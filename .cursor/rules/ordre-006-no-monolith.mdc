@@ -1,0 +1,44 @@
+---
+description: ORDRE-006 — interdit le monolithe runtime ; services découplés obligatoires
+alwaysApply: true
+---
+
+# ORDRE-006 — Pas de monolithe
+
+Ellipse est un **système distribué**. Le monorepo pnpm ≠ monolithe runtime.
+
+## Interdit
+
+- Cognition (Cortex) embarquée dans orchestrator sans passer par `@ellipse/cortex` en service ou lib isolée
+- Fichiers > 400 lignes mélangeant IO + métier + rendu + orchestration
+- Scripts `tools/*.mjs` monolithiques (IO + builders + templates + émission)
+- Composants React mélangeant fetch + parsing + rendu + navigation
+- EventEmitter in-process comme bus prod (Redis/BullMQ obligatoire en prod)
+- Nouvelle logique métier dans `server.ts` sans extraire vers un module/service dédié
+
+## Obligatoire
+
+- **1 fichier = 1 responsabilité dominante** ; orchestrateurs fins (< 150 lignes)
+- Contrats partagés dans `@ellipse/shared` ou `schemas/`, jamais dupliqués en dur dans l'UI
+- Chaque service déployable : Dockerfile, health check, variables d'env propres
+- Pattern `production-hq/` : `io.mjs` | `catalog.mjs` | `builders.mjs` | `index.mjs`
+
+## Violations connues à corriger (priorité)
+
+| Zone | Action |
+|------|--------|
+| `orchestrator/src/server.ts` | Extraire routes → `routes/*.ts`, WS → `ws/generate.ts` |
+| `orchestrator/src/game-factory.ts` | Découper : documents / assets / tasks / intent |
+| `orchestrator` ré-exporte Cortex | Cortex = service HTTP `:4401` ou lib pure, jamais couplé à Fastify |
+| `studio/src/styles.css` (3500+ lignes) | Tokens + modules CSS par domaine |
+| `studio` legacy (`FactoryView`, `CreateView`) | Supprimer ou fusionner |
+| `agent-worker.Dockerfile` | `AGENT_ID=character`, `node dist/worker.js` |
+| `tools/sync-echoes-construction-stack.mjs` | Refactor comme production-hq |
+
+## Avant chaque PR
+
+1. Le changement peut-il tourner dans un worker/service séparé ?
+2. Un agent IA pourrait-il modifier ce fichier sans effets de bord ?
+3. Y a-t-il duplication de contrat avec `shared` ou `schemas` ?
+
+Référence : `docs/04-architecture/MODULARITY_AUDIT.md`, `docs/02-architecture/INFRASTRUCTURE.md`

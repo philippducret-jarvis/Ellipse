@@ -1,0 +1,36 @@
+export { getPool, getDatabaseUrl, checkDatabaseConnection, closePool } from './client.js';
+export { runMigrations } from './migrate.js';
+export {
+  createProject,
+  saveSession,
+  saveTaskResult,
+  getSession,
+  listSessions,
+  getTaskResults,
+  registerUpload,
+} from './repositories/sessions.js';
+export {
+  ensureGameFactoryAgents,
+  createGameProject,
+  listGameProjects,
+  getGameProject,
+  createGamePrompt,
+  listGamePrompts,
+  createGameDocument,
+  listGameDocuments,
+  createGameTask,
+  listGameTasks,
+  createGameAsset,
+  listGameAssets,
+  createGameAssetSource,
+  listGameAssetSources,
+  createGameAssetVariant,
+  listGameAssetVariants,
+  createGameAssetOutput,
+  listGameAssetOutputs,
+  createGameScene,
+  listGameScenes,
+  createGameBuild,
+  listGameBuilds,
+  getGameProjectSnapshot,
+} from './repositories/game-factory.js';

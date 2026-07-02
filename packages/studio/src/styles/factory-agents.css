@@ -1,0 +1,77 @@
+﻿.work-panel-compact {
+  max-height: 420px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.compact-intro {
+  font-size: 0.8rem;
+  margin-bottom: 0.75rem;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.work-list-compact {
+  list-style: none;
+  overflow-y: auto;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem;
+  max-height: 280px;
+}
+
+.work-list-compact li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  font-size: 0.75rem;
+}
+
+.work-list-compact li.active {
+  border-color: rgba(233, 69, 96, 0.45);
+  background: rgba(233, 69, 96, 0.08);
+}
+
+.work-list-compact strong {
+  display: block;
+  font-size: 0.72rem;
+}
+
+.work-list-compact .muted {
+  display: block;
+  font-size: 0.62rem;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 140px;
+}
+
+.work-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.work-active-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--success);
+  margin-left: auto;
+  flex-shrink: 0;
+  box-shadow: 0 0 6px rgba(46, 204, 113, 0.6);
+}

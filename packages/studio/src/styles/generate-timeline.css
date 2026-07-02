@@ -1,0 +1,91 @@
+.agent-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.agent-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  transition: border-color 0.2s;
+}
+
+.agent-step-pending {
+  opacity: 0.6;
+}
+
+.agent-step-running {
+  border-color: var(--accent);
+  box-shadow: 0 0 10px var(--glow);
+  opacity: 1;
+}
+
+.agent-step-success {
+  border-color: rgba(46, 204, 113, 0.35);
+}
+
+.agent-step-failed {
+  border-color: rgba(255, 107, 107, 0.35);
+}
+
+.agent-step-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.agent-step-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.agent-step-name {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.agent-step-notes {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 0.15rem;
+  line-height: 1.35;
+}
+
+.agent-step-error {
+  display: block;
+  font-size: 0.72rem;
+  color: #ff6b6b;
+  margin-top: 0.15rem;
+}
+
+.agent-step-status-icon {
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.status-pending {
+  color: var(--muted);
+}
+
+.status-running {
+  color: var(--accent);
+}
+
+.status-success {
+  color: var(--success);
+}
+
+.status-partial {
+  color: var(--warning);
+}
+
+.status-failed {
+  color: #ff6b6b;
+}

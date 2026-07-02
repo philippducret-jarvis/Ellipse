@@ -1,0 +1,75 @@
+﻿/* â”€â”€ Layouts â”€â”€ */
+.create-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.create-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.create-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  position: sticky;
+  top: 1rem;
+}
+
+.history-layout {
+  max-width: 720px;
+}
+
+.factory-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.factory-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.factory-column-side {
+  position: sticky;
+  top: 1rem;
+}
+
+/* â”€â”€ Panels â”€â”€ */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.panel-head h2 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.empty-state {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  padding: 1rem 0;
+}
+
+/* â”€â”€ Prompt â”€â”€ */

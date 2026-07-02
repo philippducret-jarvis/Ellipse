@@ -1,0 +1,131 @@
+/* ── Assistant de création tous-genres (T2) ── */
+.wizard-panel {
+  width: min(820px, 96vw);
+}
+
+.wizard-body {
+  gap: 1.25rem;
+}
+
+.wizard-cta {
+  border-color: rgba(94, 199, 239, 0.4);
+  background: rgba(94, 199, 239, 0.1);
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 600;
+}
+.wizard-cta:hover {
+  border-color: rgba(94, 199, 239, 0.7);
+}
+
+.empty-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.wizard-family {
+  margin-bottom: 0.6rem;
+}
+.wizard-family-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+.wizard-type-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.4rem;
+}
+.wizard-type {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+}
+.wizard-type:hover {
+  border-color: var(--accent);
+}
+.wizard-type.active {
+  border-color: var(--accent);
+  background: rgba(233, 69, 96, 0.12);
+  box-shadow: 0 0 0 1px var(--accent) inset;
+}
+
+.wizard-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.75rem;
+}
+
+.wizard-chips {
+  display: flex;
+  gap: 0.5rem;
+}
+.wizard-chips .chip {
+  cursor: pointer;
+  text-transform: capitalize;
+}
+
+.wizard-modules {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 0.4rem;
+}
+.wizard-module {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--text);
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+}
+.wizard-module:hover {
+  border-color: var(--accent);
+}
+.wizard-module.active {
+  border-color: var(--success);
+  background: rgba(46, 204, 113, 0.12);
+}
+.wizard-module strong {
+  font-size: 0.82rem;
+}
+.wizard-module-desc {
+  font-size: 0.68rem;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.wizard-summary {
+  border-top: 1px solid var(--border);
+  padding-top: 0.85rem;
+}
+.wizard-summary-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+.wizard-systems {
+  font-size: 0.72rem;
+  color: var(--muted);
+  line-height: 1.5;
+}

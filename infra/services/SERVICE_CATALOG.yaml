@@ -1,0 +1,243 @@
+# Ellipse — Catalogue des services déployables
+# ORDRE-006 : source de vérité infra. Monorepo ≠ monolithe.
+# Doc : docs/02-architecture/INFRASTRUCTURE.md
+
+version: "0.1.0"
+
+principles:
+  - no_monolith_runtime
+  - one_deployable_per_bounded_context
+  - async_bus_between_agents
+  - versioned_api_contracts
+
+services:
+  ellipse-studio:
+    type: frontend
+    package: "@ellipse/studio"
+    port: 4273
+    deploy: static_cdn
+    phase: 0
+
+  ellipse-gateway:
+    type: edge
+    port: 4480
+    deploy: horizontal
+    phase: 1
+    responsibilities:
+      - authentication
+      - routing
+      - rate_limiting
+
+  ellipse-orchestrator:
+    type: core
+    package: "@ellipse/orchestrator"
+    port: 4400
+    deploy: horizontal
+    phase: 0
+    depends_on:
+      - ellipse-bus
+      - ellipse-cortex
+    responsibilities:
+      - sessions
+      - task_dag_dispatch
+      - websocket_stream
+
+  ellipse-cortex:
+    type: core
+    package: "@ellipse/cortex"
+    port: 4401
+    deploy: horizontal
+    phase: 0
+    responsibilities:
+      - intent_parse
+      - plan_build
+      - gdl_synthesize
+
+  ellipse-project-api:
+    type: core
+    port: 4002
+    deploy: horizontal
+    phase: 2
+    depends_on:
+      - ellipse-gdl-store
+    responsibilities:
+      - projects_crud
+      - user_metadata
+
+  ellipse-agent-character:
+    type: worker
+    package: "@ellipse/agents"
+    agent_id: character
+    port: 4010
+    deploy: gpu_optional
+    phase: 1
+    queue: agent.character
+
+  ellipse-agent-decor:
+    type: worker
+    package: "@ellipse/agents"
+    agent_id: decor
+    port: 4011
+    deploy: horizontal
+    phase: 1
+    queue: agent.decor
+
+  ellipse-agent-animation:
+    type: worker
+    package: "@ellipse/agents"
+    agent_id: animation
+    port: 4012
+    deploy: horizontal
+    phase: 1
+    queue: agent.animation
+
+  ellipse-agent-level:
+    type: worker
+    package: "@ellipse/agents"
+    agent_id: level
+    port: 4013
+    deploy: horizontal
+    phase: 1
+    queue: agent.level
+
+  ellipse-agent-mesh-3d:
+    type: worker
+    package: "@ellipse/agents"
+    agent_id: mesh_3d
+    port: 4014
+    deploy: gpu
+    phase: 2
+    queue: agent.mesh_3d
+
+  ellipse-agent-lighting:
+    type: worker
+    package: "@ellipse/agents"
+    agent_id: lighting
+    port: 4015
+    deploy: horizontal
+    phase: 2
+    queue: agent.lighting
+
+  ellipse-agent-camera:
+    type: worker
+    package: "@ellipse/agents"
+    agent_id: camera
+    port: 4016
+    deploy: horizontal
+    phase: 1
+    queue: agent.camera
+
+  ellipse-agent-gameplay:
+    type: worker
+    package: "@ellipse/agents"
+    agent_id: gameplay
+    port: 4017
+    deploy: horizontal
+    phase: 1
+    queue: agent.gameplay
+
+  ellipse-agent-narrative:
+    type: worker
+    package: "@ellipse/agents"
+    agent_id: narrative
+    port: 4018
+    deploy: horizontal
+    phase: 1
+    queue: agent.narrative
+
+  ellipse-agent-music:
+    type: worker
+    package: "@ellipse/agents"
+    agent_id: music
+    port: 4019
+    deploy: horizontal
+    phase: 2
+    queue: agent.music
+
+  ellipse-agent-sfx:
+    type: worker
+    package: "@ellipse/agents"
+    agent_id: sfx
+    port: 4020
+    deploy: horizontal
+    phase: 1
+    queue: agent.sfx
+
+  ellipse-agent-ui:
+    type: worker
+    package: "@ellipse/agents"
+    agent_id: ui
+    port: 4021
+    deploy: horizontal
+    phase: 2
+    queue: agent.ui
+
+  ellipse-agent-vfx:
+    type: worker
+    package: "@ellipse/agents"
+    agent_id: vfx
+    port: 4022
+    deploy: horizontal
+    phase: 1
+    queue: agent.vfx
+
+  ellipse-agent-qa:
+    type: worker
+    package: "@ellipse/agents"
+    agent_id: qa
+    port: 4023
+    deploy: horizontal
+    phase: 1
+    queue: agent.qa
+
+  ellipse-agent-integration:
+    type: worker
+    package: "@ellipse/agents"
+    agent_id: integration
+    port: 4024
+    deploy: horizontal
+    phase: 1
+    queue: agent.integration
+
+  ellipse-pipeline-vision:
+    type: worker
+    package: "@ellipse/pipeline"
+    port: 4030
+    deploy: gpu
+    phase: 2
+    queue: pipeline.vision
+
+  ellipse-pipeline-diffusion:
+    type: worker
+    package: "@ellipse/pipeline"
+    port: 4031
+    deploy: gpu
+    phase: 2
+    queue: pipeline.diffusion
+
+  ellipse-bus:
+    type: infra
+    port: 6379
+    image: redis:7-alpine
+    phase: 0
+    note: "NATS en production Phase 2+"
+
+  ellipse-gdl-store:
+    type: infra
+    port: 5435
+    external: true
+    container: postgres-ellisphere
+    note: "PostgreSQL 16 Docker dédié — credentials dans .env"
+
+  ellipse-asset-store:
+    type: infra
+    port: 9000
+    image: minio/minio
+    phase: 0
+
+  ellipse-engine-build:
+    type: worker
+    package: "@ellipse/engine"
+    port: 4030
+    deploy: queue_worker
+    phase: 3

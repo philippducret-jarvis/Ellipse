@@ -1,0 +1,55 @@
+.generate-hint {
+  font-size: 0.8rem;
+  margin-bottom: 0.65rem;
+}
+
+.generate-textarea {
+  width: 100%;
+  margin-bottom: 0.75rem;
+}
+
+.generate-upload-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+
+.generate-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.generate-btn {
+  flex: 1;
+}
+
+.generate-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--accent);
+  margin-top: 0.65rem;
+}
+
+.plan-summary {
+  margin-top: 0.75rem;
+  padding: 0.8rem 1rem;
+  background: rgba(233, 69, 96, 0.07);
+  border: 1px solid rgba(233, 69, 96, 0.2);
+  border-radius: 8px;
+}
+
+.plan-summary-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.plan-notes {
+  font-size: 0.78rem;
+  line-height: 1.4;
+}

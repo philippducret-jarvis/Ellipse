@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme {
+  --color-surface-base: #0a0b10;
+  --color-surface-raised: #12131c;
+  --color-surface-overlay: #1a1c28;
+  --color-accent: #e94560;
+  --color-accent-muted: #b83650;
+  --color-accent-cyan: #5ec7ef;
+  --color-success: #2ecc71;
+  --color-warning: #f39c12;
+  --color-text: #f2f3f8;
+  --color-muted: #8b8da3;
+  --font-sans: "Space Grotesk", system-ui, sans-serif;
+}

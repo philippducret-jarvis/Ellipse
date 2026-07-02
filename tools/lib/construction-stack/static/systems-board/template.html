@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Echoes Systems Board</title>
+    <link rel="stylesheet" href="./systems-board.css" />
+  </head>
+  <body>
+    <div class="systems-shell">
+      <header class="systems-hero">
+        <div>
+          <p class="eyebrow">Ellipse systems board</p>
+          <h1>Palette, triggers et appels runtime</h1>
+          <p class="lede">Vue manipulable des mondes, zones, assets, triggers, audio, VFX et recettes de gameplay pour construire le jeu comme un vrai systeme modulaire.</p>
+        </div>
+        <div class="hero-links">
+          <a href="/workspaces/echoes-of-the-mushroom-realm/07_exports/web/construction-map.html" target="_blank" rel="noreferrer">Construction map</a>
+          <a href="/workspaces/echoes-of-the-mushroom-realm/08_ops/manifests/systems-board.json" target="_blank" rel="noreferrer">Systems manifest</a>
+          <a href="/workspaces/echoes-of-the-mushroom-realm/07_exports/web/preview.html" target="_blank" rel="noreferrer">Playable preview</a>
+        </div>
+      </header>
+
+      <nav class="systems-tabs">
+        <button data-view="board" class="active">Board</button>
+        <button data-view="asset_calls">Appels assets</button>
+        <button data-view="triggers">Triggers</button>
+        <button data-view="worlds">Mondes</button>
+        <button data-view="recipes">Recettes</button>
+      </nav>
+
+      <div class="systems-toolbar" id="systems-toolbar"></div>
+
+      <main class="systems-grid">
+        <section class="systems-stage-panel">
+          <div class="panel-head">
+            <div>
+              <h2 id="view-title">Board</h2>
+              <p id="view-description">Chargement...</p>
+            </div>
+          </div>
+          <div id="systems-stage" class="systems-stage"></div>
+        </section>
+
+        <aside class="systems-detail-panel">
+          <div class="panel-head">
+            <div>
+              <h2>Details</h2>
+              <p>Selectionne un element, une zone, un trigger ou une recette pour voir ses appels et ses fichiers.</p>
+            </div>
+          </div>
+          <div id="systems-detail" class="systems-detail-card">
+            <h3>Selection vide</h3>
+            <p>Commence par la palette ou une zone du board.</p>
+          </div>
+        </aside>
+      </main>
+    </div>
+    <script type="module" src="./systems-board.js"></script>
+  </body>
+</html>

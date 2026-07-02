@@ -1,0 +1,59 @@
+.doc-sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 1rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.doc-nav-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 0.83rem;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    color 0.15s,
+    background 0.15s;
+}
+
+.doc-nav-item:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.doc-nav-item.active {
+  background: rgba(233, 69, 96, 0.1);
+  border-color: rgba(233, 69, 96, 0.3);
+  color: var(--text);
+}
+
+.doc-kind-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.doc-empty {
+  padding: 0.75rem;
+}
+
+@media (max-width: 900px) {
+  .doc-sidebar {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0.5rem;
+  }
+}

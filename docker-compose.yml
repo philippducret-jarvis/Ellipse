@@ -1,0 +1,6 @@
+# Ellipse — Compose racine (délègue à infra/)
+# ORDRE-006 : infra structurée sous infra/compose/
+# Usage : docker compose up -d
+
+include:
+  - path: infra/compose/docker-compose.yml

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Echoes Operating Model</title>
+    <link rel="stylesheet" href="./operating-model.css" />
+  </head>
+  <body>
+    <div class="op-shell">
+      <header class="op-hero">
+        <div>
+          <p class="eyebrow">Ellipse operating model</p>
+          <h1>Progression, save, world state et build channels</h1>
+          <p class="lede">Vue globale des systemes qui font vivre le jeu dans la durée: récompenses, quêtes, état du monde, accessibilité, localisation et releases.</p>
+        </div>
+        <div class="hero-links">
+          <a href="/workspaces/echoes-of-the-mushroom-realm/07_exports/web/construction-map.html" target="_blank" rel="noreferrer">Construction map</a>
+          <a href="/workspaces/echoes-of-the-mushroom-realm/07_exports/web/systems-board.html" target="_blank" rel="noreferrer">Systems board</a>
+          <a href="/workspaces/echoes-of-the-mushroom-realm/08_ops/manifests/game-operating-model.json" target="_blank" rel="noreferrer">Operating manifest</a>
+        </div>
+      </header>
+      <nav class="op-tabs">
+        <button data-view="progression" class="active">Progression</button>
+        <button data-view="save">Save</button>
+        <button data-view="quests">Quests</button>
+        <button data-view="world">World State</button>
+        <button data-view="accessibility">Access & Lang</button>
+        <button data-view="builds">Builds & Telemetry</button>
+      </nav>
+      <main class="op-grid">
+        <section class="op-stage-panel">
+          <div class="panel-head">
+            <div>
+              <h2 id="op-title">Progression</h2>
+              <p id="op-description">Chargement...</p>
+            </div>
+          </div>
+          <div id="op-stage" class="op-stage"></div>
+        </section>
+        <aside class="op-detail-panel">
+          <div class="panel-head">
+            <div>
+              <h2>Details</h2>
+              <p>Selectionne un track, un preset, un canal de build ou un axe de monde.</p>
+            </div>
+          </div>
+          <div id="op-detail" class="op-detail-card">
+            <h3>Selection vide</h3>
+            <p>Choisis une strate d'exploitation du jeu.</p>
+          </div>
+        </aside>
+      </main>
+    </div>
+    <script type="module" src="./operating-model.js"></script>
+  </body>
+</html>

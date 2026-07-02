@@ -1,0 +1,6 @@
+# Ellipse Cortex — entraînement du modèle Planner FROM-SCRATCH (CPU OK)
+# Aucun poids/LLM tiers : seulement le framework d'entraînement et l'export ONNX.
+torch>=2.2,<3
+numpy>=1.26
+onnx>=1.16
+onnxruntime>=1.17

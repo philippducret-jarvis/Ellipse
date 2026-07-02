@@ -1,0 +1,129 @@
+/* BUILD TAB */
+.build-tab {
+  padding: 1.25rem;
+}
+
+.build-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.build-status-panel h3,
+.build-sessions-panel h3,
+.build-detail-panel h3 {
+  font-size: 0.88rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+}
+
+.build-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.build-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 0.75rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.build-item-info {
+  flex: 1;
+}
+
+.sessions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.session-item {
+  width: 100%;
+  text-align: left;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.session-item:hover {
+  border-color: var(--accent);
+}
+
+.session-item.active {
+  border-color: var(--accent);
+  background: rgba(233, 69, 96, 0.07);
+}
+
+.session-item-prompt {
+  font-size: 0.83rem;
+  margin-bottom: 0.3rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.session-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+}
+
+.session-detail-head {
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.75rem;
+}
+
+.session-detail-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+.session-detail-actions {
+  margin-bottom: 0.75rem;
+}
+
+.session-tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.session-task {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.7rem;
+  background: var(--bg);
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  font-size: 0.8rem;
+}
+
+.session-task-agent {
+  flex: 1;
+  font-weight: 500;
+}
+
+.session-task-notes {
+  font-size: 0.72rem;
+}

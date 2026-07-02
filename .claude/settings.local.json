@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(cd \"c:\\\\Users\\\\phili\\\\Desktop\\\\Projet Ellipse\"; $pnpm = \"$env:LOCALAPPDATA\\\\node\\\\corepack\\\\v1\\\\pnpm\\\\9.15.0\\\\bin\\\\pnpm.cjs\"; node $pnpm --filter @ellipse/shared run build; if \\($?\\) { node $pnpm --filter @ellipse/cortex run build })"
+    ]
+  }
+}

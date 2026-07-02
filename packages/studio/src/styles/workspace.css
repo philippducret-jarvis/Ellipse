@@ -1,0 +1,221 @@
+/* WORKSPACE TAB */
+.workspace-kicker {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.35rem;
+}
+
+.stat-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+}
+
+.stat-value {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.workspace-hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.workspace-hero-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.workspace-stat-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.workspace-root-value {
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.workspace-layout-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.workspace-preview-panel,
+.workspace-browser-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.workspace-preview-frame,
+.workspace-inline-frame {
+  width: 100%;
+  min-height: 620px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #09080d;
+}
+
+.workspace-browser-shell {
+  display: grid;
+  grid-template-columns: minmax(260px, 340px) 1fr;
+  gap: 1rem;
+  min-height: 720px;
+}
+
+.workspace-browser-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  border-right: 1px solid var(--border);
+  padding-right: 1rem;
+}
+
+.workspace-tree,
+.workspace-search-results {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  overflow-y: auto;
+  max-height: 640px;
+  padding-right: 0.25rem;
+}
+
+.workspace-tree-node {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.workspace-tree-children {
+  margin-left: 1rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  padding-left: 0.6rem;
+}
+
+.workspace-tree-item,
+.workspace-search-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: left;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text);
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.workspace-tree-item:hover,
+.workspace-search-item:hover,
+.workspace-tree-item.active,
+.workspace-search-item.active {
+  background: rgba(233, 69, 96, 0.08);
+  border-color: rgba(233, 69, 96, 0.24);
+}
+
+.workspace-tree-icon {
+  color: var(--muted);
+  font-size: 0.72rem;
+  flex-shrink: 0;
+}
+
+.workspace-tree-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.workspace-search-item {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.workspace-browser-viewer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.workspace-file-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.workspace-file-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.workspace-code-view {
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow: auto;
+  background: #09080d;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  line-height: 1.55;
+  font-size: 0.8rem;
+  color: #dfe6f0;
+  min-height: 320px;
+}
+
+.workspace-image-preview {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #09080d;
+}
+
+.workspace-image-preview img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+@media (max-width: 900px) {
+  .workspace-browser-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .workspace-browser-sidebar {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding-right: 0;
+    padding-bottom: 1rem;
+  }
+
+  .workspace-preview-frame,
+  .workspace-inline-frame {
+    min-height: 420px;
+  }
+}
+
+@media (max-width: 640px) {
+  .workspace-hero {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

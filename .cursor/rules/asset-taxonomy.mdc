@@ -1,0 +1,61 @@
+---
+description: Taxonomie assets Ellipse — familles, rôles, stages, routing modèles
+globs: "{packages/shared/src/assets/**,packages/studio/**/Assets*,workspaces/**/03_assets/**,tools/lib/production-hq/**,packages/agents/**,packages/pipeline/**}"
+alwaysApply: false
+---
+
+# Taxonomie assets — règles normatives
+
+Source canonique : `@ellipse/shared` → `src/assets/taxonomy.ts` et `pipeline-stages.ts`.
+
+## 11 familles (ne jamais mélanger)
+
+| Famille | Groupe | Rôles |
+|---------|--------|-------|
+| `heroes` | characters | hero |
+| `companions_and_allies` | characters | companion, ally, guide, merchant, npc |
+| `enemies` | characters | enemy, monster, summon, mount |
+| `bosses` | characters | boss |
+| `weapons_and_relics` | props | weapon, armor, relic |
+| `interaction_props` | props | prop, checkpoint, door, portal, altar |
+| `hazards_and_pickups` | props | hazard, trap, pickup, collectible |
+| `biomes_and_maps` | environments | environment, biome, background, tileset |
+| `ui_shells` | ui | ui |
+| `sound_and_voice` | audio | music, sfx, voice |
+| `fx_feedback` | fx | fx |
+
+## Convention dossier
+
+```
+03_assets/<group>/<role>__<slug>/
+  01_source/       # références verrouillées
+  02_cutouts/      # segmentation alpha (SAM2, rembg)
+  03_cleanup/      # découpe parts, nettoyage
+  04_rig/          # rig 2D ou mesh 3D
+  05_animation/    # motion packs, state machines
+  06_exports/      # atlas runtime, manifests
+  07_qa/           # gates qualité
+  08_remote_jobs/  # work orders GPU
+  pipeline.contract.json
+  README.md
+```
+
+## Interdit
+
+- Mélanger hero + enemy + boss dans un même dossier asset
+- Stocker tileset et personnage dans `03_assets/characters/`
+- Dupliquer labels familles/rôles dans Studio sans importer `shared`
+- `family_id` incohérents entre `asset-taxonomy.json` et `model-routing.json`
+
+## Agents par stage
+
+| Stage | Agents runtime | Outils pipeline |
+|-------|----------------|-----------------|
+| 02_cutouts | character | SAM2, rembg, BiRefNet |
+| 03_cleanup | character, decor | Sharp, Aseprite |
+| 04_rig | animation, mesh_3d | 2D Pose Editor, Mixamo |
+| 05_animation | animation | ComfyUI, Wan 2.x, ControlNet OpenPose |
+| 06_exports | integration | Atlas JSON, glTF |
+| 07_qa | qa | smoke bot, cutting QA |
+
+Référence : `docs/02-architecture/ASSET_TAXONOMY.md`

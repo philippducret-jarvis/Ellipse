@@ -1,0 +1,70 @@
+meta:
+  title: "Ellipse Demo — Platformer"
+  dimension: "2d"
+  resolution: [1280, 720]
+  version: "0.1.0"
+
+style:
+  palette: ["#1a1a2e", "#16213e", "#0f3460", "#e94560"]
+  mood: "retro arcade"
+
+systems:
+  - input
+  - platformer_physics
+  - tile_collision
+  - animation
+  - camera_follow
+  - ui
+
+entities:
+  - id: player
+    type: character
+    assets:
+      sprite: "assets/placeholder_player.png"
+      animations:
+        idle: { frames: [0], fps: 1 }
+        run: { frames: [0, 1, 2, 3], fps: 10 }
+    components:
+      - transform: { x: 100, y: 500, scale: 1 }
+      - physics: { body: dynamic, gravity: 980, friction: 0.1 }
+      - platformer_controller:
+          move_speed: 200
+          jump_force: 420
+          coyote_time_ms: 100
+          jump_buffer_ms: 80
+      - health: { max: 3, current: 3 }
+      - collision: { layer: player, mask: [ground, enemy, collectible] }
+
+  - id: ground_tiles
+    type: prop
+    assets:
+      tileset: "assets/placeholder_tiles.png"
+    components:
+      - tilemap: { scene_ref: level_01, layer: ground }
+
+  - id: flag
+    type: trigger
+    components:
+      - transform: { x: 1100, y: 400 }
+      - trigger: { width: 64, height: 128, on_enter: win_level }
+
+scenes:
+  - id: level_01
+    tilemap: "assets/level_01.json"
+    entities: [player, ground_tiles, flag]
+    background:
+      color: "#1a1a2e"
+      parallax: []
+
+ui:
+  hud:
+    - type: health_bar
+      bind: player.health
+    - type: score
+      position: top-right
+
+audio:
+  bgm: "assets/placeholder_bgm.ogg"
+  sfx:
+    jump: "assets/sfx/jump.ogg"
+    collect: "assets/sfx/collect.ogg"

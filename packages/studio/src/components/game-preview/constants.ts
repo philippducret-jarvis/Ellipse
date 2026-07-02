@@ -1,0 +1,2 @@
+export const DEFAULT_PREVIEW_WIDTH = 640;
+export const DEFAULT_PREVIEW_HEIGHT = 360;

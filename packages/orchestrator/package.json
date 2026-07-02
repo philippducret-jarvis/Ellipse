@@ -1,0 +1,40 @@
+{
+  "name": "@ellipse/orchestrator",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "ellipse-plan": "./dist/cli/plan.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/server.ts",
+    "plan": "tsx src/cli/plan.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@ellipse/agents": "workspace:*",
+    "@ellipse/bus": "workspace:*",
+    "@ellipse/cortex": "workspace:*",
+    "@ellipse/db": "workspace:*",
+    "@ellipse/engine": "workspace:*",
+    "@ellipse/pipeline": "workspace:*",
+    "@ellipse/shared": "workspace:*",
+    "@fastify/cors": "^10.0.1",
+    "@fastify/multipart": "^9.0.1",
+    "@fastify/static": "^8.0.3",
+    "@fastify/websocket": "^11.0.1",
+    "fastify": "^5.2.0",
+    "uuid": "^11.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/uuid": "^10.0.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

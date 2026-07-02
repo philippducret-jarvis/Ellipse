@@ -1,0 +1,170 @@
+﻿.preview-wrap {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  max-width: 100%;
+}
+
+.preview-canvas canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.preview-hint {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.65);
+  color: var(--muted);
+  font-size: 0.7rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.model-preview-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.model-preview-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.model-preview-head strong {
+  font-size: 0.95rem;
+}
+
+.preview-meta {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.preview-pill {
+  font-size: 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(233, 69, 96, 0.28);
+  background: rgba(233, 69, 96, 0.08);
+  color: var(--text);
+  padding: 0.28rem 0.55rem;
+}
+
+.model-preview-canvas {
+  width: 100%;
+  min-height: 320px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(circle at top, rgba(41, 110, 155, 0.28), transparent 42%),
+    linear-gradient(180deg, #08111a 0%, #0b1722 42%, #091118 100%);
+}
+
+.model-preview-canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.model-preview-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
+}
+
+.model-preview-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.75rem;
+}
+
+.model-preview-link:hover {
+  text-decoration: underline;
+}
+
+.model-preview-fallback {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.model-preview-fallback img {
+  max-width: 240px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+@media (max-width: 1024px) {
+  .studio-shell {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 0.75rem;
+  }
+
+  .sidebar-brand {
+    border: none;
+    margin: 0;
+    padding: 0 0.5rem;
+  }
+
+  .sidebar-nav {
+    display: flex;
+    gap: 0.25rem;
+    flex: 1;
+  }
+
+  .sidebar-footer {
+    display: none;
+  }
+
+  .create-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .factory-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .create-aside {
+    position: static;
+  }
+
+  .factory-column-side {
+    position: static;
+  }
+
+  .factory-form-grid,
+  .factory-asset-create,
+  .factory-story-grid,
+  .factory-identity-hero,
+  .factory-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .agent-catalog-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .work-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

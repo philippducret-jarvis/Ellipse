@@ -1,0 +1,70 @@
+function jsonFile(path, payload) {
+  return { path, content: JSON.stringify(payload, null, 2) };
+}
+
+function textFile(path, content) {
+  return { path, content };
+}
+
+export function buildConstructionFilePlan({
+  docs,
+  foundation,
+  graph,
+  systems,
+  operating,
+  web,
+}) {
+  return [
+    textFile('02_design/specs/game-construction-stack.md', docs.gameConstructionStackMd),
+    textFile('02_design/specs/interactive-systems-blueprint.md', docs.interactiveSystemsBlueprintMd),
+    textFile('02_design/specs/game-operating-model.md', docs.gameOperatingModelMd),
+    jsonFile('02_design/specs/design-strata.json', foundation.designStrata),
+    jsonFile('02_design/specs/wireframe-blueprint.json', foundation.wireframeBlueprint),
+    jsonFile('02_design/specs/camera-language.json', foundation.cameraLanguage),
+    jsonFile('02_design/specs/menu-architecture.json', foundation.menuArchitecture),
+    jsonFile('02_design/specs/story-architecture.json', foundation.storyArchitecture),
+    jsonFile('02_design/specs/game-feel-stack.json', foundation.gameFeelStack),
+    jsonFile('02_design/specs/audio-architecture.json', foundation.audioArchitecture),
+    jsonFile('02_design/specs/vfx-hd-stack.json', foundation.vfxHdStack),
+    jsonFile('02_design/specs/dimension-strategy.json', foundation.dimensionStrategy),
+    jsonFile('04_scenes/level_01/scene-assembly.json', foundation.sceneAssembly),
+    jsonFile('04_scenes/level_01/wireframe-map.json', foundation.wireframeBlueprint.level_01_wireframe),
+    jsonFile('05_runtime/config/runtime-systems.json', foundation.runtimeSystems),
+    jsonFile('05_runtime/config/mobile-presets.json', foundation.mobilePresets),
+    jsonFile('05_runtime/config/menu-config.json', foundation.runtimeMenuConfig),
+    jsonFile('05_runtime/config/story-graph.json', foundation.runtimeStoryGraph),
+    jsonFile('05_runtime/config/audio-banks.json', foundation.audioBanks),
+    jsonFile('05_runtime/config/fx-presets.json', foundation.fxPresets),
+    jsonFile('05_runtime/config/addable-elements-catalog.json', systems.addableElementsCatalog),
+    jsonFile('05_runtime/config/trigger-library.json', systems.triggerLibrary),
+    jsonFile('05_runtime/config/asset-call-graph.json', systems.assetCallGraph),
+    jsonFile('05_runtime/config/world-composition.json', systems.worldComposition),
+    jsonFile('05_runtime/config/progression-economy.json', operating.progressionEconomy),
+    jsonFile('05_runtime/config/save-profile.schema.json', operating.saveProfileSchema),
+    jsonFile('05_runtime/config/accessibility-presets.json', operating.accessibilityPresets),
+    jsonFile('05_runtime/config/localization-plan.json', operating.localizationPlan),
+    jsonFile('05_runtime/config/quest-graph.json', operating.questGraph),
+    jsonFile('05_runtime/config/world-state-machine.json', operating.worldStateMachine),
+    jsonFile('05_runtime/config/build-targets.json', operating.buildTargets),
+    jsonFile('05_runtime/config/telemetry-plan.json', operating.telemetryPlan),
+    jsonFile('04_scenes/level_01/interaction-schema.json', systems.interactionSchema),
+    jsonFile('06_qa/checklists/production-gates.json', foundation.productionGates),
+    jsonFile('08_ops/manifests/agent-handoffs.json', foundation.agentHandoffs),
+    jsonFile('08_ops/manifests/construction-stack.json', graph.constructionManifest),
+    jsonFile('08_ops/manifests/construction-graph.json', graph.constructionGraph),
+    jsonFile('08_ops/manifests/systems-board.json', systems.systemsBoard),
+    jsonFile('08_ops/manifests/game-operating-model.json', operating.gameOperatingModel),
+    jsonFile('07_exports/web/construction-map.manifest.json', graph.constructionMapManifest),
+    textFile('07_exports/web/construction-map.html', web.constructionMapHtml),
+    textFile('07_exports/web/construction-map.css', web.constructionMapCss),
+    textFile('07_exports/web/construction-map.js', web.constructionMapJs),
+    jsonFile('07_exports/web/systems-board.manifest.json', graph.systemsBoardManifest),
+    textFile('07_exports/web/systems-board.html', web.systemsBoardHtml),
+    textFile('07_exports/web/systems-board.css', web.systemsBoardCss),
+    textFile('07_exports/web/systems-board.js', web.systemsBoardJs),
+    jsonFile('07_exports/web/operating-model.manifest.json', graph.operatingModelManifest),
+    textFile('07_exports/web/operating-model.html', web.operatingModelHtml),
+    textFile('07_exports/web/operating-model.css', web.operatingModelCss),
+    textFile('07_exports/web/operating-model.js', web.operatingModelJs),
+  ];
+}

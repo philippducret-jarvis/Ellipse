@@ -1,0 +1,144 @@
+:root {
+  /* ── Couleurs (noms historiques conservés + raffinés) ── */
+  --bg: #0a0b10;
+  --surface: #12131c;
+  --surface-2: #1a1c28;
+  --surface-3: #22243340;
+  --border: #2a2d3d;
+  --border-strong: #3a3e52;
+  --accent: #e94560;
+  --accent-dim: #b83650;
+  --accent-2: #5ec7ef;
+  --success: #2ecc71;
+  --warning: #f1c40f;
+  --danger: #ff6b6b;
+  --text: #f2f3f8;
+  --muted: #8b8da3;
+  --glow: rgba(233, 69, 96, 0.28);
+  --sidebar-w: 224px;
+
+  /* ── Échelles ── */
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 16px;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-2: 0 6px 20px rgba(0, 0, 0, 0.35);
+  --shadow-3: 0 24px 64px rgba(0, 0, 0, 0.55);
+  --ring: 0 0 0 2px rgba(94, 199, 239, 0.5);
+  --transition: 0.16s ease;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(94, 199, 239, 0.06), transparent 60%),
+    radial-gradient(900px 500px at -10% 0%, rgba(233, 69, 96, 0.06), transparent 55%),
+    var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 1.45;
+}
+
+h1, h2, h3, h4 {
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+::selection {
+  background: rgba(233, 69, 96, 0.35);
+  color: #fff;
+}
+
+/* ── Scrollbars sobres ── */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: #4a4f68;
+  background-clip: content-box;
+}
+
+/* ── Focus visible cohérent ── */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+  border-radius: var(--radius-sm);
+}
+
+/* ── Champs de formulaire (base globale ; surchargée par feature au besoin) ── */
+.text-input,
+input[type='text'],
+input[type='search'],
+textarea,
+select {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 0.7rem;
+  font-family: inherit;
+  font-size: 0.88rem;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.text-input:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--accent-2);
+  box-shadow: var(--ring);
+  outline: none;
+}
+.text-input::placeholder,
+textarea::placeholder {
+  color: var(--muted);
+}
+
+/* ── Chips (base commune) ── */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  font-size: 0.72rem;
+  line-height: 1;
+  white-space: nowrap;
+}

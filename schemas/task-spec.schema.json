@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ellipse.dev/schemas/task-spec.json",
+  "title": "TaskSpec",
+  "description": "Spécification d'une tâche déléguée par l'IA maîtresse à un sous-agent",
+  "type": "object",
+  "required": ["task_id", "agent", "input"],
+  "properties": {
+    "task_id": { "type": "string", "format": "uuid" },
+    "agent": {
+      "type": "string",
+      "enum": [
+        "character",
+        "decor",
+        "animation",
+        "level",
+        "mesh_3d",
+        "lighting",
+        "camera",
+        "gameplay",
+        "narrative",
+        "music",
+        "sfx",
+        "ui",
+        "vfx",
+        "qa",
+        "integration"
+      ]
+    },
+    "priority": { "type": "integer", "minimum": 0, "maximum": 10, "default": 5 },
+    "depends_on": {
+      "type": "array",
+      "items": { "type": "string", "format": "uuid" }
+    },
+    "input": { "type": "object" },
+    "context": {
+      "type": "object",
+      "properties": {
+        "project_id": { "type": "string" },
+        "gdd_excerpt": { "type": "string" },
+        "style_guide": { "$ref": "#/definitions/StyleGuide" }
+      }
+    }
+  },
+  "definitions": {
+    "StyleGuide": {
+      "type": "object",
+      "properties": {
+        "palette": { "type": "array", "items": { "type": "string" } },
+        "reference_assets": { "type": "array", "items": { "type": "string" } },
+        "dimension": { "enum": ["2d", "3d"] },
+        "mood": { "type": "string" }
+      }
+    }
+  }
+}

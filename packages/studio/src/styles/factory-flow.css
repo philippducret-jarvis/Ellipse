@@ -1,0 +1,213 @@
+﻿.progress-label {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.progress-bar {
+  height: 4px;
+  background: var(--border);
+  border-radius: 999px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--success));
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.status-line {
+  font-size: 0.8rem;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+
+.status-line.pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.agent-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.agent-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  transition: border-color 0.2s;
+}
+
+.agent-card.status-running {
+  border-color: var(--accent);
+  box-shadow: 0 0 12px var(--glow);
+}
+
+.agent-card.status-success {
+  border-color: rgba(46, 204, 113, 0.4);
+}
+
+.agent-card.status-failed {
+  border-color: rgba(255, 107, 107, 0.4);
+}
+
+.agent-card-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.agent-icon {
+  font-size: 1.25rem;
+}
+
+.agent-card-head strong {
+  display: block;
+  font-size: 0.85rem;
+}
+
+.agent-card-head .muted {
+  font-size: 0.7rem;
+}
+
+.agent-badge {
+  margin-left: auto;
+  font-size: 0.65rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.agent-badge.running {
+  background: rgba(233, 69, 96, 0.2);
+  color: var(--accent);
+}
+
+.agent-badge.success {
+  background: rgba(46, 204, 113, 0.15);
+  color: var(--success);
+}
+
+.agent-badge.failed {
+  background: rgba(255, 107, 107, 0.15);
+  color: #ff6b6b;
+}
+
+.agent-notes {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 0.5rem;
+  line-height: 1.4;
+}
+
+.agent-error {
+  font-size: 0.75rem;
+  color: #ff6b6b;
+  margin-top: 0.35rem;
+}
+
+.session-badge {
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  text-align: center;
+  padding: 0.4rem;
+  border-radius: 6px;
+  background: var(--bg);
+}
+
+.session-badge.status-completed {
+  color: var(--success);
+}
+
+/* â”€â”€ Plan â”€â”€ */
+.plan-notes {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  margin-bottom: 0.75rem;
+}
+
+.mechanics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+/* â”€â”€ History â”€â”€ */
+.session-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.session-card {
+  width: 100%;
+  text-align: left;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--text);
+  transition: border-color 0.2s, transform 0.15s;
+}
+
+.session-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.session-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.session-status {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.session-status.status-completed {
+  color: var(--success);
+}
+
+.session-status.status-failed {
+  color: #ff6b6b;
+}
+
+.session-prompt {
+  font-size: 0.9rem;
+  line-height: 1.45;
+  margin-bottom: 0.35rem;
+}
+
+.session-id {
+  font-size: 0.7rem;
+  color: var(--muted);
+  font-family: ui-monospace, monospace;
+}
+
+/* â”€â”€ Preview â”€â”€ */

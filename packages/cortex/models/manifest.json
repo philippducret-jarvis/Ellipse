@@ -1,0 +1,151 @@
+{
+  "version": "0.2.0",
+  "policy": "ORDRE-001 — modèles Ellipse uniquement, aucun LLM tiers",
+  "models": {
+    "master": {
+      "id": "ellipse-cortex-master-v0",
+      "type": "planner",
+      "description": "IA Maîtresse — intent, planification, synthèse GDL",
+      "weights_path": "${ELLIPSE_MODELS_DIR}/cortex-master-v0",
+      "status": "heuristic_fallback",
+      "phase": 1
+    },
+    "character": {
+      "id": "ellipse-character-v0",
+      "type": "vision-sprite",
+      "description": "Sprites personnage photo→spritesheet",
+      "weights_path": "${ELLIPSE_MODELS_DIR}/character-v0",
+      "runtime": "comfyui-local",
+      "agent_id": "character",
+      "status": "active_stub",
+      "phase": 1
+    },
+    "decor": {
+      "id": "ellipse-decor-v0",
+      "type": "texture-gen",
+      "description": "Tilesets, props, arrière-plans",
+      "weights_path": "${ELLIPSE_MODELS_DIR}/decor-v0",
+      "agent_id": "decor",
+      "status": "pending",
+      "phase": 2
+    },
+    "animation": {
+      "id": "ellipse-animation-v0",
+      "type": "motion",
+      "description": "Spritesheets animés, state machines",
+      "weights_path": "${ELLIPSE_MODELS_DIR}/animation-v0",
+      "agent_id": "animation",
+      "status": "pending",
+      "phase": 2
+    },
+    "level": {
+      "id": "ellipse-level-v0",
+      "type": "generative-layout",
+      "description": "Tilemaps, parallax, spawn points",
+      "weights_path": "${ELLIPSE_MODELS_DIR}/level-v0",
+      "agent_id": "level",
+      "status": "pending",
+      "phase": 2
+    },
+    "mesh_3d": {
+      "id": "ellipse-mesh-v0",
+      "type": "image-to-3d",
+      "description": "Photo→mesh glTF, TripoSR local",
+      "weights_path": "${ELLIPSE_MODELS_DIR}/mesh-v0",
+      "agent_id": "mesh_3d",
+      "status": "pending",
+      "phase": 2
+    },
+    "lighting": {
+      "id": "ellipse-lighting-v0",
+      "type": "scene-light",
+      "description": "Éclairage 3D, bake ombres",
+      "weights_path": "${ELLIPSE_MODELS_DIR}/lighting-v0",
+      "agent_id": "lighting",
+      "status": "pending",
+      "phase": 2
+    },
+    "camera": {
+      "id": "ellipse-camera-v0",
+      "type": "camera-rig",
+      "description": "Follow cam, bounds, cinématiques",
+      "weights_path": "${ELLIPSE_MODELS_DIR}/camera-v0",
+      "agent_id": "camera",
+      "status": "pending",
+      "phase": 1
+    },
+    "gameplay": {
+      "id": "ellipse-gameplay-v0",
+      "type": "structured-generator",
+      "description": "Patches GDL — mécaniques, systems",
+      "weights_path": "${ELLIPSE_MODELS_DIR}/gameplay-v0",
+      "output_schema": "schemas/gdl/game.schema.json",
+      "agent_id": "gameplay",
+      "status": "pending",
+      "phase": 1
+    },
+    "narrative": {
+      "id": "ellipse-narrative-v0",
+      "type": "story-generator",
+      "description": "Histoire, dialogues, quêtes",
+      "weights_path": "${ELLIPSE_MODELS_DIR}/narrative-v0",
+      "agent_id": "narrative",
+      "status": "pending",
+      "phase": 2
+    },
+    "music": {
+      "id": "ellipse-music-v0",
+      "type": "audio-gen",
+      "description": "BGM loops adaptive",
+      "weights_path": "${ELLIPSE_MODELS_DIR}/music-v0",
+      "agent_id": "music",
+      "status": "pending",
+      "phase": 2
+    },
+    "sfx": {
+      "id": "ellipse-sfx-v0",
+      "type": "sfx-gen",
+      "description": "Effets sonores gameplay",
+      "weights_path": "${ELLIPSE_MODELS_DIR}/sfx-v0",
+      "agent_id": "sfx",
+      "status": "pending",
+      "phase": 2
+    },
+    "ui": {
+      "id": "ellipse-ui-v0",
+      "type": "layout-generator",
+      "description": "HUD, menus, typographie",
+      "weights_path": "${ELLIPSE_MODELS_DIR}/ui-v0",
+      "agent_id": "ui",
+      "status": "pending",
+      "phase": 2
+    },
+    "vfx": {
+      "id": "ellipse-vfx-v0",
+      "type": "particle-gen",
+      "description": "Particules, juice, feedback",
+      "weights_path": "${ELLIPSE_MODELS_DIR}/vfx-v0",
+      "agent_id": "vfx",
+      "status": "pending",
+      "phase": 2
+    },
+    "qa": {
+      "id": "ellipse-qa-v0",
+      "type": "validator-sim",
+      "description": "Validation GDL, smoke test bot",
+      "weights_path": "${ELLIPSE_MODELS_DIR}/qa-v0",
+      "agent_id": "qa",
+      "status": "pending",
+      "phase": 1
+    },
+    "integration": {
+      "id": "ellipse-integration-v0",
+      "type": "assembler",
+      "description": "Assemblage final, export multi-cible",
+      "weights_path": "${ELLIPSE_MODELS_DIR}/integration-v0",
+      "agent_id": "integration",
+      "status": "pending",
+      "phase": 1
+    }
+  }
+}

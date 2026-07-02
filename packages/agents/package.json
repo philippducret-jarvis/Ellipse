@@ -1,0 +1,31 @@
+{
+  "name": "@ellipse/agents",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "dev:workers": "tsx src/worker.ts",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@ellipse/bus": "workspace:*",
+    "@ellipse/cortex": "workspace:*",
+    "@ellipse/pipeline": "workspace:*",
+    "@ellipse/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

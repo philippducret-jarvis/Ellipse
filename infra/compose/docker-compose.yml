@@ -1,0 +1,86 @@
+# Ellipse — Compose DEV (infra distribuée)
+# ORDRE-006 : services séparés. Pas de container "ellipse-all".
+# Catalogue : infra/services/SERVICE_CATALOG.yaml
+
+name: ellipse-dev
+
+services:
+  # ─── Infra ───────────────────────────────────────────
+  ellipse-bus:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # Postgres externe recommandé : conteneur postgres-ellisphere (localhost:5435)
+  # Voir docs/05-guides/DATABASE.md — credentials dans .env
+  #
+  # ellipse-gdl-store (optionnel — profil internal-db) :
+  ellipse-gdl-store:
+    profiles: ["internal-db"]
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ellipse
+      POSTGRES_PASSWORD: ellipse
+      POSTGRES_DB: ellipse
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ellipse"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  ellipse-asset-store:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ellipse
+      MINIO_ROOT_PASSWORD: ellipse_dev
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+
+  # ─── Services applicatifs (Phase 1 — à activer avec Dockerfiles) ───
+  # ellipse-orchestrator:
+  #   build:
+  #     context: ../..
+  #     dockerfile: infra/docker/orchestrator.Dockerfile
+  #   ports:
+  #     - "4400:4400"
+  #   depends_on:
+  #     ellipse-bus:
+  #       condition: service_healthy
+  #   environment:
+  #     REDIS_URL: redis://ellipse-bus:6379
+
+  # ellipse-cortex:
+  #   build:
+  #     context: ../..
+  #     dockerfile: infra/docker/cortex.Dockerfile
+  #   ports:
+  #     - "4401:4401"
+
+  # ellipse-agent-asset:
+  #   build:
+  #     context: ../..
+  #     dockerfile: infra/docker/agent-worker.Dockerfile
+  #     args:
+  #       AGENT_ID: asset
+  #   depends_on:
+  #     - ellipse-bus
+
+volumes:
+  redis_data:
+  postgres_data:
+  minio_data:

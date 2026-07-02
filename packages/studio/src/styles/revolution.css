@@ -1,0 +1,161 @@
+.intent-contract-panel,
+.creation-stream-panel {
+  margin-bottom: 1.5rem;
+  padding: 1.25rem;
+  border-radius: 12px;
+  border: 1px solid var(--es-border, #2a2f3a);
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.intent-contract-panel h3,
+.creation-stream-panel h3 {
+  margin: 0.25rem 0;
+}
+
+.intent-snippet {
+  font-size: 0.88rem;
+  color: var(--es-muted, #8892a0);
+}
+
+.creation-stream-steps {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stream-step {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--es-border, #2a2f3a);
+}
+
+.stream-step.is-current {
+  border-color: rgba(155, 89, 182, 0.5);
+}
+
+.stream-step-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stream-criteria {
+  font-size: 0.82rem;
+  margin: 0.35rem 0;
+}
+
+.stream-preview-link {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.corps-preview-panel {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--es-border, #2a2f3a);
+  border-radius: 10px;
+}
+
+.corps-preview-canvas {
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.corps-preview-empty {
+  padding: 2rem;
+  text-align: center;
+  border: 1px dashed var(--es-border, #2a2f3a);
+  border-radius: 8px;
+}
+
+.autonomous-workflow-panel {
+  margin-bottom: 1.5rem;
+}
+
+.autonomous-workflow-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.autonomous-workflow-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.autonomous-workflow-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.autonomous-current-step {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  background: rgba(233, 69, 96, 0.08);
+  border: 1px solid rgba(233, 69, 96, 0.25);
+}
+
+.autonomous-action-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0;
+}
+
+.autonomous-action-list li {
+  margin-bottom: 0.5rem;
+}
+
+.autonomous-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.5rem;
+}
+
+.autonomous-step-card {
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--es-border, #2a2f3a);
+  font-size: 0.75rem;
+}
+
+.autonomous-step-passed {
+  border-color: rgba(46, 204, 113, 0.4);
+  background: rgba(46, 204, 113, 0.08);
+}
+
+.autonomous-step-running,
+.autonomous-step-retrying {
+  border-color: rgba(52, 152, 219, 0.5);
+}
+
+.autonomous-step-awaiting_human {
+  border-color: rgba(241, 196, 15, 0.5);
+}
+
+.autonomous-step-score {
+  font-weight: 700;
+  font-size: 1rem;
+  margin: 0.25rem 0;
+}
+
+.autonomous-artifacts {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+}
+
+.autonomous-artifacts ul {
+  list-style: none;
+  padding: 0;
+}

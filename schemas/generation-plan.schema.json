@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ellipse.dev/schemas/generation-plan.json",
+  "title": "GenerationPlan",
+  "description": "Plan de génération produit par l'IA maîtresse",
+  "type": "object",
+  "required": ["plan_id", "user_intent", "tasks"],
+  "properties": {
+    "plan_id": { "type": "string", "format": "uuid" },
+    "user_intent": {
+      "type": "object",
+      "properties": {
+        "raw_prompt": { "type": "string" },
+        "genre": { "type": "string" },
+        "dimension": { "enum": ["2d", "3d"] },
+        "mechanics": { "type": "array", "items": { "type": "string" } },
+        "source_images": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "tasks": {
+      "type": "array",
+      "items": { "$ref": "task-spec.json" }
+    },
+    "estimated_duration_minutes": { "type": "number" },
+    "master_notes": { "type": "string" }
+  }
+}

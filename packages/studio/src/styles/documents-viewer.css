@@ -1,0 +1,70 @@
+.doc-viewer {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+}
+
+.doc-viewer-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.doc-viewer-head h2 {
+  font-size: 1.2rem;
+}
+
+.doc-viewer-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.doc-viewer-body {
+  flex: 1;
+}
+
+.doc-markdown {
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.doc-h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 1.25rem 0 0.5rem;
+}
+
+.doc-h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin: 1rem 0 0.4rem;
+}
+
+.doc-para {
+  margin-bottom: 0.6rem;
+  color: var(--text);
+}
+
+.doc-list {
+  margin: 0.4rem 0 0.75rem 1.2rem;
+  color: var(--text);
+}
+
+.doc-list li {
+  margin-bottom: 0.25rem;
+}
+
+.doc-empty-state {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+}

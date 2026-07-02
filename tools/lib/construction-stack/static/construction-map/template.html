@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Echoes Construction Map</title>
+    <link rel="stylesheet" href="./construction-map.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Ellipse construction map</p>
+          <h1>Construction graphique du projet</h1>
+          <p class="lede">Vue cliquable, animée et couche par couche de la fabrication du jeu Echoes of the Mushroom Realm.</p>
+        </div>
+        <div class="hero-links">
+          <a href="/workspaces/echoes-of-the-mushroom-realm/02_design/specs/game-construction-stack.md" target="_blank" rel="noreferrer">Stack spec</a>
+          <a href="/workspaces/echoes-of-the-mushroom-realm/08_ops/manifests/construction-stack.json" target="_blank" rel="noreferrer">Stack manifest</a>
+          <a href="/workspaces/echoes-of-the-mushroom-realm/07_exports/web/systems-board.html" target="_blank" rel="noreferrer">Systems board</a>
+          <a href="/workspaces/echoes-of-the-mushroom-realm/07_exports/web/operating-model.html" target="_blank" rel="noreferrer">Operating model</a>
+          <a href="/workspaces/echoes-of-the-mushroom-realm/07_exports/web/preview.html" target="_blank" rel="noreferrer">Playable preview</a>
+        </div>
+      </header>
+
+      <nav class="view-tabs">
+        <button data-view="strata_flow" class="active">Couches</button>
+        <button data-view="agent_flow">Agents</button>
+        <button data-view="runtime_sequence">Sequence</button>
+        <button data-view="workspace_surfaces">Surfaces</button>
+      </nav>
+
+      <main class="content-grid">
+        <section class="graph-panel">
+          <div class="panel-head">
+            <div>
+              <h2 id="view-title">Couches</h2>
+              <p id="view-description">Chargement...</p>
+            </div>
+          </div>
+          <div id="graph-stage" class="graph-stage"></div>
+        </section>
+
+        <aside class="detail-panel">
+          <div class="panel-head">
+            <div>
+              <h2>Details</h2>
+              <p>Cliquer un noeud, un lien ou une etape pour ouvrir ses fichiers et son role dans la construction.</p>
+            </div>
+          </div>
+          <div id="detail-card" class="detail-card">
+            <h3>Selection vide</h3>
+            <p>Selectionne une couche, un agent ou une etape de sequence.</p>
+          </div>
+        </aside>
+      </main>
+    </div>
+    <script type="module" src="./construction-map.js"></script>
+  </body>
+</html>

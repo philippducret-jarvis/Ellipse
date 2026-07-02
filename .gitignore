@@ -1,0 +1,26 @@
+generated/
+uploads/
+workspaces/
+node_modules/
+dist/
+.turbo/
+.env
+.env.local
+*.log
+.DS_Store
+coverage/
+.vite/
+*.glb
+*.png
+!examples/**/*.png
+
+# Entraînement IA (training/) — venv, datasets, poids ; modèles exportés (racine /models)
+training/.venv/
+training/data/
+training/artifacts/
+__pycache__/
+*.pyc
+*.onnx
+*.pt
+/models/
+tmp/

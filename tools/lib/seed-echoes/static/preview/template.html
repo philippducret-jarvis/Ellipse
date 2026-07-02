@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>__TITLE__ - Preview</title>
+    <link rel="stylesheet" href="./preview.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hud-panel">
+        <div>
+          <p class="eyebrow">Workspace Preview</p>
+          <h1>__TITLE__</h1>
+          <p class="lede">Prototype jouable ultra-leger fonde sur le GDL du workspace. Deplacement: fleches ou WASD, saut: espace.</p>
+        </div>
+        <div class="legend" id="legend"></div>
+      </section>
+      <section class="canvas-panel">
+        <canvas id="preview" width="1280" height="720" aria-label="Apercu jouable Echoes"></canvas>
+        <div class="status-bar" id="status">Chargement du preview...</div>
+      </section>
+    </main>
+    <script type="module" src="./preview.js"></script>
+  </body>
+</html>
