@@ -1,0 +1,4 @@
+{
+  "type": "module",
+  "description": "Runtime générique Forge — fichiers copiés dans chaque workspace ; ce package.json sert uniquement à Node (auto-play headless)."
+}

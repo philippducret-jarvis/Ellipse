@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Forge Ellipse</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { margin: 0; box-sizing: border-box; }
+    body {
+      min-height: 100vh; display: grid; place-items: center; gap: 10px;
+      background: radial-gradient(1200px 700px at 50% 20%, #171226, #08060f);
+      font-family: system-ui, sans-serif; color: #cfc9e0; padding: 14px;
+    }
+    header { font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.7; }
+    canvas {
+      max-width: min(96vw, 1280px); max-height: 82vh; width: auto; height: auto;
+      border-radius: 10px; box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06);
+      background: #0a0814;
+    }
+    footer { font-size: 13px; opacity: 0.6; }
+    kbd { background: #241d3a; border-radius: 4px; padding: 1px 7px; font-family: inherit; }
+    #boot-error { color: #ff7a7a; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <header id="game-title">Forge Ellipse</header>
+  <canvas id="game"></canvas>
+  <footer>
+    <kbd>◀ ▶</kbd> se déplacer · <kbd>Espace</kbd> sauter · <kbd>X</kbd> attaquer · <kbd>R</kbd> rejouer
+  </footer>
+  <p id="boot-error" hidden></p>
+  <script type="module" src="main.js"></script>
+</body>
+</html>

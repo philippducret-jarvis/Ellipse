@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ellipse.dev/schemas/gdl-1.0.schema.json",
+  "title": "Ellipse GDL 1.0 — Game Definition Language",
+  "description": "Définition COMPLÈTE d'un jeu 2D/2,5D exécutable par le runtime générique de la Forge. Le jeu est de la donnée : aucun code par titre.",
+  "type": "object",
+  "required": ["gdl", "id", "title", "genre", "world", "entities", "levels"],
+  "properties": {
+    "gdl": { "const": "1.0" },
+    "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "title": { "type": "string" },
+    "subtitle": { "type": "string" },
+    "genre": { "enum": ["sidescroller", "vertical-arena"] },
+    "seed": { "type": "integer" },
+    "palette": { "type": "array", "items": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" } },
+    "world": {
+      "type": "object",
+      "required": ["viewport"],
+      "properties": {
+        "viewport": { "type": "object", "properties": { "w": { "type": "integer" }, "h": { "type": "integer" } } },
+        "gravity": { "type": "number", "description": "px/s² (sidescroller)" },
+        "floorY": { "type": "number", "description": "fraction de la hauteur du viewport" },
+        "lanes": { "type": "integer", "description": "nombre de couloirs (vertical-arena)" }
+      }
+    },
+    "entities": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["role", "rig", "stats"],
+        "properties": {
+          "role": { "enum": ["hero", "enemy", "boss"] },
+          "rig": { "type": "string", "description": "chemin du .rig.json (relatif au runtime)" },
+          "clips": { "type": "string", "description": "chemin du .clips.json" },
+          "scale": { "type": "number", "description": "hauteur cible en fraction du viewport" },
+          "stats": {
+            "type": "object",
+            "properties": {
+              "hp": { "type": "number" }, "speed": { "type": "number" },
+              "jump": { "type": "number" }, "damage": { "type": "number" },
+              "attackRange": { "type": "number" }, "attackCooldown": { "type": "number" },
+              "invuln": { "type": "number" }, "touchDamage": { "type": "boolean" }
+            }
+          },
+          "ai": {
+            "type": "object",
+            "properties": {
+              "type": { "enum": ["patrol", "chase", "descend"] },
+              "range": { "type": "number" }, "aggroRange": { "type": "number" },
+              "chaseSpeed": { "type": "number" }
+            }
+          }
+        }
+      }
+    },
+    "levels": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "arena"],
+        "properties": {
+          "id": { "type": "string" },
+          "arena": { "type": "string", "description": "chemin du .parallax.json" },
+          "length": { "type": "number", "description": "longueur en px monde (sidescroller)" },
+          "spawns": { "type": "array", "items": { "type": "object", "required": ["entity"], "properties": { "entity": { "type": "string" }, "x": { "type": "number" }, "lane": { "type": "integer" }, "t": { "type": "number" } } } },
+          "hazards": { "type": "array", "items": { "type": "object", "properties": { "x": { "type": "number" }, "w": { "type": "number" }, "type": { "type": "string" }, "damage": { "type": "number" } } } },
+          "pickups": { "type": "array", "items": { "type": "object", "properties": { "x": { "type": "number" }, "type": { "enum": ["heart", "gem"] } } } },
+          "checkpoints": { "type": "array", "items": { "type": "number" } },
+          "exit": { "type": "object", "properties": { "x": { "type": "number" } } },
+          "waves": { "type": "array", "description": "vertical-arena : vagues programmées", "items": { "type": "object" } }
+        }
+      }
+    },
+    "ui": {
+      "type": "object",
+      "properties": {
+        "hud": { "type": "array", "items": { "enum": ["hearts", "score", "progress", "wave"] } },
+        "accent": { "type": "string" }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "properties": {
+        "pitch": { "type": "string" },
+        "designBackend": { "type": "string", "description": "claude | heuristic — traçabilité de la conception" },
+        "generatedAt": { "type": "string" }
+      }
+    }
+  }
+}

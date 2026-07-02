@@ -98,6 +98,23 @@ npm run dev:orchestrator
 
 ---
 
+## ⚒️ La Forge — prompt → vrai jeu généré (opérationnel, sans GPU)
+
+**Un jeu forgé ne contient aucun pixel copié d'une planche et aucune ligne de
+code écrite pour ce titre.** Assets générés (identité verrouillée + QA),
+rig squelettal, gameplay 100 % data-driven (GDL), niveau validé par auto-play.
+
+```bash
+pnpm forge:game -- --prompt "une chevalière d'argent dans une citadelle gothique maudite"
+pnpm forge:serve        # jouer sur http://localhost:4300
+pnpm forge:smoke        # CI : chaîne pure + auto-play headless
+```
+
+Pipeline détaillé : [docs/03-pipelines/FORGE_V2.md](docs/03-pipelines/FORGE_V2.md).
+Sans GPU : backend keyless (Pollinations/Flux). Avec ComfyUI local : bascule automatique.
+
+---
+
 ## Documentation
 
 | Document | Description |

@@ -1,5 +1,13 @@
 # Playbook FIDÈLE HD 2,5D — logique reproductible (multi-jeux, sans GPU, non vectoriel)
 
+> ⚠️ **REQUALIFIÉ (juillet 2026) : outil de PRÉVIZ/LAYOUT uniquement.**
+> Ce pipeline recompose des planches existantes — il ne GÉNÈRE pas d'assets.
+> Il reste précieux pour valider une composition en ~1 s, mais **aucun asset
+> final ne doit en sortir**. La voie de production est la **Forge**
+> (`tools/lib/forge/`, `pnpm forge:game`) : assets générés, identité
+> verrouillée, rig squelettal, GDL + runtime générique, auto-play de validation.
+> Voir `docs/03-pipelines/FORGE_V2.md`.
+
 > Ce document montre à l'IA et à ses sous-agents **comment reproduire** le pipeline qui
 > transforme des **planches concept** en **vrai jeu HD jouable**, fidèle à l'univers,
 > 100 % CPU (sharp), déterministe, **sans GPU et sans vectoriel**.

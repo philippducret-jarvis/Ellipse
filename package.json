@@ -55,6 +55,9 @@
     "training:audit": "node ./tools/run-training-audit.mjs",
     "training:all": "node ./tools/run-training-prep.mjs && node ./tools/run-training-assess.mjs && node ./tools/run-autonomous-production.mjs && node ./tools/run-training-audit.mjs",
     "training:cycle": "node ./tools/run-training-cycle.mjs",
+    "forge:game": "node ./tools/forge-game.mjs",
+    "forge:serve": "node ./tools/serve-forge.mjs",
+    "forge:smoke": "node ./tools/forge-smoke.mjs",
     "create:game": "node ./tools/create-game-from-prompt.mjs",
     "create:game:veloria": "node ./tools/deliver-veloria.mjs",
     "deliver:veloria": "node ./tools/deliver-veloria.mjs",
@@ -77,6 +80,7 @@
   },
   "packageManager": "pnpm@9.15.0",
   "devDependencies": {
+    "@imgly/background-removal-node": "^1.4.5",
     "turbo": "^2.3.3"
   }
 }

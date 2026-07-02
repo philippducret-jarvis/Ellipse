@@ -33,5 +33,8 @@ jobs:
       - name: Validate Echoes workspace
         run: pnpm echoes:validate
 
+      - name: Forge smoke (GDL + auto-play headless)
+        run: pnpm forge:smoke
+
       - name: Build
         run: pnpm build
