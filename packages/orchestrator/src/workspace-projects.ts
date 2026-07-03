@@ -136,18 +136,31 @@ async function readProjectSummary(wsRoot: string): Promise<string | null> {
 }
 
 function readWorkspaceBuilds(wsRoot: string, projectId: string): GameProjectBuild[] {
+  const builds: GameProjectBuild[] = [];
   const preview = join(wsRoot, '07_exports', 'web', 'preview.html');
-  if (!existsSync(preview)) return [];
-  return [
-    {
+  if (existsSync(preview)) {
+    builds.push({
       id: randomUUID(),
       project_id: projectId,
       target: 'web_preview',
       status: 'ready',
       output_url: join('07_exports', 'web', 'preview.html'),
       manifest: { from_workspace: true },
-    },
-  ];
+    });
+  }
+  // runtime Forge (jeu réellement généré : assets + GDL + auto-play)
+  const forgeRuntime = join(wsRoot, '05_runtime', 'index.html');
+  if (existsSync(forgeRuntime)) {
+    builds.push({
+      id: randomUUID(),
+      project_id: projectId,
+      target: 'forge_runtime',
+      status: 'ready',
+      output_url: join('05_runtime', 'index.html'),
+      manifest: { from_workspace: true, forge: true },
+    });
+  }
+  return builds;
 }
 
 function toProject(slug: string, m: WorkspaceManifest, genre: string | null): GameProject {

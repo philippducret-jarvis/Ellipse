@@ -17,6 +17,7 @@ import { buildHumanoidRig, buildMonopartRig } from './rig.mjs';
 import { clipsFor } from './clips.mjs';
 import { generateArena } from './decor.mjs';
 import { pickBackend } from './backends/registry.mjs';
+import { registerForgedGame } from './workspace.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..');
@@ -108,5 +109,11 @@ export async function buildGame(prompt, { id = null, log = console.log } = {}) {
   log(`  ↳ victoire du bot en ${play.simSeconds}s sim · ${play.kills} kills · ${play.deaths} morts · score ${play.score}`);
 
   await writeFile(join(ws, 'forge-build.json'), JSON.stringify(report, null, 2), 'utf8');
+
+  // 6. enregistrement Studio : le jeu apparaît dans le frontend (fusion douce
+  // pour les workspaces existants — on renforce, on ne casse pas).
+  const reg = await registerForgedGame(ws, gdd.id, { gdl, prompt, report });
+  log(`Studio : workspace ${reg.created ? 'enregistré' : 'renforcé'} → ${reg.previewUrl}`);
+
   return { gdl, report, workspace: ws, runtimeDir };
 }

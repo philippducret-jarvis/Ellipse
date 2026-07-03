@@ -58,6 +58,7 @@
     "forge:game": "node ./tools/forge-game.mjs",
     "forge:serve": "node ./tools/serve-forge.mjs",
     "forge:smoke": "node ./tools/forge-smoke.mjs",
+    "forge:register": "node ./tools/forge-register.mjs",
     "create:game": "node ./tools/create-game-from-prompt.mjs",
     "create:game:veloria": "node ./tools/deliver-veloria.mjs",
     "deliver:veloria": "node ./tools/deliver-veloria.mjs",

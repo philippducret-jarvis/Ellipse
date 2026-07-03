@@ -92,6 +92,25 @@ projets à la production réelle :
 - Manifest `08_ops/manifests/autonomous-production.json` : champ `forge`
   (ok, durée, rapport complet — seeds, QA, auto-play).
 
+## Visibilité Studio (workspace.mjs)
+
+Chaque build s'ENREGISTRE dans le contrat workspace lu par le frontend :
+
+- `workspace.json` — créé pour un jeu neuf (project_id stable, status `ready`,
+  preview_url → jeu forgé) ; **fusionné** pour un jeu existant (titre, statut,
+  preview historiques préservés ; seul un bloc `forge` est ajouté) ;
+- `03_assets/registry/generated-assets.json` — entrées `source:"forge"`
+  fusionnées avec les assets historiques (AssetsTab) ;
+- `07_exports/web/preview.html` — jamais écrasé ; redirection créée seulement
+  pour les workspaces neufs ;
+- l'orchestrateur expose `05_runtime/index.html` comme build `forge_runtime`.
+
+`pnpm forge:register -- <id> | --all` ré-enregistre des jeux déjà forgés.
+
+**Règle de test : on renforce les jeux existants** — les vérifs bout-en-bout
+se font avec `--id veloria-veille-des-lames` / `--id echoes-of-the-mushroom-realm`
+(fusion douce), pas en créant des workspaces jetables.
+
 ## Backends génératifs (backends/registry.mjs)
 
 | Backend | Coût | Matériel | Quand |
