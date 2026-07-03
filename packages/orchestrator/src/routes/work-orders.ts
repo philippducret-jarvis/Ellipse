@@ -20,6 +20,7 @@ const ALLOWED_SCRIPTS: Record<string, string> = {
   'veloria:build': 'build-veloria-game.mjs',
   'studio:capability-manifest': 'sync-studio-capability-manifest.mjs',
   'roadmap:t0-t3': 'run-roadmap-t0-t3.mjs',
+  'toolchain:doctor': 'setup-free-toolchain.mjs',
 };
 
 function runNodeScript(root: string, scriptFile: string): Promise<{ code: number; stdout: string; stderr: string }> {

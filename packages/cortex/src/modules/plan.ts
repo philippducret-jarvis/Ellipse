@@ -5,8 +5,8 @@ import { getCortexProvider } from '../provider-registry.js';
 import { analyzePrompt } from '../providers/heuristics.js';
 
 type TaskIds = Record<
-  | 'character' | 'decor' | 'animation' | 'level' | 'mesh_3d' | 'lighting'
-  | 'camera' | 'gameplay' | 'narrative' | 'music' | 'sfx' | 'ui' | 'vfx' | 'qa' | 'integration',
+  | 'producer' | 'character' | 'decor' | 'animation' | 'level' | 'mesh_3d' | 'lighting'
+  | 'camera' | 'gameplay' | 'economy' | 'narrative' | 'music' | 'sfx' | 'ui' | 'vfx' | 'qa' | 'integration',
   string
 >;
 
@@ -47,7 +47,10 @@ export class PlanModule {
       'moba',
       'bullet_hell',
       'dungeon_crawler',
+      'topdown_adventure',
       'action_rpg',
+      'gacha_rpg',
+      'survivors_like',
       'farming',
       'stealth',
       'survival_horde',
@@ -61,17 +64,33 @@ export class PlanModule {
 
     // Mécaniques enrichies
     const allMechanics = [...new Set([...intent.mechanics, ...(hints?.extra_mechanics ?? [])])];
+    const needsEconomy =
+      ['gacha_rpg', 'management_sim', 'auto_battler', 'idle_incremental', 'tower_defense'].includes(intent.genre ?? '') ||
+      allMechanics.some((m) => ['gacha_summon', 'loot_rarity', 'prestige_idle', 'base_building'].includes(m));
+
+    tasks.push({
+      task_id: ids.producer, agent: 'producer', priority: 10, depends_on: [],
+      input: {
+        prompt: intent.raw_prompt,
+        game_type: intent.genre ?? 'platformer',
+        genre: intent.genre,
+        dimension: intent.dimension,
+        mechanic_modules: allMechanics,
+        platforms: ['web'],
+      },
+      context: ctx,
+    });
 
     // ── character ──
     tasks.push({
-      task_id: ids.character, agent: 'character', priority: 10, depends_on: [],
+      task_id: ids.character, agent: 'character', priority: 10, depends_on: [ids.producer],
       input: { source_images: intent.source_images, target: 'hero_sprite', procedural: !hasPhoto },
       context: ctx,
     });
 
     // ── decor ──
     tasks.push({
-      task_id: ids.decor, agent: 'decor', priority: 9, depends_on: [],
+      task_id: ids.decor, agent: 'decor', priority: 9, depends_on: [ids.producer],
       input: { source_images: intent.source_images, targets: ['tileset', 'background', 'props'], genre: intent.genre },
       context: ctx,
     });
@@ -113,6 +132,14 @@ export class PlanModule {
       input: { genre: intent.genre, mechanics: allMechanics, template: intent.genre ?? 'platformer' },
       context: { gdd_excerpt: intent.raw_prompt },
     });
+
+    if (required.has('economy') || needsEconomy) {
+      tasks.push({
+        task_id: ids.economy, agent: 'economy', priority: 8, depends_on: [ids.producer, ids.gameplay],
+        input: { genre: intent.genre, mechanics: allMechanics, hard_pity: intent.genre === 'gacha_rpg' ? 60 : undefined },
+        context: ctx,
+      });
+    }
 
     // ── narrative ──
     if (required.has('narrative') || intent.features.narrative) {
@@ -169,10 +196,11 @@ export class PlanModule {
 
     // ── qa ──
     const qaDeps = [ids.gameplay, ids.level, ids.character, ids.music, ids.sfx, ids.ui];
+    if (required.has('economy') || needsEconomy) qaDeps.push(ids.economy);
     if (required.has('animation') || hasPhoto) qaDeps.push(ids.animation);
     if (required.has('narrative') || intent.features.narrative) qaDeps.push(ids.narrative);
     if (required.has('vfx') || intent.features.vfx) qaDeps.push(ids.vfx);
-    if (required.has('camera') || intent.features.cinematic || is3d) qaDeps.push(ids.camera);
+    if (required.has('camera') || intent.features.cinematic || is3d || isTopDown) qaDeps.push(ids.camera);
     if (is3d) qaDeps.push(ids.mesh_3d, ids.lighting);
 
     tasks.push({
@@ -201,6 +229,7 @@ export class PlanModule {
     if (analysis.difficulty !== 'normal') notes.push(`Difficulté : ${analysis.difficulty}`);
     if (hasPhoto) notes.push(`${intent.source_images.length} photo(s) — Photo-to-Game`);
     if (allMechanics.length > 0) notes.push(`Mécaniques : ${allMechanics.join(', ')}`);
+    if (needsEconomy) notes.push('Economie/LiveOps activee');
     if (intent.features.narrative) notes.push('Narratif activé');
     if (intent.features.vfx) notes.push('VFX activés');
     if (is25d) notes.push('Pipeline 2.5D (depth/parallax · lot0)');
@@ -217,20 +246,27 @@ export class PlanModule {
   }
 
   private defaultRequiredAgents(intent: UserIntent): string[] {
-    const base = ['character', 'decor', 'level', 'gameplay', 'music', 'sfx', 'ui', 'qa', 'integration'];
+    const base = ['producer', 'character', 'decor', 'level', 'gameplay', 'music', 'sfx', 'ui', 'qa', 'integration'];
     if (intent.source_images.length > 0 || intent.genre === 'fighting') base.push('animation');
     if (intent.dimension === '3d') base.push('mesh_3d', 'lighting', 'camera');
-    if (intent.features.narrative || intent.genre === 'rpg') base.push('narrative');
-    if (intent.features.vfx || intent.genre === 'fighting') base.push('vfx');
+    if (
+      intent.features.narrative ||
+      ['rpg', 'action_rpg', 'gacha_rpg', 'souls_like_2d', 'topdown_adventure'].includes(intent.genre ?? '')
+    ) base.push('narrative');
+    if (
+      ['gacha_rpg', 'management_sim', 'auto_battler', 'idle_incremental', 'tower_defense'].includes(intent.genre ?? '') ||
+      intent.mechanics.some((m) => ['gacha_summon', 'loot_rarity', 'prestige_idle', 'base_building'].includes(m))
+    ) base.push('economy');
+    if (intent.features.vfx || ['fighting', 'souls_like_2d', 'gacha_rpg'].includes(intent.genre ?? '')) base.push('vfx');
     if (intent.features.cinematic) base.push('camera');
     return base;
   }
 
   private newTaskIds(): TaskIds {
     return {
-      character: uuidv4(), decor: uuidv4(), animation: uuidv4(), level: uuidv4(),
+      producer: uuidv4(), character: uuidv4(), decor: uuidv4(), animation: uuidv4(), level: uuidv4(),
       mesh_3d: uuidv4(), lighting: uuidv4(), camera: uuidv4(), gameplay: uuidv4(),
-      narrative: uuidv4(), music: uuidv4(), sfx: uuidv4(), ui: uuidv4(),
+      economy: uuidv4(), narrative: uuidv4(), music: uuidv4(), sfx: uuidv4(), ui: uuidv4(),
       vfx: uuidv4(), qa: uuidv4(), integration: uuidv4(),
     };
   }

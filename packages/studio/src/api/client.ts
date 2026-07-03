@@ -89,6 +89,7 @@ export interface WorkspaceOverview {
     preview_gdl_url?: string;
     keyart_url?: string;
     workspace_manifest_url?: string;
+    deliverable_manifest_url?: string;
     readme_url?: string;
     reference_index_url?: string;
   };

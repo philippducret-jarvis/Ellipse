@@ -10,6 +10,11 @@
 import type { UserIntent } from '@ellipse/shared';
 
 export const GENRE_KEYWORDS: Record<string, string[]> = {
+  gacha_rpg: ['gacha', 'gatcha', 'invocation', 'summon', 'banner', 'pity', 'roster', 'fgo', 'genshin', 'collection rpg'],
+  survivors_like: ['survivors', 'survivor', 'vampire survivors', 'brotato', 'halls of torment', 'bullet heaven', 'horde', 'vagues'],
+  souls_like_2d: ['souls', 'souls-like', 'soulslike', 'elden ring', 'dark souls', 'blasphemous', 'salt and sanctuary', 'dark fantasy'],
+  action_rpg: ['action rpg', 'action-rpg', 'hack and slash', 'hacknslash', 'diablo', 'hades', 'secret of mana', 'adventures of elliot', 'adventure of elliot'],
+  topdown_adventure: ['zelda', 'tunic', 'top down adventure', 'top-down adventure', 'aventure top-down'],
   platformer: ['platformer', 'plateforme', 'saut', 'jump', 'mario', 'sonic'],
   rpg: ['rpg', 'quête', 'quest', 'aventure', 'exploration', 'donjon', 'dungeon'],
   puzzle: ['puzzle', 'casse-tête', 'réflexion', 'logique', 'match'],
@@ -18,6 +23,12 @@ export const GENRE_KEYWORDS: Record<string, string[]> = {
 };
 
 export const MECHANIC_PATTERNS: { id: string; patterns: string[] }[] = [
+  { id: 'gacha_summon', patterns: ['gacha', 'gatcha', 'invocation', 'summon', 'banner', 'pity'] },
+  { id: 'summon_squad', patterns: ['escouade', 'squad', 'compagnon', 'companion', 'ally', 'allie'] },
+  { id: 'parry_dodge', patterns: ['parry', 'parade', 'esquive', 'dodge', 'roll', 'souls'] },
+  { id: 'loot_rarity', patterns: ['loot', 'butin', 'rarete', 'rarity', 'relique', 'relic'] },
+  { id: 'skill_tree', patterns: ['skill tree', 'arbre de competences', 'progression', 'ascension'] },
+  { id: 'wave_survival', patterns: ['wave', 'vague', 'horde', 'survivor', 'survivors'] },
   { id: 'double jump', patterns: ['double jump', 'double saut', 'triple saut'] },
   { id: 'collect', patterns: ['collect', 'collection', 'pièce', 'coin', 'gemme'] },
   { id: 'score', patterns: ['score', 'points', 'high score'] },
@@ -35,7 +46,7 @@ export const CINEMATIC_KEYWORDS = ['cinémat', 'cinematic', 'caméra', 'camera',
 export const TWO_HALF_D_KEYWORDS = ['2.5d', '2,5d', 'parallax', 'parallaxe', 'profondeur', 'depth', 'isométrique', 'isometric'];
 
 export const MOOD_KEYWORDS: Record<string, string[]> = {
-  dark: ['sombre', 'dark', 'horror', 'effrayant'],
+  dark: ['sombre', 'dark', 'dark fantasy', 'horror', 'effrayant', 'elden ring', 'souls'],
   retro: ['rétro', 'retro', 'pixel', '8-bit', '16-bit'],
   cute: ['mignon', 'cute', 'kawaii', 'chibi'],
   epic: ['épique', 'epic', 'légende', 'heroic'],
@@ -74,7 +85,10 @@ export function detectDimension(lower: string, sourceImages: string[]): Dimensio
 }
 
 export function detectNarrative(lower: string, genre: string): boolean {
-  return NARRATIVE_KEYWORDS.some((k) => lower.includes(k)) || genre === 'rpg' || genre === 'fighting';
+  return (
+    NARRATIVE_KEYWORDS.some((k) => lower.includes(k)) ||
+    ['rpg', 'action_rpg', 'gacha_rpg', 'souls_like_2d', 'topdown_adventure', 'fighting'].includes(genre)
+  );
 }
 
 /** Parse déterministe complet prompt → UserIntent. */

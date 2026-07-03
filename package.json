@@ -66,6 +66,8 @@
     "desktop:build": "pnpm --filter @ellipse/desktop build",
     "studio:smoke": "node ./tools/studio-navigation-smoke.mjs",
     "studio:capability-manifest": "node ./tools/sync-studio-capability-manifest.mjs",
+    "toolchain:doctor": "node ./tools/setup-free-toolchain.mjs",
+    "toolchain:setup": "node ./tools/setup-free-toolchain.mjs --install-winget",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck"
   },

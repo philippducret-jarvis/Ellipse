@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import type { GenerationPlan, GameDefinition, TaskResult, TaskSpec } from '@ellipse/shared';
-import { getGameplayTemplate, PLATFORMER_TEMPLATE, getAgentsForAutoCorrect, type AgentType } from '@ellipse/shared';
+import { createBootstrapGdl, getAgentsForAutoCorrect, type AgentType } from '@ellipse/shared';
 import { getAgentRegistry } from '@ellipse/agents';
 import { CortexMaster } from '@ellipse/cortex';
 import { dispatchTask, isBusAvailable, getBusConnection } from '@ellipse/bus';
@@ -60,7 +60,16 @@ export class MasterAI {
     options: ExecutePlanOptions = {},
   ): Promise<GenerationSession> {
     const genre = plan.user_intent.genre ?? 'platformer';
-    const base = getGameplayTemplate(genre) as GameDefinition;
+    const title = this.extractTitle(plan.user_intent.raw_prompt);
+    const base = createBootstrapGdl({
+      title,
+      slug: 'session-preview',
+      genre,
+      dimension: plan.user_intent.dimension,
+      mechanics: plan.user_intent.mechanics,
+      sourceImages: plan.user_intent.source_images,
+      prompt: plan.user_intent.raw_prompt,
+    }) as GameDefinition;
 
     if (options.workspaceRoot && options.projectSlug) {
       this.projectKnowledge = await loadProjectKnowledgeContext(
@@ -77,7 +86,7 @@ export class MasterAI {
       session_id: uuidv4(),
       plan,
       results: [],
-      gdl: structuredClone({ ...PLATFORMER_TEMPLATE, ...base, meta: { ...PLATFORMER_TEMPLATE.meta, ...base.meta, title: this.extractTitle(plan.user_intent.raw_prompt) } }),
+      gdl: structuredClone(base),
       status: 'executing',
     };
 

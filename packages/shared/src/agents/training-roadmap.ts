@@ -31,7 +31,7 @@ export const TRAINING_ROADMAP_PHASES: readonly TrainingPhase[] = [
     horizon: 'Semaine 1–2',
     objectiveFr: 'Unifier score 0–100 par étape workflow, mémoire agents, retry automatique.',
     successMetrics: ['100% steps ont passScore', 'agent-memory.jsonl écrit sur échec', 'autonomous-workflow-report.json'],
-    agentFocus: ['qa', 'integration', 'character'],
+    agentFocus: ['producer', 'qa', 'integration', 'character'],
     workspaceArtifacts: ['08_ops/workflow-runs/', '08_ops/telemetry/agent-memory.jsonl', '08_ops/manifests/autonomous-workflow-report.json'],
     trainingDrills: [
       { id: 'assess_only', labelFr: 'Évaluer sans exécuter', command: 'pnpm training:assess', passCriteriaFr: '14 scores calculés' },
@@ -60,7 +60,7 @@ export const TRAINING_ROADMAP_PHASES: readonly TrainingPhase[] = [
     horizon: 'Semaine 6–8',
     objectiveFr: 'systems[] complets, Veloria parité sim, patches GDL sans régression.',
     successMetrics: ['validateGdl score ≥ 80', '26/26 tests engine', 'lane_runner + wave_spawner actifs'],
-    agentFocus: ['gameplay', 'level', 'integration'],
+    agentFocus: ['gameplay', 'economy', 'level', 'integration'],
     workspaceArtifacts: ['05_runtime/gdl/*.gdl.json', '08_ops/manifests/mechanics-audit.json'],
     trainingDrills: [
       { id: 'mechanics_audit', labelFr: 'Audit mécaniques', command: 'pnpm mechanics:audit', passCriteriaFr: '0 système manquant engine' },

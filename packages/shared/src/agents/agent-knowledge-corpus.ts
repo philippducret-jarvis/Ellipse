@@ -25,6 +25,26 @@ const UNIVERSAL_CORE = `
 
 export const AGENT_KNOWLEDGE_BLOCKS: KnowledgeBlock[] = [
   {
+    id: 'production_toolchain',
+    titleFr: 'Production, toolchain & work orders',
+    agents: ['producer', 'integration', 'qa'],
+    content: `
+Producer : figer north_star, subtype, scope, toolchain_plan, work_orders et gates avant execution.
+Toolchain gratuite : Sharp/background removal CPU, SAM2/BiRefNet GPU worker optionnel, ComfyUI via COMFYUI_URL, Tiled/LDtk pour maps, Godot/Blender pour exports avances.
+Ne jamais marquer un outil externe connected sans doctor command/env. Fallback local obligatoire pour comptes PlayFab/Firebase/GameAnalytics absents.
+`.trim(),
+  },
+  {
+    id: 'gacha_liveops',
+    titleFr: 'Gacha, economie & compliance',
+    agents: ['economy', 'gameplay', 'ui', 'qa', 'integration'],
+    content: `
+Gacha : currencies free/premium, banner pools, rates, pity hard, spark, duplicate fragments, roster ascension, stamina, event calendar.
+Compliance : afficher odds avant achat et pres du bouton d'achat pour tout randomized paid reward. Garder pull_history et odds_table auditables.
+Local fallback : economy_manifest JSON + telemetry JSONL. Connecteurs optionnels : PlayFab (catalog/inventory), Firebase Remote Config, GameAnalytics.
+`.trim(),
+  },
+  {
     id: 'pipeline_assets',
     titleFr: 'Pipeline asset 8 stages',
     agents: ['character', 'animation', 'decor', 'qa'],

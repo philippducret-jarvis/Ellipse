@@ -25,6 +25,7 @@ export const StudioCapabilitySchema = z.object({
   target: z.string(),
   owner_packages: z.array(z.string()),
   agent_roles: z.array(z.string()).default([]),
+  free_tool_ids: z.array(z.string()).optional(),
   blocking_for: z.array(z.string()).default([]),
   implementation_notes: z.array(z.string()).default([]),
 });
@@ -41,6 +42,7 @@ export const EVOLUTION_ENGINES = [
       'Planche → extraction sujet → cleanup neuronal/heuristique → pixel-diff gate → hybrid ou inpaint. Veloria IoU gate existe hors orchestrator.',
     packages: ['packages/pipeline', 'tools/lib/veloria'],
     entrypoints: ['generateHeroRuntimePack', 'produceRefinedHeroPack', 'compareSilhouettes'],
+    free_tool_ids: ['sharp_background_removal', 'sam2', 'birefnet', 'comfyui'],
     missing: ['SAM2/BiRefNet', 'inpainting ComfyUI', 'gate bloquant stage 07_qa', 'style-lock embedding'],
   },
   {
@@ -50,6 +52,7 @@ export const EVOLUTION_ENGINES = [
     description: 'rig.json + atlas + state machine → runtime Pixi skeletal. Exporté mais non consommé par engine.',
     packages: ['packages/pipeline', 'packages/engine'],
     entrypoints: ['hero-runtime/assembly.ts', 'run-stages animation stage'],
+    free_tool_ids: ['pixijs_spritesheet', 'godot'],
     missing: ['Skeletal2DRenderer', 'anim-state-machine runtime', 'IK 2D', 'timeline Studio'],
   },
   {
@@ -59,6 +62,7 @@ export const EVOLUTION_ENGINES = [
     description: 'Extraction modules depuis planches → tileset + collision + parallax GDL + hazard zones.',
     packages: ['packages/pipeline', 'packages/engine', 'tools/lib/veloria'],
     entrypoints: ['buildEnvironmentSpec', 'generate-decor', 'levels.mjs', 'render/parallax-layers.ts'],
+    free_tool_ids: ['tiled', 'ldtk'],
     missing: ['TilemapLayer renderer', 'tile_collision sim', 'Tiled export'],
   },
   {
@@ -69,6 +73,16 @@ export const EVOLUTION_ENGINES = [
     packages: ['packages/engine', 'packages/shared/src/codegen', 'packages/shared/src/gdl/mechanics-registry.ts'],
     entrypoints: ['sim/systems.ts', 'sim/veloria-survival.ts', 'render/parallax-layers.ts', 'render/depth-sort.ts'],
     missing: ['gacha_summon', 'summon_units', 'loot_system', 'tile_collision sim', 'meta_systems runes/relics'],
+  },
+  {
+    id: 'gacha_liveops_engine',
+    title: 'Moteur gacha, economie et live-ops',
+    status: 'stub' as const,
+    description: 'Bannieres, rates, pity, roster, monnaies, remote config, analytics et compliance store.',
+    packages: ['packages/agents', 'packages/shared', 'packages/orchestrator', 'packages/studio'],
+    entrypoints: ['economy-agent.ts', 'free-toolchain.ts', 'durable-workflows.ts'],
+    free_tool_ids: ['playfab', 'firebase_remote_config', 'gameanalytics', 'store_compliance'],
+    missing: ['connecteurs PlayFab/Firebase/GameAnalytics', 'editeur banner Studio', 'pull simulator UI', 'regional compliance flags'],
   },
   {
     id: 'agent_orchestration_engine',
@@ -120,6 +134,7 @@ export const STUDIO_CAPABILITY_GAPS: StudioCapability[] = [
     target: 'IoU ≥ 0.72 vs planche OU inpaint validé humain ; master = pixels planche enrichis, pas silhouettes DSL.',
     owner_packages: ['pipeline', 'tools/lib/veloria'],
     agent_roles: ['Character', 'Art Direction', 'Animation'],
+    free_tool_ids: ['sharp_background_removal', 'sam2', 'birefnet', 'comfyui'],
     blocking_for: ['runtime.sprites', 'studio.assets_tab_truth'],
     implementation_notes: [
       'hero-runtime-pack default stage 03_cleanup (orchestrator)',
@@ -138,6 +153,7 @@ export const STUDIO_CAPABILITY_GAPS: StudioCapability[] = [
     target: 'Board → N packs avec manifest + style-lock par entité.',
     owner_packages: ['pipeline', 'studio'],
     agent_roles: ['Character', 'Decor', 'Integration'],
+    free_tool_ids: ['sharp_background_removal', 'sam2', 'birefnet'],
     blocking_for: ['asset.concept_to_hd'],
     implementation_notes: ['board-cutter.ts', 'ExtractionTab', 'catalog.mjs Veloria'],
   },
@@ -152,6 +168,7 @@ export const STUDIO_CAPABILITY_GAPS: StudioCapability[] = [
     target: 'Pixi lit runtime_atlas.json + clips ; boss phases visuelles.',
     owner_packages: ['engine', 'pipeline'],
     agent_roles: ['Animation', 'Integration'],
+    free_tool_ids: ['pixijs_spritesheet', 'godot'],
     blocking_for: ['gameplay.boss_phases', 'gameplay.combat_feel'],
     implementation_notes: ['hero-runtime/assembly.ts', 'packages/engine skeletal-2D à créer'],
   },
@@ -166,6 +183,7 @@ export const STUDIO_CAPABILITY_GAPS: StudioCapability[] = [
     target: 'GDL layout.tilemap + tile_collision sim + export Tiled.',
     owner_packages: ['engine', 'tools/lib/veloria'],
     agent_roles: ['Level', 'Decor'],
+    free_tool_ids: ['tiled', 'ldtk'],
     blocking_for: ['gameplay.lane_survival'],
     implementation_notes: ['render/tilemap-layer.ts', 'platformsToTileLayer', 'generate-decor.ts'],
   },
@@ -208,6 +226,7 @@ export const STUDIO_CAPABILITY_GAPS: StudioCapability[] = [
     target: 'Draft blessings + gacha_summon + roster persistence.',
     owner_packages: ['studio', 'engine'],
     agent_roles: ['Gameplay', 'Integration'],
+    free_tool_ids: ['playfab', 'firebase_remote_config', 'gameanalytics', 'store_compliance'],
     blocking_for: ['studio.production_actions'],
     implementation_notes: ['Veloria blessings JSON', 'gacha_summon codegen TODO'],
   },

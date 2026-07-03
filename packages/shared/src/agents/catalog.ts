@@ -16,6 +16,25 @@ export const DOMAIN_LABELS: Record<AgentDomain, string> = {
 
 export const AGENT_CATALOG = [
   {
+    id: 'producer',
+    name: 'Le Producteur',
+    icon: 'P',
+    domain: 'design',
+    role: 'Scope, sous-type, toolchain, work orders et gates de production',
+    phase: 1,
+    status: 'active',
+    workLabel: 'Plan de production',
+    capabilities: [
+      'Contrat prompt/board -> procedure de fabrication',
+      'Selection des bibliotheques type/sous-type',
+      'Plan toolchain gratuit par genre',
+      'Work orders agents + gates QA',
+      'Priorisation P0/P1/P2',
+    ],
+    outputs: ['factory_operational_plan', 'toolchain_plan', 'work_order_templates'],
+    triggers: ['Toujours en debut de pipeline'],
+  },
+  {
     id: 'character',
     name: 'Le Héros',
     icon: '🦸',
@@ -167,6 +186,25 @@ export const AGENT_CATALOG = [
     ],
     outputs: ['GDL systems, entities, scenes'],
     triggers: ['Toujours inclus'],
+  },
+  {
+    id: 'economy',
+    name: "L'Economiste",
+    icon: 'E',
+    domain: 'design',
+    role: 'Gacha, monnaies, inventaire, live-ops, probabilites et compliance',
+    phase: 1,
+    status: 'active',
+    workLabel: 'Economie & gacha',
+    capabilities: [
+      'Bannieres, pools, raretes, pity, spark',
+      'Roster, fragments, doublons, ascension',
+      'Monnaies free/premium, stamina, shop, rewards',
+      'Manifest probabilites et disclosure store',
+      'Remote config defaults et analytics events',
+    ],
+    outputs: ['economy_manifest', 'banner_manifest', 'compliance_manifest', 'GDL /meta/economy'],
+    triggers: ['Gacha, collection, management, shop, live-ops'],
   },
   {
     id: 'narrative',

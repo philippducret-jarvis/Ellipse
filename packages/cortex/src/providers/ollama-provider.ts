@@ -28,7 +28,7 @@ const INTENT_SYSTEM_PROMPT = `You are Ellipse Cortex, the AI core of a video gam
 Your task: parse a game creation request and extract a structured intent JSON.
 
 Rules:
-- genre: one of platformer, rpg, puzzle, runner, fighting (pick the closest)
+- genre: one of platformer, topdown_adventure, action_rpg, souls_like_2d, gacha_rpg, survivors_like, rpg, puzzle, runner, fighting (pick the closest)
 - dimension: "2d", "2.5d" (depth/parallax over a 2D base), or "3d"
 - mechanics: array of detected gameplay mechanics (double jump, collect, score, health, enemy, power-up, dash, wall jump, etc.)
 - features.narrative: true if story/dialog/quests are relevant

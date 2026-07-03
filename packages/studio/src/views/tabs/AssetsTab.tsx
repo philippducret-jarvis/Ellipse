@@ -114,7 +114,7 @@ export function AssetsTab({ snap, onUpdate }: { snap: GameProjectSnapshot; onUpd
     const silhouette = `${base}/03_cleanup/silhouette-clean.png`;
     setRigPartUrls({ body: silhouette, torso: silhouette });
     void fetchProjectWorkspaceFile(snap.project.id, `${packRoot}/04_rig/rig.json`)
-      .then((file) => setRigJson(file.content))
+      .then((file) => setRigJson(file.content ?? null))
       .catch(() => setRigJson(null));
   }, [selectedAsset, snap.project.id, snap.project.slug]);
 

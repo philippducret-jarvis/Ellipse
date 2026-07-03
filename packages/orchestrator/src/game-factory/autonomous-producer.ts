@@ -68,6 +68,7 @@ async function seedBootstrapGdl(
     mechanics,
     heroSpriteUrl: heroSource?.url ?? heroSource?.file_path ?? null,
     sourceImages: snap.project.source_images ?? [],
+    prompt: snap.project.source_prompt,
   });
 
   await mkdir(join(workspaceRoot, '05_runtime', 'gdl'), { recursive: true });

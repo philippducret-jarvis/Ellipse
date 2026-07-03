@@ -24,6 +24,21 @@ const SHARED_FIDELITY = [
 ];
 
 export const AGENT_SKILL_PROFILES: Record<AgentType, AgentSkillProfile> = {
+  producer: {
+    agent: 'producer',
+    mission: 'Transformer prompt, boards et sous-type en plan de production executable avec toolchain, work orders et gates.',
+    directives: [
+      'Toujours commencer par figer north_star, scope, subtype et first_playable_slice.',
+      'Appeler buildGameCreationProcedure puis buildFactoryToolchainPlan pour relier bibliotheques et outils.',
+      'Generer des work orders par domaine : asset, object_blueprint, room, event_graph, gameplay, ui, audio, qa.',
+      'Marquer P0 tout ce qui bloque asset fidelity, rig runtime, tilemap/collision, gameplay sim ou compliance gacha.',
+      'Ne jamais promettre un outil externe comme connecte sans doctor env/command passe.',
+    ],
+    reports_to: 'master',
+    collaborates_with: ['character', 'decor', 'animation', 'level', 'gameplay', 'economy', 'qa', 'integration'],
+    auto_correct_triggers: ['missing production_contract', 'missing toolchain', 'work_order_without_owner'],
+    fidelity_rules: SHARED_FIDELITY,
+  },
   character: {
     agent: 'character',
     mission: 'Sprites personnage fidèles planche — cutout, hybrid, atlas runtime (parité Godot Import + PostImport).',
@@ -129,6 +144,22 @@ export const AGENT_SKILL_PROFILES: Record<AgentType, AgentSkillProfile> = {
     collaborates_with: ['level', 'integration', 'qa', 'vfx'],
     auto_correct_triggers: ['validate_gdl systems missing', 'playtest low win rate', 'enemy_ai missing'],
     fidelity_rules: ['Win rate playtest ≥ 25% avant shipping.'],
+  },
+  economy: {
+    agent: 'economy',
+    mission: 'Produire economie, gacha, live-ops, probabilites et compliance store sous forme de manifests auditables.',
+    directives: [
+      'Gacha : declarer currencies, banners, rarity_rates, pity, spark, duplicate conversion et roster progression.',
+      'Toujours generer odds_disclosure pour tout randomized item achetable.',
+      'Prevoir fallback local JSON si PlayFab/Firebase/GameAnalytics ne sont pas configures.',
+      'Exporter remote_config_defaults pour rates, stamina, rewards, shop et event calendar.',
+      'QA : simuler 10000 pulls deterministes pour verifier les taux et le pity hard.',
+      'Ne jamais cacher le cout reel derriere plusieurs monnaies sans disclosure explicite.',
+    ],
+    reports_to: 'producer',
+    collaborates_with: ['gameplay', 'ui', 'qa', 'integration'],
+    auto_correct_triggers: ['missing odds disclosure', 'gacha_summon missing economy', 'pity invalid', 'economy inflation'],
+    fidelity_rules: ['Disclosure odds before purchase is mandatory for randomized paid rewards.'],
   },
   narrative: {
     agent: 'narrative',

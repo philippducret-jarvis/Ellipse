@@ -1,4 +1,5 @@
 import type { Agent, AgentRegistry } from './types.js';
+import { ProducerAgent } from './agents/producer-agent.js';
 import { CharacterAgent } from './agents/character-agent.js';
 import { DecorAgent } from './agents/decor-agent.js';
 import { AnimationAgent } from './agents/animation-agent.js';
@@ -7,6 +8,7 @@ import { Mesh3DAgent } from './agents/mesh-3d-agent.js';
 import { LightingAgent } from './agents/lighting-agent.js';
 import { CameraAgent } from './agents/camera-agent.js';
 import { GameplayAgent } from './agents/gameplay-agent.js';
+import { EconomyAgent } from './agents/economy-agent.js';
 import { NarrativeAgent } from './agents/narrative-agent.js';
 import { MusicAgent } from './agents/music-agent.js';
 import { SfxAgent } from './agents/sfx-agent.js';
@@ -35,6 +37,7 @@ let singleton: AgentRegistry | null = null;
 
 export function createAgentRegistry(): AgentRegistry {
   const registry = new Registry();
+  registry.register(new ProducerAgent());
   registry.register(new CharacterAgent());
   registry.register(new DecorAgent());
   registry.register(new AnimationAgent());
@@ -43,6 +46,7 @@ export function createAgentRegistry(): AgentRegistry {
   registry.register(new LightingAgent());
   registry.register(new CameraAgent());
   registry.register(new GameplayAgent());
+  registry.register(new EconomyAgent());
   registry.register(new NarrativeAgent());
   registry.register(new MusicAgent());
   registry.register(new SfxAgent());

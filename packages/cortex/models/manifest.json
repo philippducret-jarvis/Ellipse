@@ -10,6 +10,15 @@
       "status": "heuristic_fallback",
       "phase": 1
     },
+    "producer": {
+      "id": "ellipse-producer-v0",
+      "type": "production-planner",
+      "description": "Scope, sous-type, toolchain et work orders",
+      "weights_path": "${ELLIPSE_MODELS_DIR}/producer-v0",
+      "agent_id": "producer",
+      "status": "active_stub",
+      "phase": 1
+    },
     "character": {
       "id": "ellipse-character-v0",
       "type": "vision-sprite",
@@ -82,6 +91,16 @@
       "output_schema": "schemas/gdl/game.schema.json",
       "agent_id": "gameplay",
       "status": "pending",
+      "phase": 1
+    },
+    "economy": {
+      "id": "ellipse-economy-v0",
+      "type": "economy-liveops",
+      "description": "Gacha, monnaies, inventaire, rates et compliance",
+      "weights_path": "${ELLIPSE_MODELS_DIR}/economy-v0",
+      "output_schema": "schemas/economy/economy.schema.json",
+      "agent_id": "economy",
+      "status": "active_stub",
       "phase": 1
     },
     "narrative": {

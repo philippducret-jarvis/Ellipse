@@ -13,6 +13,7 @@ describe('durable workflow catalog', () => {
     expect(ids).toContain('asset_family_pipeline');
     expect(ids).toContain('scene_assembly');
     expect(ids).toContain('runtime_integration');
+    expect(ids).toContain('gacha_liveops_pipeline');
     expect(ids).toContain('qa_release_gate');
   });
 });

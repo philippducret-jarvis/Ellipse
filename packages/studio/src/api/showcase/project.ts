@@ -22,26 +22,31 @@ async function fetchShowcaseManifest(): Promise<ShowcaseManifest | null> {
     return raw as ShowcaseManifest;
   }
 
+  const slug = (raw.slug as string) ?? FLAGSHIP_GAME.slug;
+  const workspaceRoot = `workspaces/${slug}`;
+
   return {
     project: {
       id: (raw.project_id as string) ?? FLAGSHIP_GAME.id,
       title: (raw.title as string) ?? FLAGSHIP_GAME.title,
-      slug: (raw.slug as string) ?? FLAGSHIP_GAME.slug,
-      status: (raw.status as string) ?? 'playable_slice',
+      slug,
+      status: 'ready',
       source_prompt: FLAGSHIP_GAME.sourcePrompt,
       summary: 'Survivors-like portrait dark fantasy — jeu livrable Ellipse.',
       genre: (raw.genre as string) ?? FLAGSHIP_GAME.genre,
-      dimension: (raw.dimension as string) ?? FLAGSHIP_GAME.dimension,
+      dimension: FLAGSHIP_GAME.dimension,
       target_runtime: 'ellipse_web_2d',
-      camera_mode: (raw.camera_mode as string) ?? FLAGSHIP_GAME.cameraMode,
+      camera_mode: FLAGSHIP_GAME.cameraMode,
       source_images: [],
       metadata: { flagship: true, orientation: raw.orientation ?? FLAGSHIP_GAME.orientation },
       created_at: (raw.generated_at as string) ?? new Date().toISOString(),
       updated_at: new Date().toISOString(),
     },
     workspace: {
-      rootDir: `workspaces/${FLAGSHIP_GAME.slug}`,
-      relativeRoot: `workspaces/${FLAGSHIP_GAME.slug}`,
+      rootDir: workspaceRoot,
+      relativeRoot: workspaceRoot,
+      readmePath: `${workspaceRoot}/README.md`,
+      contextPath: `${workspaceRoot}/08_ops/manifests/veloria-workspace.json`,
     },
     preview_gdl: FLAGSHIP_PATHS.gdlUrl,
     copied_reference_count: 0,

@@ -243,6 +243,13 @@ export function applyScene(world: SimWorld, idx: number, applyTransform = false)
   if (layout?.enemies && layout.enemies.length > 0) {
     world.enemies = layout.enemies.map((e) => {
       const range = e.patrol ?? 80;
+      const extended = e as typeof e & {
+        hp?: number;
+        isBoss?: boolean;
+        phase?: number;
+        maxPhase?: number;
+        variant?: string;
+      };
       return {
         x: e.x,
         y: e.y,
@@ -252,6 +259,12 @@ export function applyScene(world: SimWorld, idx: number, applyTransform = false)
         alive: true,
         patrolLeft: e.x - range,
         patrolRight: e.x + range,
+        kind: e.kind,
+        hp: extended.hp,
+        isBoss: extended.isBoss,
+        phase: extended.phase,
+        maxPhase: extended.maxPhase,
+        variant: extended.variant,
       };
     });
   } else if (ENEMY_GENRES.includes(world.genre)) {

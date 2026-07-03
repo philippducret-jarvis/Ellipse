@@ -44,12 +44,12 @@ export const SFX_PRESETS: Record<string, { frequencyHz: number; durationMs: numb
   footstep: { frequencyHz: 260, durationMs: 40 },
 };
 
-export function generateSfxWav(event: string): Buffer {
+export function generateSfxWav(event: string): Uint8Array {
   const preset = SFX_PRESETS[event] ?? { frequencyHz: 440, durationMs: 100 };
-  return generateToneWav(preset);
+  return new Uint8Array(generateToneWav(preset));
 }
 
-export function generateMusicLoopWav(durationMs = 2000): Buffer {
+export function generateMusicLoopWav(durationMs = 2000): Uint8Array {
   const sampleRate = 22050;
   const numSamples = Math.floor((sampleRate * durationMs) / 1000);
   const dataSize = numSamples;
@@ -78,5 +78,5 @@ export function generateMusicLoopWav(durationMs = 2000): Buffer {
     buffer.writeUInt8(Math.max(0, Math.min(255, Math.round(sample))), 44 + i);
   }
 
-  return buffer;
+  return new Uint8Array(buffer);
 }

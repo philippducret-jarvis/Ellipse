@@ -10,7 +10,9 @@ export function extractTitle(prompt: string): string {
 export function pickCameraMode(intent: UserIntent): 'side_view' | 'top_down' | 'third_person' | 'isometric' {
   if (intent.dimension === '3d') return 'third_person';
   if (intent.genre === 'puzzle') return 'isometric';
-  if (intent.genre === 'rpg') return 'top_down';
+  if (['rpg', 'action_rpg', 'gacha_rpg', 'survivors_like', 'topdown_adventure'].includes(intent.genre ?? '')) {
+    return 'top_down';
+  }
   return 'side_view';
 }
 

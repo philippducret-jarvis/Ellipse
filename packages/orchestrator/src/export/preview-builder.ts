@@ -15,13 +15,16 @@ export interface PreviewBuildResult {
   exportDir: string;
   previewHtml: string;
   previewUrl: string;
-  mode: 'survivors' | 'platformer';
+  mode: 'survivors' | 'topdown' | 'platformer';
 }
 
-function detectMode(gdl: { systems?: string[] }): 'survivors' | 'platformer' {
+function detectMode(gdl: { systems?: string[] }): 'survivors' | 'topdown' | 'platformer' {
   const systems = gdl.systems ?? [];
   if (systems.some((s) => ['lane_runner', 'wave_spawner', 'blessing_draft'].includes(s))) {
     return 'survivors';
+  }
+  if (systems.includes('physics_topdown')) {
+    return 'topdown';
   }
   return 'platformer';
 }
@@ -42,7 +45,7 @@ function buildHtml(title: string, slug: string, mode: string): string {
         <div>
           <p class="eyebrow">Ellipse · preview HD 2D</p>
           <h1>${title}</h1>
-          <p class="lede" id="lede">Mode ${mode} · flèches ou A/D · ${mode === 'survivors' ? 'touches 1-3 bénédictions' : 'Espace saut'}</p>
+          <p class="lede" id="lede">Mode ${mode} · flèches ou WASD · ${mode === 'survivors' ? 'touches 1-3 bénédictions' : mode === 'platformer' ? 'Espace saut' : 'exploration top-down'}</p>
         </div>
         <div class="stats" id="stats"></div>
       </section>
@@ -110,6 +113,22 @@ function isSurvivors(gdl) {
   return (gdl.systems || []).some(s => ['lane_runner','wave_spawner'].includes(s));
 }
 
+function isTopdown(gdl) {
+  return (gdl.systems || []).includes('physics_topdown');
+}
+
+function resizeCanvas(gdl) {
+  const res = gdl.meta?.resolution;
+  if (Array.isArray(res) && res.length === 2) {
+    canvas.width = res[0];
+    canvas.height = res[1];
+  }
+}
+
+function overlap(a, b) {
+  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+}
+
 function initPlatformer(gdl) {
   const scene = gdl.scenes?.[0] || {};
   const bg = scene.background?.color || '#1a1a2e';
@@ -144,6 +163,104 @@ function initPlatformer(gdl) {
 
     statsEl.replaceChildren(chip('PV', state.health), chip('Score', state.score));
     statusEl.textContent = 'Platformer · ' + (gdl.meta?.title || 'Jeu');
+    requestAnimationFrame(tick);
+  }
+  tick();
+}
+
+function initTopdown(gdl) {
+  const scene = gdl.scenes?.[0] || {};
+  const layout = scene.layout || {};
+  const bg = scene.background?.color || '#101922';
+  const player = gdl.entities?.find(e => e.id === 'player');
+  const t = player?.components?.find(c => c.transform)?.transform || layout.spawn || { x: 100, y: 360 };
+  const h = player?.components?.find(c => c.health)?.health;
+  const state = { x: t.x, y: t.y, score: 0, health: h?.max || 4, won: false, lost: false, invuln: 0 };
+  const size = 42;
+  const blockers = layout.platforms || [];
+  const pickups = (layout.collectibles || []).map(p => ({ ...p, got: false }));
+  const enemies = (layout.enemies || []).map((e, i) => ({
+    x: e.x,
+    y: e.y,
+    w: e.w || 40,
+    h: e.h || 40,
+    vx: e.speed || 48 + i * 4,
+    left: e.x - (e.patrol || 70),
+    right: e.x + (e.patrol || 70),
+    hp: e.hp || 2,
+    kind: e.kind || 'enemy',
+  }));
+  const goal = layout.goal ? { x: layout.goal.x - 20, y: layout.goal.y - 28, w: 48, h: 64 } : null;
+
+  function blocked(box) {
+    return blockers.some(b => overlap(box, { x: b.x, y: b.y, w: b.w, h: b.h }));
+  }
+
+  function tick() {
+    const W = canvas.width, H = canvas.height;
+    if (!state.won && !state.lost) {
+      const dx = (keys.has('ArrowRight') || keys.has('d') ? 1 : 0) - (keys.has('ArrowLeft') || keys.has('a') ? 1 : 0);
+      const dy = (keys.has('ArrowDown') || keys.has('s') ? 1 : 0) - (keys.has('ArrowUp') || keys.has('w') ? 1 : 0);
+      const len = Math.hypot(dx, dy) || 1;
+      const speed = 3.4;
+      const nx = state.x + (dx / len) * speed;
+      const ny = state.y + (dy / len) * speed;
+      if (!blocked({ x: nx, y: state.y, w: size, h: size })) state.x = nx;
+      if (!blocked({ x: state.x, y: ny, w: size, h: size })) state.y = ny;
+      state.x = Math.max(0, Math.min(W - size, state.x));
+      state.y = Math.max(0, Math.min(H - size, state.y));
+
+      for (const e of enemies) {
+        e.x += e.vx * 0.016;
+        if (e.x < e.left) { e.x = e.left; e.vx = Math.abs(e.vx); }
+        if (e.x > e.right) { e.x = e.right; e.vx = -Math.abs(e.vx); }
+        if (state.invuln <= 0 && overlap({ x: state.x, y: state.y, w: size, h: size }, e)) {
+          state.health -= 1;
+          state.invuln = 70;
+          if (state.health <= 0) state.lost = true;
+        }
+      }
+      if (state.invuln > 0) state.invuln--;
+
+      for (const p of pickups) {
+        if (!p.got && overlap({ x: state.x, y: state.y, w: size, h: size }, { x: p.x - 12, y: p.y - 12, w: 24, h: 24 })) {
+          p.got = true;
+          state.score += 50;
+        }
+      }
+      if (goal && overlap({ x: state.x, y: state.y, w: size, h: size }, goal)) state.won = true;
+    }
+
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+    for (const z of layout.zones || []) {
+      ctx.fillStyle = 'rgba(214,179,90,0.045)';
+      ctx.fillRect(z.x, z.y, z.w, z.h);
+    }
+    ctx.fillStyle = '#253247';
+    for (const b of blockers) ctx.fillRect(b.x, b.y, b.w, b.h);
+    if (goal) {
+      ctx.fillStyle = '#d6b35a';
+      ctx.fillRect(goal.x, goal.y, goal.w, goal.h);
+    }
+    for (const p of pickups) {
+      if (p.got) continue;
+      ctx.fillStyle = '#7bdff2';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 10, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    for (const e of enemies) {
+      ctx.fillStyle = e.kind.includes('elite') ? '#d6b35a' : '#9e4f5c';
+      ctx.fillRect(e.x, e.y, e.w, e.h);
+    }
+    ctx.fillStyle = state.invuln % 8 < 4 ? '#ef476f' : '#f0e1ba';
+    ctx.fillRect(state.x, state.y, size, size);
+    ctx.fillStyle = '#f0e1ba';
+    ctx.font = '14px sans-serif';
+    ctx.fillText('PV ' + state.health + '  Score ' + state.score, 16, 28);
+    statsEl.replaceChildren(chip('PV', state.health), chip('Score', state.score), chip('Objectif', state.won ? 'OK' : 'Gate'));
+    statusEl.textContent = state.won ? 'Victoire!' : state.lost ? 'Defaite' : 'Top-down · explorez et atteignez le gate';
     requestAnimationFrame(tick);
   }
   tick();
@@ -266,7 +383,9 @@ function initSurvivors(gdl) {
 }
 
 loadGdl().then(gdl => {
+  resizeCanvas(gdl);
   if (isSurvivors(gdl)) initSurvivors(gdl);
+  else if (isTopdown(gdl)) initTopdown(gdl);
   else initPlatformer(gdl);
 }).catch(err => { statusEl.textContent = 'Erreur: ' + err.message; });
 `;
