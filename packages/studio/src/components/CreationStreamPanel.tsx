@@ -3,10 +3,11 @@ import type { GameProjectSnapshot } from '@ellipse/shared';
 import { CREATION_STREAM, assessCreationStream, type StreamMilestoneId } from '@ellipse/shared';
 import { useStudioStore, type WorkspaceTab } from '../store/studio-store.js';
 import { ActionButton } from '../ui/ActionButton.js';
+import { resolvePreviewUrl } from '../lib/preview.js';
 
 export function CreationStreamPanel({ snap }: { snap: GameProjectSnapshot }) {
   const setTab = useStudioStore((s) => s.setWorkspaceTab);
-  const previewUrl = `/workspaces/${snap.project.slug}/07_exports/web/preview.html`;
+  const previewUrl = resolvePreviewUrl(snap);
   const assessment = useMemo(() => assessCreationStream(snap, previewUrl), [snap, previewUrl]);
 
   function openMilestone(id: StreamMilestoneId) {

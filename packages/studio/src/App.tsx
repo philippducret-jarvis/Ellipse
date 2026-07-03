@@ -7,6 +7,7 @@ import { CreationWizard } from './components/CreationWizard.js';
 import { Cockpit } from './components/Cockpit.js';
 import { StatusBar } from './components/StatusBar.js';
 import { PreviewModal } from './layout/PreviewModal.js';
+import { resolvePreviewUrl } from './lib/preview.js';
 import { ActionButton } from './ui/ActionButton.js';
 import { Badge } from './ui/Badge.js';
 import { PROJECT_STATUS_FR } from './i18n/fr.js';
@@ -53,10 +54,7 @@ export function App() {
     if (!activeProjectId && projects.length > 0) setActiveProject(projects[0]!.id);
   }, [projects, activeProjectId, setActiveProject]);
 
-  // priorité au runtime FORGÉ (vrai jeu généré : campagne, assets, auto-play)
-  const forgeBuild = snap?.builds.find((b) => b.target === 'forge_runtime');
-  const previewPath = (forgeBuild?.output_url ?? '07_exports/web/preview.html').replace(/\\/g, '/');
-  const previewUrl = snap ? `/workspaces/${snap.project.slug}/${previewPath}` : '';
+  const previewUrl = resolvePreviewUrl(snap);
 
   return (
     <div className="es-app">

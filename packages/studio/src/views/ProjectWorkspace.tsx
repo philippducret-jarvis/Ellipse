@@ -5,6 +5,7 @@ import { ProductionRecipePanel } from '../components/ProductionRecipePanel.js';
 import { WorkspaceNav } from '../layout/WorkspaceNav.js';
 import { ProjectCommandBar } from '../layout/ProjectCommandBar.js';
 import { PreviewModal } from '../layout/PreviewModal.js';
+import { resolvePreviewUrl } from '../lib/preview.js';
 import { getTabDef } from '../i18n/fr.js';
 
 const OverviewTab = lazy(async () => {
@@ -71,7 +72,7 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
   };
 
   const tabDef = getTabDef(tab);
-  const previewUrl = snap ? `/workspaces/${snap.project.slug}/07_exports/web/preview.html` : '';
+  const previewUrl = resolvePreviewUrl(snap);
 
   return (
     <div className="es-workspace">
