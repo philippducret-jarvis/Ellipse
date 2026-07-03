@@ -77,7 +77,18 @@ export async function registerForgedGame(wsDir, wsId, { gdl, prompt, report }) {
     autoplay: report?.autoplay ?? null,
   };
   if (existing) {
-    await writeJson(manifestPath, { ...existing, updated_at: now, forge: forgeBlock });
+    // le jeu forgé DEVIENT la preview principale (feedback utilisateur :
+    // le Studio doit ouvrir le vrai jeu) ; l'ancienne reste en legacy.
+    const legacy = existing.preview_url && !existing.preview_url.includes('05_runtime/index.html')
+      ? existing.preview_url
+      : existing.legacy_preview_url;
+    await writeJson(manifestPath, {
+      ...existing,
+      preview_url: forgeUrl,
+      legacy_preview_url: legacy ?? null,
+      updated_at: now,
+      forge: forgeBlock,
+    });
   } else {
     await writeJson(manifestPath, {
       project_id: randomUUID(),

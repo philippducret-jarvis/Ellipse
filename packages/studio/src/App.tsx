@@ -53,7 +53,10 @@ export function App() {
     if (!activeProjectId && projects.length > 0) setActiveProject(projects[0]!.id);
   }, [projects, activeProjectId, setActiveProject]);
 
-  const previewUrl = snap ? `/workspaces/${snap.project.slug}/07_exports/web/preview.html` : '';
+  // priorité au runtime FORGÉ (vrai jeu généré : campagne, assets, auto-play)
+  const forgeBuild = snap?.builds.find((b) => b.target === 'forge_runtime');
+  const previewPath = (forgeBuild?.output_url ?? '07_exports/web/preview.html').replace(/\\/g, '/');
+  const previewUrl = snap ? `/workspaces/${snap.project.slug}/${previewPath}` : '';
 
   return (
     <div className="es-app">

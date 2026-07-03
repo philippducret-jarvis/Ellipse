@@ -18,6 +18,7 @@ import { clipsFor } from './clips.mjs';
 import { generateArena } from './decor.mjs';
 import { pickBackend } from './backends/registry.mjs';
 import { registerForgedGame } from './workspace.mjs';
+import { extractWorkspaceStyle } from './style-from-boards.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..');
@@ -47,11 +48,17 @@ export async function buildGame(prompt, { id = null, log = console.log } = {}) {
   if (!backend) throw new Error('Aucun backend génératif joignable. (Pollinations hors-ligne et pas de ComfyUI — réessaie connecté, ou lance ComfyUI.)');
   log(`Forge — backend génératif : ${backend.name}`);
 
-  // 1. design
-  const gdd = await designGdd(prompt);
+  // 1. design — style VERROUILLÉ sur les planches du workspace cible s'il existe
+  const targetId = id ? id.toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-|-$/g, '') : null;
+  let style = null;
+  if (targetId) {
+    style = await extractWorkspaceStyle(join(ROOT, 'workspaces', targetId));
+    if (style) log(`Style verrouillé sur les planches [${style.source}] : ${style.palette?.length ?? 0} couleurs canoniques`);
+  }
+  const gdd = await designGdd(prompt, style);
   // id imposé (ex. slug d'un projet de l'orchestrateur) → le jeu se forge
   // dans le workspace de CE projet, aux côtés de sa structure 00_..08_.
-  if (id) gdd.id = id.toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-|-$/g, '');
+  if (targetId) gdd.id = targetId;
   log(`Design [${gdd.designBackend}] : « ${gdd.title} » (${gdd.genre}) — ${gdd.pitch}`);
   const { gdl: rawGdl, assetPlan } = compileGdl(gdd);
   const gdl = withDefaults(rawGdl);

@@ -125,6 +125,27 @@ projets à la production réelle :
 - Manifest `08_ops/manifests/autonomous-production.json` : champ `forge`
   (ok, durée, rapport complet — seeds, QA, auto-play).
 
+## Style verrouillé sur les planches (style-from-boards.mjs)
+
+Quand la Forge cible un workspace (`--id`), la direction artistique vient du
+JEU, pas d'un thème générique :
+
+1. `02_design/style-bible.json` — bible curée : palette canonique des
+   planches + mots de rendu/ambiance. Les planches donnent les **règles**
+   (couleurs, matières, lumière), jamais des pixels. Veloria et Echoes en ont une.
+2. Sinon, extraction automatique depuis `01_inputs/references/` : couleurs
+   dominantes **filtrées par saturation/luminosité** (sinon les boards
+   sombres noient tout dans le noir).
+
+La palette verrouillée s'applique aux héros, ennemis, arènes ET à la QA
+(deltaE mesuré contre CETTE palette). La preview Studio ouvre le jeu forgé
+(`forge_runtime`) en priorité ; l'ancienne preview reste en
+`legacy_preview_url`.
+
+Limite honnête sans GPU : le style est tenu (palette, ambiance, matières),
+mais la **composition exacte** d'une planche ne sera approchée qu'avec
+img2img/ControlNet/LoRA (ComfyUI) — mêmes contrats, bascule automatique.
+
 ## Visibilité Studio (workspace.mjs)
 
 Chaque build s'ENREGISTRE dans le contrat workspace lu par le frontend :

@@ -77,9 +77,21 @@ function titleFrom(prompt, theme) {
   return { biolum: 'Lueurs du Mycélium', gothic: 'La Veille Écarlate', cyber: 'Néon Protocole', fantasy: 'Les Ruines Dorées' }[theme.key];
 }
 
-/** GDD heuristique — déterministe, honnête (meta.designBackend='heuristic'). */
-export function heuristicGdd(prompt) {
-  const theme = THEMES.find((t) => t.match.test(prompt));
+/**
+ * GDD heuristique — déterministe, honnête (meta.designBackend='heuristic').
+ * `styleOverride` (bible du workspace / extraction boards) VERROUILLE la
+ * direction artistique : palette canonique, rendu, ambiance des planches.
+ */
+export function heuristicGdd(prompt, styleOverride = null) {
+  const theme0 = THEMES.find((t) => t.match.test(prompt));
+  const theme = styleOverride
+    ? {
+        ...theme0,
+        palette: styleOverride.palette?.length >= 4 ? styleOverride.palette : theme0.palette,
+        render: styleOverride.render ?? theme0.render,
+        mood: styleOverride.mood ?? theme0.mood,
+      }
+    : theme0;
   const heroHint = HERO_HINTS.find((h) => h.match.test(prompt));
   const genre = /gacha|ar[eè]ne|vague|wave|tower|verticale?/i.test(prompt) ? 'vertical-arena' : 'sidescroller';
   const id = slug(prompt);
@@ -96,7 +108,13 @@ export function heuristicGdd(prompt) {
       dna: { ...heroHint.dna, colors: { primary: theme.palette[2], secondary: theme.palette[3], accent: theme.palette[4] }, materials: heroHint.dna.materials ?? 'detailed game-ready materials' },
       stats: {},
     },
-    enemies: theme.enemies.map((e) => ({ ...e, role: 'enemy', stats: e.rigType === 'humanoid' ? { hp: 3, speed: 140, damage: 1 } : { hp: 2, speed: 110, damage: 1, touchDamage: true } })),
+    enemies: theme.enemies.map((e) => {
+      // palette verrouillée → les ennemis aussi portent les couleurs des planches
+      const colors = styleOverride?.palette
+        ? Object.fromEntries(Object.keys(e.dna.colors ?? {}).map((k, i) => [k, theme.palette[(i * 2 + 1) % theme.palette.length]]))
+        : e.dna.colors;
+      return { ...e, dna: { ...e.dna, colors }, role: 'enemy', stats: e.rigType === 'humanoid' ? { hp: 3, speed: 140, damage: 1 } : { hp: 2, speed: 110, damage: 1, touchDamage: true } };
+    }),
     boss: { name: bossName, fromEnemy: theme.enemies.find((e) => e.rigType === 'humanoid')?.id ?? theme.enemies[0].id },
     arenas: [
       { id: 'arena-01', theme: setting },
@@ -107,10 +125,10 @@ export function heuristicGdd(prompt) {
 }
 
 /** GDD par Claude (si ANTHROPIC_API_KEY) — même contrat de sortie. */
-export async function claudeGdd(prompt) {
+export async function claudeGdd(prompt, styleOverride = null) {
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) return null;
-  const base = heuristicGdd(prompt); // sert de gabarit de forme au LLM
+  const base = heuristicGdd(prompt, styleOverride); // gabarit de forme (style déjà verrouillé)
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
@@ -130,8 +148,8 @@ export async function claudeGdd(prompt) {
   } catch { console.warn('design: JSON GDD illisible → fallback heuristique'); return null; }
 }
 
-export async function designGdd(prompt) {
-  return (await claudeGdd(prompt)) ?? heuristicGdd(prompt);
+export async function designGdd(prompt, styleOverride = null) {
+  return (await claudeGdd(prompt, styleOverride)) ?? heuristicGdd(prompt, styleOverride);
 }
 
 /** Un niveau sidescroller procédural, densité croissante avec `difficulty`. */
