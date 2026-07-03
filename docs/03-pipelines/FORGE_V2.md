@@ -77,6 +77,21 @@ il n'appartient qu'aux décors et aux splash arts.
 5. **Un niveau injouable ne sort pas** — l'auto-play headless (logic.js pure,
    sans DOM) est une porte de build, exécutée aussi en CI (`forge:smoke`).
 
+## Pont usine ↔ Forge (orchestrateur)
+
+`packages/orchestrator/src/game-factory/forge-bridge.ts` relie la fabrique de
+projets à la production réelle :
+
+- `forgeGame(root, { prompt, id })` — forge le jeu **dans le workspace du
+  projet** (`--id <slug>`) ; lit `forge-build.json` ; refuse un jeu dont le
+  bot d'auto-play ne gagne pas ; ne lève jamais (`{ ok:false, error }`).
+- La **production autonome** (`runAutonomousProductionForProject`) tente la
+  Forge D'ABORD pour la preview (projets non-flagship avec prompt) ; hors-ligne
+  ou échec → fallback preview GDL générique. `ELLIPSE_FORGE_PREVIEW=0` coupe.
+- Preview jouable servie par le static : `/workspaces/<slug>/05_runtime/`.
+- Manifest `08_ops/manifests/autonomous-production.json` : champ `forge`
+  (ok, durée, rapport complet — seeds, QA, auto-play).
+
 ## Backends génératifs (backends/registry.mjs)
 
 | Backend | Coût | Matériel | Quand |

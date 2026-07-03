@@ -51,13 +51,16 @@ export async function autoplay(gdl, { maxSimSeconds = 240 } = {}) {
   return { won: state.phase === 'won', simSeconds: Math.round(simT), kills, pickups, deaths: state.deaths, score: state.score, progress: gdl.genre === 'sidescroller' ? Math.round((state.hero.x / (state.level.exit?.x ?? state.level.length)) * 100) : null };
 }
 
-export async function buildGame(prompt, { log = console.log } = {}) {
+export async function buildGame(prompt, { id = null, log = console.log } = {}) {
   const backend = await pickBackend();
   if (!backend) throw new Error('Aucun backend génératif joignable. (Pollinations hors-ligne et pas de ComfyUI — réessaie connecté, ou lance ComfyUI.)');
   log(`Forge — backend génératif : ${backend.name}`);
 
   // 1. design
   const gdd = await designGdd(prompt);
+  // id imposé (ex. slug d'un projet de l'orchestrateur) → le jeu se forge
+  // dans le workspace de CE projet, aux côtés de sa structure 00_..08_.
+  if (id) gdd.id = id.toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-|-$/g, '');
   log(`Design [${gdd.designBackend}] : « ${gdd.title} » (${gdd.genre}) — ${gdd.pitch}`);
   const { gdl: rawGdl, assetPlan } = compileGdl(gdd);
   const gdl = withDefaults(rawGdl);

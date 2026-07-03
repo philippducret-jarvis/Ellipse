@@ -18,13 +18,14 @@ const getArg = (name) => {
 };
 
 const prompt = getArg('prompt') ?? args.filter((a) => !a.startsWith('--')).join(' ');
+const id = getArg('id'); // forcer le workspace cible (ex. slug projet orchestrateur)
 if (!prompt || prompt.length < 8) {
-  console.error('Usage : pnpm forge:game -- --prompt "décris ton jeu (univers, héros, ambiance)"');
+  console.error('Usage : pnpm forge:game -- --prompt "décris ton jeu (univers, héros, ambiance)" [--id slug-projet]');
   process.exit(1);
 }
 
 const t0 = Date.now();
-buildGame(prompt)
+buildGame(prompt, { id })
   .then(async ({ report, runtimeDir, workspace }) => {
     console.log(`\n✔ « ${report.title} » forgé en ${((Date.now() - t0) / 1000).toFixed(0)}s`);
     console.log(`  Jeu     : ${runtimeDir}\\index.html`);

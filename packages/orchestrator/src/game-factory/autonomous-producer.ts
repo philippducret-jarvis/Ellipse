@@ -21,6 +21,7 @@ import { AssetPipelineService } from '../asset-pipeline/service.js';
 import { getAssetWorkspaceRoot } from '../workspace-scaffold.js';
 import { buildVeloriaPreviewBundle } from '../export/veloria-preview.js';
 import { runVeloriaFidelityPipeline, readVeloriaFidelityStatus } from '../veloria/fidelity-runner.js';
+import { forgeGame, isForgePreviewEnabled, type ForgeGameResult } from './forge-bridge.js';
 
 const pipeline = new AssetPipelineService();
 
@@ -42,6 +43,8 @@ export interface AutonomousProductionResult {
   stepsPassed: number;
   stepsTotal: number;
   fidelity?: { ready: boolean; shipping_ready: number; total: number };
+  /** résultat du pont Forge (vrai jeu généré) quand il a été tenté. */
+  forge?: { ok: boolean; error?: string; durationMs: number };
 }
 
 async function seedBootstrapGdl(
@@ -202,14 +205,26 @@ export async function runAutonomousProductionForProject(
   if (!run) throw new Error('Workflow autonome non démarré');
 
   let previewUrl: string | undefined;
+  let forgeResult: ForgeGameResult | undefined;
   if (!opts.skipPreview) {
     try {
       if (isFlagshipProject(slug) || isFlagshipProject(snap.project.id)) {
         const result = await buildVeloriaPreviewBundle(workspaceRoot, slug, snap.project.title);
         previewUrl = result.previewUrl;
       } else {
-        const result = await buildGenericPreviewBundle(workspaceRoot, slug, snap.project.title);
-        previewUrl = result.previewUrl;
+        // voie RÉELLE d'abord : la Forge produit un jeu jouable (assets générés
+        // + rig + auto-play). Hors-ligne ou bot perdant → fallback preview GDL.
+        const prompt = snap.project.source_prompt?.trim();
+        if (isForgePreviewEnabled() && prompt) {
+          await updateWorkspaceStatus(workspaceRoot, 'forging');
+          forgeResult = await forgeGame(ctx.root, { prompt, id: slug });
+          if (forgeResult.ok) previewUrl = forgeResult.previewUrl;
+          else console.warn('[autoproduce] forge:', forgeResult.error);
+        }
+        if (!previewUrl) {
+          const result = await buildGenericPreviewBundle(workspaceRoot, slug, snap.project.title);
+          previewUrl = result.previewUrl;
+        }
       }
     } catch (err) {
       console.warn('[autoproduce] preview:', (err as Error).message);
@@ -234,6 +249,9 @@ export async function runAutonomousProductionForProject(
         steps_passed: stepsPassed,
         steps_total: Object.keys(run.steps).length,
         fidelity: fidelityStatus ?? null,
+        forge: forgeResult
+          ? { ok: forgeResult.ok, error: forgeResult.error ?? null, duration_ms: forgeResult.durationMs, report: forgeResult.report ?? null }
+          : null,
       },
       null,
       2,
@@ -249,6 +267,7 @@ export async function runAutonomousProductionForProject(
     stepsPassed,
     stepsTotal: Object.keys(run.steps).length,
     fidelity: fidelityStatus,
+    forge: forgeResult ? { ok: forgeResult.ok, error: forgeResult.error, durationMs: forgeResult.durationMs } : undefined,
   };
 }
 
