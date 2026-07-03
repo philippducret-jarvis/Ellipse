@@ -202,6 +202,7 @@ export function createBootstrapGdl(input: BootstrapGdlInput): GameDefinition {
   return buildStarterGdl(preset, {
     title: input.title,
     heroSprite: input.heroSpriteUrl ?? input.sourceImages?.[0] ?? undefined,
+    boardImages: input.sourceImages,
     prompt: input.prompt,
   });
 }

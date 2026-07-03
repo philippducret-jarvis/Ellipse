@@ -2,6 +2,7 @@ import type { TaskSpec } from '@ellipse/shared';
 import {
   buildFactoryToolchainPlan,
   buildGameCreationProcedure,
+  compileVisualBoardToPlayableSlice,
   derivePreset,
   type GameDimension,
 } from '@ellipse/shared';
@@ -17,6 +18,7 @@ export class ProducerAgent extends BaseAgent {
     const dimension = task.input.dimension as GameDimension | undefined;
     const platforms = (task.input.platforms as string[] | undefined) ?? ['web'];
     const mechanicModules = (task.input.mechanic_modules as string[] | undefined) ?? [];
+    const sourceImages = (task.input.images as string[] | undefined) ?? (task.input.source_images as string[] | undefined) ?? [];
     const prompt = this.getPromptExcerpt(task) || String(task.input.prompt ?? '');
 
     try {
@@ -33,6 +35,12 @@ export class ProducerAgent extends BaseAgent {
         platforms: preset.platforms,
         mechanic_modules: preset.mechanic_modules,
       });
+      const playableSlice = compileVisualBoardToPlayableSlice({
+        preset,
+        prompt,
+        sourceImages,
+        qualityTarget: 'vertical_slice',
+      });
       const plan = {
         game_type: preset.game_type,
         subtype: procedure.subtype,
@@ -48,9 +56,11 @@ export class ProducerAgent extends BaseAgent {
         procedural_libraries: procedure.libraries,
         work_orders: procedure.backlog_templates,
         toolchain,
+        playable_slice: playableSlice,
         blocking_gates: [
           ...toolchain.qa_gates,
           ...procedure.libraries.qa_gates,
+          ...playableSlice.commercial_gates,
         ],
       };
 
@@ -58,8 +68,9 @@ export class ProducerAgent extends BaseAgent {
         gdl_patches: [
           { op: 'replace', path: '/meta/factory_operational_plan', value: plan },
           { op: 'replace', path: '/meta/toolchain_plan', value: toolchain },
+          { op: 'replace', path: '/meta/board_to_playable', value: playableSlice },
         ],
-        agent_notes: `Plan ${preset.game_type}/${procedure.subtype.id} · ${procedure.backlog_templates.length} work orders · ${toolchain.required_tools.length} outils requis`,
+        agent_notes: `Plan ${preset.game_type}/${procedure.subtype.id} · ${procedure.backlog_templates.length} work orders · ${playableSlice.critical_path.length} beats jouables · ${toolchain.required_tools.length} outils requis`,
       });
     } catch (err) {
       return this.fail(task, err instanceof Error ? err.message : 'Production plan failed', [

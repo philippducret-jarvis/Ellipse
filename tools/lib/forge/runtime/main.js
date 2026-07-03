@@ -13,6 +13,7 @@ import {
   createCampaign, startGame, advanceStory, selectLevel, onLevelWon,
   chooseRelic, relicModifiers, startOutro, resetCampaign,
 } from './campaign.js';
+import { createAudio } from './audio.js';
 
 const loadJson = (u) => fetch(u).then((r) => { if (!r.ok) throw new Error(`${u}: HTTP ${r.status}`); return r.json(); });
 const loadImage = (u) => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error(`image: ${u}`)); i.src = u; });
@@ -53,9 +54,11 @@ async function boot() {
   const heroPortrait = await tryImage('assets/hero/hero.portrait.png');
   const accent = gdl.ui?.accent ?? '#e8c05a';
 
-  // ── campagne + effets ──
+  // ── campagne + effets + audio ──
   const campaign = createCampaign(gdl, window.localStorage);
   const fx = createFx();
+  const audio = createAudio(gdl);
+  let hitstop = 0; // game feel : micro-gel du temps sur les impacts forts
   let game = null;
   let mapSel = Math.min(campaign.unlocked - 1, gdl.levels.length - 1);
   let relicSel = 0;
@@ -86,30 +89,32 @@ async function boot() {
   addEventListener('keydown', (e) => {
     const typing = document.activeElement?.tagName === 'TEXTAREA' || document.activeElement?.tagName === 'INPUT';
     if (typing) return;
+    if (e.code === 'KeyM') { audio.toggleMute(); return; }
     const s = campaign.screen;
-    if (s === 'title') { startGame(campaign); screenT = 0; return; }
+    if (s === 'title') { startGame(campaign); audio.ui(); audio.ambient(true); screenT = 0; return; }
     if (s === 'intro' || s === 'interlude' || s === 'outro') {
       const beat = campaign.storyQueue[campaign.storyIndex];
       if (beat && dialogueT * 45 < beat.text.length) dialogueT = beat.text.length; // révéler tout
-      else { advanceStory(campaign); dialogueT = 0; screenT = 0; }
+      else { advanceStory(campaign); audio.dialogue(); dialogueT = 0; screenT = 0; }
       e.preventDefault(); return;
     }
     if (s === 'map') {
-      if (e.code === 'ArrowLeft' || e.code === 'KeyA' || e.code === 'KeyQ') mapSel = Math.max(0, mapSel - 1);
-      else if (e.code === 'ArrowRight' || e.code === 'KeyD') mapSel = Math.min(gdl.levels.length - 1, mapSel + 1);
-      else if (e.code === 'Enter' || e.code === 'KeyX' || e.code === 'Space') startLevel(mapSel);
+      if (e.code === 'ArrowLeft' || e.code === 'KeyA' || e.code === 'KeyQ') { mapSel = Math.max(0, mapSel - 1); audio.ui(); }
+      else if (e.code === 'ArrowRight' || e.code === 'KeyD') { mapSel = Math.min(gdl.levels.length - 1, mapSel + 1); audio.ui(); }
+      else if (e.code === 'Enter' || e.code === 'KeyX' || e.code === 'Space') { startLevel(mapSel); audio.ambient(false); }
       e.preventDefault(); return;
     }
     if (s === 'relic') {
-      if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') relicSel = 1 - relicSel;
+      if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') { relicSel = 1 - relicSel; audio.ui(); }
       else if (e.code === 'Enter' || e.code === 'KeyX' || e.code === 'Space') {
         chooseRelic(campaign, campaign.pendingRelicChoice?.[relicSel]?.id);
+        audio.relic();
         relicSel = 0; screenT = 0;
       }
       e.preventDefault(); return;
     }
     if (s === 'credits') {
-      if (e.code === 'KeyR') { resetCampaign(campaign); screenT = 0; }
+      if (e.code === 'KeyR') { resetCampaign(campaign); audio.ambient(false); screenT = 0; }
       return;
     }
     setKeys(e.code, true);
@@ -130,10 +135,17 @@ async function boot() {
     if (s === 'outro-start') { startOutro(campaign); }
 
     if (s === 'level' && game) {
-      const events = step(game, input, dt);
+      // hitstop : micro-gel sur les impacts forts (game feel)
+      hitstop = Math.max(0, hitstop - dt);
+      const events = hitstop > 0 ? [] : step(game, input, dt);
+      for (const ev of events) {
+        if (ev.type === 'kill') hitstop = ev.boss ? 0.14 : 0.05;
+        else if (ev.type === 'hurt') hitstop = 0.06;
+      }
+      audio.onEvents(events);
       fxFromEvents(fx, events, game, accent);
       render(ctx, game, { arena: arenas[gdl.levels[campaign.levelIndex].arena], rigs }, dt, fx);
-      if (game.phase === 'won') { onLevelWon(campaign, game.score); dialogueT = 0; screenT = 0; game = null; }
+      if (game.phase === 'won') { onLevelWon(campaign, game.score); audio.win(); audio.ambient(true); dialogueT = 0; screenT = 0; game = null; }
     } else if (s === 'title') {
       renderTitle(ctx, gdl, vp, screenT, bgLayers);
     } else if (s === 'map') {

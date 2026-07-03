@@ -77,8 +77,11 @@ export async function buildGame(prompt, { id = null, log = console.log } = {}) {
   report.characters.push(await forgeCharacter({ ...assetPlan.hero, rigType: 'humanoid' }, join(assetsDir, 'hero'), log, { withPortrait: true }));
   for (const e of assetPlan.enemies) report.characters.push(await forgeCharacter(e, join(assetsDir, 'enemies'), log));
 
-  log('Arènes (4 couches parallax générées chacune) :');
+  log('Arènes (5 couches parallax générées chacune) :');
   for (const a of assetPlan.arenas) {
+    // composition verrouillée sur une planche (bible.composition) si le backend sait faire de l'img2img
+    const boardRel = style?.composition?.[a.id];
+    if (boardRel) a.compositionBoard = join(ws, boardRel);
     const m = await generateArena(a, join(assetsDir, 'arenas'));
     const scores = m.layers.map((l) => l.qa.score);
     log(`  ↳ ${a.id} : QA couches [${scores.join(', ')}]`);
@@ -90,7 +93,7 @@ export async function buildGame(prompt, { id = null, log = console.log } = {}) {
   gdl.entities.hero.clips = 'assets/hero/hero.clips.json';
 
   // 4. runtime générique copié tel quel + GDL
-  for (const f of ['index.html', 'main.js', 'logic.js', 'render.js', 'skeleton.js', 'campaign.js']) {
+  for (const f of ['index.html', 'main.js', 'logic.js', 'render.js', 'skeleton.js', 'campaign.js', 'audio.js']) {
     await cp(join(HERE, 'runtime', f), join(runtimeDir, f));
   }
   await writeFile(join(runtimeDir, 'game.gdl.json'), JSON.stringify(gdl, null, 2), 'utf8');

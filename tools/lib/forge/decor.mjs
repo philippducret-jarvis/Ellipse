@@ -4,10 +4,11 @@
  * partageant la direction artistique du jeu, puis grade CPU par profondeur
  * (luminosité, désaturation, flou lointain, rampe alpha de la couche proche).
  */
-import { mkdir, writeFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import sharp from './sharp.mjs';
-import { generateImage } from './backends/registry.mjs';
+import { generateImage, hasImg2Img } from './backends/registry.mjs';
 import { generateValidated } from './qa.mjs';
 import { masterSeed } from './identity.mjs';
 
@@ -52,17 +53,28 @@ async function applyAlphaRamp(buf, frac) {
 }
 
 /**
- * Génère l'arène complète (4 couches) → PNGs + <id>.parallax.json.
- * @param {{id:string, theme:string, style:{render:string,mood:string}, palette:string[]}} arena
+ * Génère l'arène complète (5 couches) → PNGs + <id>.parallax.json.
+ * `arena.compositionBoard` (chemin absolu d'une planche) : quand le backend
+ * sait faire de l'img2img (ComfyUI/fal), la couche MID est générée EN
+ * VERROUILLANT LA COMPOSITION sur la planche (denoise 0.55) — la vallée de
+ * la planche devient LA vallée du jeu. Sans backend capable : txt2img stylé.
+ * @param {{id:string, theme:string, style:{render:string,mood:string}, palette:string[], compositionBoard?:string}} arena
  */
 export async function generateArena(arena, outDir, { qaThreshold = 45 } = {}) {
   await mkdir(outDir, { recursive: true });
   const layersOut = [];
+  const i2i = arena.compositionBoard && existsSync(arena.compositionBoard) && (await hasImg2Img());
+  const boardBuf = i2i ? await readFile(arena.compositionBoard) : null;
   for (const layer of LAYERS) {
     const prompt = `${layer.prompt(arena.theme)}, ${arena.style.render}, ${arena.style.mood}`;
+    const useRef = layer.id === 'mid' && boardBuf;
     const best = await generateValidated(
       (spec) => generateImage(spec),
-      { prompt, negative: 'text, watermark, characters, people, ui, borders', ...layer.size, seed: masterSeed(`${arena.id}_${layer.id}`) },
+      {
+        prompt, negative: 'text, watermark, characters, people, ui, borders',
+        ...layer.size, seed: masterSeed(`${arena.id}_${layer.id}`),
+        ...(useRef ? { refImage: boardBuf, denoise: 0.55 } : {}),
+      },
       { palette: arena.palette, kind: 'decor', threshold: qaThreshold },
       { attempts: 2 },
     );
@@ -73,7 +85,7 @@ export async function generateArena(arena, outDir, { qaThreshold = 45 } = {}) {
     if (layer.grade.alphaRamp) out = await applyAlphaRamp(out, layer.grade.alphaRamp);
     const file = `${arena.id}.${layer.id}.png`;
     await writeFile(join(outDir, file), out);
-    layersOut.push({ id: layer.id, file, depth: layer.depth, size: layer.size, backend: best.backend, seed: best.seed, qa: { score: best.report.score, pass: best.report.pass } });
+    layersOut.push({ id: layer.id, file, depth: layer.depth, size: layer.size, backend: best.backend, seed: best.seed, composition: useRef ? 'img2img-board' : 'txt2img', qa: { score: best.report.score, pass: best.report.pass } });
   }
   const manifest = { version: 'forge-parallax-1', id: arena.id, theme: arena.theme, layers: layersOut, generatedAt: new Date().toISOString() };
   await writeFile(join(outDir, `${arena.id}.parallax.json`), JSON.stringify(manifest, null, 2), 'utf8');

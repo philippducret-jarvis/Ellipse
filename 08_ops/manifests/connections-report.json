@@ -1,0 +1,117 @@
+{
+  "generatedAt": "2026-07-03T10:54:53.642Z",
+  "connections": [
+    {
+      "id": "pollinations",
+      "ok": true,
+      "tier": "gratuit",
+      "env": null,
+      "unlocks": "Génération d’images keyless (voie par défaut actuelle, Flux)",
+      "how": null
+    },
+    {
+      "id": "comfyui",
+      "ok": false,
+      "tier": "gratuit (GPU requis)",
+      "env": "COMFYUI_URL",
+      "unlocks": "img2img sur les planches (composition exacte), LoRA d’identité par personnage, ControlNet — LE saut de qualité",
+      "how": "Installer ComfyUI (local RTX 8Go+ / RunPod / Colab) puis COMFYUI_URL=http://127.0.0.1:8188. Plans prêts : pnpm forge:gpu-plan -- <id>."
+    },
+    {
+      "id": "fal",
+      "ok": false,
+      "tier": "~0,01–0,03 $/image",
+      "env": "FAL_KEY",
+      "unlocks": "Génération serverless premium + img2img SANS GPU — bascule automatique du registre",
+      "how": "https://fal.ai/dashboard/keys → FAL_KEY=… (backend déjà codé)."
+    },
+    {
+      "id": "replicate",
+      "ok": false,
+      "tier": "~0,01–0,05 $/image",
+      "env": "REPLICATE_API_TOKEN",
+      "unlocks": "Alternative serverless (flux, SDXL, modèles vidéo/inbetweening ToonCrafter)",
+      "how": "https://replicate.com/account/api-tokens (backend à activer sur demande — même contrat que fal)."
+    },
+    {
+      "id": "huggingface",
+      "ok": false,
+      "tier": "gratuit",
+      "env": "HUGGINGFACE_TOKEN",
+      "unlocks": "Téléchargement des checkpoints SDXL/LoRA bases pour ComfyUI/kohya",
+      "how": "https://huggingface.co/settings/tokens (read)."
+    },
+    {
+      "id": "runpod",
+      "ok": false,
+      "tier": "~0,3–0,7 $/h GPU",
+      "env": "RUNPOD_API_KEY",
+      "unlocks": "GPU cloud à la demande : entraînement LoRA (kohya) + ComfyUI hébergé",
+      "how": "https://runpod.io → Settings → API Keys."
+    },
+    {
+      "id": "anthropic",
+      "ok": false,
+      "tier": "~0,01 $/design",
+      "env": "ANTHROPIC_API_KEY",
+      "unlocks": "GDD riches (titres, lore, équilibrage) + itération par prompt en langage totalement libre",
+      "how": "https://console.anthropic.com → API Keys (design.mjs + iterate.mjs déjà câblés)."
+    },
+    {
+      "id": "ollama",
+      "ok": false,
+      "tier": "gratuit (local)",
+      "env": "OLLAMA_URL",
+      "unlocks": "LLM local pour le pont Cortex (ELLIPSE_CORTEX_BACKEND) sans API externe",
+      "how": "https://ollama.com → installer + `ollama pull llama3.2`."
+    },
+    {
+      "id": "elevenlabs",
+      "ok": false,
+      "tier": "freemium",
+      "env": "ELEVENLABS_API_KEY",
+      "unlocks": "Voix de narration des dialogues + SFX premium (remplace le WebAudio procédural)",
+      "how": "https://elevenlabs.io → Profile → API Key."
+    },
+    {
+      "id": "playfab",
+      "ok": false,
+      "tier": "freemium",
+      "env": "PLAYFAB_TITLE_ID",
+      "unlocks": "Économie/gacha serveur : catalogues, monnaies, inventaire, bannières (economy-agent)",
+      "how": "https://developer.playfab.com → créer un Title → TITLE_ID + DEV_SECRET_KEY."
+    },
+    {
+      "id": "firebase",
+      "ok": false,
+      "tier": "freemium",
+      "env": "FIREBASE_CONFIG",
+      "unlocks": "Remote config + A/B tests (difficulté, économie) sans re-livrer",
+      "how": "https://console.firebase.google.com → projet → config JSON."
+    },
+    {
+      "id": "gameanalytics",
+      "ok": false,
+      "tier": "gratuit",
+      "env": "GAMEANALYTICS_GAME_KEY",
+      "unlocks": "Télémétrie design/économie (rétention, funnels de niveaux, morts par zone)",
+      "how": "https://gameanalytics.com → créer un jeu → GAME_KEY + SECRET_KEY."
+    },
+    {
+      "id": "sentry",
+      "ok": false,
+      "tier": "freemium",
+      "env": "SENTRY_DSN",
+      "unlocks": "Crash/erreurs en production (Studio + runtimes web)",
+      "how": "https://sentry.io → projet JS → DSN."
+    },
+    {
+      "id": "itchio",
+      "ok": false,
+      "tier": "gratuit",
+      "env": "BUTLER_API_KEY",
+      "unlocks": "Publication en un clic des jeux forgés (butler push 05_runtime → itch.io)",
+      "how": "https://itch.io/user/settings/api-keys + installer butler."
+    }
+  ]
+}

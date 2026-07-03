@@ -147,6 +147,7 @@ export * from './catalog/starter-game.js';
 export * from './catalog/production-recipe.js';
 export * from './catalog/flagship-deliverable.js';
 export * from './factory/free-toolchain.js';
+export * from './factory/visual-board-compiler.js';
 export * from './codegen/codegen.js';
 export { generateNarrative, type NarrativePack } from './gdl/narrative-gen.js';
 export { generateToneWav, generateSfxWav, generateMusicLoopWav, SFX_PRESETS } from './audio/procedural-wav.js';

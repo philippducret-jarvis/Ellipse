@@ -11,6 +11,7 @@ import type { ProductionPreset, ArtStyle, DifficultyBand } from './game-types.js
 import { resolveLibraryPlan } from './library-plan.js';
 import { buildProductionRecipe } from './production-recipe.js';
 import { buildGameCreationProcedure } from './game-subtypes.js';
+import { enhanceGdlWithPlayableSlice } from '../factory/visual-board-compiler.js';
 
 const SIDE_SYSTEMS = [
   'input',
@@ -444,7 +445,7 @@ function buildLaneActionGdl(preset: ProductionPreset, opts: StarterGdlOptions): 
     },
   } as GdlLayout;
 
-  return GameDefinitionSchema.parse({
+  const base = GameDefinitionSchema.parse({
     meta: {
       title,
       dimension: preset.dimension,
@@ -543,6 +544,14 @@ function buildLaneActionGdl(preset: ProductionPreset, opts: StarterGdlOptions): 
       },
     },
   });
+
+  return GameDefinitionSchema.parse(enhanceGdlWithPlayableSlice(base, {
+    preset,
+    title,
+    prompt: opts.prompt,
+    sourceImages: opts.boardImages,
+    qualityTarget: 'vertical_slice',
+  }));
 }
 
 export interface StarterGdlOptions {
@@ -551,6 +560,8 @@ export interface StarterGdlOptions {
   /** Already generated asset paths: hero sprite, background, etc. */
   heroSprite?: string;
   backgroundImage?: string;
+  /** Board/key-art/source references used to build a real playable volume contract. */
+  boardImages?: string[];
   /** Raw prompt retained in meta.prototype_board for downstream agents. */
   prompt?: string;
 }
@@ -565,7 +576,7 @@ export function buildStarterGdl(preset: ProductionPreset, opts: StarterGdlOption
   const palette = paletteFor(preset, opts.palette);
   const hp = healthFor(preset.difficulty);
 
-  return GameDefinitionSchema.parse({
+  const base = GameDefinitionSchema.parse({
     meta: {
       title: opts.title ?? preset.game_type,
       dimension: preset.dimension,
@@ -606,4 +617,12 @@ export function buildStarterGdl(preset: ProductionPreset, opts: StarterGdlOption
             : 'A focused first playable slice with a clear traversal objective.',
     },
   });
+
+  return GameDefinitionSchema.parse(enhanceGdlWithPlayableSlice(base, {
+    preset,
+    title: opts.title ?? preset.game_type,
+    prompt: opts.prompt,
+    sourceImages: opts.boardImages,
+    qualityTarget: 'vertical_slice',
+  }));
 }

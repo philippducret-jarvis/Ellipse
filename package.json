@@ -60,6 +60,8 @@
     "forge:smoke": "node ./tools/forge-smoke.mjs",
     "forge:register": "node ./tools/forge-register.mjs",
     "forge:iterate": "node ./tools/forge-iterate.mjs",
+    "forge:gpu-plan": "node ./tools/forge-gpu-plan.mjs",
+    "forge:connections": "node ./tools/forge-connections.mjs",
     "create:game": "node ./tools/create-game-from-prompt.mjs",
     "create:game:veloria": "node ./tools/deliver-veloria.mjs",
     "deliver:veloria": "node ./tools/deliver-veloria.mjs",
