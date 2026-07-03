@@ -21,10 +21,10 @@ const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 /** Règles comprises hors-ligne. Chaque règle → liste d'opérations + résumé. */
 const RULES = [
   {
-    match: /(héros|hero|personnage|perso|joueur).*(plus rapide|plus vite)|(?:plus rapide|plus vite).*(héros|hero|personnage)/i,
+    match: /(héros|héroïne|hero|heroine|personnage|perso|joueur|joueuse).*(plus rapide|plus vite)|(?:plus rapide|plus vite).*(héros|héroïne|hero|personnage)/i,
     ops: [{ kind: 'heroStat', stat: 'speed', mul: 1.25 }], summary: 'Vitesse du héros +25 %',
   },
-  { match: /(héros|hero|personnage|perso).*(plus lent|moins (rapide|vite))/i, ops: [{ kind: 'heroStat', stat: 'speed', mul: 0.8 }], summary: 'Vitesse du héros −20 %' },
+  { match: /(héros|héroïne|hero|heroine|personnage|perso).*(plus lent|moins (rapide|vite))/i, ops: [{ kind: 'heroStat', stat: 'speed', mul: 0.8 }], summary: 'Vitesse du héros −20 %' },
   { match: /ennemis?.*(plus rapides?|plus vite)/i, ops: [{ kind: 'enemyStat', stat: 'speed', mul: 1.25 }], summary: 'Ennemis +25 % de vitesse' },
   { match: /ennemis?.*(plus lents?|moins vite)/i, ops: [{ kind: 'enemyStat', stat: 'speed', mul: 0.8 }], summary: 'Ennemis −20 % de vitesse' },
   { match: /saut.*(haut|puissant|loin|fort)|améliore.*saut|jump.*(higher|stronger)/i, ops: [{ kind: 'heroStat', stat: 'jump', mul: 1.15 }], summary: 'Saut du héros +15 %' },
