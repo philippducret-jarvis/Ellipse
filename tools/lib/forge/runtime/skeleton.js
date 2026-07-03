@@ -87,11 +87,12 @@ export function boneWorldTransforms(rig, pose) {
  * Dessine le rig sur ctx. images = { partId: HTMLImageElement }.
  * (x,y) = position de l'ancre (pieds) à l'écran ; height = hauteur cible px.
  */
-export function drawSkeleton(ctx, rig, images, pose, { x, y, height, flip = false, alpha = 1, flash = false }) {
+export function drawSkeleton(ctx, rig, images, pose, { x, y, height, flip = false, alpha = 1, flash = false, halo = 0 }) {
   const s = height / rig.frame.h;
   const world = boneWorldTransforms(rig, pose);
   ctx.save();
   ctx.globalAlpha = alpha;
+  if (halo > 0) { ctx.shadowColor = 'rgba(4,2,10,0.85)'; ctx.shadowBlur = halo; } // séparation perso/décor
   if (flash) ctx.filter = 'brightness(1.8) saturate(0.6)';
   ctx.translate(x, y);
   ctx.scale(flip ? -s : s, s);

@@ -86,9 +86,22 @@ function drawHeart(ctx, x, y, r, filled, color) {
   ctx.restore();
 }
 
+/** Tuilage MIROIR : une tuile sur deux est retournée → aucune couture visible. */
 function tileLayer(ctx, img, offsetX, y, drawW, drawH, vpW) {
-  const start = -((offsetX % drawW) + drawW) % drawW;
-  for (let x = start; x < vpW; x += drawW - 1) ctx.drawImage(img, x, y, drawW, drawH);
+  const period = drawW * 2;
+  const start = -((offsetX % period) + period) % period;
+  for (let x = start - drawW; x < vpW; x += drawW) {
+    const idx = Math.round((x - start) / drawW);
+    if (idx % 2 === 0) {
+      ctx.drawImage(img, x, y, drawW, drawH);
+    } else {
+      ctx.save();
+      ctx.translate(x + drawW, y);
+      ctx.scale(-1, 1);
+      ctx.drawImage(img, 0, 0, drawW, drawH);
+      ctx.restore();
+    }
+  }
 }
 
 // ═══ RENDU PRINCIPAL D'UN NIVEAU ═══
@@ -109,7 +122,14 @@ export function render(ctx, state, assets, dt, fx) {
     const h = vp.h, w = h * (img.width / img.height);
     tileLayer(ctx, img, scroll * layer.depth, 0, w, h, vp.w);
     if (layer.id === 'mid') {
-      drawGround(ctx, state, ground);
+      // LISIBILITÉ : pousser le décor en arrière au-dessus de la zone de jeu
+      const push = ctx.createLinearGradient(0, 0, 0, state.groundY);
+      push.addColorStop(0, 'rgba(6,4,14,0.30)');
+      push.addColorStop(0.72, 'rgba(6,4,14,0.10)');
+      push.addColorStop(1, 'rgba(6,4,14,0.0)');
+      ctx.fillStyle = push; ctx.fillRect(0, 0, vp.w, state.groundY);
+      drawGround(ctx, state, ground, accent);
+      if (state.genre === 'vertical-arena') drawArenaLanes(ctx, state, accent);
       drawWorld(ctx, state, assets, accent);
     }
   }
@@ -135,25 +155,66 @@ export function render(ctx, state, assets, dt, fx) {
   drawHud(ctx, state, accent, fx, dt);
 }
 
-/** Sol : texture générée si dispo, sinon bande gradée. */
-function drawGround(ctx, state, ground) {
+/**
+ * Sol ANCRÉ — sobriété volontaire : bande sombre nette + liseré accent.
+ * (La texture de sol générée est une mini-scène qui parasite la lecture ;
+ * la ligne de jeu doit se lire instantanément.)
+ */
+function drawGround(ctx, state, ground, accent) {
   const { vp } = state, gy = state.groundY;
-  if (ground?.img) {
-    const h = vp.h - gy + 8, w = h * (ground.img.width / ground.img.height);
-    ctx.save();
-    tileLayer(ctx, ground.img, state.camX * 0.98, gy - 6, Math.max(w, h * 2), h + 6, vp.w);
-    // assombrir vers le bas pour asseoir la profondeur
-    const g = ctx.createLinearGradient(0, gy, 0, vp.h);
-    g.addColorStop(0, 'rgba(8,6,14,0.0)'); g.addColorStop(1, 'rgba(8,6,14,0.6)');
-    ctx.fillStyle = g; ctx.fillRect(0, gy, vp.w, vp.h - gy);
-    // ligne d'horizon du sol
-    ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.fillRect(0, gy - 4, vp.w, 4);
-    ctx.restore();
-  } else {
-    const g = ctx.createLinearGradient(0, gy, 0, vp.h);
-    g.addColorStop(0, 'rgba(8,6,14,0.05)'); g.addColorStop(0.15, 'rgba(8,6,14,0.55)'); g.addColorStop(1, 'rgba(8,6,14,0.85)');
-    ctx.fillStyle = g; ctx.fillRect(0, gy - 4, vp.w, vp.h - gy + 4);
+  if (state.genre !== 'sidescroller') return; // l'arène a sa propre ligne de défense
+  const g = ctx.createLinearGradient(0, gy - 2, 0, vp.h);
+  g.addColorStop(0, 'rgba(8,6,14,0.55)');
+  g.addColorStop(0.25, 'rgba(8,6,14,0.8)');
+  g.addColorStop(1, 'rgba(8,6,14,0.95)');
+  ctx.fillStyle = g; ctx.fillRect(0, gy - 2, vp.w, vp.h - gy + 2);
+  // arête du sol : ombre d'appui + fin liseré accent lumineux
+  ctx.fillStyle = 'rgba(0,0,0,0.6)'; ctx.fillRect(0, gy - 4, vp.w, 4);
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.fillStyle = accent; ctx.globalAlpha = 0.35;
+  ctx.fillRect(0, gy - 5, vp.w, 2);
+  ctx.restore();
+}
+
+/** Arène verticale : 3 couloirs lisibles + ligne de défense du héros. */
+function drawArenaLanes(ctx, state, accent) {
+  const { vp } = state, lanes = state.gdl.world.lanes ?? 3, gy = state.groundY;
+  const laneX = (l) => vp.w * (0.5 + (l - (lanes - 1) / 2) * 0.3);
+  const topY = vp.h * 0.06, vanish = vp.w / 2;
+  ctx.save();
+  for (let l = 0; l < lanes; l++) {
+    const xb = laneX(l), w = vp.w * 0.13;
+    const xt = vanish + (xb - vanish) * 0.42; // convergence perspective
+    const wt = w * 0.42;
+    const active = state.hero.lane === l;
+    const grad = ctx.createLinearGradient(0, topY, 0, gy);
+    grad.addColorStop(0, 'rgba(255,255,255,0.0)');
+    grad.addColorStop(1, active ? 'rgba(255,255,255,0.10)' : 'rgba(255,255,255,0.045)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.moveTo(xt - wt, topY); ctx.lineTo(xt + wt, topY);
+    ctx.lineTo(xb + w, gy); ctx.lineTo(xb - w, gy);
+    ctx.closePath(); ctx.fill();
+    if (active) {
+      ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = 0.35;
+      ctx.strokeStyle = accent; ctx.lineWidth = 2; ctx.stroke(); ctx.restore();
+    }
   }
+  // ligne de défense : plateforme lumineuse où se tient la Veilleuse
+  ctx.globalCompositeOperation = 'lighter';
+  const dg = ctx.createLinearGradient(0, gy - 8, 0, gy + 26);
+  dg.addColorStop(0, 'rgba(0,0,0,0)');
+  const a = hexA(accent, 0.5);
+  dg.addColorStop(0.4, a); dg.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = dg;
+  ctx.fillRect(vp.w * 0.06, gy - 8, vp.w * 0.88, 34);
+  ctx.restore();
+}
+
+function hexA(hex, alpha) {
+  const n = parseInt(hex.replace('#', ''), 16);
+  return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${alpha})`;
 }
 
 function drawWorld(ctx, state, assets, accent) {
@@ -187,10 +248,22 @@ function drawWorld(ctx, state, assets, accent) {
     const sx = toScreen(c);
     if (sx < -40 || sx > state.vp.w + 40) continue;
     const active = state.hero.checkpoint >= c;
-    ctx.strokeStyle = 'rgba(230,230,240,0.8)'; ctx.lineWidth = 4;
-    ctx.beginPath(); ctx.moveTo(sx, gy); ctx.lineTo(sx, gy - 110); ctx.stroke();
-    ctx.fillStyle = active ? accent : 'rgba(255,255,255,0.35)';
-    ctx.beginPath(); ctx.moveTo(sx, gy - 110); ctx.lineTo(sx + 46, gy - 96); ctx.lineTo(sx, gy - 82); ctx.closePath(); ctx.fill();
+    // lanterne de veille : mât + orbe (allumée quand atteinte)
+    ctx.strokeStyle = 'rgba(20,16,30,0.9)'; ctx.lineWidth = 6;
+    ctx.beginPath(); ctx.moveTo(sx, gy); ctx.lineTo(sx, gy - 96); ctx.stroke();
+    ctx.strokeStyle = 'rgba(200,195,215,0.5)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(sx, gy); ctx.lineTo(sx, gy - 96); ctx.stroke();
+    if (active) {
+      const pulse = 0.7 + 0.3 * Math.sin(state.time * 5);
+      const g = ctx.createRadialGradient(sx, gy - 106, 2, sx, gy - 106, 34);
+      g.addColorStop(0, accent); g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = pulse;
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(sx, gy - 106, 34, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    }
+    ctx.fillStyle = active ? accent : 'rgba(160,155,175,0.6)';
+    ctx.beginPath(); ctx.arc(sx, gy - 106, 9, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,0.5)'; ctx.lineWidth = 2; ctx.stroke();
   }
   if (!state.level.boss) {
     const ex = toScreen(state.level.exit?.x ?? -1);
@@ -240,12 +313,12 @@ function drawEntities(ctx, state, assets, fx, dt) {
     if (isHero && e.anim === 'run' && e.onGround && Math.random() < dt * 14) {
       spawn(fx, 1, { x: e.x - e.facing * 20, y: state.groundY, angle: -Math.PI / 2, spread: 1.4, speed: 40, gravity: 140, life: 0.4, size: 4, color: 'rgba(180,170,160,0.4)' });
     }
-    // ombre de contact
+    // ombre de contact (plus marquée : elle ancre le personnage)
     ctx.save();
-    ctx.globalAlpha = 0.35 * deadFade * (e.onGround === false ? Math.max(0.35, 1 - Math.abs(state.groundY - e.y) / 320) : 1);
+    ctx.globalAlpha = 0.5 * deadFade * (e.onGround === false ? Math.max(0.3, 1 - Math.abs(state.groundY - e.y) / 320) : 1);
     ctx.fillStyle = '#000';
     ctx.beginPath();
-    ctx.ellipse(sx, state.genre === 'sidescroller' ? state.groundY + 6 : sy + 4, height * 0.22, height * 0.05, 0, 0, Math.PI * 2);
+    ctx.ellipse(sx, state.genre === 'sidescroller' ? state.groundY + 6 : sy + 4, height * 0.24, height * 0.055, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
 
@@ -260,6 +333,7 @@ function drawEntities(ctx, state, assets, fx, dt) {
       flip: (e.facing ?? e.dir ?? 1) < 0,
       alpha: (blink ? 0.35 : 1) * deadFade,
       flash: e.hitT > 0.12,
+      halo: height * 0.07,
     });
   }
 }

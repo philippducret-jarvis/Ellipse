@@ -173,17 +173,17 @@ export function compileGdl(gdd, { levelLength = 4200 } = {}) {
   const seed = masterSeed(gdd.id);
   const rnd = mulberry32(seed);
   const entities = {
-    hero: { role: 'hero', name: gdd.hero.name, rig: `assets/hero/hero.rig.json`, clips: `assets/hero/hero.clips.json`, scale: 0.26, stats: gdd.hero.stats ?? {} },
+    hero: { role: 'hero', name: gdd.hero.name, rig: `assets/hero/hero.rig.json`, clips: `assets/hero/hero.clips.json`, scale: 0.34, stats: gdd.hero.stats ?? {} },
   };
   for (const e of gdd.enemies) {
-    entities[e.id] = { role: 'enemy', name: e.name, rig: `assets/enemies/${e.id}.rig.json`, clips: `assets/enemies/${e.id}.clips.json`, scale: e.rigType === 'humanoid' ? 0.24 : 0.15, stats: e.stats, ai: e.rigType === 'humanoid' ? { type: 'chase', aggroRange: 460, chaseSpeed: 170, range: 240 } : { type: 'patrol', range: 220, aggroRange: 0 } };
+    entities[e.id] = { role: 'enemy', name: e.name, rig: `assets/enemies/${e.id}.rig.json`, clips: `assets/enemies/${e.id}.clips.json`, scale: e.rigType === 'humanoid' ? 0.30 : 0.20, stats: e.stats, ai: e.rigType === 'humanoid' ? { type: 'chase', aggroRange: 460, chaseSpeed: 170, range: 240 } : { type: 'patrol', range: 220, aggroRange: 0 } };
   }
   // boss : réutilise le rig de l'ennemi le plus costaud — plus grand, plus dur
   const bossSrc = gdd.enemies.find((e) => e.id === gdd.boss?.fromEnemy) ?? gdd.enemies[0];
   entities.boss = {
     role: 'boss', name: gdd.boss?.name ?? 'Boss',
     rig: `assets/enemies/${bossSrc.id}.rig.json`, clips: `assets/enemies/${bossSrc.id}.clips.json`,
-    scale: (bossSrc.rigType === 'humanoid' ? 0.24 : 0.15) * 1.7,
+    scale: (bossSrc.rigType === 'humanoid' ? 0.30 : 0.20) * 1.6,
     stats: { hp: 14, speed: 150, damage: 1 },
     ai: { type: 'chase', aggroRange: 900, chaseSpeed: 185, range: 400 },
   };
