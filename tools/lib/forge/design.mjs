@@ -209,9 +209,9 @@ export function compileGdl(gdd, { levelLength = 4200 } = {}) {
     levels.push({ id: 'level-03', name: `Jugement — ${entities.boss.name}`, arena: arena(1), waves: bossWaves, boss: true });
   }
 
-  // histoire (récit court, portrait du héros sur ses répliques)
+  // histoire : celle du GDD (mode directeur) si fournie, sinon gabarit
   const heroN = gdd.hero.name, bossN = entities.boss.name;
-  const story = {
+  const story = gdd.story ?? {
     intro: [
       { speaker: 'Narrateur', text: gdd.pitch },
       { speaker: heroN, portrait: 'hero', text: `Ce lieu m'appelle depuis toujours. Quelque chose s'est éveillé — et je suis ${/e$/.test(heroN) ? 'la seule' : 'le seul'} à pouvoir l'affronter.` },
@@ -228,15 +228,18 @@ export function compileGdl(gdd, { levelLength = 4200 } = {}) {
     ],
   };
 
-  const relics = [
+  const relics = gdd.relics ?? [
     { id: 'boots', name: 'Bottes de célérité', desc: 'Vitesse de déplacement +25 %', effect: { speedMul: 1.25 } },
     { id: 'talisman', name: 'Talisman de vie', desc: '+2 cœurs au maximum', effect: { hpAdd: 2 } },
     { id: 'edge', name: 'Fil aiguisé', desc: 'Dégâts +1', effect: { damageAdd: 1 } },
     { id: 'wings', name: 'Plumes d\'ascension', desc: 'Saut +15 %', effect: { jumpMul: 1.15 } },
   ];
 
+  // noms de niveaux curés (mode directeur)
+  if (gdd.levelNames) levels.forEach((l, i) => { if (gdd.levelNames[i]) l.name = gdd.levelNames[i]; });
+
   const map = {
-    title: gdd.setting.length < 60 ? gdd.setting[0].toUpperCase() + gdd.setting.slice(1) : 'Carte du monde',
+    title: gdd.mapTitle ?? (gdd.setting.length < 60 ? gdd.setting[0].toUpperCase() + gdd.setting.slice(1) : 'Carte du monde'),
     nodes: levels.map((l, i) => ({ level: l.id, x: 0.22 + i * 0.28, y: i % 2 ? 0.42 : 0.56, name: l.name })),
   };
 

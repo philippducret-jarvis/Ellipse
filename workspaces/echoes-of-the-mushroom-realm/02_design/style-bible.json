@@ -1,0 +1,10 @@
+{
+  "note": "Bible de style FORGE — dérivée des planches (level_test_01, cast_exploration, enemy_family) : crépuscule fongique violet/magenta, lueurs cyan bioluminescentes, silhouettes de champignons géants.",
+  "palette": ["#1a0f2e", "#4a2a6b", "#8b4bb8", "#e565a8", "#54d8e6", "#f0e8f8", "#2b6b5c"],
+  "render": "painterly high-detail 2D game art, vibrant magical color grading, glowing bioluminescent accents, twilight purple atmosphere with cyan highlights, HD",
+  "mood": "bioluminescent mushroom realm at dusk, purple and magenta twilight, giant fungi silhouettes with glowing spores, mystical and adventurous",
+  "composition": {
+    "arena-01": "01_inputs/references/level_test_01_board.png",
+    "arena-02": "01_inputs/references/level_test_01_alt_board.png"
+  }
+}

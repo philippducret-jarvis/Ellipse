@@ -1,6 +1,11 @@
 generated/
 uploads/
-workspaces/
+# workspaces : artefacts générés ignorés, SAUF la direction créative curée
+workspaces/**
+!workspaces/*/
+!workspaces/*/02_design/
+!workspaces/*/02_design/gdd.json
+!workspaces/*/02_design/style-bible.json
 node_modules/
 dist/
 .turbo/

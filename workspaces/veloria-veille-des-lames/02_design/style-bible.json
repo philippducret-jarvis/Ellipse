@@ -1,0 +1,10 @@
+{
+  "note": "Bible de style FORGE — dérivée des planches (Personnages Principaux → Palette Chromatique, Signature Visuelle). Les planches donnent les RÈGLES, jamais des pixels.",
+  "palette": ["#07060a", "#3b3a72", "#5a3a72", "#c9a227", "#f0e6cf", "#a33046", "#7a2f5a"],
+  "render": "painterly dark fantasy premium game art, dramatic chiaroscuro lighting, warm sacred gold rim light against cool violet shadows, rich noble materials (gold filigree, silk, blackened steel), cinematic, high detail, HD",
+  "mood": "candlelit gothic twilight of a cursed citadel, sacred gold and occult violet, elegant and powerful, clear readable silhouettes",
+  "composition": {
+    "arena-01": "01_inputs/references/ambiances_hub_niveaux.png",
+    "arena-02": "01_inputs/references/gameplay_phase_elite_morgane.png"
+  }
+}

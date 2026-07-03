@@ -1,0 +1,91 @@
+{
+  "note": "GDD MODE DIRECTEUR — écrit à la main (Claude, directeur créatif). Lore canonique Echoes : le Chevalier Sporal, l'Écho de Spores, le Royaume-Champignon.",
+  "id": "echoes-of-the-mushroom-realm",
+  "title": "Echoes of the Mushroom Realm",
+  "genre": "sidescroller",
+  "pitch": "Le Chevalier Sporal traverse le Royaume-Champignon endormi pour réveiller le Cœur du Mycélium — et faire taire les échos qui le rongent.",
+  "setting": "a bioluminescent giant-mushroom realm at eternal dusk, glowing spores drifting in purple twilight, ancient fungal ruins",
+  "palette": ["#1a0f2e", "#4a2a6b", "#8b4bb8", "#e565a8", "#54d8e6", "#f0e8f8", "#2b6b5c"],
+  "render": "painterly high-detail 2D game art, vibrant magical color grading, glowing bioluminescent accents, twilight purple atmosphere with cyan highlights, HD",
+  "mood": "bioluminescent mushroom realm at dusk, purple and magenta twilight, giant fungi silhouettes with glowing spores, mystical and adventurous",
+  "hero": {
+    "id": "hero",
+    "name": "Le Chevalier Sporal",
+    "role": "hero",
+    "rigType": "humanoid",
+    "dna": {
+      "archetype": "young errant knight bonded with fungal magic, curious and brave",
+      "silhouette": "agile knightly silhouette with a rounded mushroom-cap helm and a short glowing sword",
+      "face": "youthful determined face, softly glowing cyan eyes",
+      "hair": "none, rounded bronze mushroom-cap helm with cyan spore vents",
+      "outfit": "organic knight armor grown from mushroom chitin, magenta bioluminescent veins, short cape of woven mycelium glowing at the hem",
+      "colors": { "chitin_violet": "#8b4bb8", "spore_cyan": "#54d8e6", "vein_magenta": "#e565a8" },
+      "materials": "polished chitin, living mycelium weave, soft bioluminescent glow",
+      "props": "short sword with glowing spore-crystal blade"
+    },
+    "stats": {}
+  },
+  "enemies": [
+    {
+      "id": "sporeling",
+      "name": "Sporeling",
+      "role": "enemy",
+      "rigType": "monopart",
+      "dna": {
+        "archetype": "small round mushroom creature, mischievous and territorial",
+        "silhouette": "plump round body under a wide glowing cap, tiny feet",
+        "face": "two large glowing magenta eyes under the cap rim",
+        "outfit": "violet mushroom cap speckled with cyan spots",
+        "colors": { "cap_violet": "#8b4bb8", "spots_cyan": "#54d8e6", "glow_magenta": "#e565a8" },
+        "materials": "soft fungal flesh, glowing spore pores"
+      },
+      "stats": { "hp": 2, "speed": 110, "damage": 1, "touchDamage": true }
+    },
+    {
+      "id": "myco-warden",
+      "name": "Gardien Mycélien",
+      "role": "enemy",
+      "rigType": "humanoid",
+      "dna": {
+        "archetype": "tall fungal guardian grown by the realm to repel intruders, solemn and relentless",
+        "silhouette": "lanky towering silhouette, long root-like arms, layered shelf-mushroom pauldrons",
+        "face": "hollow carved wooden mask leaking cyan mist",
+        "hair": "crown of layered violet mushroom caps",
+        "outfit": "bark and moss plate grown with glowing mycelium threads",
+        "colors": { "bark_deep": "#4a2a6b", "moss_teal": "#2b6b5c", "thread_cyan": "#54d8e6" },
+        "materials": "living wood, moss, glowing sap"
+      },
+      "stats": { "hp": 3, "speed": 140, "damage": 1 }
+    }
+  ],
+  "boss": { "name": "Le Cœur du Mycélium", "fromEnemy": "myco-warden" },
+  "arenas": [
+    { "id": "arena-01", "theme": "the luminous outskirts of a bioluminescent giant-mushroom forest at dusk, glowing spores drifting, mossy ground and shallow glowing streams" },
+    { "id": "arena-02", "theme": "the deep fungal caverns beneath the mushroom realm, colossal glowing mushroom pillars, rivers of cyan spores, ancient overgrown ruins" }
+  ],
+  "mechanics": ["run", "jump", "attack", "checkpoints", "pickups", "hazards", "boss"],
+  "levelNames": ["La Lisière Luisante", "Les Cavernes du Mycélium", "Le Cœur — Éveil"],
+  "mapTitle": "Le Royaume-Champignon",
+  "relics": [
+    { "id": "echo", "name": "Écho de Spores", "desc": "Les anciens frappent avec lui — Dégâts +1", "effect": { "damageAdd": 1 } },
+    { "id": "rosee", "name": "Chapeau de Rosée", "desc": "La rosée du matin soigne — +2 cœurs", "effect": { "hpAdd": 2 } },
+    { "id": "foulee", "name": "Foulée Mycélienne", "desc": "Le réseau le porte — Vitesse +25 %", "effect": { "speedMul": 1.25 } },
+    { "id": "spores", "name": "Spores Portantes", "desc": "L'air le soulève — Saut +15 %", "effect": { "jumpMul": 1.15 } }
+  ],
+  "story": {
+    "intro": [
+      { "speaker": "Narrateur", "text": "Le Royaume-Champignon dort d'un sommeil qui n'est pas le sien. Les spores portent des échos — des voix d'anciens que personne n'écoute plus." },
+      { "speaker": "Le Chevalier Sporal", "portrait": "hero", "text": "Moi, je les entends. Chaque nuit, plus fort. Le Cœur du Mycélium m'appelle — et je vais lui répondre." },
+      { "speaker": "Narrateur", "text": "De la lisière luisante aux cavernes profondes, l'Écho le guide. Et l'Écho le teste." }
+    ],
+    "levels": {
+      "level-01": { "victory": [{ "speaker": "Le Chevalier Sporal", "portrait": "hero", "text": "Les sporelings ne m'attaquaient pas… ils me protégeaient de ce qui dort plus bas. Les échos deviennent des cris." }] },
+      "level-02": { "victory": [{ "speaker": "Le Chevalier Sporal", "portrait": "hero", "text": "Ces ruines… le Royaume n'a pas toujours été champignon. Quelqu'un l'a semé. Le Cœur s'en souvient." }] },
+      "level-03": { "victory": [{ "speaker": "Le Chevalier Sporal", "portrait": "hero", "text": "L'Écho s'est tu. Non — il chante, enfin. Le Royaume s'éveille." }] }
+    },
+    "outro": [
+      { "speaker": "Narrateur", "text": "Le Cœur du Mycélium battit de nouveau, et pour la première fois depuis des siècles, les spores dansèrent en lumière." },
+      { "speaker": "Le Chevalier Sporal", "portrait": "hero", "text": "Les anciens peuvent dormir. Un chevalier écoute pour eux, désormais." }
+    ]
+  }
+}

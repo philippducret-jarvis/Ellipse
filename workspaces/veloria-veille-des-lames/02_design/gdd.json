@@ -1,0 +1,92 @@
+{
+  "note": "GDD MODE DIRECTEUR — écrit à la main (Claude, directeur créatif). Lore canonique Veloria : la Veille des Lames, Auréline, le Serment de Lame.",
+  "id": "veloria-veille-des-lames",
+  "title": "Veloria — La Veille des Lames",
+  "genre": "vertical-arena",
+  "pitch": "Auréline, lame de la Première Veille, défend la citadelle maudite de Veloria contre les légions de l'Évêque Déchu.",
+  "setting": "the cursed gothic citadel of Veloria, candlelit naves and broken stained glass, sacred gold against occult violet darkness",
+  "palette": ["#07060a", "#3b3a72", "#5a3a72", "#c9a227", "#f0e6cf", "#a33046", "#7a2f5a"],
+  "render": "painterly dark fantasy premium game art, dramatic chiaroscuro lighting, warm sacred gold rim light against cool violet shadows, rich noble materials, cinematic, high detail, HD",
+  "mood": "candlelit gothic twilight of a cursed citadel, sacred gold and occult violet, elegant and powerful, clear readable silhouettes",
+  "hero": {
+    "id": "hero",
+    "name": "Auréline",
+    "role": "hero",
+    "rigType": "humanoid",
+    "dna": {
+      "archetype": "adult elegant holy knight heroine, radiant and resolute, saint-lancer of a sacred order",
+      "silhouette": "tall regal silhouette, ceremonial golden lance held vertically at her side",
+      "face": "serene determined face, luminous pale skin, golden eyes",
+      "hair": "long white-blonde braid woven with gold thread",
+      "outfit": "ornate white and gold plate armor with violet silk sash, filigree pauldrons shaped like candle flames, flowing half-cape",
+      "colors": { "armor_gold": "#c9a227", "ivory_plate": "#f0e6cf", "sash_violet": "#5a3a72" },
+      "materials": "polished gold filigree, white steel, violet silk",
+      "props": "ceremonial golden lance"
+    },
+    "stats": {}
+  },
+  "enemies": [
+    {
+      "id": "fallen-knight",
+      "name": "Chevalier Déchu",
+      "role": "enemy",
+      "rigType": "humanoid",
+      "dna": {
+        "archetype": "corrupted holy knight consumed by the curse, tragic and menacing",
+        "silhouette": "heavy broad armored silhouette, greatsword dragged low",
+        "face": "closed dark greathelm leaking faint indigo mist",
+        "hair": "none, sealed helm",
+        "outfit": "blackened ruined plate armor with torn crimson-violet cape, cracked gold trim from his former order",
+        "colors": { "armor_black": "#07060a", "cape_crimson": "#a33046", "curse_indigo": "#3b3a72" },
+        "materials": "blackened steel, torn cloth, faded gold inlay",
+        "props": "cursed greatsword"
+      },
+      "stats": { "hp": 3, "speed": 140, "damage": 1 }
+    },
+    {
+      "id": "gargoyle",
+      "name": "Gargouille du Reliquaire",
+      "role": "enemy",
+      "rigType": "monopart",
+      "dna": {
+        "archetype": "stone gargoyle awakened from the citadel walls, hunched and predatory",
+        "silhouette": "compact hunched winged stone beast, claws forward",
+        "face": "snarling stone maw with glowing gold-lit eyes",
+        "outfit": "weathered violet-grey stone hide veined with gold",
+        "colors": { "stone_violet": "#5a3a72", "gold_veins": "#c9a227" },
+        "materials": "weathered carved stone, glowing gold veins"
+      },
+      "stats": { "hp": 2, "speed": 110, "damage": 1, "touchDamage": true }
+    }
+  ],
+  "boss": { "name": "L'Évêque Déchu", "fromEnemy": "fallen-knight" },
+  "arenas": [
+    { "id": "arena-01", "theme": "the candlelit grand nave of the cursed gothic citadel of Veloria, rows of golden candelabras, broken stained-glass windows glowing occult violet, incense haze" },
+    { "id": "arena-02", "theme": "the defiled throne sanctum deep within the citadel of Veloria, colossal profaned altar, sacred gold braziers blazing against occult violet darkness, shattered rose window" }
+  ],
+  "mechanics": ["lanes", "waves", "attack", "boss"],
+  "levelNames": ["Première Veille — La Nef", "Deuxième Veille — Les Vitraux", "Dernière Veille — L'Autel Profané"],
+  "mapTitle": "Citadelle de Veloria",
+  "relics": [
+    { "id": "serment", "name": "Serment de Lame", "desc": "Le serment aiguise la lance d'Auréline — Dégâts +1", "effect": { "damageAdd": 1 } },
+    { "id": "voile", "name": "Voile d'Aube", "desc": "La première lumière la protège — +2 cœurs", "effect": { "hpAdd": 2 } },
+    { "id": "aurore", "name": "Pas de l'Aurore", "desc": "Elle glisse entre les ombres — Vitesse +25 %", "effect": { "speedMul": 1.25 } },
+    { "id": "cierge", "name": "Cierge Éternel", "desc": "Une flamme qui ne s'éteint pas — +1 cœur", "effect": { "hpAdd": 1 } }
+  ],
+  "story": {
+    "intro": [
+      { "speaker": "Narrateur", "text": "Chaque nuit depuis cent ans, la citadelle de Veloria sombre un peu plus sous la Malédiction. Et chaque nuit, une Veilleuse monte la garde." },
+      { "speaker": "Auréline", "portrait": "hero", "text": "Je suis Auréline, lame de la Première Veille. Ce soir, les cloches ont sonné à l'envers — l'Évêque Déchu s'est éveillé." },
+      { "speaker": "Narrateur", "text": "Trois veilles la séparent de l'autel profané. Que sa lance ne tremble pas." }
+    ],
+    "levels": {
+      "level-01": { "victory": [{ "speaker": "Auréline", "portrait": "hero", "text": "La nef est purifiée. Mais ces chevaliers… c'étaient des nôtres, autrefois. Que la Veille me pardonne." }] },
+      "level-02": { "victory": [{ "speaker": "Auréline", "portrait": "hero", "text": "Les vitraux pleurent une lumière noire. Il m'attend, là-haut — et il connaît mon nom." }] },
+      "level-03": { "victory": [{ "speaker": "Auréline", "portrait": "hero", "text": "Par le Serment de Lame… la Veille est tenue. Reposez en paix, mes frères." }] }
+    },
+    "outro": [
+      { "speaker": "Narrateur", "text": "À l'aube, les cloches de Veloria sonnèrent à l'endroit — pour la première fois depuis cent ans." },
+      { "speaker": "Auréline", "portrait": "hero", "text": "La Malédiction reviendra. Et je serai là. C'est cela, être Veilleuse." }
+    ]
+  }
+}

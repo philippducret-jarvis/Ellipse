@@ -55,7 +55,19 @@ export async function buildGame(prompt, { id = null, log = console.log } = {}) {
     style = await extractWorkspaceStyle(join(ROOT, 'workspaces', targetId));
     if (style) log(`Style verrouillé sur les planches [${style.source}] : ${style.palette?.length ?? 0} couleurs canoniques`);
   }
-  const gdd = await designGdd(prompt, style);
+  // MODE DIRECTEUR : un GDD curé (02_design/gdd.json) prime sur le design
+  // automatique — la direction créative est de la DONNÉE, pas du code.
+  let gdd = null;
+  if (targetId) {
+    const gddPath = join(ROOT, 'workspaces', targetId, '02_design', 'gdd.json');
+    try {
+      gdd = JSON.parse(await readFile(gddPath, 'utf8'));
+      gdd.designBackend = 'director';
+      if (style?.palette && !gdd.palette) gdd.palette = style.palette;
+      log(`Design [director] : GDD curé chargé (${gddPath.split('workspaces')[1]})`);
+    } catch { /* pas de GDD curé → design automatique */ }
+  }
+  if (!gdd) gdd = await designGdd(prompt, style);
   // id imposé (ex. slug d'un projet de l'orchestrateur) → le jeu se forge
   // dans le workspace de CE projet, aux côtés de sa structure 00_..08_.
   if (targetId) gdd.id = targetId;
