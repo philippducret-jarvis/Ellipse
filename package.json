@@ -63,6 +63,7 @@
     "forge:gpu-plan": "node ./tools/forge-gpu-plan.mjs",
     "forge:connections": "node ./tools/forge-connections.mjs",
     "forge:screens": "node ./tools/forge-screenshot.mjs",
+    "forge:3d": "node ./tools/forge-3d.mjs",
     "create:game": "node ./tools/create-game-from-prompt.mjs",
     "create:game:veloria": "node ./tools/deliver-veloria.mjs",
     "deliver:veloria": "node ./tools/deliver-veloria.mjs",

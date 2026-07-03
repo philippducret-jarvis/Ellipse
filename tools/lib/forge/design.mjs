@@ -152,9 +152,14 @@ export async function designGdd(prompt, styleOverride = null) {
   return (await claudeGdd(prompt, styleOverride)) ?? heuristicGdd(prompt, styleOverride);
 }
 
-/** Un niveau sidescroller procédural, densité croissante avec `difficulty`. */
+/**
+ * Un niveau sidescroller procédural : ennemis, dangers, ET VERTICALITÉ —
+ * plateformes traversantes à 1-2 étages avec pickups en hauteur (le chemin
+ * du sol reste toujours complétable : les plateformes récompensent, elles
+ * ne bloquent pas).
+ */
 function buildSideLevel(rnd, gdd, { id, name, arena, length, difficulty, boss = false }) {
-  const level = { id, name, boss, arena, length, spawns: [], hazards: [], pickups: [], checkpoints: [Math.round(length * 0.5)], exit: { x: length - 220 } };
+  const level = { id, name, boss, arena, length, spawns: [], hazards: [], pickups: [], platforms: [], checkpoints: [Math.round(length * 0.5)], exit: { x: length - 220 } };
   const kinds = gdd.enemies.map((e) => e.id);
   let x = 750;
   const gap = boss ? 640 : 520 - difficulty * 60;
@@ -162,6 +167,21 @@ function buildSideLevel(rnd, gdd, { id, name, arena, length, difficulty, boss = 
     level.spawns.push({ entity: kinds[(rnd() * kinds.length) | 0], x: Math.round(x) });
     if (rnd() < 0.35 + difficulty * 0.1) level.hazards.push({ x: Math.round(x + 260 + rnd() * 120), w: 120, type: 'spikes', damage: 1 });
     if (rnd() < 0.35 - difficulty * 0.05) level.pickups.push({ x: Math.round(x + 140), type: rnd() < 0.6 ? 'gem' : 'heart' });
+
+    // verticalité : 60 % des segments ont un étage, 25 % un second
+    if (rnd() < 0.6) {
+      const px = Math.round(x + 120 + rnd() * 160);
+      const pw = Math.round(150 + rnd() * 110);
+      const py = Math.round(120 + rnd() * 60); // hauteur du 1er étage
+      level.platforms.push({ x: px, w: pw, y: py });
+      level.pickups.push({ x: px + pw / 2, py: py + 20, type: rnd() < 0.7 ? 'gem' : 'heart' });
+      if (rnd() < 0.42) {
+        const p2w = Math.round(120 + rnd() * 80);
+        const p2x = Math.round(px + pw * (rnd() < 0.5 ? -0.55 : 0.75));
+        level.platforms.push({ x: p2x, w: p2w, y: py + 130 + Math.round(rnd() * 40) });
+        level.pickups.push({ x: p2x + p2w / 2, py: py + 150, type: 'gem' });
+      }
+    }
     x += gap + rnd() * 420;
   }
   if (boss) level.spawns.push({ entity: 'boss', x: length - 500 });

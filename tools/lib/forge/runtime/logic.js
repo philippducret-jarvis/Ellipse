@@ -48,10 +48,24 @@ export function createGame(gdl, levelIndex = 0, opts = {}) {
 
   if (gdl.genre === 'sidescroller') {
     for (const s of level.spawns ?? []) state.enemies.push(spawnEnemy(gdl, s.entity, s.x, groundY));
-    state.pickups = (level.pickups ?? []).map((p, i) => ({ ...p, id: i, y: groundY - 40, taken: false }));
+    // p.py = hauteur au-dessus du sol (pickup posé sur une plateforme)
+    state.pickups = (level.pickups ?? []).map((p, i) => ({ ...p, id: i, y: groundY - 40 - (p.py ?? 0), taken: false }));
     state.hazards = (level.hazards ?? []).map((h, i) => ({ ...h, id: i }));
+    // plateformes traversantes : {x, w, y = hauteur du dessus au-dessus du sol}
+    state.platforms = (level.platforms ?? []).map((p, i) => ({ ...p, id: i, top: groundY - p.y }));
+    state.hero.supportY = groundY;
   }
   return state;
+}
+
+/** Surface porteuse sous (x, feetY) : plateforme traversante ou sol. */
+function supportAt(state, x, feetY, tolerance = 10) {
+  let best = state.groundY;
+  for (const p of state.platforms ?? []) {
+    if (x < p.x || x > p.x + p.w) continue;
+    if (p.top >= feetY - tolerance && p.top < best) best = p.top;
+  }
+  return best;
 }
 
 function spawnEnemy(gdl, kind, x, y, lane = 0) {
@@ -115,12 +129,24 @@ function stepSide(state, input, dt, ev) {
     if (h.vx !== 0) h.facing = Math.sign(h.vx);
     if (input.jump && h.onGround) { h.vy = -h.stats.jump; h.onGround = false; h.anim = 'jump'; h.animT = 0; ev.push({ type: 'jump' }); }
     h.vy += g * dt;
+    const prevY = h.y;
     h.x = Math.max(60, Math.min(state.level.length - 40, h.x + h.vx * dt));
     h.y += h.vy * dt;
     if (!h.onGround) h.wasAirborne = true;
-    if (h.y >= state.groundY) {
-      h.y = state.groundY; h.vy = 0; h.onGround = true;
-      if (h.wasAirborne) { h.wasAirborne = false; h.landT = 0.2; h.anim = 'land'; h.animT = 0; ev.push({ type: 'land', x: h.x }); }
+
+    // atterrissage : sol OU plateforme traversante (uniquement en descente)
+    if (h.vy >= 0) {
+      const support = supportAt(state, h.x, Math.max(prevY, h.y), 6);
+      const crossed = prevY <= support + 2 && h.y >= support;
+      if (crossed || h.y >= state.groundY) {
+        h.y = Math.min(support, state.groundY); h.vy = 0; h.onGround = true; h.supportY = h.y;
+        if (h.wasAirborne) { h.wasAirborne = false; h.landT = 0.2; h.anim = 'land'; h.animT = 0; ev.push({ type: 'land', x: h.x, y: h.y }); }
+      }
+    }
+    // marcher hors du bord d'une plateforme → chute
+    if (h.onGround && h.supportY < state.groundY) {
+      const still = supportAt(state, h.x, h.supportY, 6);
+      if (still > h.supportY + 2) { h.onGround = false; }
     }
     h.landT = Math.max(0, h.landT - dt);
 
@@ -145,9 +171,12 @@ function stepSide(state, input, dt, ev) {
       if (h.anim !== next) { h.anim = next; h.animT = 0; }
     }
 
-    // dangers au sol
+    // dangers au sol (une plateforme au-dessus protège)
     for (const hz of state.hazards) {
-      if (h.onGround && h.x > hz.x && h.x < hz.x + hz.w) { hurtHero(state, hz.damage ?? 1, ev); if (!h.dead) { h.vy = -520; h.onGround = false; } }
+      if (h.onGround && h.y >= state.groundY - 2 && h.x > hz.x && h.x < hz.x + hz.w) {
+        hurtHero(state, hz.damage ?? 1, ev);
+        if (!h.dead) { h.vy = -520; h.onGround = false; }
+      }
     }
     // pickups
     for (const p of state.pickups) {

@@ -259,6 +259,27 @@ function drawWorld(ctx, state, assets, accent) {
   const gy = state.groundY;
   const toScreen = (x) => x - state.camX;
 
+  // plateformes traversantes : dalles suspendues, même langage visuel que le sol
+  for (const p of state.platforms ?? []) {
+    const sx = toScreen(p.x);
+    if (sx + p.w < -60 || sx > state.vp.w + 60) continue;
+    const top = p.top, th = 16;
+    // ombre portée de la dalle
+    ctx.fillStyle = 'rgba(0,0,0,0.28)';
+    ctx.beginPath(); ctx.ellipse(sx + p.w / 2, gy + 5, p.w * 0.42, 7, 0, 0, Math.PI * 2); ctx.fill();
+    // corps de dalle
+    const slab = ctx.createLinearGradient(0, top, 0, top + th + 26);
+    slab.addColorStop(0, 'rgba(30,24,48,0.96)');
+    slab.addColorStop(0.4, 'rgba(14,10,26,0.94)');
+    slab.addColorStop(1, 'rgba(8,6,16,0.0)');
+    ctx.fillStyle = slab;
+    ctx.fillRect(sx, top, p.w, th + 26);
+    // arête lumineuse (même liseré que le sol)
+    ctx.fillStyle = 'rgba(0,0,0,0.6)'; ctx.fillRect(sx, top - 2, p.w, 3);
+    ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = 0.4;
+    ctx.fillStyle = accent; ctx.fillRect(sx, top - 3, p.w, 2); ctx.restore();
+  }
+
   for (const hz of state.hazards) {
     const sx = toScreen(hz.x);
     if (sx + hz.w < -50 || sx > state.vp.w + 50) continue;
@@ -345,7 +366,7 @@ function puppetWarp(e, state, isHero) {
       else { w.lean = 4; w.cloth = 1.6; }                               // retour
       break;
     }
-    case 'hit': { w.lean = -12; w.sx = 1.07; w.sy = 0.93; w.tremble = 0.006; break; }
+    case 'hit': { w.lean = -12; w.sx = 1.07; w.sy = 0.93; w.tremble = 0.003; break; }
     case 'jump': { w.sy = 1.07; w.sx = 0.96; w.lean = 5; w.cloth = 2; break; }
     case 'land': { w.sy = 0.88; w.sx = 1.1; w.cloth = 1.6; break; }
     default: { // idle : respiration + balancement discret
@@ -388,7 +409,8 @@ function drawEntities(ctx, state, assets, fx, dt) {
     ctx.globalAlpha = 0.5 * deadFade * (e.onGround === false ? Math.max(0.3, 1 - Math.abs(state.groundY - e.y) / 320) : 1);
     ctx.fillStyle = '#000';
     ctx.beginPath();
-    ctx.ellipse(sx, state.genre === 'sidescroller' ? state.groundY + 6 : sy + 4, height * 0.24, height * 0.055, 0, 0, Math.PI * 2);
+    const shadowY = state.genre === 'sidescroller' ? (isHero ? (e.supportY ?? state.groundY) : state.groundY) + 6 : sy + 4;
+    ctx.ellipse(sx, shadowY, height * 0.24, height * 0.055, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
 

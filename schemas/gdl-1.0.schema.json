@@ -86,7 +86,8 @@
           "length": { "type": "number", "description": "longueur en px monde (sidescroller)" },
           "spawns": { "type": "array", "items": { "type": "object", "required": ["entity"], "properties": { "entity": { "type": "string" }, "x": { "type": "number" }, "lane": { "type": "integer" }, "t": { "type": "number" } } } },
           "hazards": { "type": "array", "items": { "type": "object", "properties": { "x": { "type": "number" }, "w": { "type": "number" }, "type": { "type": "string" }, "damage": { "type": "number" } } } },
-          "pickups": { "type": "array", "items": { "type": "object", "properties": { "x": { "type": "number" }, "type": { "enum": ["heart", "gem"] } } } },
+          "pickups": { "type": "array", "items": { "type": "object", "properties": { "x": { "type": "number" }, "py": { "type": "number", "description": "hauteur au-dessus du sol (posé sur plateforme)" }, "type": { "enum": ["heart", "gem"] } } } },
+          "platforms": { "type": "array", "description": "plateformes traversantes (verticalité)", "items": { "type": "object", "required": ["x", "w", "y"], "properties": { "x": { "type": "number" }, "w": { "type": "number" }, "y": { "type": "number", "description": "hauteur du dessus au-dessus du sol (px)" } } } },
           "checkpoints": { "type": "array", "items": { "type": "number" } },
           "exit": { "type": "object", "properties": { "x": { "type": "number" } } },
           "waves": { "type": "array", "description": "vertical-arena : vagues programmées", "items": { "type": "object" } }
