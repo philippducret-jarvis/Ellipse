@@ -84,19 +84,25 @@ export function heuristicGdd(prompt) {
   const genre = /gacha|ar[eè]ne|vague|wave|tower|verticale?/i.test(prompt) ? 'vertical-arena' : 'sidescroller';
   const id = slug(prompt);
   const setting = prompt.length > 24 ? prompt.replace(/^(un|une|le|la|les|a|an)\s+/i, '') : theme.setting;
+  const heroName = { biolum: 'Lior', gothic: 'Sœur Adalène', cyber: 'Kaï Vector', fantasy: 'Arin' }[theme.key];
+  const bossName = { biolum: 'Cœur du Mycélium', gothic: 'L’Évêque Déchu', cyber: 'Directeur-Machine', fantasy: 'Roi des Ruines' }[theme.key];
   return {
     designBackend: 'heuristic',
     id, title: titleFrom(prompt, theme), genre,
     pitch: `Un ${genre === 'sidescroller' ? 'action-platformer' : 'combat d’arène vertical'} 2,5D HD : ${setting}.`,
     setting, palette: theme.palette, mood: theme.mood, render: theme.render,
     hero: {
-      id: 'hero', name: 'Héros', role: 'hero', rigType: 'humanoid',
+      id: 'hero', name: heroName, role: 'hero', rigType: 'humanoid',
       dna: { ...heroHint.dna, colors: { primary: theme.palette[2], secondary: theme.palette[3], accent: theme.palette[4] }, materials: heroHint.dna.materials ?? 'detailed game-ready materials' },
       stats: {},
     },
     enemies: theme.enemies.map((e) => ({ ...e, role: 'enemy', stats: e.rigType === 'humanoid' ? { hp: 3, speed: 140, damage: 1 } : { hp: 2, speed: 110, damage: 1, touchDamage: true } })),
-    arenas: [{ id: 'arena-01', theme: setting }],
-    mechanics: genre === 'sidescroller' ? ['run', 'jump', 'attack', 'checkpoints', 'pickups', 'hazards'] : ['lanes', 'waves', 'attack'],
+    boss: { name: bossName, fromEnemy: theme.enemies.find((e) => e.rigType === 'humanoid')?.id ?? theme.enemies[0].id },
+    arenas: [
+      { id: 'arena-01', theme: setting },
+      { id: 'arena-02', theme: `the deepest and most dangerous heart of ${setting}, more dramatic, more intense` },
+    ],
+    mechanics: genre === 'sidescroller' ? ['run', 'jump', 'attack', 'checkpoints', 'pickups', 'hazards', 'boss'] : ['lanes', 'waves', 'attack', 'boss'],
   };
 }
 
@@ -128,40 +134,99 @@ export async function designGdd(prompt) {
   return (await claudeGdd(prompt)) ?? heuristicGdd(prompt);
 }
 
-/** GDD → GDL (niveaux procéduraux seedés) + plan d'assets à forger. */
+/** Un niveau sidescroller procédural, densité croissante avec `difficulty`. */
+function buildSideLevel(rnd, gdd, { id, name, arena, length, difficulty, boss = false }) {
+  const level = { id, name, boss, arena, length, spawns: [], hazards: [], pickups: [], checkpoints: [Math.round(length * 0.5)], exit: { x: length - 220 } };
+  const kinds = gdd.enemies.map((e) => e.id);
+  let x = 750;
+  const gap = boss ? 640 : 520 - difficulty * 60;
+  while (x < length - (boss ? 1100 : 700)) {
+    level.spawns.push({ entity: kinds[(rnd() * kinds.length) | 0], x: Math.round(x) });
+    if (rnd() < 0.35 + difficulty * 0.1) level.hazards.push({ x: Math.round(x + 260 + rnd() * 120), w: 120, type: 'spikes', damage: 1 });
+    if (rnd() < 0.35 - difficulty * 0.05) level.pickups.push({ x: Math.round(x + 140), type: rnd() < 0.6 ? 'gem' : 'heart' });
+    x += gap + rnd() * 420;
+  }
+  if (boss) level.spawns.push({ entity: 'boss', x: length - 500 });
+  return level;
+}
+
+/** GDD → GDL 1.1 (campagne : niveaux enchaînés, boss, histoire, reliques, carte). */
 export function compileGdl(gdd, { levelLength = 4200 } = {}) {
   const seed = masterSeed(gdd.id);
   const rnd = mulberry32(seed);
   const entities = {
-    hero: { role: 'hero', rig: `assets/hero/hero.rig.json`, clips: `assets/hero/hero.clips.json`, scale: 0.26, stats: gdd.hero.stats ?? {} },
+    hero: { role: 'hero', name: gdd.hero.name, rig: `assets/hero/hero.rig.json`, clips: `assets/hero/hero.clips.json`, scale: 0.26, stats: gdd.hero.stats ?? {} },
   };
   for (const e of gdd.enemies) {
-    entities[e.id] = { role: 'enemy', rig: `assets/enemies/${e.id}.rig.json`, clips: `assets/enemies/${e.id}.clips.json`, scale: e.rigType === 'humanoid' ? 0.24 : 0.15, stats: e.stats, ai: e.rigType === 'humanoid' ? { type: 'chase', aggroRange: 460, chaseSpeed: 170, range: 240 } : { type: 'patrol', range: 220, aggroRange: 0 } };
+    entities[e.id] = { role: 'enemy', name: e.name, rig: `assets/enemies/${e.id}.rig.json`, clips: `assets/enemies/${e.id}.clips.json`, scale: e.rigType === 'humanoid' ? 0.24 : 0.15, stats: e.stats, ai: e.rigType === 'humanoid' ? { type: 'chase', aggroRange: 460, chaseSpeed: 170, range: 240 } : { type: 'patrol', range: 220, aggroRange: 0 } };
+  }
+  // boss : réutilise le rig de l'ennemi le plus costaud — plus grand, plus dur
+  const bossSrc = gdd.enemies.find((e) => e.id === gdd.boss?.fromEnemy) ?? gdd.enemies[0];
+  entities.boss = {
+    role: 'boss', name: gdd.boss?.name ?? 'Boss',
+    rig: `assets/enemies/${bossSrc.id}.rig.json`, clips: `assets/enemies/${bossSrc.id}.clips.json`,
+    scale: (bossSrc.rigType === 'humanoid' ? 0.24 : 0.15) * 1.7,
+    stats: { hp: 14, speed: 150, damage: 1 },
+    ai: { type: 'chase', aggroRange: 900, chaseSpeed: 185, range: 400 },
+  };
+
+  const arena = (i) => `assets/arenas/${gdd.arenas[Math.min(i, gdd.arenas.length - 1)].id}.parallax.json`;
+  const levels = [];
+  if (gdd.genre === 'sidescroller') {
+    levels.push(buildSideLevel(rnd, gdd, { id: 'level-01', name: 'La Lisière', arena: arena(0), length: levelLength, difficulty: 0 }));
+    levels.push(buildSideLevel(rnd, gdd, { id: 'level-02', name: 'Les Profondeurs', arena: arena(1), length: Math.round(levelLength * 1.2), difficulty: 1 }));
+    levels.push(buildSideLevel(rnd, gdd, { id: 'level-03', name: `L'Antre — ${entities.boss.name}`, arena: arena(1), length: Math.round(levelLength * 0.7), difficulty: 2, boss: true }));
+  } else {
+    const mkWaves = (count, speedT) => {
+      const waves = [];
+      for (let w = 0; w < count; w++) for (let n = 0; n < 2 + (w / 3 | 0); n++) {
+        waves.push({ t: 3 + w * (7 - speedT) + rnd() * 3, lane: (rnd() * 3) | 0, entity: gdd.enemies[(rnd() * gdd.enemies.length) | 0].id });
+      }
+      return waves;
+    };
+    levels.push({ id: 'level-01', name: 'Première Veille', arena: arena(0), waves: mkWaves(6, 0) });
+    levels.push({ id: 'level-02', name: 'La Grande Vague', arena: arena(1), waves: mkWaves(9, 1.5) });
+    const bossWaves = mkWaves(5, 2);
+    bossWaves.push({ t: 30, lane: 1, entity: 'boss' });
+    levels.push({ id: 'level-03', name: `Jugement — ${entities.boss.name}`, arena: arena(1), waves: bossWaves, boss: true });
   }
 
-  const level = { id: 'level-01', arena: `assets/arenas/${gdd.arenas[0].id}.parallax.json`, length: levelLength, spawns: [], hazards: [], pickups: [], checkpoints: [Math.round(levelLength * 0.5)], exit: { x: levelLength - 220 } };
-  if (gdd.genre === 'sidescroller') {
-    let x = 750;
-    const kinds = gdd.enemies.map((e) => e.id);
-    while (x < levelLength - 700) {
-      level.spawns.push({ entity: kinds[(rnd() * kinds.length) | 0], x: Math.round(x) });
-      if (rnd() < 0.4) level.hazards.push({ x: Math.round(x + 260 + rnd() * 120), w: 120, type: 'spikes', damage: 1 });
-      if (rnd() < 0.35) level.pickups.push({ x: Math.round(x + 140), type: rnd() < 0.6 ? 'gem' : 'heart' });
-      x += 520 + rnd() * 420;
-    }
-  } else {
-    level.waves = [];
-    const kinds = gdd.enemies.map((e) => e.id);
-    for (let w = 0; w < 8; w++) for (let n = 0; n < 2 + (w / 3 | 0); n++) {
-      level.waves.push({ t: 3 + w * 7 + rnd() * 3, lane: (rnd() * 3) | 0, entity: kinds[(rnd() * kinds.length) | 0] });
-    }
-  }
+  // histoire (récit court, portrait du héros sur ses répliques)
+  const heroN = gdd.hero.name, bossN = entities.boss.name;
+  const story = {
+    intro: [
+      { speaker: 'Narrateur', text: gdd.pitch },
+      { speaker: heroN, portrait: 'hero', text: `Ce lieu m'appelle depuis toujours. Quelque chose s'est éveillé — et je suis ${/e$/.test(heroN) ? 'la seule' : 'le seul'} à pouvoir l'affronter.` },
+      { speaker: 'Narrateur', text: `Au bout du chemin veille ${bossN}. Trois épreuves séparent ${heroN} de sa destinée.` },
+    ],
+    levels: {
+      'level-01': { victory: [{ speaker: heroN, portrait: 'hero', text: 'Première épreuve franchie. L\'air devient plus lourd — je me rapproche.' }] },
+      'level-02': { victory: [{ speaker: heroN, portrait: 'hero', text: `Je sens sa présence désormais. ${bossN} sait que j'arrive.` }] },
+      'level-03': { victory: [{ speaker: heroN, portrait: 'hero', text: 'C\'est terminé. La lumière peut revenir.' }] },
+    },
+    outro: [
+      { speaker: 'Narrateur', text: `${bossN} n'est plus. ${gdd.setting} respire à nouveau.` },
+      { speaker: heroN, portrait: 'hero', text: 'Mon histoire ne fait que commencer.' },
+    ],
+  };
+
+  const relics = [
+    { id: 'boots', name: 'Bottes de célérité', desc: 'Vitesse de déplacement +25 %', effect: { speedMul: 1.25 } },
+    { id: 'talisman', name: 'Talisman de vie', desc: '+2 cœurs au maximum', effect: { hpAdd: 2 } },
+    { id: 'edge', name: 'Fil aiguisé', desc: 'Dégâts +1', effect: { damageAdd: 1 } },
+    { id: 'wings', name: 'Plumes d\'ascension', desc: 'Saut +15 %', effect: { jumpMul: 1.15 } },
+  ];
+
+  const map = {
+    title: gdd.setting.length < 60 ? gdd.setting[0].toUpperCase() + gdd.setting.slice(1) : 'Carte du monde',
+    nodes: levels.map((l, i) => ({ level: l.id, x: 0.22 + i * 0.28, y: i % 2 ? 0.42 : 0.56, name: l.name })),
+  };
 
   const gdl = {
-    gdl: '1.0', id: gdd.id, title: gdd.title, subtitle: gdd.pitch, genre: gdd.genre, seed,
+    gdl: '1.1', id: gdd.id, title: gdd.title, subtitle: gdd.pitch, genre: gdd.genre, seed,
     palette: gdd.palette,
     world: gdd.genre === 'sidescroller' ? { viewport: { w: 1280, h: 720 }, gravity: 2600, floorY: 0.82 } : { viewport: { w: 720, h: 1280 }, lanes: 3 },
-    entities, levels: [level],
+    entities, levels, story, relics, map,
     ui: { hud: gdd.genre === 'sidescroller' ? ['hearts', 'score', 'progress'] : ['hearts', 'score', 'wave'], accent: gdd.palette[3] ?? '#e8c05a' },
     meta: { pitch: gdd.pitch, designBackend: gdd.designBackend, generatedAt: new Date().toISOString() },
   };

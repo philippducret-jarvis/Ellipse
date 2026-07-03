@@ -7,7 +7,11 @@
  * input = { left, right, jump, attack, laneLeft, laneRight }.
  */
 
-export function createGame(gdl, levelIndex = 0) {
+/**
+ * @param {object} opts.modifiers bonus de reliques : {speedMul, jumpMul, damageAdd, hpAdd}
+ */
+export function createGame(gdl, levelIndex = 0, opts = {}) {
+  const mods = { speedMul: 1, jumpMul: 1, damageAdd: 0, hpAdd: 0, ...(opts.modifiers ?? {}) };
   const level = gdl.levels[levelIndex];
   const vp = gdl.world.viewport;
   const heroDef = Object.entries(gdl.entities).find(([, e]) => e.role === 'hero');
@@ -24,15 +28,23 @@ export function createGame(gdl, levelIndex = 0) {
   state.groundY = groundY;
 
   const [heroId, hero] = heroDef;
+  const heroStats = {
+    ...hero.stats,
+    hp: hero.stats.hp + mods.hpAdd,
+    speed: hero.stats.speed * mods.speedMul,
+    jump: (hero.stats.jump ?? 0) * mods.jumpMul,
+    damage: hero.stats.damage + mods.damageAdd,
+  };
   state.hero = {
     id: heroId, kind: heroId, role: 'hero',
     x: gdl.genre === 'sidescroller' ? 120 : Math.floor((gdl.world.lanes ?? 3) / 2),
-    y: groundY, vx: 0, vy: 0, facing: 1, onGround: true,
-    hp: hero.stats.hp, maxHp: hero.stats.hp,
-    stats: hero.stats, scale: hero.scale,
-    anim: 'idle', animT: 0, attackCd: 0, invulnT: 0, hitT: 0,
+    y: groundY, vx: 0, vy: 0, facing: 1, onGround: true, wasAirborne: false,
+    hp: heroStats.hp, maxHp: heroStats.hp,
+    stats: heroStats, scale: hero.scale,
+    anim: 'idle', animT: 0, attackCd: 0, invulnT: 0, hitT: 0, landT: 0,
     checkpoint: 120, lane: Math.floor((gdl.world.lanes ?? 3) / 2), dead: false, deadT: 0,
   };
+  state.levelIndex = levelIndex;
 
   if (gdl.genre === 'sidescroller') {
     for (const s of level.spawns ?? []) state.enemies.push(spawnEnemy(gdl, s.entity, s.x, groundY));
@@ -105,7 +117,12 @@ function stepSide(state, input, dt, ev) {
     h.vy += g * dt;
     h.x = Math.max(60, Math.min(state.level.length - 40, h.x + h.vx * dt));
     h.y += h.vy * dt;
-    if (h.y >= state.groundY) { h.y = state.groundY; h.vy = 0; h.onGround = true; }
+    if (!h.onGround) h.wasAirborne = true;
+    if (h.y >= state.groundY) {
+      h.y = state.groundY; h.vy = 0; h.onGround = true;
+      if (h.wasAirborne) { h.wasAirborne = false; h.landT = 0.2; h.anim = 'land'; h.animT = 0; ev.push({ type: 'land', x: h.x }); }
+    }
+    h.landT = Math.max(0, h.landT - dt);
 
     // attaque
     if (input.attack && h.attackCd <= 0) {
@@ -116,14 +133,14 @@ function stepSide(state, input, dt, ev) {
         const inFront = Math.sign(e.x - h.x) === h.facing || Math.abs(e.x - h.x) < 40;
         if (inFront && Math.abs(e.x - h.x) < h.stats.attackRange && Math.abs(e.y - h.y) < 120) {
           e.hp -= h.stats.damage; e.hitT = 0.25; e.anim = 'hit'; e.animT = 0;
-          if (e.hp <= 0) { e.dead = true; e.deadT = 0; e.anim = 'death'; e.animT = 0; state.score += 100; ev.push({ type: 'kill', kind: e.kind }); }
-          else ev.push({ type: 'hit', kind: e.kind });
+          if (e.hp <= 0) { e.dead = true; e.deadT = 0; e.anim = 'death'; e.animT = 0; state.score += e.role === 'boss' ? 500 : 100; ev.push({ type: 'kill', kind: e.kind, boss: e.role === 'boss', x: e.x, y: e.y }); }
+          else ev.push({ type: 'hit', kind: e.kind, x: e.x, y: e.y });
         }
       }
     }
 
-    // anim au sol
-    if (h.onGround && h.hitT <= 0 && !(h.anim === 'attack' && h.animT < 0.38)) {
+    // anim au sol (land garde la priorité le temps du squash)
+    if (h.onGround && h.hitT <= 0 && h.landT <= 0 && !(h.anim === 'attack' && h.animT < 0.42)) {
       const next = Math.abs(h.vx) > 10 ? 'run' : 'idle';
       if (h.anim !== next) { h.anim = next; h.animT = 0; }
     }
@@ -141,9 +158,14 @@ function stepSide(state, input, dt, ev) {
         ev.push({ type: 'pickup', kind: p.type });
       }
     }
-    // checkpoints / sortie
+    // checkpoints / victoire (niveau boss : tuer le boss ; sinon : la sortie)
     for (const c of state.level.checkpoints ?? []) if (h.x >= c && h.checkpoint < c) { h.checkpoint = c; ev.push({ type: 'checkpoint', x: c }); }
-    if (h.x >= (state.level.exit?.x ?? Infinity)) { state.phase = 'won'; ev.push({ type: 'win', score: state.score, deaths: state.deaths }); }
+    const bossAlive = state.enemies.some((e) => e.role === 'boss' && !e.dead);
+    if (state.level.boss) {
+      if (!bossAlive && state.time > 1) { state.phase = 'won'; ev.push({ type: 'win', score: state.score, deaths: state.deaths }); }
+    } else if (h.x >= (state.level.exit?.x ?? Infinity)) {
+      state.phase = 'won'; ev.push({ type: 'win', score: state.score, deaths: state.deaths });
+    }
   }
 
   // ennemis
@@ -224,6 +246,16 @@ export function botInput(state) {
     const ahead = (o, d) => o.x > h.x && o.x - h.x < d;
     const hazardAhead = state.hazards.some((z) => h.x < z.x + z.w && z.x - h.x < 190 && z.x + z.w > h.x - 10);
     const enemyNear = state.enemies.some((e) => !e.dead && Math.abs(e.x - h.x) < h.stats.attackRange * 0.9);
+    if (state.level.boss) {
+      // niveau boss : traquer l'ennemi vivant le plus proche et le frapper
+      const alive = state.enemies.filter((e) => !e.dead).sort((a, b) => Math.abs(a.x - h.x) - Math.abs(b.x - h.x));
+      const target = alive[0];
+      if (!target) return { right: false, left: false, jump: false, attack: false };
+      return {
+        right: target.x > h.x + 60, left: target.x < h.x - 60,
+        jump: hazardAhead && h.onGround, attack: Math.abs(target.x - h.x) < h.stats.attackRange * 0.9,
+      };
+    }
     const enemyAhead = state.enemies.some((e) => !e.dead && ahead(e, h.stats.attackRange * 0.9));
     return { right: !enemyNear || enemyAhead, left: false, jump: hazardAhead && h.onGround, attack: enemyNear };
   }

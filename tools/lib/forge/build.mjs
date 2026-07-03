@@ -22,11 +22,12 @@ import { registerForgedGame } from './workspace.mjs';
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..');
 
-async function forgeCharacter(plan, outDir, log) {
+async function forgeCharacter(plan, outDir, log, { withPortrait = false } = {}) {
   const card = buildIdentityCard({ id: plan.id, name: plan.name, dna: plan.dna, style: plan.style });
   const view = plan.rigType === 'monopart' ? 'creature' : 'apose';
-  log(`  ↳ ${plan.name} (${plan.rigType}) : référence ${view} + détourage…`);
-  const enriched = await generateReferenceSheet(card, outDir, { views: [view] });
+  const views = withPortrait ? [view, 'portrait'] : [view];
+  log(`  ↳ ${plan.name} (${plan.rigType}) : référence ${views.join('+')} + détourage…`);
+  const enriched = await generateReferenceSheet(card, outDir, { views });
   const refPng = join(outDir, enriched.refs[view].file);
   const buf = await readFile(refPng);
   const rig = plan.rigType === 'monopart'
@@ -38,19 +39,8 @@ async function forgeCharacter(plan, outDir, log) {
   return { id: plan.id, name: plan.name, rigType: plan.rigType, qa: { score: qa.score, pass: qa.pass }, backend: enriched.refs[view].backend, seed: enriched.refs[view].seed };
 }
 
-/** Auto-play headless : le bot doit finir le niveau. */
-export async function autoplay(gdl, { maxSimSeconds = 240 } = {}) {
-  const { createGame, step, botInput } = await import(pathToFileURL(join(HERE, 'runtime', 'logic.js')).href);
-  const state = createGame(gdl, 0);
-  const dt = 1 / 60;
-  let simT = 0, kills = 0, pickups = 0;
-  while (state.phase === 'playing' && simT < maxSimSeconds) {
-    const events = step(state, botInput(state), dt);
-    for (const e of events) { if (e.type === 'kill') kills++; if (e.type === 'pickup') pickups++; }
-    simT += dt;
-  }
-  return { won: state.phase === 'won', simSeconds: Math.round(simT), kills, pickups, deaths: state.deaths, score: state.score, progress: gdl.genre === 'sidescroller' ? Math.round((state.hero.x / (state.level.exit?.x ?? state.level.length)) * 100) : null };
-}
+export { autoplay, autoplayLevel } from './autoplay.mjs';
+import { autoplay } from './autoplay.mjs';
 
 export async function buildGame(prompt, { id = null, log = console.log } = {}) {
   const backend = await pickBackend();
@@ -75,9 +65,9 @@ export async function buildGame(prompt, { id = null, log = console.log } = {}) {
 
   const report = { id: gdd.id, title: gdd.title, prompt, designBackend: gdd.designBackend, backend: backend.name, characters: [], arenas: [], generatedAt: new Date().toISOString() };
 
-  // 3. assets générés (identité verrouillée + QA)
+  // 3. assets générés (identité verrouillée + QA) — portrait héros pour les dialogues
   log('Personnages :');
-  report.characters.push(await forgeCharacter({ ...assetPlan.hero, rigType: 'humanoid' }, join(assetsDir, 'hero'), log));
+  report.characters.push(await forgeCharacter({ ...assetPlan.hero, rigType: 'humanoid' }, join(assetsDir, 'hero'), log, { withPortrait: true }));
   for (const e of assetPlan.enemies) report.characters.push(await forgeCharacter(e, join(assetsDir, 'enemies'), log));
 
   log('Arènes (4 couches parallax générées chacune) :');
@@ -93,20 +83,21 @@ export async function buildGame(prompt, { id = null, log = console.log } = {}) {
   gdl.entities.hero.clips = 'assets/hero/hero.clips.json';
 
   // 4. runtime générique copié tel quel + GDL
-  for (const f of ['index.html', 'main.js', 'logic.js', 'render.js', 'skeleton.js']) {
+  for (const f of ['index.html', 'main.js', 'logic.js', 'render.js', 'skeleton.js', 'campaign.js']) {
     await cp(join(HERE, 'runtime', f), join(runtimeDir, f));
   }
   await writeFile(join(runtimeDir, 'game.gdl.json'), JSON.stringify(gdl, null, 2), 'utf8');
 
-  // 5. validation : auto-play headless (porte de sortie du build)
-  log('Auto-play headless (le bot doit finir le niveau)…');
+  // 5. validation : auto-play headless de la CAMPAGNE entière
+  log(`Auto-play headless (${gdl.levels.length} niveaux, le bot doit tous les finir)…`);
   const play = await autoplay(gdl);
   report.autoplay = play;
   if (!play.won) {
     await writeFile(join(ws, 'forge-build.json'), JSON.stringify(report, null, 2), 'utf8');
-    throw new Error(`Niveau NON complétable par le bot (progression ${play.progress}%, ${play.deaths} morts) — build refusé. Rapport : workspaces/${gdd.id}/forge-build.json`);
+    const failed = play.levels.find((l) => !l.won);
+    throw new Error(`Niveau ${failed?.level} NON complétable par le bot — build refusé. Rapport : workspaces/${gdd.id}/forge-build.json`);
   }
-  log(`  ↳ victoire du bot en ${play.simSeconds}s sim · ${play.kills} kills · ${play.deaths} morts · score ${play.score}`);
+  for (const l of play.levels) log(`  ↳ ${l.level} : victoire en ${l.simSeconds}s · ${l.kills} kills · ${l.deaths} morts`);
 
   await writeFile(join(ws, 'forge-build.json'), JSON.stringify(report, null, 2), 'utf8');
 

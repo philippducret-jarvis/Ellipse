@@ -1,11 +1,77 @@
 /**
- * RENDU — parallax 2,5D, squelettes, ombres de contact, HUD, overlays.
- * Générique : tout vient du GDL + manifests d'assets. Aucun code par titre.
+ * RENDU v2 — parallax 2,5D, squelettes FONDUS (blend anti-pantin), particules,
+ * sol texturé généré, HUD (cœurs, score, reliques, barre de boss), écrans de
+ * campagne (carte-monde, dialogues avec portrait, choix de relique, crédits).
+ * Générique : tout vient du GDL + manifests. Aucun code par titre.
  */
-import { sampleClip, drawSkeleton } from './skeleton.js';
+import { sampleClip, drawSkeleton, blendPoses } from './skeleton.js';
 
-function hex(p, i, fb) { return (p && p[i]) || fb; }
+const hex = (p, i, fb) => (p && p[i]) || fb;
 
+/** Contexte d'effets persistant (créé par main.js, passé à chaque frame). */
+export function createFx() {
+  return { particles: [], entStates: new WeakMap(), toast: null, toastT: 0, time: 0 };
+}
+
+// ═══ PARTICULES ═══
+function spawn(fx, n, opts) {
+  for (let i = 0; i < n; i++) {
+    const a = (opts.angle ?? 0) + (Math.random() - 0.5) * (opts.spread ?? Math.PI * 2);
+    const sp = (opts.speed ?? 60) * (0.5 + Math.random());
+    fx.particles.push({
+      x: opts.x + (Math.random() - 0.5) * (opts.jitter ?? 8),
+      y: opts.y + (Math.random() - 0.5) * (opts.jitter ?? 8),
+      vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
+      g: opts.gravity ?? 0, drag: opts.drag ?? 0.9,
+      life: 0, maxLife: (opts.life ?? 0.5) * (0.6 + Math.random() * 0.8),
+      size: (opts.size ?? 4) * (0.6 + Math.random() * 0.8),
+      color: opts.color, add: opts.add ?? false, world: opts.world ?? true,
+    });
+  }
+}
+
+/** Traduit les événements de logique en particules/toasts. */
+export function fxFromEvents(fx, events, state, accent) {
+  const gy = state.groundY;
+  for (const e of events) {
+    if (e.type === 'land') spawn(fx, 10, { x: e.x, y: gy + 2, angle: -Math.PI / 2, spread: 2.4, speed: 90, gravity: 300, life: 0.45, size: 5, color: 'rgba(190,180,170,0.55)' });
+    if (e.type === 'jump') spawn(fx, 6, { x: state.hero.x, y: gy + 2, angle: -Math.PI / 2, spread: 2.8, speed: 60, gravity: 200, life: 0.35, size: 4, color: 'rgba(190,180,170,0.45)' });
+    if (e.type === 'attack') spawn(fx, 8, { x: state.hero.x + state.hero.facing * 60, y: state.hero.y - state.vp.h * state.hero.scale * 0.5, angle: state.hero.facing > 0 ? 0 : Math.PI, spread: 1.1, speed: 260, drag: 0.85, life: 0.28, size: 4, color: accent, add: true });
+    if (e.type === 'hit') spawn(fx, 12, { x: e.x ?? state.hero.x, y: (e.y ?? gy) - 60, speed: 200, drag: 0.85, life: 0.35, size: 4, color: '#ffd9a0', add: true });
+    if (e.type === 'kill') spawn(fx, e.boss ? 46 : 22, { x: e.x, y: (e.y ?? gy) - 50, speed: e.boss ? 320 : 220, drag: 0.88, life: e.boss ? 0.9 : 0.55, size: 5, color: accent, add: true });
+    if (e.type === 'hurt') spawn(fx, 14, { x: state.hero.x, y: state.hero.y - 60, speed: 180, drag: 0.86, life: 0.4, size: 4, color: '#ff6b6b', add: true });
+    if (e.type === 'pickup') spawn(fx, 12, { x: state.hero.x, y: state.hero.y - 70, angle: -Math.PI / 2, spread: 1.6, speed: 130, life: 0.5, size: 4, color: e.kind === 'heart' ? '#ff8595' : accent, add: true });
+    if (e.type === 'checkpoint') fx.toast = { text: 'Point de passage', t: 0 };
+  }
+}
+
+function stepAndDrawParticles(ctx, fx, state, dt) {
+  const camX = state.genre === 'sidescroller' ? state.camX : 0;
+  fx.particles = fx.particles.filter((p) => (p.life += dt) < p.maxLife);
+  for (const p of fx.particles) {
+    p.vy += p.g * dt;
+    p.vx *= Math.pow(p.drag, dt * 60); p.vy *= Math.pow(p.drag, dt * 60);
+    p.x += p.vx * dt; p.y += p.vy * dt;
+    const a = 1 - p.life / p.maxLife;
+    ctx.save();
+    if (p.add) ctx.globalCompositeOperation = 'lighter';
+    ctx.globalAlpha = a * 0.9;
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x - (p.world ? camX : 0), p.y, p.size * (0.5 + a * 0.5), 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+/** Motes d'ambiance permanentes aux couleurs du jeu (profondeur vivante). */
+function ambientMotes(ctx, fx, state, accent, dt) {
+  if (Math.random() < dt * 8 && fx.particles.length < 260) {
+    spawn(fx, 1, { x: state.camX + Math.random() * state.vp.w, y: Math.random() * state.vp.h * 0.8, speed: 12, life: 4, size: 2.5, color: accent, add: true, gravity: -6 });
+  }
+}
+
+// ═══ DESSIN COMMUN ═══
 function drawHeart(ctx, x, y, r, filled, color) {
   ctx.save();
   ctx.translate(x, y);
@@ -25,47 +91,69 @@ function tileLayer(ctx, img, offsetX, y, drawW, drawH, vpW) {
   for (let x = start; x < vpW; x += drawW - 1) ctx.drawImage(img, x, y, drawW, drawH);
 }
 
-export function render(ctx, state, assets, dt) {
+// ═══ RENDU PRINCIPAL D'UN NIVEAU ═══
+export function render(ctx, state, assets, dt, fx) {
   const { vp } = state, pal = state.gdl.palette;
   const accent = state.gdl.ui?.accent ?? hex(pal, 3, '#e8c05a');
+  fx.time += dt;
   ctx.clearRect(0, 0, vp.w, vp.h);
   ctx.save();
   if (state.shake > 0) ctx.translate((Math.random() - 0.5) * 10 * state.shake, (Math.random() - 0.5) * 8 * state.shake);
 
-  // ── parallax (la couche near se dessine DEVANT les entités : vrai 2,5D) ──
   const scroll = state.genre === 'sidescroller' ? state.camX : state.time * 30;
   const near = assets.arena.layers.find((l) => l.id === 'near');
+  const ground = assets.arena.layers.find((l) => l.id === 'ground');
   for (const layer of assets.arena.layers) {
     const img = layer.img;
-    if (!img || layer.id === 'near') continue;
+    if (!img || layer.id === 'near' || layer.id === 'ground') continue;
     const h = vp.h, w = h * (img.width / img.height);
     tileLayer(ctx, img, scroll * layer.depth, 0, w, h, vp.w);
     if (layer.id === 'mid') {
-      // sol lisible : bande sombre sous la ligne de sol
-      const g = ctx.createLinearGradient(0, state.groundY, 0, vp.h);
-      g.addColorStop(0, 'rgba(8,6,14,0.05)'); g.addColorStop(0.15, 'rgba(8,6,14,0.55)'); g.addColorStop(1, 'rgba(8,6,14,0.85)');
-      ctx.fillStyle = g; ctx.fillRect(0, state.groundY - 4, vp.w, vp.h - state.groundY + 4);
+      drawGround(ctx, state, ground);
       drawWorld(ctx, state, assets, accent);
     }
   }
 
-  drawEntities(ctx, state, assets);
+  ambientMotes(ctx, fx, state, accent, dt);
+  drawEntities(ctx, state, assets, fx, dt);
+  stepAndDrawParticles(ctx, fx, state, dt);
   if (near?.img) {
     const h = vp.h * 0.45, w = h * (near.img.width / near.img.height);
     tileLayer(ctx, near.img, scroll * near.depth, vp.h - h, w, h, vp.w);
   }
   ctx.restore();
 
-  // ── post : flash dégâts + vignette ──
+  // post : flash dégâts + vignette + grade palette
   if (state.hero.hitT > 0) {
     ctx.fillStyle = `rgba(200,30,40,${0.35 * state.hero.hitT / 0.28})`;
     ctx.fillRect(0, 0, vp.w, vp.h);
   }
   const v = ctx.createRadialGradient(vp.w / 2, vp.h / 2, vp.h * 0.45, vp.w / 2, vp.h / 2, vp.h * 0.95);
-  v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(4,2,10,0.42)');
+  v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(4,2,10,0.45)');
   ctx.fillStyle = v; ctx.fillRect(0, 0, vp.w, vp.h);
 
-  drawHud(ctx, state, accent);
+  drawHud(ctx, state, accent, fx, dt);
+}
+
+/** Sol : texture générée si dispo, sinon bande gradée. */
+function drawGround(ctx, state, ground) {
+  const { vp } = state, gy = state.groundY;
+  if (ground?.img) {
+    const h = vp.h - gy + 8, w = h * (ground.img.width / ground.img.height);
+    ctx.save();
+    tileLayer(ctx, ground.img, state.camX * 0.98, gy - 6, Math.max(w, h * 2), h + 6, vp.w);
+    // assombrir vers le bas pour asseoir la profondeur
+    const g = ctx.createLinearGradient(0, gy, 0, vp.h);
+    g.addColorStop(0, 'rgba(8,6,14,0.0)'); g.addColorStop(1, 'rgba(8,6,14,0.6)');
+    ctx.fillStyle = g; ctx.fillRect(0, gy, vp.w, vp.h - gy);
+    // ligne d'horizon du sol
+    ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.fillRect(0, gy - 4, vp.w, 4);
+    ctx.restore();
+  } else {
+    const g = ctx.createLinearGradient(0, gy, 0, vp.h);
+    g.addColorStop(0, 'rgba(8,6,14,0.05)'); g.addColorStop(0.15, 'rgba(8,6,14,0.55)'); g.addColorStop(1, 'rgba(8,6,14,0.85)');
+    ctx.fillStyle = g; ctx.fillRect(0, gy - 4, vp.w, vp.h - gy + 4);
+  }
 }
 
 function drawWorld(ctx, state, assets, accent) {
@@ -90,7 +178,7 @@ function drawWorld(ctx, state, assets, accent) {
     const bob = Math.sin(state.time * 3 + p.x) * 6;
     if (p.type === 'heart') drawHeart(ctx, sx, p.y + bob, 13, true, '#e5484d');
     else {
-      ctx.save(); ctx.translate(sx, p.y + bob); ctx.rotate(Math.PI / 4);
+      ctx.save(); ctx.translate(sx, p.y + bob); ctx.rotate(Math.PI / 4 + state.time);
       ctx.fillStyle = accent; ctx.strokeStyle = 'rgba(255,255,255,0.7)'; ctx.lineWidth = 2;
       ctx.fillRect(-9, -9, 18, 18); ctx.strokeRect(-9, -9, 18, 18); ctx.restore();
     }
@@ -104,17 +192,31 @@ function drawWorld(ctx, state, assets, accent) {
     ctx.fillStyle = active ? accent : 'rgba(255,255,255,0.35)';
     ctx.beginPath(); ctx.moveTo(sx, gy - 110); ctx.lineTo(sx + 46, gy - 96); ctx.lineTo(sx, gy - 82); ctx.closePath(); ctx.fill();
   }
-  const ex = toScreen(state.level.exit?.x ?? -1);
-  if (ex > -80 && ex < state.vp.w + 80) {
-    const pulse = 0.75 + 0.25 * Math.sin(state.time * 4);
-    const g = ctx.createRadialGradient(ex, gy - 90, 8, ex, gy - 90, 95);
-    g.addColorStop(0, accent); g.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.save(); ctx.globalAlpha = pulse; ctx.fillStyle = g;
-    ctx.beginPath(); ctx.ellipse(ex, gy - 90, 60, 105, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+  if (!state.level.boss) {
+    const ex = toScreen(state.level.exit?.x ?? -1);
+    if (ex > -80 && ex < state.vp.w + 80) {
+      const pulse = 0.75 + 0.25 * Math.sin(state.time * 4);
+      const g = ctx.createRadialGradient(ex, gy - 90, 8, ex, gy - 90, 95);
+      g.addColorStop(0, accent); g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.save(); ctx.globalAlpha = pulse; ctx.fillStyle = g;
+      ctx.beginPath(); ctx.ellipse(ex, gy - 90, 60, 105, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+    }
   }
 }
 
-function drawEntities(ctx, state, assets) {
+/** Pose fondue (blend anti-pantin) : crossfade 120 ms entre clips. */
+function blendedPose(fx, e, pack) {
+  let st = fx.entStates.get(e);
+  if (!st) { st = { anim: e.anim, pose: null, blend: 1 }; fx.entStates.set(e, st); }
+  const cur = sampleClip(pack.clips, e.anim, e.animT);
+  if (st.anim !== e.anim) { st.prev = st.pose ?? cur; st.anim = e.anim; st.blend = 0; }
+  st.blend = Math.min(1, st.blend + 0.09);
+  const pose = st.prev && st.blend < 1 ? blendPoses(st.prev, cur, st.blend) : cur;
+  st.pose = pose;
+  return pose;
+}
+
+function drawEntities(ctx, state, assets, fx, dt) {
   const vp = state.vp;
   const list = [...state.enemies, state.hero].filter(Boolean);
   if (state.genre === 'vertical-arena') list.sort((a, b) => a.y - b.y);
@@ -126,7 +228,7 @@ function drawEntities(ctx, state, assets) {
     let sx, sy, height;
     if (state.genre === 'sidescroller') {
       sx = e.x - state.camX; sy = e.y;
-      if (sx < -160 || sx > vp.w + 160) continue;
+      if (sx < -200 || sx > vp.w + 200) continue;
       height = e.scale * vp.h;
     } else {
       const depth = Math.max(0.1, Math.min(1, e.y / state.groundY));
@@ -134,15 +236,25 @@ function drawEntities(ctx, state, assets) {
     }
     const deadFade = e.dead ? Math.max(0, 1 - e.deadT / 1.1) : 1;
     if (deadFade <= 0) continue;
+    // poussière de course
+    if (isHero && e.anim === 'run' && e.onGround && Math.random() < dt * 14) {
+      spawn(fx, 1, { x: e.x - e.facing * 20, y: state.groundY, angle: -Math.PI / 2, spread: 1.4, speed: 40, gravity: 140, life: 0.4, size: 4, color: 'rgba(180,170,160,0.4)' });
+    }
     // ombre de contact
     ctx.save();
-    ctx.globalAlpha = 0.35 * deadFade;
+    ctx.globalAlpha = 0.35 * deadFade * (e.onGround === false ? Math.max(0.35, 1 - Math.abs(state.groundY - e.y) / 320) : 1);
     ctx.fillStyle = '#000';
-    ctx.beginPath(); ctx.ellipse(sx, state.genre === 'sidescroller' ? state.groundY + 6 : sy + 4, height * 0.22, height * 0.05, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(sx, state.genre === 'sidescroller' ? state.groundY + 6 : sy + 4, height * 0.22, height * 0.05, 0, 0, Math.PI * 2);
+    ctx.fill();
     ctx.restore();
 
     const blink = isHero && e.invulnT > 0 && !e.dead && Math.floor(state.time * 12) % 2 === 0;
-    const pose = sampleClip(pack.clips, e.anim, e.animT);
+    const pose = blendedPose(fx, e, pack);
+    // lean aérien : penche selon la vitesse verticale
+    if (isHero && !e.onGround) {
+      pose.root = { ...(pose.root ?? {}), rot: (pose.root?.rot ?? 0) + Math.max(-8, Math.min(8, e.vy / 140)) * e.facing };
+    }
     drawSkeleton(ctx, pack.rig, pack.images, pose, {
       x: sx, y: sy, height,
       flip: (e.facing ?? e.dir ?? 1) < 0,
@@ -152,7 +264,7 @@ function drawEntities(ctx, state, assets) {
   }
 }
 
-function drawHud(ctx, state, accent) {
+function drawHud(ctx, state, accent, fx, dt) {
   const { vp } = state, h = state.hero, hud = state.gdl.ui?.hud ?? [];
   ctx.save();
   ctx.font = '600 20px system-ui, sans-serif';
@@ -162,7 +274,29 @@ function drawHud(ctx, state, accent) {
     ctx.fillStyle = 'rgba(255,255,255,0.92)'; ctx.textAlign = 'right';
     ctx.fillText(String(state.score).padStart(5, '0'), vp.w - 26, 36);
   }
-  if (hud.includes('progress') && state.genre === 'sidescroller') {
+  // reliques acquises
+  if (state.relics?.length) {
+    ctx.textAlign = 'left'; ctx.font = '600 13px system-ui, sans-serif';
+    state.relics.forEach((r, i) => {
+      const x = 36 + i * 30, y = 72;
+      ctx.save(); ctx.translate(x, y); ctx.rotate(Math.PI / 4);
+      ctx.fillStyle = accent; ctx.fillRect(-9, -9, 18, 18);
+      ctx.restore();
+      ctx.fillStyle = '#1a1426'; ctx.textAlign = 'center';
+      ctx.fillText(r.name[0].toUpperCase(), x, y + 1);
+    });
+  }
+  // barre de boss
+  const boss = state.enemies.find((e) => e.role === 'boss' && !e.dead);
+  if (boss) {
+    const w = vp.w * 0.5, x = (vp.w - w) / 2, y = 30;
+    ctx.fillStyle = 'rgba(0,0,0,0.55)'; ctx.fillRect(x - 3, y - 9, w + 6, 18);
+    ctx.fillStyle = '#a31229'; ctx.fillRect(x, y - 6, w * Math.max(0, boss.hp / boss.stats.hp), 12);
+    ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.strokeRect(x - 3, y - 9, w + 6, 18);
+    ctx.fillStyle = 'rgba(255,255,255,0.95)'; ctx.textAlign = 'center'; ctx.font = '700 14px system-ui, sans-serif';
+    ctx.fillText(state.bossName ?? 'Boss', vp.w / 2, y - 20);
+  }
+  if (hud.includes('progress') && state.genre === 'sidescroller' && !state.level.boss) {
     const w = vp.w * 0.42, x = (vp.w - w) / 2, y = vp.h - 26;
     ctx.fillStyle = 'rgba(255,255,255,0.18)'; ctx.fillRect(x, y, w, 6);
     ctx.fillStyle = accent; ctx.fillRect(x, y, w * Math.min(1, state.hero.x / (state.level.exit?.x ?? state.level.length)), 6);
@@ -171,39 +305,199 @@ function drawHud(ctx, state, accent) {
     const total = (state.level.waves ?? []).length;
     const spawned = (state.level.waves ?? []).filter((w) => w._spawned).length;
     ctx.fillStyle = 'rgba(255,255,255,0.92)'; ctx.textAlign = 'center';
-    ctx.fillText(`Vague ${spawned}/${total}`, vp.w / 2, 36);
+    ctx.fillText(`Vague ${spawned}/${total}`, vp.w / 2, 66);
+  }
+  // toast (nom de niveau, checkpoint…)
+  if (fx.toast) {
+    fx.toast.t += dt;
+    const a = fx.toast.t < 0.4 ? fx.toast.t / 0.4 : fx.toast.t > 2.2 ? Math.max(0, 1 - (fx.toast.t - 2.2) / 0.5) : 1;
+    if (fx.toast.t > 2.8) fx.toast = null;
+    else {
+      ctx.globalAlpha = a;
+      ctx.fillStyle = accent; ctx.textAlign = 'center'; ctx.font = `700 ${Math.round(vp.w * 0.03)}px Georgia, serif`;
+      ctx.fillText(fx.toast.text, vp.w / 2, vp.h * 0.16);
+      ctx.globalAlpha = 1;
+    }
   }
   ctx.restore();
 }
 
-/** Écrans title / victoire — retourne l'opacité du voile pour le fondu. */
-export function renderOverlay(ctx, state, phase, t) {
-  const { vp } = state;
-  const accent = state.gdl.ui?.accent ?? '#e8c05a';
-  ctx.save();
-  ctx.fillStyle = 'rgba(6,4,14,0.72)';
+// ═══ ÉCRANS DE CAMPAGNE ═══
+
+function panel(ctx, vp) {
+  ctx.fillStyle = 'rgba(6,4,14,0.82)';
   ctx.fillRect(0, 0, vp.w, vp.h);
+}
+
+export function renderTitle(ctx, gdl, vp, t, bgLayers) {
+  drawScreenBackdrop(ctx, vp, t, bgLayers);
+  const accent = gdl.ui?.accent ?? '#e8c05a';
+  ctx.save();
   ctx.textAlign = 'center';
   ctx.fillStyle = accent;
-  ctx.font = `700 ${Math.round(vp.w * 0.055)}px Georgia, serif`;
-  if (phase === 'title') {
-    ctx.fillText(state.gdl.title, vp.w / 2, vp.h * 0.4);
-    ctx.fillStyle = 'rgba(255,255,255,0.85)';
-    ctx.font = '400 19px system-ui, sans-serif';
-    wrapText(ctx, state.gdl.subtitle ?? '', vp.w / 2, vp.h * 0.48, vp.w * 0.7, 26);
-    if (Math.floor(t * 1.6) % 2 === 0) ctx.fillText('— Appuie sur une touche pour jouer —', vp.w / 2, vp.h * 0.62);
-  } else if (phase === 'won') {
-    ctx.fillText('Victoire', vp.w / 2, vp.h * 0.42);
-    ctx.fillStyle = 'rgba(255,255,255,0.9)';
-    ctx.font = '400 20px system-ui, sans-serif';
-    ctx.fillText(`Score ${state.score} · ${state.deaths} chute${state.deaths > 1 ? 's' : ''}`, vp.w / 2, vp.h * 0.5);
-    ctx.fillText('R pour rejouer', vp.w / 2, vp.h * 0.58);
-  }
+  ctx.shadowColor = accent; ctx.shadowBlur = 24;
+  ctx.font = `700 ${Math.round(vp.w * 0.06)}px Georgia, serif`;
+  ctx.fillText(gdl.title, vp.w / 2, vp.h * 0.36);
+  ctx.shadowBlur = 0;
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  ctx.font = '400 19px system-ui, sans-serif';
+  wrapText(ctx, gdl.subtitle ?? '', vp.w / 2, vp.h * 0.46, vp.w * 0.7, 26);
+  if (Math.floor(t * 1.6) % 2 === 0) ctx.fillText('— Appuie sur une touche —', vp.w / 2, vp.h * 0.66);
   ctx.restore();
+}
+
+function drawScreenBackdrop(ctx, vp, t, bgLayers) {
+  ctx.clearRect(0, 0, vp.w, vp.h);
+  if (bgLayers?.length) {
+    for (const layer of bgLayers) {
+      if (!layer.img || layer.id === 'ground') continue;
+      const h = vp.h, w = h * (layer.img.width / layer.img.height);
+      tileLayer(ctx, layer.img, t * 12 * layer.depth, layer.id === 'near' ? vp.h * 0.55 : 0, w, layer.id === 'near' ? vp.h * 0.45 : h, vp.w);
+    }
+  }
+  panel(ctx, vp);
+}
+
+/** Carte-monde : nœuds de niveaux, états verrouillé/fini, sélection. */
+export function renderMap(ctx, gdl, campaign, vp, t, bgLayers, selectedIndex) {
+  drawScreenBackdrop(ctx, vp, t, bgLayers);
+  const accent = gdl.ui?.accent ?? '#e8c05a';
+  ctx.save();
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'rgba(255,255,255,0.9)';
+  ctx.font = `700 ${Math.round(vp.w * 0.032)}px Georgia, serif`;
+  ctx.fillText(gdl.map?.title ?? 'Carte du monde', vp.w / 2, vp.h * 0.12);
+  ctx.font = '400 15px system-ui, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.6)';
+  ctx.fillText(`Score total ${campaign.totalScore} · ${campaign.relics.length} relique${campaign.relics.length > 1 ? 's' : ''}`, vp.w / 2, vp.h * 0.17);
+
+  const nodes = gdl.map?.nodes ?? gdl.levels.map((l, i) => ({ level: l.id, x: 0.2 + (i * 0.6) / Math.max(1, gdl.levels.length - 1), y: 0.5 + (i % 2 ? -0.08 : 0.08), name: l.name ?? `Niveau ${i + 1}` }));
+  // chemin
+  ctx.strokeStyle = 'rgba(255,255,255,0.25)'; ctx.lineWidth = 3; ctx.setLineDash([8, 8]);
+  ctx.beginPath();
+  nodes.forEach((n, i) => { const x = n.x * vp.w, y = n.y * vp.h; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+  ctx.stroke(); ctx.setLineDash([]);
+  // nœuds
+  nodes.forEach((n, i) => {
+    const x = n.x * vp.w, y = n.y * vp.h;
+    const unlocked = i < campaign.unlocked;
+    const done = campaign.completed.includes(n.level);
+    const isSel = i === selectedIndex;
+    const r = isSel ? 26 + Math.sin(t * 5) * 3 : 20;
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = done ? accent : unlocked ? 'rgba(255,255,255,0.85)' : 'rgba(120,120,140,0.4)';
+    ctx.fill();
+    ctx.lineWidth = 3; ctx.strokeStyle = isSel ? accent : 'rgba(0,0,0,0.5)'; ctx.stroke();
+    ctx.fillStyle = done ? '#1a1426' : unlocked ? '#1a1426' : 'rgba(255,255,255,0.4)';
+    ctx.font = '700 16px system-ui, sans-serif';
+    ctx.fillText(done ? '✓' : unlocked ? String(i + 1) : '🔒', x, y + 1);
+    ctx.fillStyle = isSel ? accent : 'rgba(255,255,255,0.75)';
+    ctx.font = `${isSel ? 700 : 400} 14px system-ui, sans-serif`;
+    ctx.fillText(n.name, x, y + r + 20);
+    const lvl = gdl.levels[i];
+    if (isSel && lvl?.boss) { ctx.fillStyle = '#ff8585'; ctx.fillText('⚔ BOSS', x, y + r + 40); }
+  });
+  ctx.fillStyle = 'rgba(255,255,255,0.55)';
+  ctx.font = '400 15px system-ui, sans-serif';
+  ctx.fillText('◀ ▶ choisir · Entrée/X jouer', vp.w / 2, vp.h * 0.9);
+  ctx.restore();
+}
+
+/** Dialogue : portrait + nom + texte machine à écrire. */
+export function renderDialogue(ctx, vp, beat, charT, portraitImg, accent) {
+  const boxH = Math.min(200, vp.h * 0.3);
+  const y = vp.h - boxH - 18;
+  ctx.save();
+  ctx.fillStyle = 'rgba(8,6,16,0.92)';
+  ctx.strokeStyle = accent; ctx.lineWidth = 2;
+  roundRect(ctx, 18, y, vp.w - 36, boxH, 12); ctx.fill(); ctx.stroke();
+  let textX = 40;
+  if (portraitImg) {
+    const ph = boxH - 28, pw = ph * (portraitImg.width / portraitImg.height);
+    ctx.save(); roundRect(ctx, 32, y + 14, pw, ph, 8); ctx.clip();
+    ctx.drawImage(portraitImg, 32, y + 14, pw, ph); ctx.restore();
+    ctx.strokeStyle = 'rgba(255,255,255,0.3)'; roundRect(ctx, 32, y + 14, pw, ph, 8); ctx.stroke();
+    textX = 32 + pw + 22;
+  }
+  ctx.fillStyle = accent;
+  ctx.font = '700 17px system-ui, sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  ctx.fillText(beat.speaker ?? '', textX, y + 18);
+  ctx.fillStyle = 'rgba(255,255,255,0.94)';
+  ctx.font = '400 17px system-ui, sans-serif';
+  const shown = beat.text.slice(0, Math.floor(charT * 45));
+  wrapTextTop(ctx, shown, textX, y + 48, vp.w - textX - 50, 24);
+  ctx.fillStyle = 'rgba(255,255,255,0.5)';
+  ctx.font = '400 13px system-ui, sans-serif';
+  if (shown.length >= beat.text.length) ctx.fillText('▼ continuer', vp.w - 130, y + boxH - 24);
+  ctx.restore();
+}
+
+/** Choix de relique : deux cartes. */
+export function renderRelicChoice(ctx, vp, relics, selected, accent, t) {
+  panel(ctx, vp);
+  ctx.save();
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'rgba(255,255,255,0.92)';
+  ctx.font = `700 ${Math.round(vp.w * 0.028)}px Georgia, serif`;
+  ctx.fillText('Choisis une relique', vp.w / 2, vp.h * 0.2);
+  const cw = Math.min(300, vp.w * 0.36), ch = vp.h * 0.4;
+  relics.forEach((r, i) => {
+    const x = vp.w / 2 + (i === 0 ? -cw - 20 : 20), y = vp.h * 0.3;
+    const isSel = i === selected;
+    ctx.fillStyle = isSel ? 'rgba(40,32,64,0.95)' : 'rgba(20,16,34,0.9)';
+    ctx.strokeStyle = isSel ? accent : 'rgba(255,255,255,0.25)';
+    ctx.lineWidth = isSel ? 3 : 1.5;
+    roundRect(ctx, x, y + (isSel ? Math.sin(t * 4) * 4 : 0), cw, ch, 14); ctx.fill(); ctx.stroke();
+    const cy = y + (isSel ? Math.sin(t * 4) * 4 : 0);
+    ctx.save(); ctx.translate(x + cw / 2, cy + ch * 0.28); ctx.rotate(Math.PI / 4);
+    ctx.fillStyle = accent; ctx.fillRect(-24, -24, 48, 48); ctx.restore();
+    ctx.fillStyle = 'rgba(255,255,255,0.95)';
+    ctx.font = '700 19px system-ui, sans-serif';
+    ctx.fillText(r.name, x + cw / 2, cy + ch * 0.55);
+    ctx.fillStyle = 'rgba(255,255,255,0.7)';
+    ctx.font = '400 15px system-ui, sans-serif';
+    wrapText(ctx, r.desc ?? '', x + cw / 2, cy + ch * 0.68, cw - 40, 20);
+  });
+  ctx.fillStyle = 'rgba(255,255,255,0.55)';
+  ctx.font = '400 15px system-ui, sans-serif';
+  ctx.fillText('◀ ▶ choisir · Entrée/X prendre', vp.w / 2, vp.h * 0.85);
+  ctx.restore();
+}
+
+export function renderCredits(ctx, gdl, campaign, vp, t) {
+  panel(ctx, vp);
+  const accent = gdl.ui?.accent ?? '#e8c05a';
+  ctx.save();
+  ctx.textAlign = 'center';
+  ctx.fillStyle = accent;
+  ctx.shadowColor = accent; ctx.shadowBlur = 20;
+  ctx.font = `700 ${Math.round(vp.w * 0.05)}px Georgia, serif`;
+  ctx.fillText('Victoire !', vp.w / 2, vp.h * 0.32);
+  ctx.shadowBlur = 0;
+  ctx.fillStyle = 'rgba(255,255,255,0.92)';
+  ctx.font = '400 20px system-ui, sans-serif';
+  ctx.fillText(`${gdl.title} — campagne terminée`, vp.w / 2, vp.h * 0.42);
+  ctx.fillText(`Score total ${campaign.totalScore} · ${campaign.relics.length} reliques`, vp.w / 2, vp.h * 0.49);
+  ctx.fillStyle = 'rgba(255,255,255,0.6)';
+  ctx.font = '400 16px system-ui, sans-serif';
+  ctx.fillText('Forgé par Ellipse — assets générés, jeu défini en GDL', vp.w / 2, vp.h * 0.6);
+  if (Math.floor(t * 1.6) % 2 === 0) ctx.fillText('R : recommencer l’aventure', vp.w / 2, vp.h * 0.7);
+  ctx.restore();
+}
+
+// ── utilitaires texte/formes ──
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
 }
 
 function wrapText(ctx, text, x, y, maxW, lh) {
-  const words = text.split(' ');
+  const words = String(text).split(' ');
   let line = '', yy = y;
   for (const w of words) {
     if (ctx.measureText(line + w).width > maxW && line) { ctx.fillText(line.trim(), x, yy); line = ''; yy += lh; }
@@ -211,3 +505,15 @@ function wrapText(ctx, text, x, y, maxW, lh) {
   }
   if (line.trim()) ctx.fillText(line.trim(), x, yy);
 }
+
+function wrapTextTop(ctx, text, x, y, maxW, lh) {
+  const words = String(text).split(' ');
+  let line = '', yy = y;
+  for (const w of words) {
+    if (ctx.measureText(line + w).width > maxW && line) { ctx.fillText(line.trim(), x, yy); line = ''; yy += lh; }
+    line += w + ' ';
+  }
+  if (line.trim()) ctx.fillText(line.trim(), x, yy);
+}
+
+export function setLevelToast(fx, text) { fx.toast = { text, t: 0 }; }

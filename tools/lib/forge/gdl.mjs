@@ -18,7 +18,7 @@ const DEFAULTS = {
 export function validateGdl(gdl) {
   const errors = [];
   const req = (cond, msg) => { if (!cond) errors.push(msg); };
-  req(gdl.gdl === '1.0', `gdl: version attendue "1.0", reçu "${gdl.gdl}"`);
+  req(['1.0', '1.1'].includes(gdl.gdl), `gdl: version attendue "1.0"/"1.1", reçu "${gdl.gdl}"`);
   req(/^[a-z0-9-]+$/.test(gdl.id ?? ''), 'id: kebab-case requis');
   req(typeof gdl.title === 'string' && gdl.title.length > 0, 'title requis');
   req(['sidescroller', 'vertical-arena'].includes(gdl.genre), `genre inconnu: ${gdl.genre}`);

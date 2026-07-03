@@ -6,7 +6,26 @@
   "type": "object",
   "required": ["gdl", "id", "title", "genre", "world", "entities", "levels"],
   "properties": {
-    "gdl": { "const": "1.0" },
+    "gdl": { "enum": ["1.0", "1.1"] },
+    "story": {
+      "type": "object",
+      "description": "1.1 — récit : intro, beats de victoire par niveau, outro. beat = {speaker, text, portrait?}",
+      "properties": {
+        "intro": { "type": "array", "items": { "$ref": "#/$defs/beat" } },
+        "levels": { "type": "object", "additionalProperties": { "type": "object", "properties": { "victory": { "type": "array", "items": { "$ref": "#/$defs/beat" } } } } },
+        "outro": { "type": "array", "items": { "$ref": "#/$defs/beat" } }
+      }
+    },
+    "relics": {
+      "type": "array",
+      "description": "1.1 — objets de progression choisis entre les niveaux",
+      "items": { "type": "object", "required": ["id", "name"], "properties": { "id": { "type": "string" }, "name": { "type": "string" }, "desc": { "type": "string" }, "effect": { "type": "object", "properties": { "speedMul": { "type": "number" }, "jumpMul": { "type": "number" }, "damageAdd": { "type": "number" }, "hpAdd": { "type": "number" } } } } }
+    },
+    "map": {
+      "type": "object",
+      "description": "1.1 — carte-monde : nœuds positionnés (fractions viewport)",
+      "properties": { "title": { "type": "string" }, "nodes": { "type": "array", "items": { "type": "object", "properties": { "level": { "type": "string" }, "x": { "type": "number" }, "y": { "type": "number" }, "name": { "type": "string" } } } } }
+    },
     "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
     "title": { "type": "string" },
     "subtitle": { "type": "string" },
@@ -30,6 +49,7 @@
         "required": ["role", "rig", "stats"],
         "properties": {
           "role": { "enum": ["hero", "enemy", "boss"] },
+          "name": { "type": "string", "description": "nom affiché (barre de boss, dialogues)" },
           "rig": { "type": "string", "description": "chemin du .rig.json (relatif au runtime)" },
           "clips": { "type": "string", "description": "chemin du .clips.json" },
           "scale": { "type": "number", "description": "hauteur cible en fraction du viewport" },
@@ -60,6 +80,8 @@
         "required": ["id", "arena"],
         "properties": {
           "id": { "type": "string" },
+          "name": { "type": "string" },
+          "boss": { "type": "boolean", "description": "niveau boss : victoire = boss vaincu (pas de sortie)" },
           "arena": { "type": "string", "description": "chemin du .parallax.json" },
           "length": { "type": "number", "description": "longueur en px monde (sidescroller)" },
           "spawns": { "type": "array", "items": { "type": "object", "required": ["entity"], "properties": { "entity": { "type": "string" }, "x": { "type": "number" }, "lane": { "type": "integer" }, "t": { "type": "number" } } } },
@@ -83,8 +105,16 @@
       "properties": {
         "pitch": { "type": "string" },
         "designBackend": { "type": "string", "description": "claude | heuristic — traçabilité de la conception" },
-        "generatedAt": { "type": "string" }
+        "generatedAt": { "type": "string" },
+        "iterations": { "type": "array", "description": "historique des modifications par prompt", "items": { "type": "object" } }
       }
+    }
+  },
+  "$defs": {
+    "beat": {
+      "type": "object",
+      "required": ["speaker", "text"],
+      "properties": { "speaker": { "type": "string" }, "text": { "type": "string" }, "portrait": { "type": "string", "description": "'hero' pour afficher le portrait généré" } }
     }
   }
 }

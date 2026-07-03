@@ -31,6 +31,26 @@ export function sampleClip(clipsDoc, name, t) {
   return pose;
 }
 
+/** Fond deux poses (crossfade entre clips) : t=0 → a, t=1 → b. */
+export function blendPoses(a, b, t) {
+  if (t >= 1) return b;
+  if (t <= 0) return a;
+  const out = {};
+  const bones = new Set([...Object.keys(a), ...Object.keys(b)]);
+  for (const bone of bones) {
+    const pa = a[bone] ?? {}, pb = b[bone] ?? {};
+    const o = {};
+    for (const prop of ['rot', 'dx', 'dy', 'sx', 'sy']) {
+      const va = pa[prop], vb = pb[prop];
+      if (va === undefined && vb === undefined) continue;
+      const def = prop.startsWith('s') ? 1 : 0;
+      o[prop] = (va ?? def) + ((vb ?? def) - (va ?? def)) * t;
+    }
+    out[bone] = o;
+  }
+  return out;
+}
+
 // ── mat2d [a,b,c,d,e,f] ──
 const I = [1, 0, 0, 1, 0, 0];
 const mul = (m, n) => [

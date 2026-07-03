@@ -32,6 +32,11 @@ const LAYERS = [
     prompt: (t) => `close foreground silhouettes of ${t}, dark shapes framing the bottom of the scene, high contrast, no characters, no text`,
     grade: { brightness: 0.45, saturation: 0.7, blur: 0, alphaRamp: 0.45 },
   },
+  {
+    id: 'ground', depth: 0.98, size: { width: 1024, height: 256 },
+    prompt: (t) => `seamless tileable ground texture strip of ${t}, walkable terrain surface seen from the side at eye level, game platform ground, horizontal band, no characters, no text`,
+    grade: { brightness: 0.9, saturation: 0.95, blur: 0 },
+  },
 ];
 
 /** rampe alpha verticale : opaque en bas, fondu vers le haut sur `frac` de la hauteur. */

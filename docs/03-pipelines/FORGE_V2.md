@@ -1,4 +1,4 @@
-# Forge v2 — prompt → vrai jeu HD 2D/2,5D généré
+# Forge v2 — prompt → vrai jeu HD 2D/2,5D généré, COMPLET et VIVANT
 
 > **La règle : un jeu forgé ne contient AUCUN pixel copié d'une planche et
 > AUCUNE ligne de code écrite pour ce titre.** Les assets sont générés, le
@@ -6,9 +6,42 @@
 
 ```
 pnpm forge:game -- --prompt "une chevalière d'argent dans une citadelle gothique maudite"
-pnpm forge:serve            # jouer (http://localhost:4300)
-pnpm forge:smoke            # CI : chaîne pure + auto-play des deux genres
+pnpm forge:serve                 # jouer (http://localhost:4300, POST /iterate actif)
+pnpm forge:iterate -- <id> "rends le héros plus rapide"   # dialogue avec le jeu
+pnpm forge:smoke                 # CI : campagnes, clips, campagne, itération
 ```
+
+## Un jeu COMPLET (GDL 1.1), pas un niveau
+
+Chaque forge produit une **campagne** : titre → histoire d'intro (dialogues
+avec portrait généré du héros) → **carte-monde** (nœuds, progression,
+verrouillage) → 3 niveaux enchaînés à difficulté croissante → **boss final**
+(barre de PV, victoire = boss vaincu) → épilogue. Entre les niveaux : beats
+narratifs + **choix de reliques** (bottes +25 % vitesse, talisman +2 cœurs,
+fil +1 dégât, plumes +15 % saut) qui modifient réellement les stats.
+**Sauvegarde locale** (progression, reliques, score) par jeu.
+
+## Le dialogue avec le jeu (itération par prompt)
+
+Bouton « 💬 Modifier le jeu par prompt » dans chaque jeu (ou `forge:iterate`) :
+la demande est traduite en opérations GDL (heuristique FR/EN hors-ligne ;
+Claude en secours si `ANTHROPIC_API_KEY`), le patch est appliqué **puis toute
+la campagne est re-validée à l'auto-play** — un patch qui rend un niveau
+infranchissable est refusé et annulé. Historique : `meta.iterations` +
+`02_design/forge-iterations.md`. Demandes comprises : vitesse/saut/vie/dégâts
+du héros, vitesse/PV des ennemis, difficulté ±, boss ±, ajout de niveau
+(inséré avant le boss), renommage.
+
+## Anti-pantin (animations v2)
+
+- **Blend de poses** : crossfade 120 ms entre clips — plus de transitions sèches ;
+- clips denses avec **anticipation** (recul avant frappe, accroupi avant saut),
+  **squash & stretch** (impact d'atterrissage, extension en l'air),
+  **follow-through** (overshoot puis retour) ;
+- clip `land` dédié + lean aérien selon la vitesse verticale ;
+- **particules** : poussière de course/atterrissage, étincelles de coups,
+  arcs d'attaque, explosion de boss, motes d'ambiance aux couleurs du thème ;
+- **sol texturé généré** (couche `ground` par arène) + grade de profondeur.
 
 ---
 
