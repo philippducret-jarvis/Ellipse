@@ -1,6 +1,14 @@
 /**
- * SQUELETTE — échantillonnage des clips + dessin canvas des rigs paper-doll.
- * L'échantillonnage est pur (utilisable hors DOM) ; seul draw() touche canvas.
+ * SQUELETTE + MARIONNETTE — deux rendus de personnages :
+ *
+ * drawPuppet (DÉFAUT) — la technique des gachas (Live2D-lite) : l'illustration
+ * COMPLÈTE est découpée en bandes horizontales ondulées (respiration, étoffe,
+ * inclinaison) + squash & stretch global. Réf. Don't Starve : le charme du
+ * cut-out vient de l'exagération squash/bounce, JAMAIS de fausses rotations
+ * de jambes sur textures découpées.
+ *
+ * drawSkeleton (legacy) — paper-doll 8 pièces ; gardé pour le futur
+ * (retarget de mocap quand les pièces seront segmentées proprement).
  */
 
 // ── interpolation ──
@@ -29,6 +37,50 @@ export function sampleClip(clipsDoc, name, t) {
     pose[bone] = out;
   }
   return pose;
+}
+
+/**
+ * MARIONNETTE — dessine l'illustration complète en ~22 bandes horizontales
+ * ondulées. Toutes les amplitudes sont en fractions de la hauteur affichée.
+ * @param {object} w warp : {breathe, cloth, clothAmp, lean, hop, sx, sy, tremble}
+ */
+export function drawPuppet(ctx, img, { x, y, height, flip = false, alpha = 1, flash = false, halo = 0, time = 0, warp = {} }) {
+  const BANDS = 22;
+  const ratio = img.width / img.height;
+  const w = height * ratio;
+  const sx = warp.sx ?? 1, sy = warp.sy ?? 1;
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  if (halo > 0) { ctx.shadowColor = 'rgba(4,2,10,0.85)'; ctx.shadowBlur = halo; }
+  if (flash) ctx.filter = 'brightness(1.8) saturate(0.6)';
+  // ancre aux pieds + squash/stretch autour de l'ancre + flip
+  ctx.translate(x, y + (warp.hop ?? 0) * height);
+  ctx.scale(flip ? -sx : sx, sy);
+  if (warp.rot) ctx.rotate((warp.rot * Math.PI) / 180);
+  ctx.translate(-w / 2, -height);
+
+  const bandH = height / BANDS;
+  const srcBand = img.height / BANDS;
+  const lean = (warp.lean ?? 0) * height * 0.010; // cisaillement : haut décalé
+  const breathe = warp.breathe ?? 0;
+  const clothAmp = (warp.clothAmp ?? 0.012) * height;
+  for (let i = 0; i < BANDS; i++) {
+    const f = i / (BANDS - 1); // 0 = tête, 1 = pieds
+    // étoffe : onde voyageante, amplitude croissante vers l'ourlet
+    const cloth = Math.sin(time * 2.2 + f * 5.2) * clothAmp * Math.pow(f, 1.7) * (warp.cloth ?? 1);
+    // respiration : léger gonflement du buste (bandes 25-55 %)
+    const chest = breathe * height * 0.006 * Math.exp(-Math.pow((f - 0.38) / 0.16, 2));
+    // inclinaison : le haut suit le mouvement
+    const shear = lean * (1 - f);
+    const trembleX = warp.tremble ? (Math.random() - 0.5) * warp.tremble * height : 0;
+    ctx.drawImage(
+      img,
+      0, i * srcBand, img.width, srcBand + 1.5,
+      cloth + chest + shear + trembleX, i * bandH, w, bandH + 1.2,
+    );
+  }
+  ctx.restore();
+  if (flash) ctx.filter = 'none';
 }
 
 /** Fond deux poses (crossfade entre clips) : t=0 → a, t=1 → b. */

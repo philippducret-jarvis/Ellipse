@@ -72,7 +72,9 @@ await key('Space', 1, 150);
 await page.waitForTimeout(350);
 await shot('06-saut');
 await page.waitForTimeout(1200);
-await key('KeyX', 3, 300);
+await key('KeyX', 2, 300);
+await page.keyboard.press('KeyX');
+await page.waitForTimeout(90); // au cœur du croissant de slash (220 ms)
 await shot('07-attaque');
 await page.keyboard.up('ArrowRight');
 await page.waitForTimeout(600);

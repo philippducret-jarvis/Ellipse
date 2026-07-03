@@ -19,13 +19,12 @@ const loadJson = (u) => fetch(u).then((r) => { if (!r.ok) throw new Error(`${u}:
 const loadImage = (u) => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error(`image: ${u}`)); i.src = u; });
 const tryImage = (u) => loadImage(u).catch(() => null);
 
-async function loadRigPack(rigPath, clipsPath) {
+async function loadRigPack(rigPath) {
   const rig = await loadJson(rigPath);
-  const clips = await loadJson(clipsPath);
   const dir = rigPath.split('/').slice(0, -1).join('/');
-  const images = {};
-  await Promise.all(rig.parts.map(async (p) => { images[p.id] = await loadImage(`${dir}/${p.file}`); }));
-  return { rig, clips, images };
+  // rendu marionnette : l'illustration COMPLÈTE détourée (rig.source)
+  const full = await loadImage(`${dir}/${rig.source}`);
+  return { rig, full };
 }
 
 async function loadArena(path) {
@@ -50,7 +49,7 @@ async function boot() {
   const arenas = {};
   await Promise.all(arenaPaths.map(async (p) => { arenas[p] = await loadArena(p); }));
   const rigs = {};
-  await Promise.all(Object.entries(gdl.entities).map(async ([kind, e]) => { rigs[kind] = await loadRigPack(e.rig, e.clips); }));
+  await Promise.all(Object.entries(gdl.entities).map(async ([kind, e]) => { rigs[kind] = await loadRigPack(e.rig); }));
   const heroPortrait = await tryImage('assets/hero/hero.portrait.png');
   const accent = gdl.ui?.accent ?? '#e8c05a';
 

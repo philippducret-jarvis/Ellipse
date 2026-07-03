@@ -4,13 +4,13 @@
  * campagne (carte-monde, dialogues avec portrait, choix de relique, crédits).
  * Générique : tout vient du GDL + manifests. Aucun code par titre.
  */
-import { sampleClip, drawSkeleton, blendPoses } from './skeleton.js';
+import { drawPuppet } from './skeleton.js';
 
 const hex = (p, i, fb) => (p && p[i]) || fb;
 
 /** Contexte d'effets persistant (créé par main.js, passé à chaque frame). */
 export function createFx() {
-  return { particles: [], entStates: new WeakMap(), toast: null, toastT: 0, time: 0 };
+  return { particles: [], slashes: [], entStates: new WeakMap(), toast: null, toastT: 0, time: 0 };
 }
 
 // ═══ PARTICULES ═══
@@ -36,7 +36,11 @@ export function fxFromEvents(fx, events, state, accent) {
   for (const e of events) {
     if (e.type === 'land') spawn(fx, 10, { x: e.x, y: gy + 2, angle: -Math.PI / 2, spread: 2.4, speed: 90, gravity: 300, life: 0.45, size: 5, color: 'rgba(190,180,170,0.55)' });
     if (e.type === 'jump') spawn(fx, 6, { x: state.hero.x, y: gy + 2, angle: -Math.PI / 2, spread: 2.8, speed: 60, gravity: 200, life: 0.35, size: 4, color: 'rgba(190,180,170,0.45)' });
-    if (e.type === 'attack') spawn(fx, 8, { x: state.hero.x + state.hero.facing * 60, y: state.hero.y - state.vp.h * state.hero.scale * 0.5, angle: state.hero.facing > 0 ? 0 : Math.PI, spread: 1.1, speed: 260, drag: 0.85, life: 0.28, size: 4, color: accent, add: true });
+    if (e.type === 'attack') {
+      const hh = state.vp.h * state.hero.scale;
+      fx.slashes.push({ x: state.hero.x, y: state.hero.y - hh * 0.52, r: hh * 0.62, facing: state.hero.facing, t: 0, color: accent });
+      spawn(fx, 6, { x: state.hero.x + state.hero.facing * 60, y: state.hero.y - hh * 0.5, angle: state.hero.facing > 0 ? 0 : Math.PI, spread: 1.1, speed: 260, drag: 0.85, life: 0.25, size: 4, color: accent, add: true });
+    }
     if (e.type === 'hit') spawn(fx, 12, { x: e.x ?? state.hero.x, y: (e.y ?? gy) - 60, speed: 200, drag: 0.85, life: 0.35, size: 4, color: '#ffd9a0', add: true });
     if (e.type === 'kill') spawn(fx, e.boss ? 46 : 22, { x: e.x, y: (e.y ?? gy) - 50, speed: e.boss ? 320 : 220, drag: 0.88, life: e.boss ? 0.9 : 0.55, size: 5, color: accent, add: true });
     if (e.type === 'hurt') spawn(fx, 14, { x: state.hero.x, y: state.hero.y - 60, speed: 180, drag: 0.86, life: 0.4, size: 4, color: '#ff6b6b', add: true });
@@ -59,6 +63,36 @@ function stepAndDrawParticles(ctx, fx, state, dt) {
     ctx.fillStyle = p.color;
     ctx.beginPath();
     ctx.arc(p.x - (p.world ? camX : 0), p.y, p.size * (0.5 + a * 0.5), 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+/** Croissants de slash — le VFX PORTE l'attaque (lisible avant tout). */
+function drawSlashes(ctx, fx, state, dt) {
+  const camX = state.genre === 'sidescroller' ? state.camX : 0;
+  fx.slashes = fx.slashes.filter((s) => (s.t += dt) < 0.22);
+  for (const s of fx.slashes) {
+    const k = s.t / 0.22; // 0→1
+    const sweep = (-0.65 + k * 1.5) * s.facing; // balayage haut → bas
+    const alpha = Math.sin(Math.PI * Math.min(1, k * 1.15)) * 0.9;
+    ctx.save();
+    ctx.translate(s.x - camX, s.y);
+    ctx.scale(s.facing, 1);
+    ctx.rotate(sweep);
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.globalAlpha = alpha;
+    // croissant : deux arcs décalés
+    const grad = ctx.createRadialGradient(0, 0, s.r * 0.4, 0, 0, s.r);
+    grad.addColorStop(0, 'rgba(255,255,255,0)');
+    grad.addColorStop(0.72, s.color);
+    grad.addColorStop(0.86, '#ffffff');
+    grad.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(0, 0, s.r, -0.95, 0.95);
+    ctx.arc(0, 0, s.r * 0.55, 0.8, -0.8, true);
+    ctx.closePath();
     ctx.fill();
     ctx.restore();
   }
@@ -121,6 +155,14 @@ export function render(ctx, state, assets, dt, fx) {
     if (!img || layer.id === 'near' || layer.id === 'ground') continue;
     const h = vp.h, w = h * (img.width / img.height);
     tileLayer(ctx, img, scroll * layer.depth, 0, w, h, vp.w);
+    if (layer.id === 'far') {
+      // brume de séparation entre le lointain et le plan de jeu (réf. Hollow Knight)
+      const fog = ctx.createLinearGradient(0, vp.h * 0.3, 0, vp.h * 0.9);
+      fog.addColorStop(0, 'rgba(16,12,30,0)');
+      fog.addColorStop(0.65, 'rgba(20,15,38,0.34)');
+      fog.addColorStop(1, 'rgba(16,12,30,0.05)');
+      ctx.fillStyle = fog; ctx.fillRect(0, 0, vp.w, vp.h);
+    }
     if (layer.id === 'mid') {
       // LISIBILITÉ : pousser le décor en arrière au-dessus de la zone de jeu
       const push = ctx.createLinearGradient(0, 0, 0, state.groundY);
@@ -136,6 +178,7 @@ export function render(ctx, state, assets, dt, fx) {
 
   ambientMotes(ctx, fx, state, accent, dt);
   drawEntities(ctx, state, assets, fx, dt);
+  drawSlashes(ctx, fx, state, dt);
   stepAndDrawParticles(ctx, fx, state, dt);
   if (near?.img) {
     const h = vp.h * 0.45, w = h * (near.img.width / near.img.height);
@@ -177,38 +220,32 @@ function drawGround(ctx, state, ground, accent) {
   ctx.restore();
 }
 
-/** Arène verticale : 3 couloirs lisibles + ligne de défense du héros. */
+/**
+ * Arène verticale — repères DIÉGÉTIQUES discrets (réf. mobile lane-battlers) :
+ * pas de colonnes plaquées, juste des sceaux au sol à la ligne de défense.
+ * L'alignement des ennemis communique les couloirs.
+ */
 function drawArenaLanes(ctx, state, accent) {
   const { vp } = state, lanes = state.gdl.world.lanes ?? 3, gy = state.groundY;
   const laneX = (l) => vp.w * (0.5 + (l - (lanes - 1) / 2) * 0.3);
-  const topY = vp.h * 0.06, vanish = vp.w / 2;
   ctx.save();
   for (let l = 0; l < lanes; l++) {
-    const xb = laneX(l), w = vp.w * 0.13;
-    const xt = vanish + (xb - vanish) * 0.42; // convergence perspective
-    const wt = w * 0.42;
+    const x = laneX(l);
     const active = state.hero.lane === l;
-    const grad = ctx.createLinearGradient(0, topY, 0, gy);
-    grad.addColorStop(0, 'rgba(255,255,255,0.0)');
-    grad.addColorStop(1, active ? 'rgba(255,255,255,0.10)' : 'rgba(255,255,255,0.045)');
-    ctx.fillStyle = grad;
-    ctx.beginPath();
-    ctx.moveTo(xt - wt, topY); ctx.lineTo(xt + wt, topY);
-    ctx.lineTo(xb + w, gy); ctx.lineTo(xb - w, gy);
-    ctx.closePath(); ctx.fill();
-    if (active) {
-      ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = 0.35;
-      ctx.strokeStyle = accent; ctx.lineWidth = 2; ctx.stroke(); ctx.restore();
-    }
+    const pulse = active ? 0.55 + 0.25 * Math.sin(state.time * 5) : 0.16;
+    // sceau au sol : ellipse gravée + lueur si couloir actif
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.globalAlpha = pulse;
+    const g = ctx.createRadialGradient(x, gy + 4, 4, x, gy + 4, vp.w * 0.085);
+    g.addColorStop(0, accent); g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.ellipse(x, gy + 4, vp.w * 0.085, vp.w * 0.028, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+    ctx.strokeStyle = active ? hexA(accent, 0.7) : 'rgba(255,255,255,0.14)';
+    ctx.lineWidth = active ? 2.5 : 1.5;
+    ctx.beginPath(); ctx.ellipse(x, gy + 4, vp.w * 0.075, vp.w * 0.024, 0, 0, Math.PI * 2); ctx.stroke();
   }
-  // ligne de défense : plateforme lumineuse où se tient la Veilleuse
-  ctx.globalCompositeOperation = 'lighter';
-  const dg = ctx.createLinearGradient(0, gy - 8, 0, gy + 26);
-  dg.addColorStop(0, 'rgba(0,0,0,0)');
-  const a = hexA(accent, 0.5);
-  dg.addColorStop(0.4, a); dg.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = dg;
-  ctx.fillRect(vp.w * 0.06, gy - 8, vp.w * 0.88, 34);
   ctx.restore();
 }
 
@@ -277,16 +314,49 @@ function drawWorld(ctx, state, assets, accent) {
   }
 }
 
-/** Pose fondue (blend anti-pantin) : crossfade 120 ms entre clips. */
-function blendedPose(fx, e, pack) {
-  let st = fx.entStates.get(e);
-  if (!st) { st = { anim: e.anim, pose: null, blend: 1 }; fx.entStates.set(e, st); }
-  const cur = sampleClip(pack.clips, e.anim, e.animT);
-  if (st.anim !== e.anim) { st.prev = st.pose ?? cur; st.anim = e.anim; st.blend = 0; }
-  st.blend = Math.min(1, st.blend + 0.09);
-  const pose = st.prev && st.blend < 1 ? blendPoses(st.prev, cur, st.blend) : cur;
-  st.pose = pose;
-  return pose;
+/**
+ * Warp de marionnette selon l'état — les principes Don't Starve appliqués :
+ * squash & stretch exagéré, anticipation, jamais de fausses articulations.
+ */
+function puppetWarp(e, state, isHero) {
+  const t = state.time + (e.homeX ?? e.x ?? 0) * 0.01; // déphasage par entité
+  const w = { breathe: Math.sin(t * 1.9), cloth: 1, clothAmp: 0.012, lean: 0, hop: 0, sx: 1, sy: 1 };
+  const at = e.animT;
+
+  if (e.dead) {
+    const k = Math.min(1, e.deadT / 0.7);
+    w.rot = -85 * k * k; w.hop = 0.03 * k; w.cloth = 0.4;
+    return w;
+  }
+  switch (e.anim) {
+    case 'run': {
+      const freq = 9;
+      const beat = Math.abs(Math.sin(t * freq));
+      w.hop = -beat * 0.045;                      // bond
+      const contact = 1 - beat;                    // squash au contact
+      w.sy = 1 - contact * 0.06 + beat * 0.03;     // stretch en l'air
+      w.sx = 1 + contact * 0.05 - beat * 0.02;
+      w.lean = 7; w.cloth = 2.2; w.clothAmp = 0.016;
+      break;
+    }
+    case 'attack': {
+      if (at < 0.14) { w.lean = -9; w.sx = 0.95; w.sy = 1.03; }        // anticipation
+      else if (at < 0.34) { w.lean = 16; w.sx = 1.1; w.sy = 0.96; w.hop = -0.012; w.cloth = 3; } // fente
+      else { w.lean = 4; w.cloth = 1.6; }                               // retour
+      break;
+    }
+    case 'hit': { w.lean = -12; w.sx = 1.07; w.sy = 0.93; w.tremble = 0.006; break; }
+    case 'jump': { w.sy = 1.07; w.sx = 0.96; w.lean = 5; w.cloth = 2; break; }
+    case 'land': { w.sy = 0.88; w.sx = 1.1; w.cloth = 1.6; break; }
+    default: { // idle : respiration + balancement discret
+      w.hop = Math.sin(t * 1.9) * 0.004;
+      w.lean = Math.sin(t * 0.9) * 1.2;
+    }
+  }
+  if (isHero && state.genre === 'sidescroller' && !e.onGround) {
+    w.sy = 1.06; w.sx = 0.97; w.lean = Math.max(-6, Math.min(6, e.vy / 200));
+  }
+  return w;
 }
 
 function drawEntities(ctx, state, assets, fx, dt) {
@@ -323,17 +393,14 @@ function drawEntities(ctx, state, assets, fx, dt) {
     ctx.restore();
 
     const blink = isHero && e.invulnT > 0 && !e.dead && Math.floor(state.time * 12) % 2 === 0;
-    const pose = blendedPose(fx, e, pack);
-    // lean aérien : penche selon la vitesse verticale
-    if (isHero && !e.onGround) {
-      pose.root = { ...(pose.root ?? {}), rot: (pose.root?.rot ?? 0) + Math.max(-8, Math.min(8, e.vy / 140)) * e.facing };
-    }
-    drawSkeleton(ctx, pack.rig, pack.images, pose, {
+    drawPuppet(ctx, pack.full, {
       x: sx, y: sy, height,
       flip: (e.facing ?? e.dir ?? 1) < 0,
       alpha: (blink ? 0.35 : 1) * deadFade,
       flash: e.hitT > 0.12,
       halo: height * 0.07,
+      time: state.time,
+      warp: puppetWarp(e, state, isHero),
     });
   }
 }
