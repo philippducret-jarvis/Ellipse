@@ -1,0 +1,50 @@
+/* Jarvis — assistant conversationnel flottant */
+.es-jarvis-fab {
+  position: fixed; right: 22px; bottom: 22px; z-index: 900;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(140deg, #e8c05a, #b07a2a);
+  border: 1px solid rgba(255, 255, 255, 0.25); cursor: pointer;
+  font-size: 26px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  transition: transform 0.15s ease;
+}
+.es-jarvis-fab:hover { transform: scale(1.08); }
+
+.es-jarvis {
+  position: fixed; right: 22px; bottom: 22px; z-index: 901;
+  width: min(410px, 92vw); height: min(600px, 80vh);
+  display: flex; flex-direction: column;
+  background: #12101c; border: 1px solid #2c2640; border-radius: 14px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6); overflow: hidden;
+  font-size: 14px;
+}
+.es-jarvis-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 14px; background: #191527; border-bottom: 1px solid #2c2640;
+}
+.es-jarvis-head strong { color: #e8c05a; }
+.es-jarvis-brain { margin-left: 10px; font-size: 11px; opacity: 0.55; text-transform: uppercase; letter-spacing: 0.05em; }
+.es-jarvis-close { background: none; border: 0; color: #9a92b4; cursor: pointer; font-size: 16px; }
+
+.es-jarvis-log { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.es-jarvis-hint { color: #8a83a6; line-height: 1.5; font-size: 13px; }
+
+.es-jarvis-msg { display: flex; flex-direction: column; gap: 4px; max-width: 88%; }
+.es-jarvis-user { align-self: flex-end; align-items: flex-end; }
+.es-jarvis-assistant { align-self: flex-start; }
+.es-jarvis-bubble { padding: 9px 13px; border-radius: 12px; line-height: 1.5; white-space: pre-wrap; word-break: break-word; }
+.es-jarvis-user .es-jarvis-bubble { background: #3a2f5c; color: #ece7f8; border-bottom-right-radius: 4px; }
+.es-jarvis-assistant .es-jarvis-bubble { background: #1e1a2e; color: #d6d0ea; border: 1px solid #2c2640; border-bottom-left-radius: 4px; }
+.es-jarvis-typing { letter-spacing: 3px; opacity: 0.6; }
+.es-jarvis-actions { display: flex; flex-wrap: wrap; gap: 5px; }
+.es-jarvis-action { font-size: 11px; color: #e8c05a; background: rgba(232, 192, 90, 0.12); border-radius: 6px; padding: 2px 7px; }
+
+.es-jarvis-input { display: flex; gap: 8px; padding: 10px; border-top: 1px solid #2c2640; background: #15121f; }
+.es-jarvis-input textarea {
+  flex: 1; resize: none; background: #0d0a16; color: #e8e2f8;
+  border: 1px solid #2c2640; border-radius: 8px; padding: 8px 10px; font: inherit; font-size: 14px;
+}
+.es-jarvis-input button {
+  background: #e8c05a; color: #241a06; border: 0; border-radius: 8px;
+  padding: 0 16px; font-weight: 700; cursor: pointer;
+}
+.es-jarvis-input button:disabled { opacity: 0.4; cursor: default; }

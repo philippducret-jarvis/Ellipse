@@ -18,6 +18,9 @@ if not errorlevel 1 (
 echo Lancement de l'orchestrateur (API, port 4400)...
 start "Ellipse Orchestrator" cmd /k "cd /d "%~dp0" && corepack pnpm --filter @ellipse/orchestrator dev"
 
+echo Lancement de Jarvis (assistant, port 4310)...
+start "Ellipse Jarvis" cmd /k "cd /d "%~dp0" && corepack pnpm forge:assistant"
+
 echo Lancement du studio (frontend, port 4273)...
 start "Ellipse Studio" cmd /k "cd /d "%~dp0" && corepack pnpm --filter @ellipse/studio dev"
 

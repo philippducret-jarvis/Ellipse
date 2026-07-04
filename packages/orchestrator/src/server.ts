@@ -17,6 +17,7 @@ import { registerUploadRoutes } from './routes/upload.js';
 import { registerExportRoutes } from './routes/export.js';
 import { registerWorkflowRoutes } from './routes/workflows.js';
 import { registerWorkOrderRoutes } from './routes/work-orders.js';
+import { registerAssistantRoutes } from './routes/assistant.js';
 import { registerWebSocketRoutes } from './ws/generate.js';
 import type { ServerContext } from './routes/context.js';
 
@@ -56,6 +57,7 @@ export async function createServer() {
   registerExportRoutes(app, ctx);
   registerWorkflowRoutes(app, ctx);
   registerWorkOrderRoutes(app, ctx);
+  registerAssistantRoutes(app);
   registerWebSocketRoutes(app, ctx);
 
   return app;

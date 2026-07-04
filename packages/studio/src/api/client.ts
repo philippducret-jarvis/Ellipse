@@ -516,3 +516,28 @@ export async function searchProjectKnowledge(
 ): Promise<{ results: Array<{ id: string; path: string; title: string; excerpt: string; tags: string[] }> }> {
   return fetchJsonOrThrow(`/api/projects/${projectId}/knowledge/search?q=${encodeURIComponent(query)}&limit=${limit}`);
 }
+
+export interface AssistantMessage { role: 'user' | 'assistant'; content: string; }
+export interface AssistantAction { tool: string; args: Record<string, unknown>; result: unknown; }
+export interface AssistantTurn {
+  reply: string;
+  actions: AssistantAction[];
+  brain: string | null;
+  history: AssistantMessage[];
+}
+
+export async function askAssistant(history: AssistantMessage[]): Promise<AssistantTurn> {
+  return fetchJsonOrThrow<AssistantTurn>('/api/assistant', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ history }),
+  });
+}
+
+export async function assistantHealth(): Promise<{ ok: boolean; brain: string | null }> {
+  try {
+    return await fetchJsonOrThrow('/api/assistant/health');
+  } catch {
+    return { ok: false, brain: null };
+  }
+}
