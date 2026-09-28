@@ -13,7 +13,7 @@ try{
  await page.goto(base+'seraphine-lookdev.html',{waitUntil:'domcontentloaded'});
  await page.waitForFunction(()=>document.querySelector('#candidate')?.complete&&document.querySelector('#candidate')?.naturalWidth===1024);
  const alpha=await page.evaluate(()=>{const im=document.querySelector('#candidate'),c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;c.getContext('2d').drawImage(im,0,0);const ctx=c.getContext('2d');return [ctx.getImageData(0,0,1,1).data[3],ctx.getImageData(500,700,1,1).data[3]];});
- assert.equal(alpha[0],0,'le fond du personnage doit être transparent');assert.ok(alpha[1]>220,'le personnage doit rester opaque');
+ assert.equal(alpha[0],0,'le coin hors personnage doit être transparent');assert.ok(alpha[1]>220,'le personnage doit rester opaque');
  await page.screenshot({path:`${out}/lookdev-reference-and-cutout.png`,fullPage:true});
  await page.locator('#candidate-v1').click();
  await page.waitForFunction(()=>document.querySelector('#candidate')?.complete&&document.querySelector('#candidate')?.dataset.version==='v1'&&document.querySelector('#candidate')?.naturalWidth===1024);
@@ -57,5 +57,5 @@ try{
  assert.equal(sequence.dataset.seraphineVisiblePoses,'1','une seule silhouette doit être visible');
  assert.equal(sequence.dataset.seraphinePoseOverlap,undefined,'aucun chevauchement des poses entières');
  assert.deepEqual(errors,[]);
- console.log('Séraphine 2,5D : transparence réelle, trois poses clés, séquence de revue, échelle de combat et intégration tactique vérifiées.');
+ console.log('Séraphine 2,5D B : coins transparents, trois poses clés, séquence de revue, échelle de combat et intégration tactique vérifiées. Le halo incrusté dans les images est traité séparément dans l’étude C.');
 }finally{await browser.close();}

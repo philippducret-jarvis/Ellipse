@@ -14,7 +14,11 @@ const sentinelPortraitPaths={armored:'../../03_assets/enemies/sentinels-lookdev/
 const lookdevBase='../../03_assets/characters/seraphine/lookdev/';
 const seraphineLookdevSets={
  'lookdev-v1':{idle:'seraphine-front-cutout-v1.png',windup:'seraphine-basic-windup-key-v1.png',attack:'seraphine-basic-attack-key-v2.png'},
- 'lookdev-v2':{idle:'seraphine-front-cutout-v2.png',windup:'seraphine-basic-windup-key-v2.png',attack:'seraphine-basic-attack-key-v3.png'}
+ 'lookdev-v2':{idle:'seraphine-front-cutout-v2.png',windup:'seraphine-basic-windup-key-v2.png',attack:'seraphine-basic-attack-key-v3.png'},
+ 'lookdev-v3':{idle:'seraphine-front-cutout-v2.png',windup:'seraphine-basic-windup-key-v2.png',attack:'seraphine-basic-attack-key-v3.png',mattes:['seraphine-idle-matte-v3.png','seraphine-windup-matte-v3.png','seraphine-attack-matte-v3.png']},
+ 'lookdev-v4':{idle:'../turnaround-v1.png',windup:'seraphine-basic-windup-key-v2.png',attack:'seraphine-basic-attack-key-v3.png',mattes:['seraphine-reference-front-matte-v4.png','seraphine-windup-matte-v3.png','seraphine-attack-matte-v3.png'],idleWidth:1.02,frontCrop:422/1536},
+ 'lookdev-v5':{idle:'../turnaround-v1.png',windup:'../turnaround-v1.png',attack:'seraphine-basic-attack-key-v3.png',mattes:['seraphine-reference-front-matte-v4.png','seraphine-reference-quarter-matte-v5.png','seraphine-attack-matte-v3.png'],idleWidth:1.02,frontCrop:422/1536,keyCrops:[{offset:1147/1536,repeat:389/1536},null],keyWidths:[1.02,1.63]},
+ 'lookdev-v6':{idle:'../turnaround-v1.png',windup:'../turnaround-v1.png',attack:'seraphine-reference-attack-key-v6.png',mattes:['seraphine-reference-front-matte-v4.png','seraphine-reference-quarter-matte-v5.png','seraphine-reference-attack-matte-v6.png'],idleWidth:1.02,frontCrop:422/1536,keyCrops:[{offset:1147/1536,repeat:389/1536},null],keyWidths:[1.02,1.63]}
 };
 const tilePosition=(x,lane)=>new T.Vector3(x-(WIDTH-1)/2,0,(lane-(LANES-1)/2)*.75);
 const actorPosition=(x,lane)=>tilePosition(x,lane);
@@ -22,14 +26,14 @@ const alive=unit=>unit.hp>0;
 
 /** One renderer for the entire encounter. The HTML grid remains the accessible input layer. */
 export function createTacticsScene3D(host,{reduced=false}={}){
- const useReferenceEnemies=new URLSearchParams(location.search).get('seraphine')==='lookdev-v2';
+ const params=new URLSearchParams(location.search),useReferenceEnemies=['lookdev-v2','lookdev-v3','lookdev-v4','lookdev-v5','lookdev-v6'].includes(params.get('seraphine')??'lookdev-v6'),heroReview=params.get('camera')==='seraphine';
  const renderer=new T.WebGLRenderer({alpha:false,antialias:true,powerPreference:'high-performance'});
  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.35));renderer.outputColorSpace=T.SRGBColorSpace;
  renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.28;
  renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
  renderer.domElement.dataset.renderer='tactics-volume-3d';renderer.domElement.setAttribute('aria-hidden','true');host.append(renderer.domElement);
  const scene=new T.Scene(),camera=new T.OrthographicCamera(-4.68,4.68,2.1,-2.1,.1,80);
- camera.position.set(0,5.3,14);camera.lookAt(0,1.45,0);
+ camera.position.set(heroReview?-1.5:0,5.3,14);camera.lookAt(heroReview?-1.5:0,1.45,0);host.dataset.camera=heroReview?'seraphine-review':'formation';
  scene.add(new T.HemisphereLight('#c7d4ec','#3b2633',2.2));
  const key=new T.DirectionalLight('#ffe3c1',3.2);key.position.set(-3,7,5);key.castShadow=true;key.shadow.mapSize.set(1024,1024);key.shadow.camera.left=-6;key.shadow.camera.right=6;key.shadow.camera.top=5;key.shadow.camera.bottom=-5;scene.add(key);
  const rim=new T.DirectionalLight('#ec485d',1.9);rim.position.set(4,4,-5);scene.add(rim);
@@ -94,7 +98,7 @@ export function createTacticsScene3D(host,{reduced=false}={}){
  }
  const neutralColor=new T.Color('#95939a'),reachColor=new T.Color('#cbb06e'),intentColor=new T.Color('#d75568'),selectedColor=new T.Color('#f1d68f');
  function disposeScene(root){const geometries=new Set(),materials=new Set();root.traverse(object=>{if(object.geometry)geometries.add(object.geometry);for(const material of Array.isArray(object.material)?object.material:[object.material])if(material)materials.add(material);});geometries.forEach(geometry=>geometry.dispose());materials.forEach(material=>{for(const value of Object.values(material))if(value?.isTexture)value.dispose();material.dispose();});}
- function disposeActor(entry){entry.contact.geometry.dispose();entry.contact.material.dispose();if(entry.referenceSprite){for(const sprite of [entry.referenceSprite,entry.windupSprite,entry.attackSprite].filter(Boolean)){sprite.geometry.dispose();sprite.material.map?.dispose();sprite.material.dispose();}return;}if(entry.enemySprite){entry.enemySprite.geometry.dispose();entry.enemySprite.material.map?.dispose();entry.enemySprite.material.dispose();return;}if(entry.gltf){entry.gltf.mixer.stopAllAction();disposeScene(entry.gltf.scene);return;}if(entry.model){entry.model.dispose();return;}disposeScene(entry.pivot);}
+ function disposeActor(entry){entry.contact.geometry.dispose();entry.contact.material.dispose();if(entry.referenceSprite){for(const sprite of [entry.referenceSprite,entry.windupSprite,entry.attackSprite].filter(Boolean)){sprite.geometry.dispose();sprite.material.map?.dispose();sprite.material.alphaMap?.dispose();sprite.material.dispose();}return;}if(entry.enemySprite){entry.enemySprite.geometry.dispose();entry.enemySprite.material.map?.dispose();entry.enemySprite.material.dispose();return;}if(entry.gltf){entry.gltf.mixer.stopAllAction();disposeScene(entry.gltf.scene);return;}if(entry.model){entry.model.dispose();return;}disposeScene(entry.pivot);}
  async function loadEnemySkin(entry){try{const kind=entry.unit?.boss?'boss':entry.id==='sentry-b'?'void':'armored',source=await enemyTexture(kind);if(!source||disposed||actors.get(entry.id)!==entry)return;
   const texture=source.clone();if(kind==='boss'){texture.repeat.set(1/3,1);texture.offset.set(2/3,0);}texture.needsUpdate=true;
   const sprite=new T.Mesh(new T.PlaneGeometry(kind==='boss'?1.87:1.63,kind==='boss'?1.87:2.45,10,16),new T.MeshBasicMaterial({map:texture,transparent:true,alphaTest:.045,side:T.DoubleSide,depthWrite:false,toneMapped:false}));
@@ -103,27 +107,37 @@ export function createTacticsScene3D(host,{reduced=false}={}){
   entry.pivot.remove(entry.enemy.root);geometries.forEach(geometry=>geometry.dispose());entry.enemy.materials.forEach(material=>material.dispose());entry.enemy=null;entry.enemySprite=sprite;entry.pivot.add(sprite);
   host.dataset.enemyVisuals='guardian-portraits-v1';host.dataset.enemySprites=String([...actors.values()].filter(actor=>actor.enemySprite).length);
  }catch(error){console.warn('Planche des gardiens indisponible ; sentinelles en volume conservées.',error);}}
- async function loadSeraphineSkin(entry){try{const requested=new URLSearchParams(location.search).get('seraphine'),lookdev=seraphineLookdevSets[requested];if(lookdev){
+ async function loadSeraphineSkin(entry){try{const requested=new URLSearchParams(location.search).get('seraphine')??'lookdev-v6',lookdev=seraphineLookdevSets[requested];if(lookdev){
   const texture=await new T.TextureLoader().loadAsync(lookdevBase+lookdev.idle);
   if(disposed||actors.get(entry.id)!==entry){texture.dispose();return;}
   texture.colorSpace=T.SRGBColorSpace;texture.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());
-  const geometry=new T.PlaneGeometry(1.63,2.45,12,24);
+  if(lookdev.frontCrop){texture.repeat.set(lookdev.frontCrop,1);texture.needsUpdate=true;}
+  const geometry=new T.PlaneGeometry(lookdev.idleWidth??1.63,2.45,12,24);
   const sprite=new T.Mesh(geometry,new T.MeshBasicMaterial({map:texture,transparent:true,alphaTest:.045,side:T.DoubleSide,depthWrite:false,toneMapped:false}));
   sprite.userData.rest=Float32Array.from(geometry.attributes.position.array);
   sprite.position.y=1.22;sprite.renderOrder=2;sprite.name='Seraphine reference-derived 2.5D lookdev';
   entry.pivot.remove(entry.model.root);entry.model.dispose();entry.model=null;entry.referenceSprite=sprite;entry.pivot.add(sprite);
   host.dataset.seraphineModel=requested;host.dataset.seraphineMaterials='reference-cutout';host.dataset.seraphineKeyposes='1';
+  if(lookdev.mattes){
+   const matte=await new T.TextureLoader().loadAsync(lookdevBase+lookdev.mattes[0]);
+   if(disposed||actors.get(entry.id)!==entry){matte.dispose();return;}
+   if(lookdev.frontCrop){matte.repeat.set(lookdev.frontCrop,1);matte.needsUpdate=true;}
+   sprite.material.alphaMap=matte;sprite.material.alphaTest=.965;sprite.material.needsUpdate=true;
+   host.dataset.seraphineMaterials='reference-with-silhouette-matte';
+  }
   const results=await Promise.allSettled([lookdev.windup,lookdev.attack].map(path=>new T.TextureLoader().loadAsync(lookdevBase+path)));
   if(disposed||actors.get(entry.id)!==entry){for(const result of results)if(result.status==='fulfilled')result.value.dispose();return;}
   for(let i=0;i<results.length;i++){const result=results[i];if(result.status!=='fulfilled'){console.warn('Pose clé de Séraphine indisponible.',result.reason);continue;}
    const keyTexture=result.value;keyTexture.colorSpace=T.SRGBColorSpace;keyTexture.anisotropy=texture.anisotropy;
-   const key=new T.Mesh(new T.PlaneGeometry(1.63,2.45,12,24),new T.MeshBasicMaterial({map:keyTexture,transparent:true,alphaTest:.045,side:T.DoubleSide,depthWrite:false,toneMapped:false}));
+   const crop=lookdev.keyCrops?.[i];if(crop){keyTexture.repeat.set(crop.repeat,1);keyTexture.offset.set(crop.offset,0);keyTexture.needsUpdate=true;}
+   const key=new T.Mesh(new T.PlaneGeometry(lookdev.keyWidths?.[i]??1.63,2.45,12,24),new T.MeshBasicMaterial({map:keyTexture,transparent:true,alphaTest:.045,side:T.DoubleSide,depthWrite:false,toneMapped:false}));
+   if(lookdev.mattes){try{const matte=await new T.TextureLoader().loadAsync(lookdevBase+lookdev.mattes[i+1]);if(disposed||actors.get(entry.id)!==entry){matte.dispose();key.geometry.dispose();key.material.dispose();continue;}if(crop){matte.repeat.set(crop.repeat,1);matte.offset.set(crop.offset,0);matte.needsUpdate=true;}key.material.alphaMap=matte;key.material.alphaTest=.965;key.material.needsUpdate=true;}catch(error){console.warn('Masque de pose indisponible.',error);}}
    key.userData.rest=Float32Array.from(key.geometry.attributes.position.array);
    key.position.y=1.22;key.renderOrder=3+i;key.name=i===0?'Seraphine basic windup reference-derived key pose':'Seraphine basic strike reference-derived key pose';
    if(i===0)entry.windupSprite=key;else entry.attackSprite=key;
    entry.pivot.add(key);
   }
-  host.dataset.seraphineKeyposes=String(1+Number(!!entry.windupSprite)+Number(!!entry.attackSprite));host.dataset.seraphineMotion='regional-mesh-and-clean-keyposes';
+  host.dataset.seraphineKeyposes=String(1+Number(!!entry.windupSprite)+Number(!!entry.attackSprite));host.dataset.seraphineMattes=String([entry.referenceSprite,entry.windupSprite,entry.attackSprite].filter(pose=>!!pose?.material.alphaMap).length);host.dataset.seraphineMotion='regional-mesh-and-clean-keyposes';
   return;
  }
  const groomReview=requested==='groom-v4-1',silhouetteReview=requested==='silhouette-v4',surfaceReview=requested==='surface-v3';const modelName=groomReview?'seraphine-silhouette-v4-1-runtime.glb':silhouetteReview?'seraphine-silhouette-v4-runtime.glb':surfaceReview?'seraphine-surface-v3-runtime.glb':'seraphine-atelier-v2-runtime.glb';const gltf=await new GLTFLoader().loadAsync(`../../03_assets/characters/seraphine/modeling/${modelName}`);if(disposed||actors.get(entry.id)!==entry){disposeScene(gltf.scene);return;}entry.pivot.remove(entry.model.root);entry.model.dispose();entry.model=null;gltf.scene.traverse(object=>{if(object.isMesh){object.castShadow=true;object.receiveShadow=true;}});entry.pivot.add(gltf.scene);host.dataset.seraphineMaterials=String(tuneHeroMaterials(gltf.scene,{roughness:.9,metalness:1.1}));entry.gltf={scene:gltf.scene,mixer:new T.AnimationMixer(gltf.scene),clips:new Map(gltf.animations.map(clip=>[clip.name,clip])),playing:null};host.dataset.seraphineModel=groomReview?'groom-v4-1':silhouetteReview?'silhouette-v4':surfaceReview?'surface-v3':'atelier-v2';}catch(error){host.dataset.seraphineModel='fallback';console.warn('Rig skinné de Séraphine indisponible, volume de secours conservé.',error);}}
@@ -146,7 +160,7 @@ export function createTacticsScene3D(host,{reduced=false}={}){
  }
  function action(actorId,kind,targetId){const entry=actors.get(actorId);if(!entry)return;entry.clip=kind==='move'?'run':kind==='basic'?'attack1':kind==='super'?'ultimateCast':kind.startsWith('skill')?`${kind}Cast`:'hitLight';entry.started=performance.now()/1000;if(entry.referenceSprite&&entry.clip==='attack1'){entry.referenceAttackElapsed=0;entry.slashEffect=makeSlash(entry,targetId);host.dataset.seraphineAttackTriggered='true';}}
  function enemyTurn(){const now=performance.now()/1000;for(const entry of actors.values())if(entry.enemy){entry.clip='attack1';entry.started=now;}}
- function resize(){const w=Math.max(host.clientWidth,1),h=Math.max(host.clientHeight,1);renderer.setSize(w,h,false);const aspect=w/h;camera.left=-4.68;camera.right=4.68;camera.top=4.68/aspect;camera.bottom=-camera.top;camera.updateProjectionMatrix();}
+ function resize(){const w=Math.max(host.clientWidth,1),h=Math.max(host.clientHeight,1);renderer.setSize(w,h,false);const aspect=w/h,span=heroReview?2.4:4.68;camera.left=-span;camera.right=span;camera.top=span/aspect;camera.bottom=-camera.top;camera.updateProjectionMatrix();}
  const observer=new ResizeObserver(resize);observer.observe(host);resize();
  function frame(ms){if(disposed)return;raf=requestAnimationFrame(frame);if(!visible||document.hidden)return;const now=ms/1000,dt=Math.min(.05,Math.max(0,now-last));last=now;
   for(const entry of actors.values()){
