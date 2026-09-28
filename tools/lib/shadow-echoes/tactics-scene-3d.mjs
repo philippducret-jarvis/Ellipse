@@ -28,14 +28,14 @@ const alive=unit=>unit.hp>0;
 
 /** One renderer for the entire encounter. The HTML grid remains the accessible input layer. */
 export function createTacticsScene3D(host,{reduced=false}={}){
- const params=new URLSearchParams(location.search),useReferenceEnemies=['lookdev-v2','lookdev-v3','lookdev-v4','lookdev-v5','lookdev-v6','lookdev-v7','lookdev-v8'].includes(params.get('seraphine')??'lookdev-v6'),heroReview=params.get('camera')==='seraphine';
+ const params=new URLSearchParams(location.search),useReferenceEnemies=['lookdev-v2','lookdev-v3','lookdev-v4','lookdev-v5','lookdev-v6','lookdev-v7','lookdev-v8'].includes(params.get('seraphine')??'lookdev-v6'),portraitReview=params.get('camera')==='portrait',heroReview=portraitReview||params.get('camera')==='seraphine';
  const renderer=new T.WebGLRenderer({alpha:false,antialias:true,powerPreference:'high-performance'});
  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.35));renderer.outputColorSpace=T.SRGBColorSpace;
  renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.28;
  renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
  renderer.domElement.dataset.renderer='tactics-volume-3d';renderer.domElement.setAttribute('aria-hidden','true');host.append(renderer.domElement);
  const scene=new T.Scene(),camera=new T.OrthographicCamera(-4.68,4.68,2.1,-2.1,.1,80);
- camera.position.set(heroReview?-1.5:0,5.3,14);camera.lookAt(heroReview?-1.5:0,1.45,0);host.dataset.camera=heroReview?'seraphine-review':'formation';
+ camera.position.set(heroReview?-1.5:0,5.3,14);camera.lookAt(heroReview?-1.5:0,portraitReview?1.43:1.45,0);host.dataset.camera=portraitReview?'seraphine-portrait':heroReview?'seraphine-review':'formation';
  scene.add(new T.HemisphereLight('#c7d4ec','#3b2633',2.2));
  const key=new T.DirectionalLight('#ffe3c1',3.2);key.position.set(-3,7,5);key.castShadow=true;key.shadow.mapSize.set(1024,1024);key.shadow.camera.left=-6;key.shadow.camera.right=6;key.shadow.camera.top=5;key.shadow.camera.bottom=-5;scene.add(key);
  const rim=new T.DirectionalLight('#ec485d',1.9);rim.position.set(4,4,-5);scene.add(rim);
@@ -103,7 +103,7 @@ export function createTacticsScene3D(host,{reduced=false}={}){
   material.onBeforeCompile=shader=>{
    shader.uniforms.regionMap={value:region};
    shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nuniform sampler2D regionMap;');
-   shader.fragmentShader=shader.fragmentShader.replace('#include <alphamap_fragment>',`#include <alphamap_fragment>\nfloat cutRegion=step(0.967,texture2D(regionMap,vAlphaMapUv).g);\ndiffuseColor.a*=${overlay?'cutRegion':'1.0-cutRegion'};`);
+   shader.fragmentShader=shader.fragmentShader.replace('#include <alphamap_fragment>',`#include <alphamap_fragment>\nfloat regionX=vAlphaMapUv.x/0.2747396;\nfloat regionSide=step(0.18,abs(regionX-0.5));\nfloat regionHead=step(0.76,vAlphaMapUv.y);\nfloat cutRegion=step(0.967,texture2D(regionMap,vAlphaMapUv).g)*max(regionSide,regionHead);\ndiffuseColor.a*=${overlay?'cutRegion':'1.0-cutRegion'};`);
   };
   material.customProgramCacheKey=()=>`seraphine-region-${overlay?'overlay':'base'}`;
   material.needsUpdate=true;
@@ -114,7 +114,7 @@ export function createTacticsScene3D(host,{reduced=false}={}){
    shader.uniforms.hairMap={value:hair};shader.uniforms.clothMap={value:cloth};
    shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nuniform sampler2D hairMap;\nuniform sampler2D clothMap;');
    const weight=layer==='hair'?'hairCut':layer==='cloth'?'clothCut':'(1.0-hairCut)*(1.0-clothCut)';
-   shader.fragmentShader=shader.fragmentShader.replace('#include <alphamap_fragment>',`#include <alphamap_fragment>\nfloat hairCut=step(0.967,texture2D(hairMap,vAlphaMapUv).g);\nfloat clothCut=step(0.967,texture2D(clothMap,vAlphaMapUv).g)*(1.0-hairCut);\ndiffuseColor.a*=${weight};`);
+   shader.fragmentShader=shader.fragmentShader.replace('#include <alphamap_fragment>',`#include <alphamap_fragment>\nfloat regionX=vAlphaMapUv.x/0.2747396;\nfloat regionSide=step(0.18,abs(regionX-0.5));\nfloat regionHead=step(0.76,vAlphaMapUv.y);\nfloat hairCut=step(0.967,texture2D(hairMap,vAlphaMapUv).g)*max(regionSide,regionHead);\nfloat clothCut=step(0.967,texture2D(clothMap,vAlphaMapUv).g)*regionSide*(1.0-hairCut);\ndiffuseColor.a*=${weight};`);
   };
   material.customProgramCacheKey=()=>`seraphine-regions-${layer}`;
   material.needsUpdate=true;
@@ -209,7 +209,7 @@ export function createTacticsScene3D(host,{reduced=false}={}){
  }
  function action(actorId,kind,targetId){const entry=actors.get(actorId);if(!entry)return;entry.clip=kind==='move'?'run':kind==='basic'?'attack1':kind==='super'?'ultimateCast':kind.startsWith('skill')?`${kind}Cast`:'hitLight';entry.started=performance.now()/1000;if(entry.referenceSprite&&entry.clip==='attack1'){entry.referenceAttackElapsed=0;entry.slashEffect=makeSlash(entry,targetId);host.dataset.seraphineAttackTriggered='true';}}
  function enemyTurn(){const now=performance.now()/1000;for(const entry of actors.values())if(entry.enemy){entry.clip='attack1';entry.started=now;}}
- function resize(){const w=Math.max(host.clientWidth,1),h=Math.max(host.clientHeight,1);renderer.setSize(w,h,false);const aspect=w/h,span=heroReview?2.4:4.68;camera.left=-span;camera.right=span;camera.top=span/aspect;camera.bottom=-camera.top;camera.updateProjectionMatrix();}
+ function resize(){const w=Math.max(host.clientWidth,1),h=Math.max(host.clientHeight,1);renderer.setSize(w,h,false);const aspect=w/h,span=portraitReview?.8:heroReview?2.4:4.68;camera.left=-span;camera.right=span;camera.top=span/aspect;camera.bottom=-camera.top;camera.updateProjectionMatrix();}
  const observer=new ResizeObserver(resize);observer.observe(host);resize();
  function frame(ms){if(disposed)return;raf=requestAnimationFrame(frame);if(!visible||document.hidden)return;const now=ms/1000,dt=Math.min(.05,Math.max(0,now-last));last=now;
   for(const entry of actors.values()){

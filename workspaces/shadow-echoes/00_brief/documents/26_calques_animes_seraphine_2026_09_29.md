@@ -7,3 +7,7 @@ Prévisualisation de la V8 : `07_exports/web/tactics.html?seraphine=lookdev-v8&c
 Vérification : `node tools/verify-shadow-seraphine-matte.mjs lookdev-v8 focus` charge trois poses masquées, le passage cheveux/tissu, la préparation et la frappe sans erreur WebGL. Captures de travail dans `02_production/lot-15/qa/`.
 
 La V8 n'est **pas approuvée** : les masques de cheveux et de tissu ont été générés depuis la planche et leur correspondance exacte aux bords fins n'est pas assurée. Le mouvement est un déformateur de maillage 2,5D, pas un rig anatomique. Avant toute promotion comme rendu cible, il faut reprendre les contours à taille native, dissocier au minimum les bras et l'épée, produire des poses de combat dont les raccords et les matières restent cohérents, puis confronter une capture de jeu à la planche et aux images de campagne fournies.
+
+Deux essais de génération d'un masque « bras armé + épée » n'ont isolé que l'épée. Ces masques ont été rejetés et ne sont pas intégrés au projet : en déduire une articulation aurait coupé le bras et créé un raccord visible. La vue rapprochée `?seraphine=lookdev-v8&camera=portrait` sert à contrôler ce type de défaut avant de changer la version par défaut.
+
+Les captures comparables à mouvement réduit sont `02_production/lot-15/seraphine-v6-portrait-review.png` et `02_production/lot-15/seraphine-v8-portrait-review.png`. Elles documentent le contrôle du visage, de la coiffe, du buste et des raccords à gros plan.
