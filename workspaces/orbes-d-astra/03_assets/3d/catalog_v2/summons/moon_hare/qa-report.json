@@ -1,0 +1,29 @@
+{
+  "id": "moon_hare",
+  "displayName": "Lièvre lunaire",
+  "affinity": "Lune",
+  "kind": "rigged_familiar",
+  "status": "integration_ready_animated_source",
+  "sourceLicense": "CC0",
+  "sourcePack": "Quaternius Cute Animated Monsters Pack",
+  "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/moon_hare/moon_hare_source.blend",
+  "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/moon_hare/moon_hare_lod0.glb",
+  "runtime": "res://assets/3d/summons_v2/moon_hare/moon_hare_lod0.glb",
+  "animations": [
+    "Bite_Front",
+    "Bite_InPlace",
+    "Dance",
+    "Death",
+    "HitRecieve",
+    "Idle",
+    "Jump",
+    "No",
+    "Walk",
+    "Yes"
+  ],
+  "detachedMissingImages": [],
+  "deformBones": 5,
+  "triangles": 1180,
+  "bytes": 439124,
+  "commercialFinal": false
+}

@@ -1,0 +1,147 @@
+{
+  "generated_at": "2026-07-17T13:34:17.753Z",
+  "contract_version": "1.0.0",
+  "authority": "Ellisphere",
+  "workspace": "orbes-d-astra",
+  "title": "Orbes d'Astra",
+  "runtime": "merge_drop_engine",
+  "protected_from_generic_forge": true,
+  "status": "operational",
+  "visual_target": "portrait mobile premium, bulles de Gardiens, observatoire céleste et invocation cinématique",
+  "cell": [
+    {
+      "id": "producer",
+      "owns": [
+        "scope",
+        "runtime_authority",
+        "release_gate"
+      ]
+    },
+    {
+      "id": "art_direction",
+      "owns": [
+        "canonical_boards",
+        "palette",
+        "composition",
+        "visual_acceptance"
+      ]
+    },
+    {
+      "id": "animation",
+      "owns": [
+        "state_machine",
+        "motion_readability",
+        "vfx_timing"
+      ]
+    },
+    {
+      "id": "gameplay_programming",
+      "owns": [
+        "simulation",
+        "input",
+        "runtime_integration"
+      ]
+    },
+    {
+      "id": "ui",
+      "owns": [
+        "hud",
+        "menus",
+        "touch_targets",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "qa",
+      "owns": [
+        "tests",
+        "browser_matrix",
+        "asset_urls",
+        "honest_status"
+      ]
+    },
+    {
+      "id": "build_release",
+      "owns": [
+        "deterministic_build",
+        "manifest",
+        "single_runtime_export"
+      ]
+    }
+  ],
+  "handoffs": [
+    {
+      "from": "art_direction",
+      "to": "animation",
+      "requires": [
+        "approved silhouette",
+        "motion-safe layers"
+      ]
+    },
+    {
+      "from": "animation",
+      "to": "gameplay_programming",
+      "requires": [
+        "state ids",
+        "pivots",
+        "timings"
+      ]
+    },
+    {
+      "from": "gameplay_programming",
+      "to": "ui",
+      "requires": [
+        "observable state",
+        "input contract"
+      ]
+    },
+    {
+      "from": "ui",
+      "to": "qa",
+      "requires": [
+        "screen matrix",
+        "touch map",
+        "reduced-motion path"
+      ]
+    },
+    {
+      "from": "qa",
+      "to": "build_release",
+      "requires": [
+        "passing tests",
+        "zero missing URL",
+        "remaining gates"
+      ]
+    }
+  ],
+  "commands": {
+    "rebuild": "pnpm orbes:build",
+    "verify": [
+      "pnpm --filter @ellipse/engine test -- src/sim/merge-drop.test.ts",
+      "pnpm forge:brain-smoke"
+    ]
+  },
+  "critical_files": [
+    "examples/orbes-astra/game.js",
+    "examples/orbes-astra/styles.css",
+    "packages/engine/src/merge-drop/merge-drop-engine.ts",
+    "packages/engine/src/sim/merge-drop.ts",
+    "tools/build-orbes-astra.mjs"
+  ],
+  "missing_critical_files": [],
+  "release_policy": {
+    "playable_hd_requires": [
+      "specialized runtime",
+      "deterministic simulation",
+      "browser smoke",
+      "asset provenance"
+    ],
+    "commercial_ready_requires": [
+      "golden screenshot approval",
+      "target-device performance",
+      "human playtest",
+      "audio and store compliance"
+    ],
+    "automated_agents_may_not_self_certify_commercial_ready": true
+  }
+}

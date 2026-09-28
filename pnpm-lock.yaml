@@ -30,6 +30,15 @@ importers:
         specifier: ^25.1.8
         version: 25.1.8(electron-builder-squirrel-windows@25.1.8)
 
+  apps/orbes-astra-desktop:
+    devDependencies:
+      electron:
+        specifier: ^34.0.0
+        version: 34.5.8
+      electron-builder:
+        specifier: ^25.1.8
+        version: 25.1.8(electron-builder-squirrel-windows@25.1.8)
+
   packages/agents:
     dependencies:
       '@ellipse/bus':

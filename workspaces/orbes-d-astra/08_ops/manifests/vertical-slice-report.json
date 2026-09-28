@@ -1,0 +1,87 @@
+{
+  "generated_at": "2026-07-29T12:12:06.015Z",
+  "game_type": "merge_drop_gacha",
+  "title": "Orbes d'Astra",
+  "playable": true,
+  "commercial_ready": false,
+  "executable_systems": [
+    "input",
+    "merge_drop_physics",
+    "merge_cascade",
+    "drop_aim",
+    "hero_abilities",
+    "merge_drop_gacha_summon",
+    "merge_drop_roster",
+    "merge_drop_pity",
+    "run_rewards",
+    "local_save",
+    "ui"
+  ],
+  "verified_tests": [
+    "packages/engine/src/sim/merge-drop.test.ts",
+    "packages/engine/src/merge-drop/merge-drop-progress.test.ts",
+    "packages/orchestrator/src/export/preview-builder.test.ts"
+  ],
+  "assets": [
+    "astral-observatory-v3.png",
+    "keepers-roster-v3.png",
+    "astral-sanctuary-v3.png",
+    "astral-prologue-v3.png",
+    "void-leviathan-v3.png",
+    "app-icon-512.png",
+    "astral-super-magic-v1.png"
+  ],
+  "content": {
+    "guardians": 24,
+    "campaign_chapters": 3,
+    "campaign_missions": 18,
+    "campaign_bosses": 3,
+    "repeatable_challenges": 3,
+    "minigames": 2,
+    "featured_gacha_guarantee": "SSR hard pity 30 with featured 50/50 carry guarantee",
+    "responsive_targets": [
+      "desktop_mouse_keyboard",
+      "mobile_touch"
+    ]
+  },
+  "commercial_candidate_gates": [
+    "first 30 seconds: player reads next orb, loss line, objective and first merge without a tutorial modal",
+    "input loop: aim, drop, merge, cascade, failure and restart all respond in runtime",
+    "physics gate: circle stacking remains stable at 60, 30 and 20 FPS simulation steps",
+    "merge gate: only equal tiers merge and every cascade is deterministic",
+    "progression gate: a run earns score, ability charge, currency and persistent roster progress",
+    "character gate: each hero ability produces a distinct, testable board-state change",
+    "narrative gate: run start, first merge, first power and Nexus completion advance the Astra premise",
+    "mobile gate: aim, drop, hero selection, ability and summon are touch-operable",
+    "collection gate: rates, pity, duplicate compensation and earned currency source are disclosed",
+    "asset gate: orb radii, portraits, FX and collision truth remain readable at final portrait scale",
+    "QA gate: deterministic tests cover merge, ability, pity, overflow and Nexus completion"
+  ],
+  "disclosure": {
+    "paid_currency": false,
+    "currency_source": "earned by merges, cascades and Nexus completion",
+    "duplicate_resource": "essence",
+    "duplicate_compensation": {
+      "R": 15,
+      "SR": 35,
+      "SSR": 80
+    },
+    "duplicate_sink": "essence awakens Guardian ultimates (5 levels, published costs)",
+    "duplicate_evolution": "each Guardian duplicate grants an evolution star (max 5) unlocking skills at 1 and 3 stars",
+    "rates": {
+      "R": "70%",
+      "SR": "25%",
+      "SSR": "5%"
+    },
+    "pity": "SSR guaranteed no later than pull 30; a non-featured SSR guarantees the featured SSR on the next SSR pull",
+    "ten_pull": "900 shards for 10 pulls with at least one SR or better guaranteed",
+    "relic_banner": "80 shards per pull (720 for 10, SR+ guaranteed); duplicates level items up to 5 then convert to essence"
+  },
+  "preview": "/workspaces/orbes-d-astra/07_exports/web/index.html",
+  "preview_mode": "merge_drop_engine",
+  "remaining_gates": [
+    "visual regression on target devices",
+    "audio production",
+    "long-session balance"
+  ]
+}

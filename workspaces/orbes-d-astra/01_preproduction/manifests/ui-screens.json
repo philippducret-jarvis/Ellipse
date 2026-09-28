@@ -1,0 +1,198 @@
+{
+  "schemaVersion": 1,
+  "statuses": [
+    "missing",
+    "draft",
+    "approved",
+    "implemented",
+    "verified"
+  ],
+  "screens": [
+    {
+      "id": "title",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "onboarding",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "hub_pc",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "hub_mobile",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "world_map",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "mission_brief",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "combat_pc",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "combat_mobile",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "boss_phase_3",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "guardian_switch",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "ultimate",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "overdrive",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "victory",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "defeat",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "roster",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "guardian_detail",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "equipment",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "wardrobe",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "bond",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "summon_single",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "summon_ten",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "shop",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "rates_history",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "rift",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "rhythm_game",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "astral_hunt",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "outfit_workshop",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "settings",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "accessibility",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "download_content",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    },
+    {
+      "id": "network_error",
+      "pc": "draft",
+      "mobile": "draft",
+      "accessibleVariant": "draft"
+    }
+  ]
+}

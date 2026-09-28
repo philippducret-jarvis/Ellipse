@@ -1,0 +1,114 @@
+{
+  "id": "mythiques-03",
+  "title": "Atelier du mouvement",
+  "updated_at": "2026-09-24T06:57:12.057Z",
+  "status": "motion_study_review",
+  "delivery": "4 rigs par maillage, 8 articulations chacun, 7 études de mouvement et pose neutre, atelier et raccord au combat",
+  "animation_scope": "Amplitudes limitées, angle de vue conservé, aucune découpe anatomique",
+  "reports": [
+    {
+      "hero_id": "seraphine",
+      "checked_at": "2026-09-24T06:57:12.057Z",
+      "source_sha256": "8ce57c326c464177a80ec8c8944223d568aedffb9cfb114d622fa26f813d81d9",
+      "source_unchanged": true,
+      "bones": 8,
+      "vertices": 2501,
+      "triangles": 4800,
+      "sampled_poses": 248,
+      "geometry": {
+        "inverted_triangles": 0,
+        "min_area_ratio": 0.6460719407348366,
+        "max_edge_stretch": 1.3144233463804027,
+        "max_neutral_error_px": 0.00018310546875
+      },
+      "technical_passed": true,
+      "artistic_status": "review",
+      "fidelity_approved": false,
+      "anatomical_layers": false,
+      "limitations": [
+        "Maillage de déformation sur une illustration entière",
+        "Pas de faces cachées ni de rotation en profondeur",
+        "Ornements et rigidité des armes à examiner en mouvement",
+        "Rigs articulés sur calques séparés et animations finales à produire"
+      ]
+    },
+    {
+      "hero_id": "nyxara",
+      "checked_at": "2026-09-24T06:57:12.057Z",
+      "source_sha256": "72525b00fe645c5dee4e4195197e769608fc04f0bcf725604c2a6a4cfa58f200",
+      "source_unchanged": true,
+      "bones": 8,
+      "vertices": 2501,
+      "triangles": 4800,
+      "sampled_poses": 248,
+      "geometry": {
+        "inverted_triangles": 0,
+        "min_area_ratio": 0.8233447013701592,
+        "max_edge_stretch": 1.1896836373609385,
+        "max_neutral_error_px": 0.00067138671875
+      },
+      "technical_passed": true,
+      "artistic_status": "review",
+      "fidelity_approved": false,
+      "anatomical_layers": false,
+      "limitations": [
+        "Maillage de déformation sur une illustration entière",
+        "Pas de faces cachées ni de rotation en profondeur",
+        "Ornements et rigidité des armes à examiner en mouvement",
+        "Rigs articulés sur calques séparés et animations finales à produire"
+      ]
+    },
+    {
+      "hero_id": "lysael",
+      "checked_at": "2026-09-24T06:57:12.057Z",
+      "source_sha256": "9a9ebbc7ca1915d0594d381cf91c6592effc8267f614cded0d2fd54b7d7d8cdc",
+      "source_unchanged": true,
+      "bones": 8,
+      "vertices": 2501,
+      "triangles": 4800,
+      "sampled_poses": 248,
+      "geometry": {
+        "inverted_triangles": 0,
+        "min_area_ratio": 0.7450198233824412,
+        "max_edge_stretch": 1.2338768555094755,
+        "max_neutral_error_px": 0.0001220703125
+      },
+      "technical_passed": true,
+      "artistic_status": "review",
+      "fidelity_approved": false,
+      "anatomical_layers": false,
+      "limitations": [
+        "Maillage de déformation sur une illustration entière",
+        "Pas de faces cachées ni de rotation en profondeur",
+        "Ornements et rigidité des armes à examiner en mouvement",
+        "Rigs articulés sur calques séparés et animations finales à produire"
+      ]
+    },
+    {
+      "hero_id": "voren",
+      "checked_at": "2026-09-24T06:57:12.057Z",
+      "source_sha256": "fc3fe5834c5a055cc746d89d9fdab1a6e398e2f44f5807d84760c2be70660ac8",
+      "source_unchanged": true,
+      "bones": 8,
+      "vertices": 2501,
+      "triangles": 4800,
+      "sampled_poses": 248,
+      "geometry": {
+        "inverted_triangles": 0,
+        "min_area_ratio": 0.7636782281167027,
+        "max_edge_stretch": 1.2251923316504674,
+        "max_neutral_error_px": 0.00018310546875
+      },
+      "technical_passed": true,
+      "artistic_status": "review",
+      "fidelity_approved": false,
+      "anatomical_layers": false,
+      "limitations": [
+        "Maillage de déformation sur une illustration entière",
+        "Pas de faces cachées ni de rotation en profondeur",
+        "Ornements et rigidité des armes à examiner en mouvement",
+        "Rigs articulés sur calques séparés et animations finales à produire"
+      ]
+    }
+  ]
+}

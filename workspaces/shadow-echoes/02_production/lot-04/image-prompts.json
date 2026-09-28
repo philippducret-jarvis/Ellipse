@@ -1,0 +1,15 @@
+{
+  "tool": "image_gen",
+  "mode": "built_in",
+  "source": "03_assets/characters/seraphine/presentation-v1.png",
+  "outputs": [
+    {
+      "file": "03_assets/characters/seraphine/layers-v1/arm-sword.png",
+      "prompt": "Use case: background-extraction / precise-object-edit. Input image 1 is the exact source texture of Séraphine for a 2D game rig. Produce ONE transparent RGBA anatomical layer on a 1024x1536 canvas. Extract ONLY the character's arm on the LEFT SIDE OF THE IMAGE that holds the long red crystal sword: include the complete black-and-gold armored upper arm from the shoulder, elbow, armored forearm, gauntlet, fingers gripping the hilt, and the entire red crystal sword including its tip. Keep the arm and sword together as one connected rigid piece. Preserve the exact source pixel placement, scale, angle, silhouette, black/gold thorn filigree, crimson blade, highlights and painterly texture. The shoulder is around x430 y320, elbow x394 y510, wrist x342 y706, sword tip around x20 y1440 in the 1024x1536 source. Do NOT move or center the extracted limb. Keep it in its original coordinates. Reconstruct only a small rounded 20px overlap at the shoulder for a pivot hidden under the shoulder ornament. Remove every other part of the person: no head, no hair, no torso, no breasts, no legs, no skirts, no red cape, no background, no lettering. Spaces between sword thorns must be transparent. Genuine transparent alpha, not a painted checkerboard. No restyling, no alternative sword, no invented motifs. Match the source with maximum fidelity."
+    },
+    {
+      "file": "03_assets/characters/seraphine/layers-v1/body.png",
+      "prompt": "Use case: precise-object-edit. Input image 1 is the edit target and exact visual master. Prepare the BODY/BACKFILL layer for a 2D Séraphine rig. Change ONLY the arm on the LEFT SIDE OF THE IMAGE that holds the red sword and the red sword itself: remove that entire near arm from just below the shoulder ornament down to the glove, and remove the entire sword and its glow. Behind that removed limb, reconstruct the small previously occluded areas of the black/crimson skirt, cape, waist armor and long silver hair with the same gold thorn filigree and fabric folds. Leave a rounded shoulder attachment area hidden by the existing spiked pauldron. Preserve every other visible feature as closely as possible: exactly the same face, gaze, hair, rose/thorn crown, raised OTHER hand near her chin, body, legs, costume, black and gold ornaments, original lighting, red cape, proportions and pose. Keep the original full 1024x1536 canvas, exact placement and scale of the head, torso and feet. Do not crop, recenter, resize, add limbs or redesign any details. Return genuine transparent RGBA outside the silhouette, no backdrop or painted checkerboard. Output only the full body layer without the sword-bearing arm, no text or sheet."
+    }
+  ]
+}

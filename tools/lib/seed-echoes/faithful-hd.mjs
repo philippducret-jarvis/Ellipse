@@ -4,10 +4,9 @@
  * Chaque entité provient de SA planche dédiée (pas de teinte/recyclage).
  * Parallax depuis level_test_01 ; tiles de plateformes depuis sporale_cliffs.
  */
-import { mkdir, writeFile } from 'node:fs/promises';
+import { copyFile, mkdir, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { cutoutSprite, sharp } from '../hd-faithful/matte.mjs';
-import { enemyCutSpecs } from '../level-01/board-specs.mjs';
 
 const ROOT = process.cwd();
 const REF = join(ROOT, 'workspaces', 'echoes-of-the-mushroom-realm', '01_inputs', 'references');
@@ -22,12 +21,9 @@ const BOARDS = {
   boss: join(REF, 'boss_guardian_board.png'),
   level: join(REF, 'level_test_01_board.png'),
   modular: join(REF, 'sporale_cliffs_board.png'),
-};
-
-const BOARD_KEY = {
-  sporelingBoard: 'sporeling',
-  enemyBoard: 'enemy',
-  bossBoard: 'boss',
+  tutorial: join(REF, 'tutorial_overview_board.png'),
+  menu: join(REF, 'menu_keyart.jpeg'),
+  world: join(REF, 'world_map_board.png'),
 };
 
 const ENEMY_FEATHER = {
@@ -37,15 +33,6 @@ const ENEMY_FEATHER = {
 
 const BOSS_TEXT = [{ x0: 0.6, y0: 0.86, x1: 1.01, y1: 1.01, feather: 0.03 }];
 
-function boxToCrop(box) {
-  return { x: box.x, y: box.y, w: box.width, h: box.height };
-}
-
-function enemyBoardPath(source) {
-  const key = BOARD_KEY[source] ?? 'enemy';
-  return BOARDS[key];
-}
-
 /** Table de sprites : une planche par entité, crops calibrés sur les boards fournis. */
 const SPRITES = [
   // héros — planche dédiée front (flood sur fond clair)
@@ -54,21 +41,30 @@ const SPRITES = [
     mode: 'flood', matte: { tol: 72, edgeFeather: 0.04 }, maxW: 240, flip: false,
   },
   // ennemis — planches enemy_family + sporeling_detail (keyarts du level-01 pack)
-  ...enemyCutSpecs
-    .filter((s) => s.category === 'keyart' && s.enemy !== 'family')
-    .map((s) => ({
-      id: `enemy_${s.enemy}`,
-      kind: s.enemy,
-      board: enemyBoardPath(s.source),
-      crop: boxToCrop(s.box),
-      mode: 'feather',
-      matte: { ...ENEMY_FEATHER, textErase: [{ x0: 0, y0: 0, x1: 0.55, y1: 0.18, feather: 0.04 }] },
-      maxW: s.enemy === 'chevalier_fongique' ? 240 : s.enemy === 'moussu_furieux' ? 250 : 230,
-    })),
+  {
+    id: 'enemy_sporeling', kind: 'sporeling', board: BOARDS.sporeling,
+    crop: { x: 0.145, y: 0.035, w: 0.145, h: 0.31 }, mode: 'feather', matte: ENEMY_FEATHER, maxW: 230,
+  },
+  {
+    id: 'enemy_rampore', kind: 'rampore', board: BOARDS.enemy,
+    crop: { x: 0.165, y: 0.045, w: 0.105, h: 0.17 }, mode: 'feather', matte: ENEMY_FEATHER, maxW: 230,
+  },
+  {
+    id: 'enemy_porteur_sporeal', kind: 'porteur_sporeal', board: BOARDS.enemy,
+    crop: { x: 0.165, y: 0.285, w: 0.105, h: 0.165 }, mode: 'feather', matte: ENEMY_FEATHER, maxW: 230,
+  },
+  {
+    id: 'enemy_chevalier_fongique', kind: 'chevalier_fongique', board: BOARDS.enemy,
+    crop: { x: 0.12, y: 0.49, w: 0.095, h: 0.14 }, mode: 'feather', matte: ENEMY_FEATHER, maxW: 240,
+  },
+  {
+    id: 'enemy_moussu_furieux', kind: 'moussu_furieux', board: BOARDS.enemy,
+    crop: { x: 0.115, y: 0.69, w: 0.105, h: 0.128 }, mode: 'feather', matte: ENEMY_FEATHER, maxW: 250,
+  },
   // boss — planche gardien des racines
   {
     id: 'boss_root_guardian', kind: 'root_guardian_boss', board: BOARDS.boss,
-    crop: { x: 0.135, y: 0.03, w: 0.31, h: 0.31 },
+    crop: { x: 0.17, y: 0.035, w: 0.275, h: 0.305 },
     mode: 'feather',
     matte: { top: 0.06, side: 0.06, bottom: 0.06, textErase: BOSS_TEXT, vignette: true,
       darkKeep: 0.12, centerKeepW: 0.45, alphaClean: [0.2, 0.46] },
@@ -77,10 +73,10 @@ const SPRITES = [
 ];
 
 // Panorama niveau 01 — bande horizontale des 4 modules (planche level_test_01)
-const PANORAMA = { x: 0.012, y: 0.068, w: 0.976, h: 0.355 };
+const PANORAMA = { x: 0.008, y: 0.405, w: 0.984, h: 0.205 };
 // Strip de tiles modulaires (planche sporale_cliffs, bas de planche)
 const MODULAR_TILES = { x: 0, y: 0.505, w: 0.325, h: 0.24 };
-const LEVEL_W = 2304;
+const LEVEL_W = 4096;
 const VIEW_H = 720;
 
 async function genSprites(report) {
@@ -100,46 +96,39 @@ async function genSprites(report) {
   }
 }
 
-async function parallaxLayer(crop, outPath, { width, height, brightness, blur, alphaRampTop = false }) {
-  const meta = await sharp(BOARDS.level).metadata();
-  const ext = {
-    left: Math.round(crop.x * meta.width), top: Math.round(crop.y * meta.height),
-    width: Math.round(crop.w * meta.width), height: Math.round(crop.h * meta.height),
-  };
-  let pipe = sharp(BOARDS.level).extract(ext)
-    .resize(width, height, { fit: 'cover', position: 'top' })
-    .modulate({ brightness });
-  if (blur > 0) pipe = pipe.blur(blur);
-  const { data, info } = await pipe.ensureAlpha().raw().toBuffer({ resolveWithObject: true });
-  if (alphaRampTop) {
-    for (let y = 0; y < info.height; y++) {
-      const fy = y / info.height;
-      const a = fy < 0.55 ? 1 : Math.max(0, 1 - (fy - 0.55) / 0.45);
-      for (let x = 0; x < info.width; x++) {
-        const i = (y * info.width + x) * 4 + 3;
-        data[i] = Math.round(data[i] * a);
-      }
-    }
-  }
-  await mkdir(dirname(outPath), { recursive: true });
-  await sharp(data, { raw: { width: info.width, height: info.height, channels: 4 } }).png().toFile(outPath);
-  return { width: info.width, height: info.height };
-}
-
 async function genParallax(report) {
-  const far = await parallaxLayer(PANORAMA, join(OUT, 'parallax_far.png'),
-    { width: LEVEL_W, height: VIEW_H, brightness: 0.46, blur: 10 });
-  const mid = await parallaxLayer(PANORAMA, join(OUT, 'parallax_mid.png'),
-    { width: LEVEL_W, height: VIEW_H, brightness: 0.82, blur: 4 });
-  const near = await parallaxLayer(
-    { x: PANORAMA.x, y: PANORAMA.y + PANORAMA.h * 0.48, w: PANORAMA.w, h: PANORAMA.h * 0.44 },
-    join(OUT, 'parallax_near.png'),
-    { width: LEVEL_W, height: 260, brightness: 0.58, blur: 3, alphaRampTop: true },
-  );
+  const meta = await sharp(BOARDS.tutorial).metadata();
+  const ext = {
+    left: Math.round(PANORAMA.x * meta.width),
+    top: Math.round(PANORAMA.y * meta.height),
+    width: Math.round(PANORAMA.w * meta.width),
+    height: Math.round(PANORAMA.h * meta.height),
+  };
+  const outPath = join(OUT, 'playfield.png');
+  const scaledHeight = Math.round(ext.height * (LEVEL_W / ext.width));
+  const verticalPad = Math.max(0, VIEW_H - scaledHeight);
+  await sharp(BOARDS.tutorial)
+    .extract(ext)
+    .resize({ width: LEVEL_W, kernel: 'lanczos3' })
+    .sharpen({ sigma: 0.35 })
+    .extend({
+      top: Math.floor(verticalPad / 2),
+      bottom: Math.ceil(verticalPad / 2),
+      background: { r: 5, g: 7, b: 10, alpha: 1 },
+    })
+    .resize(LEVEL_W, VIEW_H, { fit: 'fill', kernel: 'lanczos3' })
+    .png()
+    .toFile(outPath);
+  await copyFile(BOARDS.menu, join(OUT, 'menu_keyart.jpeg'));
+  await copyFile(BOARDS.world, join(OUT, 'world_map_board.png'));
+  await copyFile(BOARDS.boss, join(OUT, 'boss_guardian_board.png'));
   report.parallax = {
-    far: { asset: `${ASSET_BASE}/parallax_far.png`, factor: 0.22, ...far },
-    mid: { asset: `${ASSET_BASE}/parallax_mid.png`, factor: 0.5, ...mid },
-    near: { asset: `${ASSET_BASE}/parallax_near.png`, factor: 0.78, yTop: 300, ...near },
+    playfield: { asset: `${ASSET_BASE}/playfield.png`, factor: 1, width: LEVEL_W, height: VIEW_H },
+  };
+  report.screens = {
+    menu: { asset: `${ASSET_BASE}/menu_keyart.jpeg`, source: 'menu_keyart.jpeg' },
+    world_map: { asset: `${ASSET_BASE}/world_map_board.png`, source: 'world_map_board.png' },
+    boss_reference: { asset: `${ASSET_BASE}/boss_guardian_board.png`, source: 'boss_guardian_board.png', runtimeEligible: false },
   };
 }
 
@@ -185,11 +174,14 @@ export async function generateEchoesFaithfulHd() {
       hero: 'hero_echo_front.png',
       enemies: 'enemy_family_board.png + sporeling_detail_board.png',
       boss: 'boss_guardian_board.png',
-      parallax: 'level_test_01_board.png',
+      playfield: 'tutorial_overview_board.png (clean level-map strip)',
+      menu: 'menu_keyart.jpeg (byte-identical copy)',
+      world_map: 'world_map_board.png (byte-identical copy)',
       platforms: 'sporale_cliffs_board.png (modular tiles strip)',
     },
     sprites: [],
     parallax: null,
+    screens: null,
     platforms: null,
   };
   await genSprites(report);
@@ -208,6 +200,7 @@ export async function generateEchoesFaithfulHd() {
     enemies: byKind,
     sprites: report.sprites,
     parallax: report.parallax,
+    screens: report.screens,
     platforms: report.platforms,
     level: { width: LEVEL_W, viewHeight: VIEW_H },
   };

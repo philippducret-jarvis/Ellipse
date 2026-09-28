@@ -1,0 +1,28 @@
+{
+  "hero_id": "lysael",
+  "checked_at": "2026-09-24T06:59:24.617Z",
+  "technical_passed": true,
+  "width": 1024,
+  "height": 1536,
+  "sha256": "9a9ebbc7ca1915d0594d381cf91c6592effc8267f614cded0d2fd54b7d7d8cdc",
+  "alpha": {
+    "present": true,
+    "fully_transparent_fraction": 0.3359394073486328,
+    "solid_fraction": 0.5229994455973307
+  },
+  "visual_status": "review",
+  "fidelity_approved": false,
+  "runtime_ready": false,
+  "observations": [
+    "Cheveux ivoire ondulés, traits doux et couronne de branches",
+    "Robe ivoire, or végétal, feuillage vert et fleurs blanches",
+    "Bâton floral à cage lumineuse sphérique",
+    "Drapés fins, bijoux verts et sandales végétales"
+  ],
+  "remaining": [
+    "Comparer les détails du visage et des ornements à la référence",
+    "Nettoyer les éventuels halos et pixels de fond",
+    "Séparer les éléments pour le rig",
+    "Produire et vérifier les animations en mouvement"
+  ]
+}

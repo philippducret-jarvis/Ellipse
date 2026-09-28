@@ -1,0 +1,28 @@
+{
+  "hero_id": "seraphine",
+  "checked_at": "2026-09-24T06:59:24.617Z",
+  "technical_passed": true,
+  "width": 1024,
+  "height": 1536,
+  "sha256": "8ce57c326c464177a80ec8c8944223d568aedffb9cfb114d622fa26f813d81d9",
+  "alpha": {
+    "present": true,
+    "fully_transparent_fraction": 0.374664306640625,
+    "solid_fraction": 0.5504805246988932
+  },
+  "visual_status": "review",
+  "fidelity_approved": false,
+  "runtime_ready": false,
+  "observations": [
+    "Visage pâle, yeux rubis, cheveux argentés",
+    "Armure noire à filigranes dorés et étoffes cramoisies",
+    "Couronne de ronces et roses rouges",
+    "Lame de cristal rouge, silhouette élancée"
+  ],
+  "remaining": [
+    "Comparer les détails du visage et des ornements à la référence",
+    "Nettoyer les éventuels halos et pixels de fond",
+    "Séparer les éléments pour le rig",
+    "Produire et vérifier les animations en mouvement"
+  ]
+}

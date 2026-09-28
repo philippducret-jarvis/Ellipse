@@ -1,0 +1,7 @@
+{
+  "tool": "image_gen",
+  "mode": "built_in",
+  "reference": "01_inputs/references/partie-2/ruines_de_l_aube_sous_la_lune_rouge.png",
+  "output": "03_assets/environments/ruins-trial-v1.png",
+  "prompt": "Use case: game-environment. Asset type: high detail landscape background for Shadow Echoes playable mythic hero combat trial. Input image 1 is a STYLE AND ARCHITECTURE REFERENCE ONLY, not a UI to reproduce. Create a new clean landscape cinematic environment plate, 1536x1024 or wider: the Ruins of Dawn, richly detailed dark gothic cathedral ruins and stone arcades, immense blood red moon behind distant spires, burnt crimson banners, carved stone, golden fire in braziers, cool ash mist. Match the supplied reference's painterly realism, intricate stonework, material richness and restrained dark red/gold palette. View from a low side-facing camera onto a broad flat stone terrace where characters will be composited. Ground plane occupies bottom quarter, unobstructed center and lower half for four hero sprites. Architecture frames edges and recedes in depth; clear silhouette contrast for light and dark costumes. No characters, no enemies, no interface, no panels, no text, no logos, no bars, no icons, no buttons. This is an actual game backdrop, not a screenshot or mockup."
+}

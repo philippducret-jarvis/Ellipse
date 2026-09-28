@@ -1,0 +1,137 @@
+{
+  "passed": true,
+  "checks": [
+    "Hub, quatre héros, invocation réelle, fragments, élévation, sélection et quête sans double paiement",
+    "Niveaux runes, alchimie, expédition, mémoire, dés et pêche gagnés par leurs commandes",
+    "Sauvegarde, rechargement, export, import valide avec confirmation et rejet d’un fichier corrompu",
+    "Sept écrans du hub vérifiés à 390 px sans débordement"
+  ],
+  "errors": [],
+  "profile": {
+    "version": 1,
+    "progressionVersion": 2,
+    "essence": 6,
+    "gearRanks": {},
+    "gold": 910,
+    "sigils": 10,
+    "xp": 600,
+    "selected": "voren",
+    "heroes": {
+      "seraphine": {
+        "level": 1,
+        "xp": 0,
+        "ascension": 0,
+        "talents": {},
+        "copies": 1,
+        "fragments": 0,
+        "relic": null,
+        "gear": {
+          "weapon": "roseblade",
+          "armor": null,
+          "accessory": null
+        }
+      },
+      "nyxara": {
+        "level": 1,
+        "xp": 0,
+        "ascension": 0,
+        "talents": {},
+        "copies": 1,
+        "fragments": 0,
+        "relic": "moon",
+        "gear": {
+          "weapon": "nightstaff",
+          "armor": null,
+          "accessory": null
+        }
+      },
+      "lysael": {
+        "level": 1,
+        "xp": 0,
+        "ascension": 0,
+        "talents": {},
+        "copies": 1,
+        "fragments": 0,
+        "relic": null,
+        "gear": {
+          "weapon": "dawnstaff",
+          "armor": null,
+          "accessory": null
+        }
+      },
+      "voren": {
+        "level": 5,
+        "xp": 10,
+        "ascension": 0,
+        "talents": {},
+        "copies": 2,
+        "fragments": 0,
+        "relic": null,
+        "gear": {
+          "weapon": "emberaxe",
+          "armor": null,
+          "accessory": null
+        }
+      }
+    },
+    "equipment": [
+      "roseblade",
+      "nightstaff",
+      "dawnstaff",
+      "emberaxe",
+      "veilrobe",
+      "bloodring"
+    ],
+    "relics": [
+      "moon",
+      "vial",
+      "mirror",
+      "pearl"
+    ],
+    "modes": {
+      "runes": {
+        "wins": 1,
+        "best": 900,
+        "attempts": 1
+      },
+      "alchemy": {
+        "wins": 1,
+        "best": 1000,
+        "attempts": 1
+      },
+      "expedition": {
+        "wins": 1,
+        "best": 75,
+        "attempts": 1
+      },
+      "memory": {
+        "wins": 1,
+        "best": 820,
+        "attempts": 1
+      },
+      "dice": {
+        "wins": 1,
+        "best": 38,
+        "attempts": 1
+      },
+      "fishing": {
+        "wins": 1,
+        "best": 1000,
+        "attempts": 1
+      }
+    },
+    "summons": 1,
+    "history": [
+      "voren"
+    ],
+    "claimed": [
+      "summon"
+    ],
+    "active": null,
+    "settings": {
+      "sound": false,
+      "motion": true
+    },
+    "revision": 20
+  }
+}

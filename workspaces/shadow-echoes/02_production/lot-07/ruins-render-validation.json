@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "checks": [
+    "Rendu après regroupement des géométries",
+    "Pause et reprise",
+    "Arène atteinte par les commandes de jeu et inspectée"
+  ],
+  "stage": 2,
+  "seconds": 11.000000000000126,
+  "survivors": 4,
+  "drawCalls": 591,
+  "triangles": 336160,
+  "errors": [],
+  "scope": "Render counters from desktop headless Chromium; not a device performance benchmark."
+}

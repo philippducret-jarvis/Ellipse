@@ -4,10 +4,17 @@
 import type { Application } from 'pixi.js';
 import type { GameDefinition } from '@ellipse/shared';
 import { applyScene } from '../sim/world.js';
+import {
+  activateVeloriaAbility,
+  moveVeloriaLane,
+  resetVeloriaRun,
+  type VeloriaAbilitySlot,
+} from '../sim/veloria-survival.js';
 import type { EllipseEngine, EngineOptions } from '../index.js';
 import { VeloriaHudLayer } from './veloria-hud.js';
 import { VeloriaHazardLayer } from './veloria-hazard.js';
 import { VeloriaScreenLayer, loadTexture, type VeloriaScreenId } from './veloria-screens.js';
+import { VeloriaCombatFxLayer } from './veloria-combat-fx.js';
 
 export interface VeloriaEngineOptions extends Omit<EngineOptions, 'shouldSimulate' | 'afterRender' | 'veloriaMode'> {
   hudOverlayUrl?: string;
@@ -21,23 +28,26 @@ export class VeloriaEngine {
   private levelIndex = 0;
   private screen: VeloriaScreenId = 'hub';
   private invokeShown = false;
-  private runTimer = 0;
-  private combo = 0;
   private score = 0;
   private bannerTimer = 0;
   private hud: VeloriaHudLayer;
   private hazard: VeloriaHazardLayer | null = null;
   private screens: VeloriaScreenLayer;
+  private combatFx: VeloriaCombatFxLayer;
   private heroTex: import('pixi.js').Texture | null = null;
   private hubTex: import('pixi.js').Texture | null = null;
   private viewW = 720;
   private viewH = 1280;
   private keyHandlerDown: ((e: KeyboardEvent) => void) | null = null;
   private keyHandlerUp: ((e: KeyboardEvent) => void) | null = null;
+  private pointerStart: { x: number; y: number } | null = null;
+  private pointerHandlerDown: ((e: PointerEvent) => void) | null = null;
+  private pointerHandlerUp: ((e: PointerEvent) => void) | null = null;
 
   constructor() {
     this.hud = new VeloriaHudLayer(720, 1280);
     this.screens = new VeloriaScreenLayer(720, 1280);
+    this.combatFx = new VeloriaCombatFxLayer(720, 1280);
   }
 
   get application(): Application | null {
@@ -51,6 +61,7 @@ export class VeloriaEngine {
     this.viewH = options.height ?? 1280;
     this.hud = new VeloriaHudLayer(this.viewW, this.viewH);
     this.screens = new VeloriaScreenLayer(this.viewW, this.viewH);
+    this.combatFx = new VeloriaCombatFxLayer(this.viewW, this.viewH);
 
     await this.core.init({
       ...options,
@@ -62,12 +73,13 @@ export class VeloriaEngine {
     const app = this.core.getApplication();
     if (!app) return;
     app.stage.sortableChildren = true;
-    app.stage.addChild(this.hud.root, this.screens.root);
+    this.attachOverlayLayers();
     if (options.hudOverlayUrl) await this.hud.loadOverlay(options.hudOverlayUrl);
     if (options.heroSpriteUrl) this.heroTex = await loadTexture(options.heroSpriteUrl);
     if (options.hubBgUrl) this.hubTex = await loadTexture(options.hubBgUrl);
 
     this.bindKeys();
+    this.bindPointer();
   }
 
   async loadGDL(gdl: GameDefinition): Promise<void> {
@@ -75,7 +87,9 @@ export class VeloriaEngine {
     this.gdl = gdl;
     this.levelIndex = 0;
     this.screen = 'hub';
+    this.score = 0;
     await this.core.loadGDL(gdl);
+    this.attachOverlayLayers();
     this.setupHazardLayer();
     this.refreshOverlays();
   }
@@ -85,15 +99,11 @@ export class VeloriaEngine {
     this.levelIndex = index;
     const world = this.core.getSimWorld();
     if (!world) return;
-    world.sceneIndex = index;
     applyScene(world, index);
-    world.gameOver = false;
-    world.levelWon = false;
-    world.message = '';
-    this.runTimer = 0;
-    this.combo = 0;
+    resetVeloriaRun(world);
     this.score = 0;
     await this.core.rebuildScene();
+    this.attachOverlayLayers();
     this.setupHazardLayer();
     this.screen = 'combat';
     this.refreshOverlays();
@@ -132,19 +142,36 @@ export class VeloriaEngine {
   private bindKeys(): void {
     this.keyHandlerDown = (e: KeyboardEvent) => {
       const k = e.key.toLowerCase();
+      if (this.screen === 'blessing' && ['1', '2', '3'].includes(k)) {
+        e.preventDefault();
+        this.core?.handleVeloriaDraftKey(k);
+        if (!this.isDraftActive()) {
+          this.screen = 'combat';
+          this.bannerTimer = 1.8;
+        }
+        return;
+      }
       if (k === 'enter' || k === ' ') {
         e.preventDefault();
         this.onConfirm();
+        return;
       }
-      if (k >= '1' && k <= '6') {
+      if (k === 'escape') {
+        if (this.screen !== 'hub') {
+          this.screen = 'hub';
+          this.refreshOverlays();
+        }
+        return;
+      }
+      const abilitySlot = abilitySlotForKey(k);
+      if (this.screen === 'combat' && abilitySlot != null) {
+        e.preventDefault();
+        this.activateAbility(abilitySlot);
+        return;
+      }
+      if (this.screen === 'hub' && k >= '1' && k <= '6') {
         const idx = parseInt(k, 10) - 1;
-        if (this.screen === 'hub') void this.switchLevel(idx).then(() => this.startRun(false));
-        else if (this.screen === 'combat' && !this.isDraftActive()) void this.switchLevel(idx);
-      }
-      if (this.screen === 'combat' && this.isDraftActive() && ['1', '2', '3'].includes(k)) {
-        this.core?.handleVeloriaDraftKey(e.key);
-        this.screen = 'combat';
-        this.bannerTimer = 1.8;
+        void this.switchLevel(idx).then(() => this.startRun(false));
       }
     };
     this.keyHandlerUp = (e: KeyboardEvent) => {
@@ -159,13 +186,19 @@ export class VeloriaEngine {
     else if (this.screen === 'invoke') {
       this.screen = 'combat';
       this.bannerTimer = 1.5;
-    } else if (this.screen === 'victory' || this.screen === 'game_over') {
+    } else if (this.screen === 'game_over') {
+      this.startRun(false);
+    } else if (this.screen === 'victory') {
       this.screen = 'hub';
       this.refreshOverlays();
     }
   }
 
   private startRun(fromHub: boolean): void {
+    const world = this.core?.getSimWorld();
+    if (!world) return;
+    resetVeloriaRun(world);
+    this.score = 0;
     if (fromHub && !this.invokeShown) {
       this.screen = 'invoke';
       this.invokeShown = true;
@@ -173,8 +206,98 @@ export class VeloriaEngine {
       this.screen = 'combat';
       this.bannerTimer = 1.5;
     }
-    this.runTimer = 0;
     this.refreshOverlays();
+  }
+
+  private activateAbility(slot: VeloriaAbilitySlot): void {
+    const world = this.core?.getSimWorld();
+    if (!world || !activateVeloriaAbility(world, slot)) return;
+    this.combatFx.triggerAbility(slot);
+    this.bannerTimer = slot === 3 ? 1.2 : 0.45;
+  }
+
+  private bindPointer(): void {
+    const canvas = this.core?.getApplication()?.canvas;
+    if (!canvas) return;
+    this.pointerHandlerDown = (e: PointerEvent) => {
+      const point = this.pointerPoint(e);
+      if (!point) return;
+      if (this.screen === 'blessing') {
+        const pick = this.blessingAt(point.x, point.y);
+        if (pick != null) {
+          this.core?.handleVeloriaDraftKey(String(pick + 1));
+          if (!this.isDraftActive()) {
+            this.screen = 'combat';
+            this.bannerTimer = 1.8;
+          }
+          this.pointerStart = null;
+          e.preventDefault();
+        }
+        return;
+      }
+      const skill = this.skillAt(point.x, point.y);
+      if (this.screen === 'combat' && skill != null) {
+        this.activateAbility(skill);
+        this.pointerStart = null;
+        e.preventDefault();
+        return;
+      }
+      this.pointerStart = point;
+    };
+    this.pointerHandlerUp = (e: PointerEvent) => {
+      const start = this.pointerStart;
+      const end = this.pointerPoint(e);
+      this.pointerStart = null;
+      if (!start || !end) return;
+      const dx = end.x - start.x;
+      const dy = end.y - start.y;
+      if (this.screen !== 'combat') {
+        if (Math.hypot(dx, dy) < 32) this.onConfirm();
+        e.preventDefault();
+        return;
+      }
+      const direction: -1 | 1 = Math.abs(dx) >= 28 ? (dx < 0 ? -1 : 1) : end.x < this.viewW / 2 ? -1 : 1;
+      const world = this.core?.getSimWorld();
+      if (world) moveVeloriaLane(world, direction);
+      e.preventDefault();
+    };
+    canvas.addEventListener('pointerdown', this.pointerHandlerDown);
+    canvas.addEventListener('pointerup', this.pointerHandlerUp);
+  }
+
+  private pointerPoint(e: PointerEvent): { x: number; y: number } | null {
+    const canvas = this.core?.getApplication()?.canvas;
+    if (!canvas) return null;
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) return null;
+    return {
+      x: ((e.clientX - rect.left) / rect.width) * this.viewW,
+      y: ((e.clientY - rect.top) / rect.height) * this.viewH,
+    };
+  }
+
+  private skillAt(x: number, y: number): VeloriaAbilitySlot | null {
+    if (x < this.viewW - 150) return null;
+    for (let i = 0; i < 4; i++) {
+      const cy = 450 + i * 112;
+      const radius = i === 3 ? 66 : 56;
+      if (Math.abs(y - cy) <= radius) return i as VeloriaAbilitySlot;
+    }
+    return null;
+  }
+
+  private blessingAt(x: number, y: number): number | null {
+    const picks = this.core?.getSimWorld()?.veloria?.draftOptions ?? [];
+    if (!picks.length || y < this.viewH * 0.42 || y > this.viewH * 0.42 + 260) return null;
+    const cardW = 200;
+    const gap = 16;
+    const total = picks.length * cardW + (picks.length - 1) * gap;
+    const left = (this.viewW - total) / 2;
+    for (let i = 0; i < picks.length; i++) {
+      const cardLeft = left + i * (cardW + gap);
+      if (x >= cardLeft && x <= cardLeft + cardW) return i;
+    }
+    return null;
   }
 
   private onAfterRender(dtMs: number): void {
@@ -182,31 +305,46 @@ export class VeloriaEngine {
     const world = this.core?.getSimWorld();
     const scene = this.currentScene();
     const veloria = (scene as { veloria?: { encounters?: { total_waves?: number } } })?.veloria;
+    this.combatFx.update(world ?? null, dt, this.screen === 'combat' || this.screen === 'blessing');
 
-    if (world?.gameOver && this.screen === 'combat') {
+    if (world?.gameOver && (this.screen === 'combat' || this.screen === 'blessing')) {
       this.screen = 'game_over';
       this.score = world.player.score;
-    }
-    if (world?.levelWon && this.screen === 'combat') {
+    } else if (world?.levelWon && (this.screen === 'combat' || this.screen === 'blessing')) {
       this.screen = 'victory';
       this.score = world.player.score;
+    } else if (world?.veloria?.draftActive && this.screen === 'combat') {
+      this.screen = 'blessing';
+    } else if (!world?.veloria?.draftActive && this.screen === 'blessing') {
+      this.screen = 'combat';
     }
-    if (world?.veloria?.draftActive) this.screen = 'blessing';
 
     if (this.screen === 'combat' && world) {
-      this.runTimer += dt;
       if (this.bannerTimer > 0) this.bannerTimer -= dt;
       this.hazard?.update(world.veloria, dt);
+      const v = world.veloria;
+      const boss = world.enemies.find((enemy) => enemy.alive && (enemy as { isBoss?: boolean }).isBoss) as
+        | { hp?: number; maxHp?: number; phase?: number; kind?: string }
+        | undefined;
       this.hud.update({
         visible: true,
-        wave: world.veloria?.waveNumber ?? 1,
+        wave: v?.waveNumber ?? 1,
         totalWaves: veloria?.encounters?.total_waves ?? 12,
-        timerSec: this.runTimer,
+        timerSec: Math.max(0, ((v?.runDurationMs ?? 180_000) - (v?.runElapsedMs ?? 0)) / 1_000),
         arenaTitle: (scene as { title?: string })?.title,
         hp: world.player.health,
         maxHp: world.player.maxHealth,
-        combo: this.combo,
-        ultReady: false,
+        combo: v?.combo ?? 0,
+        ultReady: (v?.ultimateCharge ?? 0) >= 100,
+        ultimateCharge: v?.ultimateCharge ?? 0,
+        skillCooldownsMs: v?.skillCooldownsMs ?? [0, 0, 0, 0],
+        guardCharges: v?.guardCharges ?? 0,
+        bossHp: boss?.hp,
+        bossMaxHp: boss?.maxHp,
+        bossPhase: boss?.phase,
+        bossName: boss?.kind === 'bourreau'
+          ? 'BOURREAU DU CRÉPUSCULE'
+          : boss?.kind?.replaceAll('_', ' ').toUpperCase(),
       });
     } else {
       this.hud.update({ visible: false, wave: 0, totalWaves: 0, timerSec: 0, hp: 0, maxHp: 1, combo: 0 });
@@ -219,7 +357,8 @@ export class VeloriaEngine {
       arenaTitle: (scene as { title?: string })?.title,
       blessingPicks: this.screen === 'blessing' ? world?.veloria?.draftOptions : undefined,
       heroTexture: this.heroTex,
-      bgTexture: this.screen === 'hub' ? this.hubTex : null,
+      bgTexture: this.screen === 'hub' || this.screen === 'invoke' ? this.hubTex : null,
+      dtSec: dt,
     });
   }
 
@@ -227,13 +366,32 @@ export class VeloriaEngine {
     this.onAfterRender(0);
   }
 
+  private attachOverlayLayers(): void {
+    const app = this.core?.getApplication();
+    if (!app) return;
+    app.stage.sortableChildren = true;
+    app.stage.addChild(this.combatFx.root, this.hud.root, this.screens.root);
+  }
+
   destroy(): void {
     if (this.keyHandlerDown) window.removeEventListener('keydown', this.keyHandlerDown);
     if (this.keyHandlerUp) window.removeEventListener('keyup', this.keyHandlerUp);
+    const canvas = this.core?.getApplication()?.canvas;
+    if (canvas && this.pointerHandlerDown) canvas.removeEventListener('pointerdown', this.pointerHandlerDown);
+    if (canvas && this.pointerHandlerUp) canvas.removeEventListener('pointerup', this.pointerHandlerUp);
     this.hud.dispose();
+    this.combatFx.dispose();
     this.hazard?.dispose();
     this.screens.dispose();
     this.core?.destroy();
     this.core = null;
   }
+}
+
+function abilitySlotForKey(key: string): VeloriaAbilitySlot | null {
+  if (key === 'z') return 0;
+  if (key === 'x') return 1;
+  if (key === 'c') return 2;
+  if (key === 'v') return 3;
+  return null;
 }

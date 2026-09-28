@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1600" viewBox="0 0 900 1600">
+  <defs>
+    <radialGradient id="portal"><stop offset="0" stop-color="#67e8f9" stop-opacity=".7"/><stop offset=".48" stop-color="#6d28d9" stop-opacity=".45"/><stop offset="1" stop-color="#050711" stop-opacity="0"/></radialGradient>
+    <linearGradient id="gauge"><stop stop-color="#67e8f9"/><stop offset=".55" stop-color="#a78bfa"/><stop offset="1" stop-color="#f472b6"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="900" height="1600" fill="#050711"/>
+  <circle cx="702" cy="256" r="370" fill="#111c3c" opacity=".45"/>
+  <text x="54" y="110" fill="#fff4dc" font-family="Inter,Segoe UI,sans-serif" font-size="48" font-weight="850" text-anchor="start">MIRA — ORACLE DES MARÉES</text>
+  <text x="54" y="165" fill="#a9a4b8" font-family="Inter,Segoe UI,sans-serif" font-size="25" font-weight="450" text-anchor="start">Modèle 3D rotatif, statistiques, histoire et voix</text>
+  <text x="846" y="110" fill="#67e8f9" font-family="Inter,Segoe UI,sans-serif" font-size="22" font-weight="800" text-anchor="end">MOBILE • UX DRAFT</text>
+  
+  <rect x="54" y="280" width="792" height="990" rx="30" fill="#090d1c" stroke="#252c47" stroke-width="2"/>
+  
+      <circle cx="608.4" cy="656.2" r="250" fill="url(#portal)" opacity=".8"/>
+      <path d="M 84 1170 Q 450 1050 816 1180 L 816 1270 L 84 1270 Z" fill="#151b32"/>
+      
+    <g opacity=".94">
+      <ellipse cx="592.5600000000001" cy="1235" rx="131.1" ry="30.36" fill="#050711" opacity=".7"/>
+      <circle cx="592.5600000000001" cy="811" r="57.959999999999994" fill="#d7a98d"/>
+      <path d="M 530.46 799.96 Q 592.5600000000001 707.5 668.46 816.52 Q 620.1600000000001 777.88 530.46 799.96" fill="#20243b"/>
+      <path d="M 512.5200000000001 882.76 Q 592.5600000000001 838.6 678.12 882.76 L 709.86 1149.1 Q 592.5600000000001 1204.3 479.4000000000001 1149.1 Z" fill="#181d35" stroke="#67e8f9" stroke-width="4.14"/>
+      <path d="M 522.1800000000001 891.04 L 447.6600000000001 1073.2" stroke="#d7a98d" stroke-width="34.5" stroke-linecap="round"/>
+      <path d="M 665.7 891.04 L 747.1200000000001 1048.3600000000001" stroke="#d7a98d" stroke-width="34.5" stroke-linecap="round"/>
+      <path d="M 542.8800000000001 1128.4 L 523.5600000000001 1225" stroke="#111529" stroke-width="46.919999999999995" stroke-linecap="round"/>
+      <path d="M 642.24 1128.4 L 661.5600000000001 1225" stroke="#111529" stroke-width="46.919999999999995" stroke-linecap="round"/>
+      <circle cx="592.5600000000001" cy="983.5" r="23.459999999999997" fill="#67e8f9" filter="url(#glow)"/>
+    </g>
+      <rect x="92" y="324" width="716" height="210" rx="24" fill="#111529" fill-opacity=".9" stroke="#67e8f9" stroke-opacity=".6"/>
+      <text x="126" y="378" fill="#67e8f9" font-family="Inter,Segoe UI,sans-serif" font-size="28" font-weight="800" text-anchor="start">MODÈLE 3D / LIEU</text>
+      <text x="126" y="425" fill="#fff4dc" font-family="Inter,Segoe UI,sans-serif" font-size="34" font-weight="700" text-anchor="start">GUARDIAN DETAIL</text>
+      <text x="126" y="475" fill="#a9a4b8" font-family="Inter,Segoe UI,sans-serif" font-size="25" font-weight="500" text-anchor="start">Caméra, lumière et animation</text>
+  <rect x="54" y="1350" width="256" height="68" rx="20" fill="#111529" stroke="#67e8f9"/><text x="182" y="1393" fill="#fff4dc" font-family="Inter,Segoe UI,sans-serif" font-size="18" font-weight="650" text-anchor="middle">Niveau 60</text><rect x="322" y="1350" width="256" height="68" rx="20" fill="#111529" stroke="#343a57"/><text x="450" y="1393" fill="#fff4dc" font-family="Inter,Segoe UI,sans-serif" font-size="18" font-weight="650" text-anchor="middle">Affinité 7</text><rect x="590" y="1350" width="256" height="68" rx="20" fill="#111529" stroke="#343a57"/><text x="718" y="1393" fill="#fff4dc" font-family="Inter,Segoe UI,sans-serif" font-size="18" font-weight="650" text-anchor="middle">Tenues 3/4</text>
+  <rect x="54" y="1455" width="792" height="82" rx="28" fill="#5f42a8" stroke="#67e8f9" stroke-width="3"/>
+  <text x="450" y="1508" fill="#fff4dc" font-family="Inter,Segoe UI,sans-serif" font-size="26" font-weight="850" text-anchor="middle">ESSAYER</text>
+  <text x="54" y="1576" fill="#a9a4b8" font-family="Inter,Segoe UI,sans-serif" font-size="16" font-weight="600" text-anchor="start">MAQUETTE UX — COMPOSITION ET HIÉRARCHIE, PAS UN ASSET FINAL</text>
+</svg>

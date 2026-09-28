@@ -1,0 +1,26 @@
+{
+  "hero_id": "voren",
+  "checked_at": "2026-09-24T06:57:12.057Z",
+  "source_sha256": "fc3fe5834c5a055cc746d89d9fdab1a6e398e2f44f5807d84760c2be70660ac8",
+  "source_unchanged": true,
+  "bones": 8,
+  "vertices": 2501,
+  "triangles": 4800,
+  "sampled_poses": 248,
+  "geometry": {
+    "inverted_triangles": 0,
+    "min_area_ratio": 0.7636782281167027,
+    "max_edge_stretch": 1.2251923316504674,
+    "max_neutral_error_px": 0.00018310546875
+  },
+  "technical_passed": true,
+  "artistic_status": "review",
+  "fidelity_approved": false,
+  "anatomical_layers": false,
+  "limitations": [
+    "Maillage de déformation sur une illustration entière",
+    "Pas de faces cachées ni de rotation en profondeur",
+    "Ornements et rigidité des armes à examiner en mouvement",
+    "Rigs articulés sur calques séparés et animations finales à produire"
+  ]
+}

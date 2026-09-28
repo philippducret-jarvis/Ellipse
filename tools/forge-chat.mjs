@@ -1,12 +1,12 @@
 /**
- * JARVIS — dialogue avec le studio en ligne de commande :
+ * ELLISPHERE — dialogue avec le studio en ligne de commande :
  *   pnpm forge:chat                      # REPL interactif
  *   pnpm forge:chat -- "ta question"     # un seul tour
  *
  * Vrai LLM (keyless par défaut), avec outils réels. Tape 'exit' pour quitter.
  */
 import readline from 'node:readline';
-import { jarvisTurn } from './lib/forge/brain/agent.mjs';
+import { ellisphereTurn } from './lib/forge/brain/agent.mjs';
 import { pickBrain } from './lib/forge/brain/providers.mjs';
 
 const oneShot = process.argv.slice(2).filter((a) => a !== '--').join(' ').trim();
@@ -16,7 +16,7 @@ if (!brain) {
   console.error('✗ Aucun cerveau conversationnel joignable (hors-ligne ?). Voies : Pollinations (keyless), Ollama local, ANTHROPIC_API_KEY.');
   process.exit(1);
 }
-console.log(`🤖 Jarvis en ligne (cerveau : ${brain.name}). ${oneShot ? '' : 'Écris ton message — « exit » pour quitter.'}\n`);
+console.log(`✦ Ellisphere en ligne (cerveau : ${brain.name}). ${oneShot ? '' : 'Écris ton message — « exit » pour quitter.'}\n`);
 
 let history = [];
 
@@ -24,11 +24,11 @@ async function turn(input) {
   history.push({ role: 'user', content: input });
   process.stdout.write('… ');
   const t0 = Date.now();
-  const { reply, actions, history: h } = await jarvisTurn(history);
+  const { reply, actions, history: h } = await ellisphereTurn(history);
   history = h;
   process.stdout.write('\r');
   for (const a of actions) console.log(`   ⚙ ${a.tool}(${JSON.stringify(a.args)})`);
-  console.log(`\n🤖 ${reply}   \x1b[2m(${((Date.now() - t0) / 1000).toFixed(1)}s)\x1b[0m\n`);
+  console.log(`\n✦ ${reply}   \x1b[2m(${((Date.now() - t0) / 1000).toFixed(1)}s)\x1b[0m\n`);
 }
 
 if (oneShot) {

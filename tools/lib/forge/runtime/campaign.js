@@ -61,14 +61,14 @@ export function storyBeats(gdl, moment, levelId = null) {
 export function startGame(c) {
   const intro = storyBeats(c.gdl, 'intro');
   if (intro.length && c.completed.length === 0) { c.screen = 'intro'; c.storyQueue = intro; c.storyIndex = 0; }
-  else c.screen = 'map';
+  else c.screen = 'hub';
 }
 
 export function advanceStory(c) {
   c.storyIndex++;
   if (c.storyIndex < c.storyQueue.length) return;
   // fin des dialogues → écran suivant selon le contexte
-  if (c.screen === 'intro') c.screen = 'map';
+  if (c.screen === 'intro') c.screen = 'hub';
   else if (c.screen === 'interlude') {
     c.screen = c.pendingRelicChoice ? 'relic' : afterInterlude(c);
   } else if (c.screen === 'outro') c.screen = 'credits';
@@ -76,7 +76,7 @@ export function advanceStory(c) {
 }
 
 function afterInterlude(c) {
-  return c.completed.length >= c.gdl.levels.length ? 'outro-start' : 'map';
+  return c.completed.length >= c.gdl.levels.length ? 'outro-start' : 'hub';
 }
 
 export function selectLevel(c, index) {
@@ -111,7 +111,14 @@ export function chooseRelic(c, relicId) {
   c.pendingRelicChoice = null;
   saveCampaign(c);
   if (c.completed.length >= c.gdl.levels.length) c.screen = 'outro-start';
-  else c.screen = 'map';
+  else c.screen = 'hub';
+}
+
+export function returnToHub(c) {
+  c.screen = 'hub';
+  c.storyQueue = [];
+  c.storyIndex = 0;
+  saveCampaign(c);
 }
 
 /** À appeler quand screen === 'outro-start' : lance les dialogues de fin. */

@@ -1,0 +1,630 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-29T19:11:08.364Z",
+  "status": "preproduction_complete_vertical_slice_blockout_started",
+  "summary": {
+    "passed": 122,
+    "failed": 0,
+    "documents": 14,
+    "adultGuardians": 24,
+    "assets3dSpecified": 112,
+    "uxScreens": 31,
+    "uxMockupVariants": 93,
+    "artDirectionBoards": 6
+  },
+  "commercialReady": false,
+  "nextGate": "vertical_slice_gold_master_mira_brann_aster_leviathan_drowned_harbor",
+  "failures": [],
+  "checks": [
+    {
+      "name": "document:README.md",
+      "ok": true,
+      "detail": "fichier requis"
+    },
+    {
+      "name": "document:00_VISION_ET_PILIERS.md",
+      "ok": true,
+      "detail": "fichier requis"
+    },
+    {
+      "name": "document:01_GDD_COMMERCIAL.md",
+      "ok": true,
+      "detail": "fichier requis"
+    },
+    {
+      "name": "document:02_REGLES_DETAILLEES.md",
+      "ok": true,
+      "detail": "fichier requis"
+    },
+    {
+      "name": "document:03_ROSTER_ET_PRODUCTION_3D.md",
+      "ok": true,
+      "detail": "fichier requis"
+    },
+    {
+      "name": "document:04_DIRECTION_ARTISTIQUE_ET_MAQUETTES.md",
+      "ok": true,
+      "detail": "fichier requis"
+    },
+    {
+      "name": "document:05_ECONOMIE_GACHA_ET_CONFORMITE.md",
+      "ok": true,
+      "detail": "fichier requis"
+    },
+    {
+      "name": "document:06_ARCHITECTURE_ET_PIPELINE.md",
+      "ok": true,
+      "detail": "fichier requis"
+    },
+    {
+      "name": "document:07_PLAN_DE_PRODUCTION.md",
+      "ok": true,
+      "detail": "fichier requis"
+    },
+    {
+      "name": "document:08_QA_ET_COMMERCIAL_GATES.md",
+      "ok": true,
+      "detail": "fichier requis"
+    },
+    {
+      "name": "document:09_ACTIVITES_SECONDAIRES.md",
+      "ok": true,
+      "detail": "fichier requis"
+    },
+    {
+      "name": "document:10_ETAT_REEL_ET_PROCHAINES_ETAPES.md",
+      "ok": true,
+      "detail": "fichier requis"
+    },
+    {
+      "name": "document:11_REPRISE_VISUELLE_GODOT_V3.md",
+      "ok": true,
+      "detail": "fichier requis"
+    },
+    {
+      "name": "document:12_CONFORMITE_MAQUETTES_RUNTIME_V4.md",
+      "ok": true,
+      "detail": "fichier requis"
+    },
+    {
+      "name": "roster:24",
+      "ok": true,
+      "detail": "24/24"
+    },
+    {
+      "name": "roster:adults",
+      "ok": true,
+      "detail": "tous les âges doivent être >= 18"
+    },
+    {
+      "name": "roster:contracts",
+      "ok": true,
+      "detail": "fichiers et animations requis"
+    },
+    {
+      "name": "inventory:112",
+      "ok": true,
+      "detail": "112/112"
+    },
+    {
+      "name": "ui:31",
+      "ok": true,
+      "detail": "31/31"
+    },
+    {
+      "name": "ui:93-variants",
+      "ok": true,
+      "detail": "93/93"
+    },
+    {
+      "name": "ui:drafts",
+      "ok": true,
+      "detail": "PC/mobile/accessible"
+    },
+    {
+      "name": "mockup:title:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/title--pc.svg"
+    },
+    {
+      "name": "mockup:title:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/title--mobile.svg"
+    },
+    {
+      "name": "mockup:title:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/title--accessible.svg"
+    },
+    {
+      "name": "mockup:onboarding:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/onboarding--pc.svg"
+    },
+    {
+      "name": "mockup:onboarding:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/onboarding--mobile.svg"
+    },
+    {
+      "name": "mockup:onboarding:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/onboarding--accessible.svg"
+    },
+    {
+      "name": "mockup:hub_pc:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/hub_pc--pc.svg"
+    },
+    {
+      "name": "mockup:hub_pc:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/hub_pc--mobile.svg"
+    },
+    {
+      "name": "mockup:hub_pc:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/hub_pc--accessible.svg"
+    },
+    {
+      "name": "mockup:hub_mobile:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/hub_mobile--pc.svg"
+    },
+    {
+      "name": "mockup:hub_mobile:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/hub_mobile--mobile.svg"
+    },
+    {
+      "name": "mockup:hub_mobile:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/hub_mobile--accessible.svg"
+    },
+    {
+      "name": "mockup:world_map:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/world_map--pc.svg"
+    },
+    {
+      "name": "mockup:world_map:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/world_map--mobile.svg"
+    },
+    {
+      "name": "mockup:world_map:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/world_map--accessible.svg"
+    },
+    {
+      "name": "mockup:mission_brief:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/mission_brief--pc.svg"
+    },
+    {
+      "name": "mockup:mission_brief:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/mission_brief--mobile.svg"
+    },
+    {
+      "name": "mockup:mission_brief:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/mission_brief--accessible.svg"
+    },
+    {
+      "name": "mockup:combat_pc:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/combat_pc--pc.svg"
+    },
+    {
+      "name": "mockup:combat_pc:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/combat_pc--mobile.svg"
+    },
+    {
+      "name": "mockup:combat_pc:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/combat_pc--accessible.svg"
+    },
+    {
+      "name": "mockup:combat_mobile:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/combat_mobile--pc.svg"
+    },
+    {
+      "name": "mockup:combat_mobile:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/combat_mobile--mobile.svg"
+    },
+    {
+      "name": "mockup:combat_mobile:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/combat_mobile--accessible.svg"
+    },
+    {
+      "name": "mockup:boss_phase_3:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/boss_phase_3--pc.svg"
+    },
+    {
+      "name": "mockup:boss_phase_3:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/boss_phase_3--mobile.svg"
+    },
+    {
+      "name": "mockup:boss_phase_3:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/boss_phase_3--accessible.svg"
+    },
+    {
+      "name": "mockup:guardian_switch:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/guardian_switch--pc.svg"
+    },
+    {
+      "name": "mockup:guardian_switch:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/guardian_switch--mobile.svg"
+    },
+    {
+      "name": "mockup:guardian_switch:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/guardian_switch--accessible.svg"
+    },
+    {
+      "name": "mockup:ultimate:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/ultimate--pc.svg"
+    },
+    {
+      "name": "mockup:ultimate:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/ultimate--mobile.svg"
+    },
+    {
+      "name": "mockup:ultimate:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/ultimate--accessible.svg"
+    },
+    {
+      "name": "mockup:overdrive:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/overdrive--pc.svg"
+    },
+    {
+      "name": "mockup:overdrive:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/overdrive--mobile.svg"
+    },
+    {
+      "name": "mockup:overdrive:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/overdrive--accessible.svg"
+    },
+    {
+      "name": "mockup:victory:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/victory--pc.svg"
+    },
+    {
+      "name": "mockup:victory:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/victory--mobile.svg"
+    },
+    {
+      "name": "mockup:victory:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/victory--accessible.svg"
+    },
+    {
+      "name": "mockup:defeat:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/defeat--pc.svg"
+    },
+    {
+      "name": "mockup:defeat:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/defeat--mobile.svg"
+    },
+    {
+      "name": "mockup:defeat:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/defeat--accessible.svg"
+    },
+    {
+      "name": "mockup:roster:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/roster--pc.svg"
+    },
+    {
+      "name": "mockup:roster:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/roster--mobile.svg"
+    },
+    {
+      "name": "mockup:roster:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/roster--accessible.svg"
+    },
+    {
+      "name": "mockup:guardian_detail:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/guardian_detail--pc.svg"
+    },
+    {
+      "name": "mockup:guardian_detail:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/guardian_detail--mobile.svg"
+    },
+    {
+      "name": "mockup:guardian_detail:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/guardian_detail--accessible.svg"
+    },
+    {
+      "name": "mockup:equipment:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/equipment--pc.svg"
+    },
+    {
+      "name": "mockup:equipment:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/equipment--mobile.svg"
+    },
+    {
+      "name": "mockup:equipment:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/equipment--accessible.svg"
+    },
+    {
+      "name": "mockup:wardrobe:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/wardrobe--pc.svg"
+    },
+    {
+      "name": "mockup:wardrobe:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/wardrobe--mobile.svg"
+    },
+    {
+      "name": "mockup:wardrobe:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/wardrobe--accessible.svg"
+    },
+    {
+      "name": "mockup:bond:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/bond--pc.svg"
+    },
+    {
+      "name": "mockup:bond:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/bond--mobile.svg"
+    },
+    {
+      "name": "mockup:bond:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/bond--accessible.svg"
+    },
+    {
+      "name": "mockup:summon_single:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/summon_single--pc.svg"
+    },
+    {
+      "name": "mockup:summon_single:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/summon_single--mobile.svg"
+    },
+    {
+      "name": "mockup:summon_single:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/summon_single--accessible.svg"
+    },
+    {
+      "name": "mockup:summon_ten:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/summon_ten--pc.svg"
+    },
+    {
+      "name": "mockup:summon_ten:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/summon_ten--mobile.svg"
+    },
+    {
+      "name": "mockup:summon_ten:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/summon_ten--accessible.svg"
+    },
+    {
+      "name": "mockup:shop:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/shop--pc.svg"
+    },
+    {
+      "name": "mockup:shop:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/shop--mobile.svg"
+    },
+    {
+      "name": "mockup:shop:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/shop--accessible.svg"
+    },
+    {
+      "name": "mockup:rates_history:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/rates_history--pc.svg"
+    },
+    {
+      "name": "mockup:rates_history:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/rates_history--mobile.svg"
+    },
+    {
+      "name": "mockup:rates_history:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/rates_history--accessible.svg"
+    },
+    {
+      "name": "mockup:rift:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/rift--pc.svg"
+    },
+    {
+      "name": "mockup:rift:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/rift--mobile.svg"
+    },
+    {
+      "name": "mockup:rift:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/rift--accessible.svg"
+    },
+    {
+      "name": "mockup:rhythm_game:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/rhythm_game--pc.svg"
+    },
+    {
+      "name": "mockup:rhythm_game:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/rhythm_game--mobile.svg"
+    },
+    {
+      "name": "mockup:rhythm_game:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/rhythm_game--accessible.svg"
+    },
+    {
+      "name": "mockup:astral_hunt:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/astral_hunt--pc.svg"
+    },
+    {
+      "name": "mockup:astral_hunt:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/astral_hunt--mobile.svg"
+    },
+    {
+      "name": "mockup:astral_hunt:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/astral_hunt--accessible.svg"
+    },
+    {
+      "name": "mockup:outfit_workshop:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/outfit_workshop--pc.svg"
+    },
+    {
+      "name": "mockup:outfit_workshop:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/outfit_workshop--mobile.svg"
+    },
+    {
+      "name": "mockup:outfit_workshop:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/outfit_workshop--accessible.svg"
+    },
+    {
+      "name": "mockup:settings:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/settings--pc.svg"
+    },
+    {
+      "name": "mockup:settings:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/settings--mobile.svg"
+    },
+    {
+      "name": "mockup:settings:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/settings--accessible.svg"
+    },
+    {
+      "name": "mockup:accessibility:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/accessibility--pc.svg"
+    },
+    {
+      "name": "mockup:accessibility:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/accessibility--mobile.svg"
+    },
+    {
+      "name": "mockup:accessibility:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/accessibility--accessible.svg"
+    },
+    {
+      "name": "mockup:download_content:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/download_content--pc.svg"
+    },
+    {
+      "name": "mockup:download_content:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/download_content--mobile.svg"
+    },
+    {
+      "name": "mockup:download_content:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/download_content--accessible.svg"
+    },
+    {
+      "name": "mockup:network_error:pc",
+      "ok": true,
+      "detail": "mockups/wireframes/network_error--pc.svg"
+    },
+    {
+      "name": "mockup:network_error:mobile",
+      "ok": true,
+      "detail": "mockups/wireframes/network_error--mobile.svg"
+    },
+    {
+      "name": "mockup:network_error:accessible",
+      "ok": true,
+      "detail": "mockups/wireframes/network_error--accessible.svg"
+    },
+    {
+      "name": "direction:01_hub_pc_direction.png",
+      "ok": true,
+      "detail": "PNG de direction"
+    },
+    {
+      "name": "direction:02_combat_pc_direction.png",
+      "ok": true,
+      "detail": "PNG de direction"
+    },
+    {
+      "name": "direction:03_combat_mobile_direction.png",
+      "ok": true,
+      "detail": "PNG de direction"
+    },
+    {
+      "name": "direction:04_roster_gacha_direction.png",
+      "ok": true,
+      "detail": "PNG de direction"
+    },
+    {
+      "name": "direction:05_side_games_direction.png",
+      "ok": true,
+      "detail": "PNG de direction"
+    },
+    {
+      "name": "direction:06_mira_3d_turnaround_direction.png",
+      "ok": true,
+      "detail": "PNG de direction"
+    },
+    {
+      "name": "roster:24-contracts-on-disk",
+      "ok": true,
+      "detail": "24/24"
+    },
+    {
+      "name": "truth:no-fake-3d-claim",
+      "ok": true,
+      "detail": "aucun blockout ne doit être déclaré modèle final"
+    }
+  ]
+}

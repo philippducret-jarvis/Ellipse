@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="fr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark"><title>Shadow Echoes · Atelier du mouvement</title><link rel="stylesheet" href="./motion.css"></head>
+<body>
+  <header><a class="brand" href="./heroes.html">✥ SHADOW ECHOES<small>ATELIER DU MOUVEMENT</small></a><nav><a href="./layers.html">Calques de Séraphine</a><a href="./heroes.html">Les Mythiques</a><a class="play-link" href="./play.html">Jouer l’épreuve ↗</a></nav></header>
+  <main>
+    <section class="intro"><div><p class="eyebrow">LOT 03 · ÉTUDE DE DÉFORMATION</p><h1>Le détail prend vie.</h1></div><p>Un premier mouvement sur les illustrations HD.<br>Comparer, ralentir, observer chaque articulation.</p></section>
+    <nav id="heroes" class="hero-tabs" aria-label="Choisir le héros à animer"></nav>
+    <section class="workspace">
+      <aside class="controls"><p class="eyebrow">MOUVEMENTS</p><div id="clips" class="clip-list"></div><div class="control-section"><label for="speed">Vitesse de lecture</label><select id="speed"><option value="0.25">¼ · image par image</option><option value="0.5">½ · ralenti</option><option value="1" selected>1 × · normale</option></select><label for="strength">Amplitude <output id="strength-value">100 %</output></label><input id="strength" type="range" min="0" max="1" value="1" step="0.05"><label class="toggle"><input id="loop" type="checkbox" checked> Lecture en boucle</label></div><div class="control-section"><p class="eyebrow">INSPECTION</p><label class="toggle"><input id="bones" type="checkbox"> Articulations</label><label class="toggle"><input id="wireframe" type="checkbox"> Maillage</label><label class="toggle"><input id="checker" type="checkbox"> Fond de transparence</label><label for="weights">Zone d’influence</label><select id="weights"><option value="">Illustration</option></select></div><a id="source-link" target="_blank" rel="noopener">Fiche d’origine ↗</a><a id="rig-link" target="_blank" rel="noopener">Données du rig ↗</a></aside>
+      <div class="review">
+        <div class="comparison"><figure><figcaption><span>ILLUSTRATION HD</span><b>POSE FIXE</b></figcaption><div class="art-stage"><img id="reference" alt="Illustration fixe du héros"></div></figure><figure><figcaption><span id="motion-label">ATTENTE</span><b>MAILLAGE V1</b></figcaption><div id="actor-host" class="art-stage"><img id="fallback" alt="Illustration de secours"></div></figure></div>
+        <div class="transport"><button id="toggle" class="primary">Pause</button><button id="restart">Début</button><button id="step" title="Avancer d’une image à 30 images/s">+1 image</button><span id="timecode">0,00 / 4,00 s</span><input id="timeline" aria-label="Position dans l’animation" type="range" min="0" max="4" step="0.01" value="0"></div>
+        <p id="status" role="status" aria-live="polite">Chargement du premier rig…</p>
+      </div>
+    </section>
+    <section class="review-notes"><div><p class="eyebrow">REPÈRES DE REVUE</p><h2 id="hero-name"></h2><p id="hero-role"></p></div><div><h3>Ce qu’il faut observer</h3><p id="focus-note"></p></div><div><h3>État de production</h3><p>Maillage pondéré sur l’image entière. Les pixels sources sont conservés. Les poses restent limitées à cet angle de vue ; séparation en calques et animations finales à produire.</p></div></section>
+    <footer><span>ELLIPSE × SHADOW ECHOES</span><span>8 articulations · 2 501 sommets · 4 800 triangles par héros</span><a href="../../00_brief/documents/06_atelier_mouvement.md" target="_blank" rel="noopener">Dossier de production ↗</a></footer>
+  </main><script type="module" src="./motion-app.mjs"></script>
+</body></html>

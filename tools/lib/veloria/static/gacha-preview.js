@@ -59,15 +59,8 @@ const assetAtlas = await loadAssetAtlas(gdl);
 const heroImg = await loadImage(normalizeAsset(playerEntity?.assets?.sprite));
 let hubBgImg = await loadImage(normalizeAsset(gdl.meta?.asset_atlas?.pavillon_veilles ?? scene.background?.image));
 let bgImg = hubBgImg;
-const integratedManifest = await fetchJson(normalizeAsset('03_assets/integrated/integrated-manifest.json')).catch(() => null);
-const integratedArena = integratedManifest
-  ? await loadImage(normalizeAsset(integratedManifest.scene?.combat_arena?.asset))
-  : null;
-const hudOverlay = await loadImage(normalizeAsset('03_assets/ui/ui__combat-hud-shell/06_exports/hud_overlay.png'));
 
 const gacha = createGachaRenderer(ctx, layout, {
-  hudOverlay,
-  integratedArena,
   depthSpec: scene.depth ?? { mode: 'lane_perspective', horizon_y: 110, ground_y: layout.ground_y, scale_range: [0.5, 1.12] },
 });
 
@@ -118,8 +111,8 @@ function startRun(fromHub = true) {
 }
 
 async function resolveArenaBg(idx) {
-  if (idx === 0 && integratedArena) return integratedArena;
-  return loadImage(normalizeAsset(gdl.scenes[idx]?.background?.image));
+  const background = gdl.scenes[idx]?.background;
+  return loadImage(normalizeAsset(background?.layers?.[0]?.image ?? background?.image));
 }
 
 async function switchLevel(idx) {
@@ -144,42 +137,65 @@ function pickBlessing(id) {
   enemies = waveSpawner.spawnWave();
 }
 
+function confirmAction() {
+  if (screen === Screen.HUB) startRun(true);
+  else if (screen === Screen.INVOKE) {
+    screen = Screen.COMBAT;
+    banner = 'Vague 1';
+    bannerTimer = 1.5;
+  } else if (screen === Screen.VICTORY || screen === Screen.GAME_OVER) {
+    screen = Screen.HUB;
+    setStatus('Hub Veloria');
+  }
+}
+
 window.addEventListener('keydown', (e) => {
   const k = e.key.toLowerCase();
   keys.add(k);
 
   if (k === 'enter' || k === ' ') {
     e.preventDefault();
-    if (screen === Screen.HUB) startRun(true);
-    else if (screen === Screen.INVOKE) {
-      screen = Screen.COMBAT;
-      banner = 'Vague 1';
-      bannerTimer = 1.5;
-    } else if (screen === Screen.VICTORY || screen === Screen.GAME_OVER) {
-      screen = Screen.HUB;
-      setStatus('Hub Veloria');
-    }
+    confirmAction();
   }
 
   if (screen === Screen.COMBAT && gamePaused && blessingDraft?.active) {
-    if (k === '1' && blessingDraft.active.picks[0]) pickBlessing(blessingDraft.active.picks[0].id);
-    if (k === '2' && blessingDraft.active.picks[1]) pickBlessing(blessingDraft.active.picks[1].id);
-    if (k === '3' && blessingDraft.active.picks[2]) pickBlessing(blessingDraft.active.picks[2].id);
+    const pick = blessingDraft.active.picks[Number(k) - 1];
+    if (pick) pickBlessing(pick.id);
+    return;
   }
 
-  if (k >= '1' && k <= '6') {
+  if (screen === Screen.HUB && k >= '1' && k <= '6') {
     const idx = parseInt(k, 10) - 1;
-    if (screen === Screen.HUB) {
-      switchLevel(idx).then(() => startRun(false));
-    } else if (!gamePaused) {
-      switchLevel(idx);
-    }
+    switchLevel(idx).then(() => startRun(false));
+  }
+
+  if (screen === Screen.COMBAT && !gamePaused) {
+    if (['arrowleft', 'a', 'q'].includes(k)) laneRunner.snap(-1);
+    if (['arrowright', 'd'].includes(k)) laneRunner.snap(1);
   }
 
   if (['arrowleft', 'arrowright', 'a', 'd', 'q'].includes(k)) e.preventDefault();
 });
 
 window.addEventListener('keyup', (e) => keys.delete(e.key.toLowerCase()));
+
+canvas.addEventListener('pointerdown', (event) => {
+  event.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+  const x = ((event.clientX - rect.left) / rect.width) * canvas.width;
+  if (screen !== Screen.COMBAT) {
+    confirmAction();
+    return;
+  }
+  if (gamePaused && blessingDraft?.active) {
+    const index = Math.max(0, Math.min(2, Math.floor((x / canvas.width) * 3)));
+    const pick = blessingDraft.active.picks[index];
+    if (pick) pickBlessing(pick.id);
+    return;
+  }
+  if (x < player.x + player.w / 2) laneRunner.snap(-1);
+  else laneRunner.snap(1);
+});
 
 const urlParams = new URLSearchParams(location.search);
 if (urlParams.get('start') === 'combat') {
@@ -199,8 +215,6 @@ function updateCombat(dt) {
   if (bannerTimer > 0) bannerTimer -= dt;
   if (bannerTimer <= 0) banner = null;
 
-  if (keys.has('arrowleft') || keys.has('a') || keys.has('q')) laneRunner.snap(-1);
-  if (keys.has('arrowright') || keys.has('d')) laneRunner.snap(1);
   player.x = laneRunner.state.x;
   player.lane = laneRunner.state.lane;
 

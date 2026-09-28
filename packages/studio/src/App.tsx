@@ -7,7 +7,7 @@ import { CreationWizard } from './components/CreationWizard.js';
 import { Cockpit } from './components/Cockpit.js';
 import { StatusBar } from './components/StatusBar.js';
 import { PreviewModal } from './layout/PreviewModal.js';
-import { JarvisPanel } from './components/JarvisPanel.js';
+import { EllispherePanel } from './components/EllispherePanel.js';
 import { resolvePreviewUrl } from './lib/preview.js';
 import { ActionButton } from './ui/ActionButton.js';
 import { Badge } from './ui/Badge.js';
@@ -35,7 +35,8 @@ export function App() {
         .then((list) => {
           startTransition(() => {
             setProjects(list);
-            if (!activeProjectId && list[0]) setActiveProject(list[0].id);
+            // Une réponse tardive ne doit pas écraser un choix fait dans la sidebar.
+            if (!useStudioStore.getState().activeProjectId && list[0]) setActiveProject(list[0].id);
           });
         })
         .catch(() => {}),
@@ -103,7 +104,7 @@ export function App() {
       {previewOpen && previewUrl ? (
         <PreviewModal url={previewUrl} title={snap?.project.title ?? 'Jeu'} onClose={() => setPreviewOpen(false)} />
       ) : null}
-      <JarvisPanel />
+      <EllispherePanel />
     </div>
   );
 }

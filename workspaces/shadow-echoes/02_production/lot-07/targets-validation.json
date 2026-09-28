@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "checks": [
+    "21 planches, original accessible, agrandissement et filtre des six niveaux",
+    "Galerie mobile sans débordement horizontal",
+    "Référence individuelle intégrée dans le lecteur de mouvements",
+    "Fiche Lysael liée à sa nouvelle cible",
+    "Campagne : les quatre acteurs 3D chargent après nettoyage"
+  ],
+  "errors": []
+}

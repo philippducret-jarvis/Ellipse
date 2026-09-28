@@ -1,0 +1,59 @@
+{
+  "generatedAt": "2026-07-29T23:42:33.472Z",
+  "status": "passed",
+  "truth": {
+    "integrationReady": true,
+    "commercialFinal": false,
+    "remainingCommercialGates": [
+      "sculpt de finition propre à chaque identité",
+      "retopologie et LOD1/LOD2 définitifs",
+      "cartes PBR complètes et textures peintes uniques",
+      "formes faciales et animation complète",
+      "validation des déformations extrêmes PC/mobile"
+    ]
+  },
+  "guardians": {
+    "expected": 24,
+    "catalogued": 24,
+    "bytes": 311767436,
+    "triangles": 2898997
+  },
+  "loadouts": {
+    "total": 144,
+    "byKind": {
+      "artifact": 24,
+      "outfit": 96,
+      "weapon": 24
+    },
+    "expectedPerGuardian": 6
+  },
+  "summons": {
+    "total": 20,
+    "byKind": {
+      "rigged_familiar": 12,
+      "living_orb": 8
+    },
+    "animations": 96,
+    "bytes": 5026052
+  },
+  "proceduralSupportCatalog": {
+    "total": 211,
+    "byKind": {
+      "shared_prop": 20,
+      "signature_armor_set": 24,
+      "signature_artifact": 24,
+      "summon_familiar": 12,
+      "rigged_guardian": 3,
+      "living_orb": 8,
+      "modular_outfit": 96,
+      "signature_weapon": 24
+    }
+  },
+  "fabrics": [
+    "fabric_lunar_tide_basecolor.png",
+    "fabric_nature_wind_basecolor.png",
+    "fabric_solar_ember_basecolor.png",
+    "fabric_void_cosmic_basecolor.png"
+  ],
+  "failures": []
+}

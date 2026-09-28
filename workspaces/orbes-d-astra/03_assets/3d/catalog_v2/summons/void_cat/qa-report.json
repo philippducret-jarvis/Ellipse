@@ -1,0 +1,31 @@
+{
+  "id": "void_cat",
+  "displayName": "Chat du vide",
+  "affinity": "Vide",
+  "kind": "rigged_familiar",
+  "status": "integration_ready_animated_source",
+  "sourceLicense": "CC0",
+  "sourcePack": "Quaternius Cute Animated Monsters Pack",
+  "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/void_cat/void_cat_source.blend",
+  "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/void_cat/void_cat_lod0.glb",
+  "runtime": "res://assets/3d/summons_v2/void_cat/void_cat_lod0.glb",
+  "animations": [
+    "Bite_Front",
+    "Bite_InPlace",
+    "Dance",
+    "Death",
+    "HitRecieve",
+    "Idle",
+    "Jump",
+    "No",
+    "Walk",
+    "Yes"
+  ],
+  "detachedMissingImages": [
+    "GreenDemon_Texture.png.001"
+  ],
+  "deformBones": 7,
+  "triangles": 1280,
+  "bytes": 233032,
+  "commercialFinal": false
+}

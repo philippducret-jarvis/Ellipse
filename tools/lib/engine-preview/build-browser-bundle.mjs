@@ -4,14 +4,23 @@
  */
 import { copyFile, mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import { execSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 
 const ROOT = process.cwd();
 
+function runPnpm(args) {
+  const npmExecPath = process.env.npm_execpath;
+  if (npmExecPath && /pnpm(?:\.c?js)?$/iu.test(npmExecPath)) {
+    execFileSync(process.execPath, [npmExecPath, ...args], { cwd: ROOT, stdio: 'inherit' });
+    return;
+  }
+  const corepack = process.platform === 'win32' ? 'corepack.cmd' : 'corepack';
+  execFileSync(corepack, ['pnpm', ...args], { cwd: ROOT, stdio: 'inherit' });
+}
+
 export async function buildEngineBrowserBundle(targetWebDir) {
-  execSync('pnpm --filter @ellipse/shared build', { cwd: ROOT, stdio: 'inherit' });
-  execSync('pnpm --filter @ellipse/engine build', { cwd: ROOT, stdio: 'inherit' });
-  execSync('pnpm --filter @ellipse/engine build:browser', { cwd: ROOT, stdio: 'inherit' });
+  runPnpm(['--filter', '@ellipse/shared', 'build']);
+  runPnpm(['--filter', '@ellipse/engine', 'build']);
 
   const engineDir = join(targetWebDir, 'engine');
   await mkdir(engineDir, { recursive: true });

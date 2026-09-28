@@ -23,14 +23,14 @@ const sharp = require('../../../packages/pipeline/node_modules/sharp');
 
 // ── Crops calibrés (normalisés sur la planche 1448×1086) ──────────────────────
 // Héroïnes : pose principale isolée (la legacy capturait 2 poses + texte).
-const HERO_BOARD = 'personnages_principaux_v2.png';
 const HERO_CROPS = {
-  aureline: { x: 0.030, y: 0.135, w: 0.150, h: 0.305 },
-  morgane:  { x: 0.196, y: 0.135, w: 0.146, h: 0.305 },
-  selka:    { x: 0.356, y: 0.135, w: 0.140, h: 0.305 },
-  isolde:   { x: 0.506, y: 0.135, w: 0.148, h: 0.305 },
-  roxane:   { x: 0.664, y: 0.135, w: 0.150, h: 0.305 },
-  liora:    { x: 0.828, y: 0.135, w: 0.150, h: 0.305 },
+  // Auréline vient de la planche gameplay : même silhouette vue de dos que la cible.
+  aureline: { board: 'gameplay_mobile_aureline.png', crop: { x: 0.405, y: 0.405, w: 0.178, h: 0.250 } },
+  morgane:  { board: 'gameplay_phase_elite_morgane.png', crop: { x: 0.445, y: 0.405, w: 0.235, h: 0.255 } },
+  selka:    { board: 'personnages_principaux_v2.png', crop: { x: 0.356, y: 0.135, w: 0.140, h: 0.305 } },
+  isolde:   { board: 'personnages_principaux_v2.png', crop: { x: 0.506, y: 0.135, w: 0.148, h: 0.305 } },
+  roxane:   { board: 'personnages_principaux_v2.png', crop: { x: 0.664, y: 0.135, w: 0.150, h: 0.305 } },
+  liora:    { board: 'personnages_principaux_v2.png', crop: { x: 0.828, y: 0.135, w: 0.150, h: 0.305 } },
 };
 
 // Ennemis : sources nettes — 3 dans la scène de combat (gameplay), 2 dans les vignettes
@@ -43,15 +43,25 @@ const ENEMY_CROPS = {
   shadow_acolyte: { board: 'planches_environnements.png', crop: { x: 0.430, y: 0.792, w: 0.070, h: 0.078 }, m: { top: 0.05, side: 0.05, bottom: 0.14 } },
 };
 
-// Environnements : grande scène d'ambiance de chaque carte (meilleure que la legacy).
+const BOSS_CROPS = {
+  bourreau: {
+    board: 'gameplay_phase_elite_morgane.png',
+    crop: { x: 0.465, y: 0.122, w: 0.150, h: 0.205 },
+    m: { top: 0.08, side: 0.09, bottom: 0.08, tlText: false },
+  },
+};
+
+// Environnements : vignettes « PLAN 3 LANES » des planches. Elles sont les seules
+// sources sans titres, personnages ou HUD et fixent exactement la caméra de jeu.
 const ENV_BOARD = 'planches_environnements.png';
+const HUB_CROP = { x: 0.276, y: 0.094, w: 0.350, h: 0.310 };
 const ENV_CROPS = {
-  ruined_cloister:   { x: 0.018, y: 0.152, w: 0.187, h: 0.200 },
-  pyre_road:         { x: 0.315, y: 0.152, w: 0.187, h: 0.200 },
-  statue_garden:     { x: 0.612, y: 0.152, w: 0.187, h: 0.200 },
-  drowned_port:      { x: 0.018, y: 0.565, w: 0.187, h: 0.200 },
-  candle_crypt:      { x: 0.315, y: 0.565, w: 0.187, h: 0.200 },
-  crepuscule_throne: { x: 0.612, y: 0.565, w: 0.187, h: 0.200 },
+  ruined_cloister:   { x: 0.211, y: 0.152, w: 0.092, h: 0.195 },
+  pyre_road:         { x: 0.491, y: 0.152, w: 0.088, h: 0.195 },
+  statue_garden:     { x: 0.752, y: 0.152, w: 0.087, h: 0.195 },
+  drowned_port:      { x: 0.209, y: 0.557, w: 0.094, h: 0.190 },
+  candle_crypt:      { x: 0.489, y: 0.557, w: 0.091, h: 0.190 },
+  crepuscule_throne: { x: 0.752, y: 0.557, w: 0.087, h: 0.190 },
 };
 
 function boardPath(file) {
@@ -89,8 +99,8 @@ function featherMatte(data, w, h, o = {}) {
       let a = Math.min(aL, aR, aT, aB);
       if (tlText) {
         // atténue le bloc RÔLE/ARCHÉTYPE/étoiles (haut-gauche) sans toucher la tête (centrée)
-        const tl = smooth(0.34, 0.12, fx) * smooth(0.34, 0.1, fy);
-        a *= 1 - 0.85 * tl;
+        const tl = smooth(0.52, 0.2, fx) * smooth(0.34, 0.12, fy);
+        a *= 1 - 0.98 * tl;
       }
       const r = data[i], g = data[i + 1], b = data[i + 2];
       const lum = 0.299 * r + 0.587 * g + 0.114 * b;
@@ -130,8 +140,8 @@ async function buildCombatSprite(asset, crop, board, matteOpts, maxW) {
   featherMatte(data, info.width, info.height, matteOpts);
   const out = join(exportsDir, 'combat_sprite.png');
   await sharp(data, { raw: { width: info.width, height: info.height, channels: 4 } })
-    .resize({ width: Math.min(maxW, info.width), withoutEnlargement: true })
-    .sharpen({ sigma: 0.5 })
+    .resize({ width: maxW, kernel: sharp.kernel.lanczos3 })
+    .sharpen({ sigma: 0.65, m1: 0.8, m2: 1.6 })
     .png()
     .toFile(out);
 
@@ -148,8 +158,8 @@ async function buildCombatSprite(asset, crop, board, matteOpts, maxW) {
     key: asset.key,
     combat_sprite: wsUrl(`${asset.pack_root}/06_exports/combat_sprite.png`),
     portrait: wsUrl(`${asset.pack_root}/06_exports/portrait.png`),
-    w: Math.min(maxW, info.width),
-    h: Math.round((Math.min(maxW, info.width) / info.width) * info.height),
+    w: maxW,
+    h: Math.round((maxW / info.width) * info.height),
   };
 }
 
@@ -168,12 +178,12 @@ async function buildArenaBg(asset, crop, board) {
     height: Math.round(ch * meta.height),
   };
 
-  // scène fidèle → cover plein écran, assombrie pour lisibilité du combat
+  // Plan de jeu canonique → upscale HD. Aucun texte ni acteur n'est cuit dedans.
   const scene = await sharp(board)
     .extract(ext)
-    .resize(W, H, { fit: 'cover', position: 'top' })
-    .modulate({ brightness: 0.82, saturation: 1.08 })
-    .blur(0.3)
+    .resize(W, H, { fit: 'cover', position: 'centre', kernel: sharp.kernel.lanczos3 })
+    .modulate({ brightness: 0.92, saturation: 1.08 })
+    .sharpen({ sigma: 0.7, m1: 0.7, m2: 1.4 })
     .toBuffer();
 
   // overlays : voile sombre + halo violet bas + plancher de profondeur
@@ -182,10 +192,10 @@ async function buildArenaBg(asset, crop, board) {
     `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#07060a" stop-opacity="0.55"/>
+          <stop offset="0" stop-color="#07060a" stop-opacity="0.42"/>
           <stop offset="0.35" stop-color="#07060a" stop-opacity="0.05"/>
           <stop offset="0.72" stop-color="#07060a" stop-opacity="0.10"/>
-          <stop offset="1" stop-color="#05040a" stop-opacity="0.75"/>
+          <stop offset="1" stop-color="#05040a" stop-opacity="0.58"/>
         </linearGradient>
         <radialGradient id="vign" cx="0.5" cy="0.46" r="0.75">
           <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
@@ -199,8 +209,8 @@ async function buildArenaBg(asset, crop, board) {
       <rect width="${W}" height="${H}" fill="url(#sky)"/>
       <rect width="${W}" height="${H}" fill="url(#vign)"/>
       <!-- plancher de perspective : trapèze qui converge vers l'horizon -->
-      <polygon points="${W * 0.5 - 60},${horizon} ${W * 0.5 + 60},${horizon} ${W + 120},${ground} ${-120},${ground}" fill="url(#floor)"/>
-      <rect x="0" y="${ground}" width="${W}" height="${H - ground}" fill="#0c0912" fill-opacity="0.55"/>
+      <polygon points="${W * 0.5 - 60},${horizon} ${W * 0.5 + 60},${horizon} ${W + 120},${ground} ${-120},${ground}" fill="url(#floor)" opacity="0.48"/>
+      <rect x="0" y="${ground}" width="${W}" height="${H - ground}" fill="#0c0912" fill-opacity="0.42"/>
     </svg>`,
   );
 
@@ -226,8 +236,14 @@ export async function generateFaithfulHdAssets(onProgress = () => {}) {
   // Héroïnes — crops calibrés sur la planche roster
   for (const hero of HEROES) {
     onProgress(`héroïne ${hero.key}`);
-    const crop = HERO_CROPS[hero.key];
-    const r = await buildCombatSprite(hero, crop, boardPath(HERO_BOARD), { top: 0.12, side: 0.07, tlText: true }, 380);
+    const source = HERO_CROPS[hero.key];
+    const r = await buildCombatSprite(
+      hero,
+      source.crop,
+      boardPath(source.board),
+      { top: 0.12, side: 0.07, tlText: source.board === 'personnages_principaux_v2.png' },
+      380,
+    );
     manifest.combat_sprites[hero.key] = r.combat_sprite;
     manifest.portraits[hero.key] = r.portrait;
   }
@@ -240,7 +256,7 @@ export async function generateFaithfulHdAssets(onProgress = () => {}) {
   ];
   for (const { a, maxW, m } of others) {
     onProgress(`${a.role ?? 'asset'} ${a.key}`);
-    const override = ENEMY_CROPS[a.key];
+    const override = ENEMY_CROPS[a.key] ?? BOSS_CROPS[a.key];
     const crop = override?.crop ?? a.crop;
     const board = boardPath(override?.board ?? a.board);
     const matteOpts = { ...m, ...(override?.m ?? {}) };
@@ -256,8 +272,9 @@ export async function generateFaithfulHdAssets(onProgress = () => {}) {
   // Environnements — fonds d'arène 2,5D
   for (const env of ENVIRONMENTS) {
     onProgress(`arène ${env.key}`);
-    const crop = ENV_CROPS[env.key] ?? env.crop;
-    const board = boardPath(ENV_CROPS[env.key] ? ENV_BOARD : env.board);
+    const isHub = env.key === 'pavillon_veilles';
+    const crop = isHub ? HUB_CROP : (ENV_CROPS[env.key] ?? env.crop);
+    const board = boardPath(isHub ? env.board : (ENV_CROPS[env.key] ? ENV_BOARD : env.board));
     try {
       const r = await buildArenaBg(env, crop, board);
       manifest.arenas[env.key] = r.arena_bg;

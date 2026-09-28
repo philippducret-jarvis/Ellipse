@@ -42,6 +42,7 @@ export function createGame(gdl, levelIndex = 0, opts = {}) {
     hp: heroStats.hp, maxHp: heroStats.hp,
     stats: heroStats, scale: hero.scale,
     anim: 'idle', animT: 0, attackCd: 0, invulnT: 0, hitT: 0, landT: 0,
+    dodgeCd: 0, dodgeT: 0, abilityCharge: 0, abilityMax: 100,
     checkpoint: 120, lane: Math.floor((gdl.world.lanes ?? 3) / 2), dead: false, deadT: 0,
   };
   state.levelIndex = levelIndex;
@@ -91,6 +92,8 @@ export function step(state, input, dt) {
   h.attackCd = Math.max(0, h.attackCd - dt);
   h.invulnT = Math.max(0, h.invulnT - dt);
   h.hitT = Math.max(0, h.hitT - dt);
+  h.dodgeCd = Math.max(0, h.dodgeCd - dt);
+  h.dodgeT = Math.max(0, h.dodgeT - dt);
   h.animT += dt;
 
   if (state.genre === 'sidescroller') stepSide(state, input, dt, ev);
@@ -100,6 +103,13 @@ export function step(state, input, dt) {
   if (h.dead) {
     h.deadT += dt;
     if (h.deadT > 1.2) {
+      if (state.deaths >= 2) {
+        state.deaths++;
+        state.phase = 'lost';
+        ev.push({ type: 'game_over', score: state.score, deaths: state.deaths });
+        state.events.push(...ev);
+        return ev;
+      }
       h.dead = false; h.deadT = 0; h.hp = h.maxHp; h.invulnT = 1.5;
       h.x = state.genre === 'sidescroller' ? h.checkpoint : h.x;
       h.anim = 'idle'; h.animT = 0;
@@ -125,7 +135,13 @@ function stepSide(state, input, dt, ev) {
 
   if (!h.dead) {
     // déplacement
-    h.vx = (input.right ? 1 : 0) * h.stats.speed - (input.left ? 1 : 0) * h.stats.speed;
+    if (input.dodge && h.dodgeCd <= 0) {
+      h.dodgeCd = 1.05; h.dodgeT = 0.18; h.invulnT = Math.max(h.invulnT, 0.32);
+      h.anim = 'run'; h.animT = 0; ev.push({ type: 'dodge', x: h.x, y: h.y });
+    }
+    h.vx = h.dodgeT > 0
+      ? h.facing * h.stats.speed * 2.7
+      : (input.right ? 1 : 0) * h.stats.speed - (input.left ? 1 : 0) * h.stats.speed;
     if (h.vx !== 0) h.facing = Math.sign(h.vx);
     if (input.jump && h.onGround) { h.vy = -h.stats.jump; h.onGround = false; h.anim = 'jump'; h.animT = 0; ev.push({ type: 'jump' }); }
     h.vy += g * dt;
@@ -151,6 +167,20 @@ function stepSide(state, input, dt, ev) {
     h.landT = Math.max(0, h.landT - dt);
 
     // attaque
+    if (input.ability && h.abilityCharge >= h.abilityMax) {
+      h.abilityCharge = 0; h.invulnT = Math.max(h.invulnT, 0.55);
+      ev.push({ type: 'ability', x: h.x, y: h.y });
+      for (const e of state.enemies) {
+        if (e.dead || Math.abs(e.x - h.x) > 360) continue;
+        e.hp -= Math.max(2, h.stats.damage * 2); e.hitT = 0.35; e.anim = 'hit'; e.animT = 0;
+        if (e.hp <= 0) {
+          e.dead = true; e.deadT = 0; e.anim = 'death'; e.animT = 0;
+          state.score += e.role === 'boss' ? 500 : 100;
+          ev.push({ type: 'kill', kind: e.kind, boss: e.role === 'boss', x: e.x, y: e.y });
+        }
+      }
+    }
+
     if (input.attack && h.attackCd <= 0) {
       h.attackCd = h.stats.attackCooldown; h.anim = 'attack'; h.animT = 0;
       ev.push({ type: 'attack' });
@@ -159,7 +189,7 @@ function stepSide(state, input, dt, ev) {
         const inFront = Math.sign(e.x - h.x) === h.facing || Math.abs(e.x - h.x) < 40;
         if (inFront && Math.abs(e.x - h.x) < h.stats.attackRange && Math.abs(e.y - h.y) < 120) {
           e.hp -= h.stats.damage; e.hitT = 0.25; e.anim = 'hit'; e.animT = 0;
-          if (e.hp <= 0) { e.dead = true; e.deadT = 0; e.anim = 'death'; e.animT = 0; state.score += e.role === 'boss' ? 500 : 100; ev.push({ type: 'kill', kind: e.kind, boss: e.role === 'boss', x: e.x, y: e.y }); }
+          if (e.hp <= 0) { e.dead = true; e.deadT = 0; e.anim = 'death'; e.animT = 0; state.score += e.role === 'boss' ? 500 : 100; h.abilityCharge = Math.min(h.abilityMax, h.abilityCharge + (e.role === 'boss' ? 55 : 28)); ev.push({ type: 'kill', kind: e.kind, boss: e.role === 'boss', x: e.x, y: e.y }); }
           else ev.push({ type: 'hit', kind: e.kind, x: e.x, y: e.y });
         }
       }
@@ -184,6 +214,7 @@ function stepSide(state, input, dt, ev) {
         p.taken = true;
         if (p.type === 'heart') h.hp = Math.min(h.maxHp, h.hp + 1);
         else state.score += 50;
+        h.abilityCharge = Math.min(h.abilityMax, h.abilityCharge + 18);
         ev.push({ type: 'pickup', kind: p.type });
       }
     }
@@ -230,19 +261,37 @@ function stepArena(state, input, dt, ev) {
   const laneX = (l) => vp.w * (0.5 + (l - (lanes - 1) / 2) * 0.3);
 
   if (!h.dead) {
+    if (input.dodge && h.dodgeCd <= 0) {
+      h.dodgeCd = 1.2; h.invulnT = Math.max(h.invulnT, 0.5);
+      const pressure = state.enemies.filter((e) => !e.dead).sort((a, b) => b.y - a.y)[0];
+      if (pressure?.lane === h.lane) h.lane = h.lane === lanes - 1 ? h.lane - 1 : h.lane + 1;
+      ev.push({ type: 'dodge', x: h.x, y: h.y });
+    }
     if (input.laneLeft && !h._laneHeld) { h.lane = Math.max(0, h.lane - 1); h._laneHeld = true; }
     else if (input.laneRight && !h._laneHeld) { h.lane = Math.min(lanes - 1, h.lane + 1); h._laneHeld = true; }
     else if (!input.laneLeft && !input.laneRight) h._laneHeld = false;
     h.x += (laneX(h.lane) - h.x) * Math.min(1, dt * 12);
     h.y = state.groundY;
 
-    if (input.attack && h.attackCd <= 0) {
+    if (input.ability && h.abilityCharge >= h.abilityMax) {
+      h.abilityCharge = 0; h.invulnT = Math.max(h.invulnT, 0.75);
+      ev.push({ type: 'ability', x: h.x, y: h.y });
+      for (const target of state.enemies) {
+        if (target.dead) continue;
+        target.hp -= Math.max(2, h.stats.damage * 2);
+        target.hitT = 0.35; target.anim = 'hit'; target.animT = 0;
+        if (target.hp <= 0) { target.dead = true; target.anim = 'death'; target.animT = 0; state.score += target.role === 'boss' ? 500 : 100; ev.push({ type: 'kill', kind: target.kind, boss: target.role === 'boss', x: target.x, y: target.y }); }
+      }
+    }
+
+    const autoAttack = state.gdl.gameplay?.autoAttack !== false;
+    if ((input.attack || autoAttack) && h.attackCd <= 0) {
       h.attackCd = h.stats.attackCooldown; h.anim = 'attack'; h.animT = 0; ev.push({ type: 'attack' });
       const targets = state.enemies.filter((e) => !e.dead && e.lane === h.lane).sort((a, b) => b.y - a.y);
       const front = targets[0];
       if (front && state.groundY - front.y < vp.h * 0.45) {
         front.hp -= h.stats.damage; front.hitT = 0.25; front.anim = 'hit'; front.animT = 0;
-        if (front.hp <= 0) { front.dead = true; front.anim = 'death'; front.animT = 0; state.score += 100; ev.push({ type: 'kill', kind: front.kind }); }
+        if (front.hp <= 0) { front.dead = true; front.anim = 'death'; front.animT = 0; state.score += front.role === 'boss' ? 500 : 100; h.abilityCharge = Math.min(h.abilityMax, h.abilityCharge + (front.role === 'boss' ? 55 : 24)); ev.push({ type: 'kill', kind: front.kind, boss: front.role === 'boss', x: front.x, y: front.y }); }
         else ev.push({ type: 'hit', kind: front.kind });
       }
     } else if (h.hitT <= 0 && !(h.anim === 'attack' && h.animT < 0.38) && h.anim !== 'idle') { h.anim = 'idle'; h.animT = 0; }
@@ -293,5 +342,7 @@ export function botInput(state) {
   return {
     laneLeft: front && front.lane < h.lane, laneRight: front && front.lane > h.lane,
     attack: front && front.lane === h.lane && state.groundY - front.y < state.vp.h * 0.4,
+    ability: h.abilityCharge >= h.abilityMax,
+    dodge: front && front.lane === h.lane && state.groundY - front.y < 100,
   };
 }

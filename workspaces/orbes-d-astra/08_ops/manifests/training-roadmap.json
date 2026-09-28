@@ -1,0 +1,24 @@
+{
+  "generated_at": "2026-07-29T13:49:39.408Z",
+  "report_type": "training_curriculum",
+  "release_gate": false,
+  "commercial_ready": false,
+  "current_phase_id": "P1_perception",
+  "phase_scores": {
+    "P0_foundation": 20,
+    "P1_perception": 15,
+    "P2_gameplay_code": 60,
+    "P3_narrative_npc": 45,
+    "P4_enemy_ai": 13,
+    "P5_shipping": 100
+  },
+  "drills_completed": [],
+  "agent_training_hours_estimate": 7,
+  "next_drills": [
+    "floodfill_100",
+    "inpaint_shipping",
+    "lot0_photo"
+  ],
+  "workflow_run_id": "assessment",
+  "workflow_status": "running"
+}

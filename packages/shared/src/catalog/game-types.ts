@@ -272,6 +272,33 @@ export const GAME_TYPES: GameType[] = [
     phase: 2,
   },
   {
+    id: 'merge_drop_gacha',
+    label: 'Fusion de billes / Collection',
+    family: 'puzzle',
+    dimensions: ['2d'],
+    perspectives: ['side'],
+    default_art_styles: ['cartoon', 'anime', 'vector_flat'],
+    core_loops: ['puzzle', 'management'],
+    difficulty_band: 'casual',
+    library: {
+      asset_families: ['orb_tiers', 'hero_portraits', 'board_bg', 'ui_kit', 'rarity_fx', 'ability_fx'],
+      map_kind: 'board',
+      audio_profile: 'astral_pop+merge_sfx+gacha_sfx',
+      systems: [
+        'merge_drop_physics',
+        'merge_cascade',
+        'drop_aim',
+        'hero_abilities',
+        'merge_drop_gacha_summon',
+        'merge_drop_roster',
+        'merge_drop_pity',
+        'run_rewards',
+        'local_save',
+      ],
+    },
+    phase: 1,
+  },
+  {
     id: 'sokoban',
     label: 'Puzzle logique (Sokoban/physique)',
     family: 'puzzle',
@@ -458,7 +485,8 @@ export interface MechanicModule {
 }
 
 export const MECHANIC_MODULES: MechanicModule[] = [
-  { id: 'gacha_summon', label: 'Gacha / Invocation', description: 'Tirages aléatoires de personnages/objets avec raretés et bannières.', adds_systems: ['gacha_summon', 'roster_collection', 'banner_rotation', 'pity_system'], adds_asset_families: ['banner_art', 'portraits', 'rarity_fx'], suits_families: ['rpg', 'strategy'] },
+  { id: 'gacha_summon', label: 'Gacha / Invocation', description: 'Tirages aléatoires de personnages/objets avec raretés et bannières.', adds_systems: ['gacha_summon', 'roster_collection', 'banner_rotation', 'pity_system'], adds_asset_families: ['banner_art', 'portraits', 'rarity_fx'], suits_families: ['rpg', 'strategy', 'puzzle'] },
+  { id: 'merge_drop', label: 'Fusion de billes', description: 'Billes physiques qui tombent et fusionnent par paires identiques en une bille de rang supérieur.', adds_systems: ['merge_drop_physics', 'merge_cascade', 'drop_aim'], adds_asset_families: ['orb_tiers', 'merge_fx'], suits_families: ['puzzle'] },
   { id: 'summon_squad', label: 'Invocation / Escouade', description: 'Invoquer et contrôler des créatures ou alliés au combat.', adds_systems: ['summon_units', 'squad_control'], adds_asset_families: ['summons', 'portraits'], suits_families: ['rpg', 'strategy', 'action'] },
   { id: 'falling_blocks', label: 'Blocs qui tombent (Tetris)', description: 'Grille, pièces qui tombent, lignes à compléter.', adds_systems: ['falling_blocks', 'line_clear', 'gravity_grid'], adds_asset_families: ['blocks'], suits_families: ['puzzle'] },
   { id: 'match3', label: 'Match-3', description: 'Alignement de 3+ symboles, cascades.', adds_systems: ['grid_match', 'cascade', 'score_objectives'], adds_asset_families: ['gems'], suits_families: ['puzzle'] },
@@ -508,6 +536,7 @@ const REFERENCE_DATA: Record<string, ReferenceEntry> = {
   tactics_srpg: { reference_games: ['Fire Emblem', 'Final Fantasy Tactics', 'XCOM'], suggested_modules: ['summon_squad', 'skill_tree'] },
   match3: { reference_games: ['Bejeweled', 'Candy Crush', 'Puzzle & Dragons'], suggested_modules: ['match3', 'gacha_summon'] },
   falling_block: { reference_games: ['Tetris', 'Puyo Puyo', 'Lumines'], suggested_modules: ['falling_blocks'] },
+  merge_drop_gacha: { reference_games: ['Suika Game', '2048', 'Puyo Puyo'], suggested_modules: ['merge_drop', 'gacha_summon', 'skill_tree'] },
   sokoban: { reference_games: ['Sokoban', 'Baba Is You', 'Stephen’s Sausage Roll'], suggested_modules: ['time_control'] },
   visual_novel: { reference_games: ['Doki Doki Literature Club', 'Phoenix Wright', 'Steins;Gate'], suggested_modules: ['romance_branch'] },
   point_and_click: { reference_games: ['Monkey Island', 'Return of the Obra Dinn', 'Machinarium'], suggested_modules: [] },

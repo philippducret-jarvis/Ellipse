@@ -1,0 +1,122 @@
+{
+  "passed": true,
+  "checks": [
+    "caravan : premier niveau gagné, récompense enregistrée",
+    "race : premier niveau gagné, récompense enregistrée",
+    "survival : premier niveau gagné, récompense enregistrée",
+    "campaign : trois phases gagnées, message du bon iframe, récompense et relique uniques"
+  ],
+  "errors": [],
+  "profile": {
+    "version": 1,
+    "progressionVersion": 2,
+    "essence": 5,
+    "gearRanks": {},
+    "gold": 900,
+    "sigils": 8,
+    "xp": 400,
+    "selected": "seraphine",
+    "heroes": {
+      "seraphine": {
+        "level": 4,
+        "xp": 135,
+        "ascension": 0,
+        "talents": {},
+        "copies": 1,
+        "fragments": 0,
+        "relic": null,
+        "gear": {
+          "weapon": "roseblade",
+          "armor": null,
+          "accessory": null
+        }
+      },
+      "nyxara": {
+        "level": 2,
+        "xp": 120,
+        "ascension": 0,
+        "talents": {},
+        "copies": 1,
+        "fragments": 0,
+        "relic": null,
+        "gear": {
+          "weapon": "nightstaff",
+          "armor": null,
+          "accessory": null
+        }
+      },
+      "lysael": {
+        "level": 2,
+        "xp": 120,
+        "ascension": 0,
+        "talents": {},
+        "copies": 1,
+        "fragments": 0,
+        "relic": null,
+        "gear": {
+          "weapon": "dawnstaff",
+          "armor": null,
+          "accessory": null
+        }
+      },
+      "voren": {
+        "level": 2,
+        "xp": 120,
+        "ascension": 0,
+        "talents": {},
+        "copies": 1,
+        "fragments": 0,
+        "relic": null,
+        "gear": {
+          "weapon": "emberaxe",
+          "armor": null,
+          "accessory": null
+        }
+      }
+    },
+    "equipment": [
+      "roseblade",
+      "nightstaff",
+      "dawnstaff",
+      "emberaxe",
+      "redcloak",
+      "watchplate",
+      "echoheart"
+    ],
+    "relics": [
+      "crown",
+      "rose"
+    ],
+    "modes": {
+      "caravan": {
+        "wins": 1,
+        "best": 4700,
+        "attempts": 1
+      },
+      "race": {
+        "wins": 1,
+        "best": 630,
+        "attempts": 1
+      },
+      "survival": {
+        "wins": 1,
+        "best": 4920,
+        "attempts": 1
+      },
+      "campaign": {
+        "wins": 1,
+        "best": 10694,
+        "attempts": 1
+      }
+    },
+    "summons": 0,
+    "history": [],
+    "claimed": [],
+    "active": null,
+    "settings": {
+      "sound": false,
+      "motion": true
+    },
+    "revision": 9
+  }
+}

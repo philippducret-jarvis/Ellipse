@@ -1,0 +1,76 @@
+{
+  "id": "nyxara",
+  "name": "Nyxara",
+  "title": "Souveraine du Néant",
+  "rarity": "mythique",
+  "element": "Ténèbres",
+  "role": "Mage · contrôle",
+  "accent": "#bc8aee",
+  "symbol": "☽",
+  "quote": "Dans chaque ombre se cache une couronne.",
+  "description": "Le néant se rassemble dans sa paume. Corbeaux, orbes et malédictions dessinent le territoire de la reine.",
+  "reference": "partie-2/fiche_héros_de_nyxara_souveraine_du_néant.png",
+  "board": "partie-3/nyxara_souveraine_du_néant.png",
+  "invariants": [
+    "Longue chevelure noire aux reflets violets",
+    "Couronne d’or effilée et pierres améthyste",
+    "Corsage noir, chaînes d’or fines et cape violette",
+    "Corbeau et orbe du néant ; visage et proportions de la fiche"
+  ],
+  "skills": [
+    {
+      "id": "orb",
+      "name": "Orbe du néant",
+      "type": "drain",
+      "power": 115,
+      "healing": 65,
+      "cooldown": 1.5,
+      "energyGain": 15,
+      "description": "115 dégâts et 65 PV rendus à Nyxara."
+    },
+    {
+      "id": "eclipse",
+      "name": "Éclipse souveraine",
+      "type": "control",
+      "power": 190,
+      "duration": 3,
+      "cooldown": 9,
+      "energyGain": 20,
+      "description": "190 dégâts. Suspend les attaques de la cible pendant 3 secondes."
+    },
+    {
+      "id": "silence",
+      "name": "Retour au silence",
+      "type": "drain",
+      "power": 650,
+      "healing": 380,
+      "cooldown": 18,
+      "cost": 100,
+      "description": "650 dégâts et 380 PV rendus à Nyxara. Coût : 100 énergie."
+    }
+  ],
+  "stats": {
+    "maxHp": 2500,
+    "attack": 115,
+    "defense": 95
+  },
+  "motion_study": {
+    "stage": "deformation_study_review",
+    "rig": "03_assets/characters/nyxara/mesh-rig-v1.json",
+    "qa": "03_assets/characters/nyxara/mesh-qa-v1.json",
+    "fidelity_approved": false
+  },
+  "presentation": "03_assets/characters/nyxara/presentation-v1.png",
+  "source_reference": "01_inputs/references/partie-2/fiche_héros_de_nyxara_souveraine_du_néant.png",
+  "rarity_evidence": {
+    "method": "visual_reading",
+    "text": "Mythique",
+    "source": "01_inputs/references/partie-2/fiche_héros_de_nyxara_souveraine_du_néant.png"
+  },
+  "quality_target": "Fidélité aux designs fournis : identité, proportions, costume, matériaux et finesse.",
+  "production_stage": "hd_base_review",
+  "skill_status": "prototype_proposal",
+  "rig": null,
+  "animations": [],
+  "qa": "03_assets/characters/nyxara/qa-v1.json"
+}

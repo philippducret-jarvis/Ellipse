@@ -1,0 +1,10 @@
+{
+  "hero": "nyxara",
+  "path": "03_assets/characters/nyxara/volume-v1/hero.glb",
+  "bytes": 11293056,
+  "nodes": 191,
+  "meshes": 118,
+  "clips": 42,
+  "representation": "Hierarchical articulated meshes; rigid attachment at joints, no continuous skin weights",
+  "quality": "Procedural volume study; not final reference-quality art"
+}

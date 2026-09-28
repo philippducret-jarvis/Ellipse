@@ -1,0 +1,920 @@
+{
+  "schemaVersion": 1,
+  "status": "inventory_complete_assets_missing",
+  "categories": {
+    "guardians": [
+      {
+        "id": "mira",
+        "kind": "rigged_character",
+        "variants": [
+          "combat",
+          "awakened",
+          "celestial_evening",
+          "seasonal"
+        ],
+        "status": "blockout"
+      },
+      {
+        "id": "brann",
+        "kind": "rigged_character",
+        "variants": [
+          "combat",
+          "awakened",
+          "celestial_evening",
+          "seasonal"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "kael",
+        "kind": "rigged_character",
+        "variants": [
+          "combat",
+          "awakened",
+          "celestial_evening",
+          "seasonal"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "orin",
+        "kind": "rigged_character",
+        "variants": [
+          "combat",
+          "awakened",
+          "celestial_evening",
+          "seasonal"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "talia",
+        "kind": "rigged_character",
+        "variants": [
+          "combat",
+          "awakened",
+          "celestial_evening",
+          "seasonal"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "joren",
+        "kind": "rigged_character",
+        "variants": [
+          "combat",
+          "awakened",
+          "celestial_evening",
+          "seasonal"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "phae",
+        "kind": "rigged_character",
+        "variants": [
+          "combat",
+          "awakened",
+          "celestial_evening",
+          "seasonal"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "ciro",
+        "kind": "rigged_character",
+        "variants": [
+          "combat",
+          "awakened",
+          "celestial_evening",
+          "seasonal"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "lys",
+        "kind": "rigged_character",
+        "variants": [
+          "combat",
+          "awakened",
+          "celestial_evening",
+          "seasonal"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "noor",
+        "kind": "rigged_character",
+        "variants": [
+          "combat",
+          "awakened",
+          "celestial_evening",
+          "seasonal"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "vesper",
+        "kind": "rigged_character",
+        "variants": [
+          "combat",
+          "awakened",
+          "celestial_evening",
+          "seasonal"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "saphira",
+        "kind": "rigged_character",
+        "variants": [
+          "combat",
+          "awakened",
+          "celestial_evening",
+          "seasonal"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "nyx",
+        "kind": "rigged_character",
+        "variants": [
+          "combat",
+          "awakened",
+          "celestial_evening",
+          "seasonal"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "ilyra",
+        "kind": "rigged_character",
+        "variants": [
+          "combat",
+          "awakened",
+          "celestial_evening",
+          "seasonal"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "caelum",
+        "kind": "rigged_character",
+        "variants": [
+          "combat",
+          "awakened",
+          "celestial_evening",
+          "seasonal"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "rhea",
+        "kind": "rigged_character",
+        "variants": [
+          "combat",
+          "awakened",
+          "celestial_evening",
+          "seasonal"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "talos",
+        "kind": "rigged_character",
+        "variants": [
+          "combat",
+          "awakened",
+          "celestial_evening",
+          "seasonal"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "maelys",
+        "kind": "rigged_character",
+        "variants": [
+          "combat",
+          "awakened",
+          "celestial_evening",
+          "seasonal"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "aster",
+        "kind": "rigged_character",
+        "variants": [
+          "combat",
+          "awakened",
+          "celestial_evening",
+          "seasonal"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "elya",
+        "kind": "rigged_character",
+        "variants": [
+          "combat",
+          "awakened",
+          "celestial_evening",
+          "seasonal"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "solveig",
+        "kind": "rigged_character",
+        "variants": [
+          "combat",
+          "awakened",
+          "celestial_evening",
+          "seasonal"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "seraphiel",
+        "kind": "rigged_character",
+        "variants": [
+          "combat",
+          "awakened",
+          "celestial_evening",
+          "seasonal"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "vaelora",
+        "kind": "rigged_character",
+        "variants": [
+          "combat",
+          "awakened",
+          "celestial_evening",
+          "seasonal"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "orion",
+        "kind": "rigged_character",
+        "variants": [
+          "combat",
+          "awakened",
+          "celestial_evening",
+          "seasonal"
+        ],
+        "status": "missing"
+      }
+    ],
+    "bosses": [
+      {
+        "id": "tide_leviathan",
+        "variants": [
+          "phase_1",
+          "phase_2",
+          "phase_3",
+          "broken"
+        ],
+        "targetTriangles": 220000,
+        "kind": "rigged_boss",
+        "status": "missing"
+      },
+      {
+        "id": "eclipse_golem",
+        "variants": [
+          "phase_1",
+          "phase_2",
+          "phase_3",
+          "broken"
+        ],
+        "targetTriangles": 180000,
+        "kind": "rigged_boss",
+        "status": "missing"
+      },
+      {
+        "id": "abyssion",
+        "variants": [
+          "humanoid",
+          "winged_void",
+          "primordial_night",
+          "broken"
+        ],
+        "targetTriangles": 240000,
+        "kind": "rigged_boss",
+        "status": "missing"
+      }
+    ],
+    "enemies": [
+      {
+        "id": "drowned_wisp",
+        "kind": "rigged_enemy",
+        "variants": [
+          "base",
+          "elite"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "tide_knight",
+        "kind": "rigged_enemy",
+        "variants": [
+          "base",
+          "elite"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "coral_stalker",
+        "kind": "rigged_enemy",
+        "variants": [
+          "base",
+          "elite"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "siren_orb",
+        "kind": "rigged_enemy",
+        "variants": [
+          "base",
+          "elite"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "abyss_crab",
+        "kind": "rigged_enemy",
+        "variants": [
+          "base",
+          "elite"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "solar_drone",
+        "kind": "rigged_enemy",
+        "variants": [
+          "base",
+          "elite"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "forge_hound",
+        "kind": "rigged_enemy",
+        "variants": [
+          "base",
+          "elite"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "slag_colossus",
+        "kind": "rigged_enemy",
+        "variants": [
+          "base",
+          "elite"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "eclipse_mage",
+        "kind": "rigged_enemy",
+        "variants": [
+          "base",
+          "elite"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "magnetic_sentinel",
+        "kind": "rigged_enemy",
+        "variants": [
+          "base",
+          "elite"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "void_moth",
+        "kind": "rigged_enemy",
+        "variants": [
+          "base",
+          "elite"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "inverted_dryad",
+        "kind": "rigged_enemy",
+        "variants": [
+          "base",
+          "elite"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "night_lancer",
+        "kind": "rigged_enemy",
+        "variants": [
+          "base",
+          "elite"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "memory_eater",
+        "kind": "rigged_enemy",
+        "variants": [
+          "base",
+          "elite"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "fracture_priest",
+        "kind": "rigged_enemy",
+        "variants": [
+          "base",
+          "elite"
+        ],
+        "status": "missing"
+      }
+    ],
+    "livingOrbs": [
+      {
+        "id": "orb_spark",
+        "displayName": "Pio",
+        "kind": "rigged_creature_orb",
+        "animations": [
+          "idle",
+          "fall",
+          "bounce",
+          "merge",
+          "happy",
+          "danger"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "orb_dew",
+        "displayName": "Lumi",
+        "kind": "rigged_creature_orb",
+        "animations": [
+          "idle",
+          "fall",
+          "bounce",
+          "merge",
+          "happy",
+          "danger"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "orb_moon",
+        "displayName": "Séla",
+        "kind": "rigged_creature_orb",
+        "animations": [
+          "idle",
+          "fall",
+          "bounce",
+          "merge",
+          "happy",
+          "danger"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "orb_comet",
+        "displayName": "Kori",
+        "kind": "rigged_creature_orb",
+        "animations": [
+          "idle",
+          "fall",
+          "bounce",
+          "merge",
+          "happy",
+          "danger"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "orb_sun",
+        "displayName": "Hélio",
+        "kind": "rigged_creature_orb",
+        "animations": [
+          "idle",
+          "fall",
+          "bounce",
+          "merge",
+          "happy",
+          "danger"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "orb_crown",
+        "displayName": "Auriel",
+        "kind": "rigged_creature_orb",
+        "animations": [
+          "idle",
+          "fall",
+          "bounce",
+          "merge",
+          "happy",
+          "danger"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "orb_world",
+        "displayName": "Gaïa",
+        "kind": "rigged_creature_orb",
+        "animations": [
+          "idle",
+          "fall",
+          "bounce",
+          "merge",
+          "happy",
+          "danger"
+        ],
+        "status": "missing"
+      },
+      {
+        "id": "orb_nexus",
+        "displayName": "Astra",
+        "kind": "rigged_creature_orb",
+        "animations": [
+          "idle",
+          "fall",
+          "bounce",
+          "merge",
+          "happy",
+          "danger"
+        ],
+        "status": "missing"
+      }
+    ],
+    "familiars": [
+      {
+        "id": "luma",
+        "kind": "rigged_familiar",
+        "status": "missing"
+      },
+      {
+        "id": "nebulin",
+        "kind": "rigged_familiar",
+        "status": "missing"
+      },
+      {
+        "id": "forge_sprite",
+        "kind": "rigged_familiar",
+        "status": "missing"
+      },
+      {
+        "id": "oracle_moth",
+        "kind": "rigged_familiar",
+        "status": "missing"
+      },
+      {
+        "id": "crystal_fox",
+        "kind": "rigged_familiar",
+        "status": "missing"
+      },
+      {
+        "id": "void_cat",
+        "kind": "rigged_familiar",
+        "status": "missing"
+      },
+      {
+        "id": "solar_bird",
+        "kind": "rigged_familiar",
+        "status": "missing"
+      },
+      {
+        "id": "moon_hare",
+        "kind": "rigged_familiar",
+        "status": "missing"
+      },
+      {
+        "id": "tide_otter",
+        "kind": "rigged_familiar",
+        "status": "missing"
+      },
+      {
+        "id": "clock_drake",
+        "kind": "rigged_familiar",
+        "status": "missing"
+      },
+      {
+        "id": "brass_beetle",
+        "kind": "rigged_familiar",
+        "status": "missing"
+      },
+      {
+        "id": "nexus_whale",
+        "kind": "rigged_familiar",
+        "status": "missing"
+      }
+    ],
+    "guardianWeapons": [
+      {
+        "id": "weapon_mira",
+        "owner": "mira",
+        "kind": "weapon_prop",
+        "status": "missing"
+      },
+      {
+        "id": "weapon_brann",
+        "owner": "brann",
+        "kind": "weapon_prop",
+        "status": "missing"
+      },
+      {
+        "id": "weapon_kael",
+        "owner": "kael",
+        "kind": "weapon_prop",
+        "status": "missing"
+      },
+      {
+        "id": "weapon_orin",
+        "owner": "orin",
+        "kind": "weapon_prop",
+        "status": "missing"
+      },
+      {
+        "id": "weapon_talia",
+        "owner": "talia",
+        "kind": "weapon_prop",
+        "status": "missing"
+      },
+      {
+        "id": "weapon_joren",
+        "owner": "joren",
+        "kind": "weapon_prop",
+        "status": "missing"
+      },
+      {
+        "id": "weapon_phae",
+        "owner": "phae",
+        "kind": "weapon_prop",
+        "status": "missing"
+      },
+      {
+        "id": "weapon_ciro",
+        "owner": "ciro",
+        "kind": "weapon_prop",
+        "status": "missing"
+      },
+      {
+        "id": "weapon_lys",
+        "owner": "lys",
+        "kind": "weapon_prop",
+        "status": "missing"
+      },
+      {
+        "id": "weapon_noor",
+        "owner": "noor",
+        "kind": "weapon_prop",
+        "status": "missing"
+      },
+      {
+        "id": "weapon_vesper",
+        "owner": "vesper",
+        "kind": "weapon_prop",
+        "status": "missing"
+      },
+      {
+        "id": "weapon_saphira",
+        "owner": "saphira",
+        "kind": "weapon_prop",
+        "status": "missing"
+      },
+      {
+        "id": "weapon_nyx",
+        "owner": "nyx",
+        "kind": "weapon_prop",
+        "status": "missing"
+      },
+      {
+        "id": "weapon_ilyra",
+        "owner": "ilyra",
+        "kind": "weapon_prop",
+        "status": "missing"
+      },
+      {
+        "id": "weapon_caelum",
+        "owner": "caelum",
+        "kind": "weapon_prop",
+        "status": "missing"
+      },
+      {
+        "id": "weapon_rhea",
+        "owner": "rhea",
+        "kind": "weapon_prop",
+        "status": "missing"
+      },
+      {
+        "id": "weapon_talos",
+        "owner": "talos",
+        "kind": "weapon_prop",
+        "status": "missing"
+      },
+      {
+        "id": "weapon_maelys",
+        "owner": "maelys",
+        "kind": "weapon_prop",
+        "status": "missing"
+      },
+      {
+        "id": "weapon_aster",
+        "owner": "aster",
+        "kind": "weapon_prop",
+        "status": "missing"
+      },
+      {
+        "id": "weapon_elya",
+        "owner": "elya",
+        "kind": "weapon_prop",
+        "status": "missing"
+      },
+      {
+        "id": "weapon_solveig",
+        "owner": "solveig",
+        "kind": "weapon_prop",
+        "status": "missing"
+      },
+      {
+        "id": "weapon_seraphiel",
+        "owner": "seraphiel",
+        "kind": "weapon_prop",
+        "status": "missing"
+      },
+      {
+        "id": "weapon_vaelora",
+        "owner": "vaelora",
+        "kind": "weapon_prop",
+        "status": "missing"
+      },
+      {
+        "id": "weapon_orion",
+        "owner": "orion",
+        "kind": "weapon_prop",
+        "status": "missing"
+      }
+    ],
+    "locations": [
+      {
+        "id": "astra_observatory",
+        "kind": "modular_environment_kit",
+        "targetModules": 48,
+        "status": "missing"
+      },
+      {
+        "id": "summoning_sanctuary",
+        "kind": "modular_environment_kit",
+        "targetModules": 32,
+        "status": "missing"
+      },
+      {
+        "id": "reliquary",
+        "kind": "modular_environment_kit",
+        "targetModules": 36,
+        "status": "missing"
+      },
+      {
+        "id": "drowned_harbor",
+        "kind": "modular_environment_kit",
+        "targetModules": 64,
+        "status": "missing"
+      },
+      {
+        "id": "dead_sun_forge",
+        "kind": "modular_environment_kit",
+        "targetModules": 64,
+        "status": "missing"
+      },
+      {
+        "id": "night_beyond",
+        "kind": "modular_environment_kit",
+        "targetModules": 72,
+        "status": "missing"
+      }
+    ],
+    "commonProps": [
+      {
+        "id": "orrery_large",
+        "kind": "environment_prop",
+        "status": "missing"
+      },
+      {
+        "id": "orrery_small",
+        "kind": "environment_prop",
+        "status": "missing"
+      },
+      {
+        "id": "summon_altar",
+        "kind": "environment_prop",
+        "status": "missing"
+      },
+      {
+        "id": "wardrobe_mirror",
+        "kind": "environment_prop",
+        "status": "missing"
+      },
+      {
+        "id": "relic_forge",
+        "kind": "environment_prop",
+        "status": "missing"
+      },
+      {
+        "id": "mission_table",
+        "kind": "environment_prop",
+        "status": "missing"
+      },
+      {
+        "id": "telescope",
+        "kind": "environment_prop",
+        "status": "missing"
+      },
+      {
+        "id": "constellation_door",
+        "kind": "environment_prop",
+        "status": "missing"
+      },
+      {
+        "id": "astral_elevator",
+        "kind": "environment_prop",
+        "status": "missing"
+      },
+      {
+        "id": "archive_shelf",
+        "kind": "environment_prop",
+        "status": "missing"
+      },
+      {
+        "id": "ritual_brazier",
+        "kind": "environment_prop",
+        "status": "missing"
+      },
+      {
+        "id": "banner_frame",
+        "kind": "environment_prop",
+        "status": "missing"
+      },
+      {
+        "id": "boss_gate",
+        "kind": "environment_prop",
+        "status": "missing"
+      },
+      {
+        "id": "reward_chest",
+        "kind": "environment_prop",
+        "status": "missing"
+      },
+      {
+        "id": "training_dummy",
+        "kind": "environment_prop",
+        "status": "missing"
+      },
+      {
+        "id": "guild_board",
+        "kind": "environment_prop",
+        "status": "missing"
+      },
+      {
+        "id": "music_stage",
+        "kind": "environment_prop",
+        "status": "missing"
+      },
+      {
+        "id": "target_launcher",
+        "kind": "environment_prop",
+        "status": "missing"
+      },
+      {
+        "id": "tailor_table",
+        "kind": "environment_prop",
+        "status": "missing"
+      },
+      {
+        "id": "photo_podium",
+        "kind": "environment_prop",
+        "status": "missing"
+      }
+    ]
+  },
+  "summary": {
+    "guardians": 24,
+    "bosses": 3,
+    "enemies": 15,
+    "livingOrbs": 8,
+    "familiars": 12,
+    "guardianWeapons": 24,
+    "locations": 6,
+    "commonProps": 20,
+    "totalEntries": 112
+  }
+}

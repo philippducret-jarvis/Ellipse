@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <radialGradient id="portal"><stop offset="0" stop-color="#67e8f9" stop-opacity=".7"/><stop offset=".48" stop-color="#6d28d9" stop-opacity=".45"/><stop offset="1" stop-color="#050711" stop-opacity="0"/></radialGradient>
+    <linearGradient id="gauge"><stop stop-color="#67e8f9"/><stop offset=".55" stop-color="#a78bfa"/><stop offset="1" stop-color="#f472b6"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1600" height="900" fill="#000000"/>
+  <circle cx="1248" cy="144" r="430" fill="#111c3c" opacity=".45"/>
+  <text x="70" y="78" fill="#fff4dc" font-family="Inter,Segoe UI,sans-serif" font-size="45.239999999999995" font-weight="850" text-anchor="start">INVOCATION ×10</text>
+  <text x="70" y="120" fill="#ffffff" font-family="Inter,Segoe UI,sans-serif" font-size="23.2" font-weight="450" text-anchor="start">Présenter garantie, coût total et option de révélation rapide</text>
+  <text x="1530" y="78" fill="#ffe066" font-family="Inter,Segoe UI,sans-serif" font-size="18" font-weight="800" text-anchor="end">ACCESSIBLE • UX DRAFT</text>
+  
+    <rect x="70" y="150" width="300" height="610" rx="26" fill="#111111" stroke="#292f49"/>
+    
+      <rect x="94" y="188" width="252" height="70" rx="16" fill="#1b3144" stroke="#ffe066"/>
+      <text x="117" y="232" fill="#fff4dc" font-family="Inter,Segoe UI,sans-serif" font-size="23.2" font-weight="700" text-anchor="start">1 600 éclats</text>
+    
+      <rect x="94" y="286" width="252" height="70" rx="16" fill="#0b0e1a" stroke="#292f49"/>
+      <text x="117" y="330" fill="#ffffff" font-family="Inter,Segoe UI,sans-serif" font-size="23.2" font-weight="500" text-anchor="start">4★ garanti</text>
+    
+      <rect x="94" y="384" width="252" height="70" rx="16" fill="#0b0e1a" stroke="#292f49"/>
+      <text x="117" y="428" fill="#ffffff" font-family="Inter,Segoe UI,sans-serif" font-size="23.2" font-weight="500" text-anchor="start">Historique</text>
+    
+  <rect x="394" y="150" width="1136" height="610" rx="30" fill="#090d1c" stroke="#252c47" stroke-width="2"/>
+  
+      <circle cx="1189.1999999999998" cy="381.8" r="310" fill="url(#portal)" opacity=".8"/>
+      <path d="M 424 660 Q 962 540 1500 670 L 1500 760 L 424 760 Z" fill="#151b32"/>
+      
+    <g opacity=".94">
+      <ellipse cx="1166.48" cy="725" rx="109.24999999999999" ry="25.299999999999997" fill="#050711" opacity=".7"/>
+      <circle cx="1166.48" cy="370" r="48.3" fill="#d7a98d"/>
+      <path d="M 1114.73 360.8 Q 1166.48 283.75 1229.73 374.6 Q 1189.48 342.4 1114.73 360.8" fill="#20243b"/>
+      <path d="M 1099.78 429.8 Q 1166.48 393 1237.78 429.8 L 1264.23 651.75 Q 1166.48 697.75 1072.18 651.75 Z" fill="#181d35" stroke="#ffe066" stroke-width="3.4499999999999997"/>
+      <path d="M 1107.83 436.7 L 1045.73 588.5" stroke="#d7a98d" stroke-width="28.749999999999996" stroke-linecap="round"/>
+      <path d="M 1227.43 436.7 L 1295.28 567.8" stroke="#d7a98d" stroke-width="28.749999999999996" stroke-linecap="round"/>
+      <path d="M 1125.08 634.5 L 1108.98 715" stroke="#111529" stroke-width="39.099999999999994" stroke-linecap="round"/>
+      <path d="M 1207.88 634.5 L 1223.98 715" stroke="#111529" stroke-width="39.099999999999994" stroke-linecap="round"/>
+      <circle cx="1166.48" cy="513.75" r="19.549999999999997" fill="#ffe066" filter="url(#glow)"/>
+    </g>
+      <rect x="432" y="194" width="360" height="230" rx="24" fill="#111111" fill-opacity=".9" stroke="#ffe066" stroke-opacity=".6"/>
+      <text x="466" y="248" fill="#ffe066" font-family="Inter,Segoe UI,sans-serif" font-size="22" font-weight="800" text-anchor="start">MODÈLE 3D / LIEU</text>
+      <text x="466" y="295" fill="#fff4dc" font-family="Inter,Segoe UI,sans-serif" font-size="28" font-weight="700" text-anchor="start">SUMMON TEN</text>
+      <text x="466" y="345" fill="#ffffff" font-family="Inter,Segoe UI,sans-serif" font-size="20" font-weight="500" text-anchor="start">Caméra, lumière et animation</text>
+  
+  <rect x="1150" y="792" width="380" height="62" rx="22" fill="#ffe066" stroke="#ffe066" stroke-width="3"/>
+  <text x="1340" y="832" fill="#000" font-family="Inter,Segoe UI,sans-serif" font-size="24.36" font-weight="850" text-anchor="middle">INVOQUER ×10</text>
+  <text x="70" y="876" fill="#ffffff" font-family="Inter,Segoe UI,sans-serif" font-size="15" font-weight="600" text-anchor="start">MAQUETTE UX — COMPOSITION ET HIÉRARCHIE, PAS UN ASSET FINAL</text>
+</svg>

@@ -1,0 +1,31 @@
+{
+  "checked_at": "2026-09-27T22:38:51.324Z",
+  "technical_passed": true,
+  "source_unchanged": true,
+  "fidelity_approved": false,
+  "layers": [
+    {
+      "file": "body.png",
+      "sha256": "f99aa5b533ec17b66be45f8a0279dd4d7c0b7ab8496336411309003426aff50c",
+      "width": 1024,
+      "height": 1536,
+      "clear_ratio": 0.4238109588623047,
+      "opaque_ratio": 0.5397529602050781
+    },
+    {
+      "file": "arm-sword-v2.png",
+      "sha256": "a58baee5a1c78272f445ff63d61dc43b5d449347cc82583bfa6c962526666ef0",
+      "width": 1024,
+      "height": 1536,
+      "clear_ratio": 0.9383894602457682,
+      "opaque_ratio": 0.054926554361979164
+    }
+  ],
+  "limitations": [
+    "Calques régénérés, pas une découpe pixel à pixel",
+    "Calage affine initial conservant la pose, proportions du bras à revoir",
+    "Raccord d’épaule visible aux grands angles",
+    "Bras et épée solidaires, coude et poignet non articulés",
+    "Étude intégrée au combat avec retour possible au maillage"
+  ]
+}

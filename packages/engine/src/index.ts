@@ -50,6 +50,79 @@ export { updateCameraFollow, resolveCameraMode, type CameraState } from './rende
 export { createSkeletal2D, parseRigSpec, idlePosePhase, deriveRigUrlFromSprite, deriveSilhouetteUrlFromSprite, type RigSpec, type Skeletal2DInstance } from './render/skeletal2d.js';
 export { TilemapLayer } from './render/tilemap-layer.js';
 export { runSyntheticPlaytest, loadGdlForPlaytest, type SyntheticPlaytestReport } from './playtest/synthetic-playtest.js';
+export {
+  DEFAULT_MERGE_DROP_CONFIG,
+  activateMergeDropAbility,
+  awakenMergeDropHero,
+  createMergeDropWorld,
+  createMergeDropWorldFromGdl,
+  drainMergeDropEvents,
+  dropMergeBall,
+  equipMergeDropCompanion,
+  equipMergeDropRelic,
+  mergeDropAwakenCost,
+  mergeDropConfigFromGdl,
+  mergeDropHeroLevel,
+  mergeDropHeroStars,
+  mergeDropModifiers,
+  primeMergeDropRun,
+  selectMergeDropHero,
+  setMergeDropAim,
+  stepMergeDropWorld,
+  summonMergeDropHero,
+  summonMergeDropHeroTen,
+  summonMergeDropRelic,
+  summonMergeDropRelicTen,
+  type MergeDropAbility,
+  type MergeDropBall,
+  type MergeDropCompanion,
+  type MergeDropConfig,
+  type MergeDropEvent,
+  type MergeDropHero,
+  type MergeDropModifiers,
+  type MergeDropPassiveEffect,
+  type MergeDropRarity,
+  type MergeDropRelic,
+  type MergeDropRelicOutcome,
+  type MergeDropRunRules,
+  type MergeDropSkill,
+  type MergeDropSummonOptions,
+  type MergeDropSummonOutcome,
+  type MergeDropTier,
+  type MergeDropWorld,
+} from './sim/merge-drop.js';
+export {
+  ABILITY_CAST_EVENT,
+  MergeDropEngine,
+  OPEN_GALLERY_EVENT,
+  OPEN_RELIQUARY_EVENT,
+  OPEN_SUMMON_EVENT,
+  RUN_RESULT_EVENT,
+  type MergeDropEngineOptions,
+} from './merge-drop/merge-drop-engine.js';
+export {
+  ECHOES_FIXED_STEP_MS,
+  EMPTY_ECHOES_INPUT,
+  advanceEchoesWorld,
+  chooseEchoesWeapon,
+  createEchoesWorld,
+  createEchoesWorldFromGdl,
+  drainEchoesEvents,
+  echoesBoss,
+  echoesLevelConfigFromGdl,
+  restartEchoesWorld,
+  retryEchoesWorld,
+  type EchoesEnemy,
+  type EchoesEnemyKind,
+  type EchoesEvent,
+  type EchoesInput,
+  type EchoesLevelConfig,
+  type EchoesProjectile,
+  type EchoesStatus,
+  type EchoesWeapon,
+  type EchoesWorld,
+} from './sim/echoes-platformer.js';
+export { EchoesEngine, type EchoesEngineOptions, type EchoesScreen } from './echoes/echoes-engine.js';
 
 export interface EngineOptions {
   container: HTMLElement;
@@ -67,6 +140,8 @@ interface SpriteSheetAnim {
   frameH: number;
   frameCount: number;
   animTime: number;
+  baseScaleX: number;
+  baseScaleY: number;
 }
 
 /**
@@ -271,7 +346,8 @@ export class EllipseEngine {
 
     const atlas = (this.gdl.meta as { asset_atlas?: Record<string, string> })?.asset_atlas ?? {};
     clearEnemyPool(world, this.enemyPool);
-    await syncEnemyPool(world, w.enemies, atlas, this.enemyPool);
+    const enemyRenderProfiles = (this.gdl.meta as { asset_render_profiles?: Record<string, { width?: number; height?: number }> })?.asset_render_profiles ?? {};
+    await syncEnemyPool(world, w.enemies, atlas, this.enemyPool, enemyRenderProfiles);
 
     await this.buildPlayerSprite();
 
@@ -318,6 +394,8 @@ export class EllipseEngine {
           sprite?: string;
           rig?: string;
           frame_count?: number;
+          render_width?: number;
+          render_height?: number;
           layers?: { url: string; offsetY?: number }[];
         }
       | undefined;
@@ -337,9 +415,18 @@ export class EllipseEngine {
         const frame = new Rectangle(0, 0, frameW, frameH);
         const texture = new Texture({ source: sheet.source, frame });
         this.playerSprite = new Sprite(texture);
-        this.playerSprite.width = player.width;
-        this.playerSprite.height = player.height;
-        this.spriteAnim = { source: sheet.source, frameW, frameH, frameCount, animTime: 0 };
+        this.playerSprite.width = Math.max(1, assets.render_width ?? player.width);
+        this.playerSprite.height = Math.max(1, assets.render_height ?? player.height);
+        this.playerSprite.anchor.set(0.5, 1);
+        this.spriteAnim = {
+          source: sheet.source,
+          frameW,
+          frameH,
+          frameCount,
+          animTime: 0,
+          baseScaleX: this.playerSprite.scale.x,
+          baseScaleY: this.playerSprite.scale.y,
+        };
         this.worldContainer?.addChild(this.playerSprite);
 
         for (const layer of layerDefs) {
@@ -541,7 +628,8 @@ export class EllipseEngine {
     if (fp !== this.enemyPool.fingerprint && this.worldContainer && this.gdl && !this.enemySyncPending) {
       this.enemySyncPending = true;
       const atlas = (this.gdl.meta as { asset_atlas?: Record<string, string> })?.asset_atlas ?? {};
-      void syncEnemyPool(this.worldContainer, w.enemies, atlas, this.enemyPool).finally(() => {
+      const enemyRenderProfiles = (this.gdl.meta as { asset_render_profiles?: Record<string, { width?: number; height?: number }> })?.asset_render_profiles ?? {};
+      void syncEnemyPool(this.worldContainer, w.enemies, atlas, this.enemyPool, enemyRenderProfiles).finally(() => {
         this.enemySyncPending = false;
       });
     }
@@ -555,6 +643,11 @@ export class EllipseEngine {
       if (!enemy || !entry) continue;
       const display = entry.sprite ?? entry.gfx;
       if (!display) continue;
+      if (this.engineOptions?.veloriaMode && entry.sprite) {
+        const phase = this.rigPhase * 2.2 + i * 1.7;
+        display.y += Math.sin(phase) * (enemy.isBoss ? 3.5 : 2);
+        display.rotation = Math.sin(phase * 0.7) * (enemy.isBoss ? 0.007 : 0.014);
+      }
       sortables.push({
         display,
         x: enemy.x,
@@ -601,11 +694,16 @@ export class EllipseEngine {
         this.playerSkeletal.setBoneRotation('torso', Math.sin(this.rigPhase * 12) * 0.06);
       }
     } else if (this.playerSprite && this.spriteAnim) {
-      this.playerSprite.x = p.x;
-      this.playerSprite.y = p.y;
-      this.playerSprite.scale.x = playerPers * (p.facing < 0 ? -1 : 1);
-      this.playerSprite.scale.y = playerPers;
-      if (p.facing < 0) this.playerSprite.x += p.width;
+      this.rigPhase += dtSec;
+      const attackPulse = this.engineOptions?.veloriaMode && (w.veloria?.attackCooldown ?? 0) > 0.25 ? 1.055 : 1;
+      const breathe = this.engineOptions?.veloriaMode ? 1 + Math.sin(this.rigPhase * 2.4) * 0.012 : 1;
+      this.playerSprite.x = p.x + p.width / 2;
+      this.playerSprite.y = p.y + p.height;
+      this.playerSprite.scale.x = this.spriteAnim.baseScaleX * playerPers * breathe * attackPulse * (p.facing < 0 ? -1 : 1);
+      this.playerSprite.scale.y = this.spriteAnim.baseScaleY * playerPers * breathe * attackPulse;
+      this.playerSprite.rotation = this.engineOptions?.veloriaMode
+        ? Math.sin(this.rigPhase * 1.8) * 0.008 + ((w.veloria?.attackCooldown ?? 0) > 0.25 ? -0.055 * p.facing : 0)
+        : 0;
       const alpha = p.invincibleMs > 0 && Math.floor(p.invincibleMs / 80) % 2 === 0 ? 0.3 : 1;
       this.playerSprite.alpha = alpha;
       this.playerSprite.zIndex = sortKeyForEntity(

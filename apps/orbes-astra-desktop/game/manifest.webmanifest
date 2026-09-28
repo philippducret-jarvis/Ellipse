@@ -1,0 +1,21 @@
+{
+  "name": "Orbes d'Astra",
+  "short_name": "Orbes Astra",
+  "description": "Restaurez le Nexus astral dans un jeu de fusion, de collection et d'aventure.",
+  "lang": "fr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#07131d",
+  "theme_color": "#07131d",
+  "categories": ["games", "entertainment"],
+  "icons": [
+    {
+      "src": "./assets/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

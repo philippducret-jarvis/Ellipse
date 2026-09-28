@@ -2,6 +2,10 @@
 
 ## Instance active (Docker)
 
+Récupération du 23 septembre 2026 : le conteneur avait disparu, mais son ancien volume anonyme était encore présent. Le cluster a été copié vers le volume nommé `ellipse-postgres-data`, puis le conteneur a été recréé sur cette copie. L’original `f6cb833b43b393064627acd6bc0c93ec685c442d1ca16715a90bfc1604e60f47` reste intact. Deux projets étaient présents dans cette base récupérée ; les workspaces du disque restent également disponibles dans le Studio.
+
+Une sauvegarde au format PostgreSQL custom a été conservée avant migration dans `generated/backups/ellipse-before-repair-20260923.dump`.
+
 | Paramètre | Valeur |
 |-----------|--------|
 | Conteneur | `postgres-ellisphere` |
@@ -11,6 +15,8 @@
 | Utilisateur | `ellisphere` |
 | Mot de passe | Défini dans `.env` (`POSTGRES_PASSWORD`) |
 | Version | PostgreSQL 16 |
+| Volume persistant | `ellipse-postgres-data` |
+| Compose de récupération | `infra/compose/postgres-local.yml` |
 | pgAdmin | Connexion « Ellisphere - PostgreSQL Docker 5435 » |
 
 ## Configuration projet
@@ -47,6 +53,18 @@ Si le mot de passe contient des caractères spéciaux URL, les encoder :
 Exemple : mot de passe se terminant par `**` → `%2A%2A` dans l’URL.
 
 ## Vérifier la connexion
+
+`Ellipse.exe` vérifie maintenant une connexion SQL avant de lancer le Studio. Si l’instance locale `localhost:5435/ellisphere` est arrêtée, le lanceur redémarre `postgres-ellisphere`. Si le conteneur manque mais que le volume persistant existe, il le recrée depuis le compose dédié. Il ne crée jamais de base vide et ne gère pas les autres instances PostgreSQL de la machine.
+
+Pour vérifier/rétablir la base séparément :
+
+```bash
+node tools/ensure-ellipse-database.mjs
+```
+
+Docker Desktop doit être démarré. Le conteneur utilise `restart: unless-stopped` ; aucune configuration des autres conteneurs n’est modifiée. Les identifiants existants dans `.env` sont conservés.
+
+Le pool applique un délai de connexion de cinq secondes et gère les interruptions de connexions inactives pour que l’orchestrateur survive à un redémarrage de PostgreSQL.
 
 ```bash
 # Avec psql (si installé)

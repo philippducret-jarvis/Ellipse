@@ -1,0 +1,17 @@
+SHADOW ECHOES — Dernières créations de la conversation
+
+Contenu : 2 documents de conception (Word et PDF) et 21 planches PNG.
+
+01_Documentation : Bible de Game Design V1 (Word et PDF).
+02_Transformation_Seraphine : recherches, concept art, modèle cible et pipeline visuel.
+03_Transformation_Interface : proposition avant/après de l’interface de présentation des héros.
+04_Transformation_10_Mythiques : dix planches de transformation visuelle des héros.
+05_Transformation_Niveaux : six explorations visuelles successives de création et intégration de niveaux.
+
+IMPORTANT : Ce sont des illustrations de conception, PAS des fichiers sources 3D,
+des rigs, animations fonctionnelles ou des scènes exécutables. Plusieurs planches
+préliminaires de niveaux mêlent personnages et environnements ; elles sont
+conservées pour préserver les itérations réalisées.
+
+Ce ZIP contient les créations produites après la précédente archive,
+à l’exception des aperçus techniques temporaires et des doublons.

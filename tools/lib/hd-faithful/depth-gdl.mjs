@@ -65,13 +65,15 @@ export function buildEchoesSceneGdl(layout, integratedManifest) {
   };
 }
 
-/** Couches Veloria — arène intégrée fixe + HUD scroll 0. */
+/** Couches Veloria — fond d'arène propre, sans HUD ni acteurs incrustés. */
 export function buildVeloriaArenaBackground(integratedManifest, fallbackImage) {
-  const arena = integratedManifest?.scene?.combat_arena?.asset;
+  const arena = integratedManifest?.runtimeEligible === true
+    ? integratedManifest?.scene?.combat_arena?.asset
+    : null;
   const image = arena ?? fallbackImage;
   return {
     color: '#07060a',
-    mode: 'integrated_arena',
+    mode: 'lane_arena',
     layers: [{ id: 'arena', image, scroll_factor: 0, sort_group: 'world' }],
   };
 }

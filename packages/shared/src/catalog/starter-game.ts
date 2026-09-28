@@ -52,6 +52,20 @@ const LANE_ACTION_SYSTEMS = [
   'ui',
 ];
 
+const MERGE_DROP_SYSTEMS = [
+  'input',
+  'merge_drop_physics',
+  'merge_cascade',
+  'drop_aim',
+  'hero_abilities',
+  'merge_drop_gacha_summon',
+  'merge_drop_roster',
+  'merge_drop_pity',
+  'run_rewards',
+  'local_save',
+  'ui',
+];
+
 const PALETTES: Partial<Record<ArtStyle, string[]>> = {
   pixel: ['#1a1a2e', '#0f3460', '#e94560', '#f0d9a6'],
   dark_fantasy: ['#08070d', '#211729', '#5a3a72', '#9e4f5c', '#d6b35a'],
@@ -80,6 +94,10 @@ function isLaneAction(preset: ProductionPreset): boolean {
   return preset.game_type === 'survivors_like' || preset.game_type === 'gacha_rpg';
 }
 
+function isMergeDrop(preset: ProductionPreset): boolean {
+  return preset.game_type === 'merge_drop_gacha';
+}
+
 function paletteFor(preset: ProductionPreset, override?: string[]): string[] {
   return override ?? PALETTES[preset.art_style] ?? DEFAULT_PALETTE;
 }
@@ -90,7 +108,9 @@ function background(color: string, opts: StarterGdlOptions): Record<string, unkn
 
 function productionBoard(preset: ProductionPreset, opts: StarterGdlOptions): Record<string, unknown> {
   const loop =
-    preset.game_type === 'gacha_rpg'
+    preset.game_type === 'merge_drop_gacha'
+      ? ['aim', 'drop_orb', 'stack', 'merge_equal_tiers', 'cascade', 'cast_hero_power', 'earn_summon', 'unlock_roster', 'reach_nexus']
+      : preset.game_type === 'gacha_rpg'
       ? ['invoke', 'draft_upgrade', 'lane_combat', 'boss', 'reward']
       : preset.game_type === 'souls_like_2d'
         ? ['approach', 'read_enemy', 'punish', 'checkpoint', 'boss_gate']
@@ -166,7 +186,9 @@ function productionContract(preset: ProductionPreset, opts: StarterGdlOptions): 
       art_style: preset.art_style,
       difficulty: preset.difficulty,
       promise:
-        preset.game_type === 'gacha_rpg'
+        preset.game_type === 'merge_drop_gacha'
+          ? 'A one-touch physical puzzle where equal orbs merge upward, cascades charge hero powers and every run earns transparent collection progress.'
+          : preset.game_type === 'gacha_rpg'
           ? 'A premium collection RPG loop: summon, improve, fight readable waves, defeat a boss, earn progression.'
           : preset.game_type === 'souls_like_2d'
             ? 'A punishing but fair dark fantasy slice with readable enemies, checkpoints, hazards and a boss gate.'
@@ -554,12 +576,195 @@ function buildLaneActionGdl(preset: ProductionPreset, opts: StarterGdlOptions): 
   }));
 }
 
+function buildMergeDropGdl(preset: ProductionPreset, opts: StarterGdlOptions): GameDefinition {
+  const title = opts.title ?? "Orbes d'Astra";
+  const palette = opts.palette ?? ['#07131d', '#2dd4bf', '#38bdf8', '#fb7185', '#f59e0b', '#f8fafc'];
+  const sceneId = 'astral_merge_well';
+  const layout: GdlLayout = {
+    width: 720,
+    height: 1280,
+    ground_y: 1008,
+    spawn: { x: 360, y: 224 },
+    platforms: [],
+    collectibles: [],
+    goal: { x: 360, y: 184 },
+    zones: [
+      { id: 'drop_preview', label: 'Drop Preview', x: 0, y: 0, w: 720, h: 184, theme: 'setup' },
+      { id: 'merge_well', label: 'Merge Well', x: 72, y: 184, w: 576, h: 824, theme: 'physics_puzzle' },
+      { id: 'roster_and_power', label: 'Roster and Power', x: 0, y: 1008, w: 720, h: 144, theme: 'hero_ability' },
+      { id: 'earned_summon', label: 'Earned Summon', x: 0, y: 1152, w: 720, h: 128, theme: 'reward' },
+    ],
+  };
+
+  type GuardianProfile = {
+    id: string;
+    name: string;
+    title: string;
+    rarity: 'R' | 'SR' | 'SSR';
+    ability: string;
+    ability_label: string;
+    color: string;
+    faction: string;
+    role: string;
+    element: string;
+    quote: string;
+    biography: string;
+  };
+  type Passive = [effect: string, value: number, name: string, description: string];
+  const guardian = (frame: number, profile: GuardianProfile, first: Passive, second: Passive) => ({
+    ...profile,
+    portrait: opts.heroPortraitSheet,
+    portrait_frame: frame,
+    portrait_columns: 6,
+    portrait_rows: 4,
+    skills: [
+      { id: `${profile.id}_a`, name: first[2], description: first[3], stars: 1, effect: first[0], value: first[1] },
+      { id: `${profile.id}_b`, name: second[2], description: second[3], stars: 3, effect: second[0], value: second[1] },
+    ],
+  });
+
+  const base = GameDefinitionSchema.parse({
+    meta: {
+      title,
+      dimension: '2d',
+      genre: 'merge_drop_gacha',
+      resolution: [720, 1280],
+      version: '1.0.0',
+      orientation: 'portrait',
+      declared_systems: preset.systems,
+      mechanic_modules: preset.mechanic_modules,
+      prototype_board: productionBoard(preset, opts),
+      production_contract: productionContract(preset, opts),
+      merge_drop: {
+        board: { x: 72, y: 184, width: 576, height: 824, loss_line_y: 326 },
+        gravity: 1180,
+        drop_cooldown_ms: 280,
+        overflow_grace_ms: 1600,
+        initial_currency: 1800,
+        summon_cost: 100,
+        summon10_cost: 900,
+        relic_summon_cost: 80,
+        relic_summon10_cost: 720,
+        pity_after: 30,
+        summon_rates: { R: 0.7, SR: 0.25, SSR: 0.05 },
+        duplicate_essence: { R: 15, SR: 35, SSR: 80 },
+        awaken_base_cost: 40,
+        awaken_cost_step: 30,
+        awaken_max_level: 5,
+        evolution_max_stars: 5,
+        item_max_level: 5,
+        initial_unlocked_heroes: ['mira', 'brann', 'lys'],
+        tiers: [
+          { id: 'spark', label: 'Étincelle', persona: 'Pio', radius: 24, color: '#5eead4', score: 12 },
+          { id: 'dew', label: 'Rosée', persona: 'Lumi', radius: 31, color: '#38bdf8', score: 30 },
+          { id: 'moon', label: 'Lune', persona: 'Séla', radius: 40, color: '#818cf8', score: 72 },
+          { id: 'comet', label: 'Comète', persona: 'Kori', radius: 50, color: '#c084fc', score: 160 },
+          { id: 'sun', label: 'Soleil', persona: 'Hélio', radius: 62, color: '#fb7185', score: 360 },
+          { id: 'crown', label: 'Couronne', persona: 'Auriel', radius: 76, color: '#f59e0b', score: 800 },
+          { id: 'world', label: 'Monde', persona: 'Gaïa', radius: 92, color: '#84cc16', score: 1800 },
+          { id: 'nexus', label: 'Nexus', persona: 'Astra', radius: 112, color: '#f8fafc', score: 4200 },
+        ],
+        // Atlas 6x4 : vingt-quatre Gardiens uniques avec identité, rôle et passifs propres.
+        heroes: [
+          guardian(0, { id: 'mira', name: 'Mira', title: 'Tisseuse de gravité', rarity: 'R', ability: 'gravity_well', ability_label: 'Puits astral', color: '#2dd4bf', faction: 'Cercle des Marées', role: 'Contrôle', element: 'Lune', quote: 'Tout astre connaît le chemin du retour.', biography: 'Cartographe des courants célestes, Mira plie la gravité pour protéger les voyageurs du Nexus.' }, ['eclat_bonus_pct', 10, "Fil d'argent", 'Éclats de fusion +10 %'], ['charge_merge_bonus', 2, 'Cœur du puits', '+2 charge par fusion']),
+          guardian(1, { id: 'brann', name: 'Brann', title: 'Forgeron des astres', rarity: 'R', ability: 'forge_next', ability_label: 'Frappe runique', color: '#f97316', faction: 'Forge Solaire', role: 'Amplificateur', element: 'Feu', quote: 'Le ciel se répare à coups de marteau.', biography: 'Brann frappe les météores encore chauds pour façonner des orbes capables de défier la Nuit.' }, ['score_bonus_pct', 8, 'Braises', 'Score +8 %'], ['charge_per_drop', 2, 'Souffle de forge', '+2 charge par orbe']),
+          guardian(2, { id: 'kael', name: 'Kael', title: "Chasseur d'étoiles", rarity: 'R', ability: 'starfall', ability_label: "Pluie d'étoiles", color: '#a3e635', faction: 'Veilleurs Boréaux', role: 'Dégâts', element: 'Vent', quote: 'Je ne manque jamais une étoile filante.', biography: 'Éclaireur des frontières boréales, Kael abat les fragments corrompus avant leur chute.' }, ['eclat_bonus_pct', 12, 'Instinct de chasse', 'Éclats de fusion +12 %'], ['overflow_grace_ms', 250, 'Ciel dégagé', 'Grâce de débordement +250 ms']),
+          guardian(3, { id: 'orin', name: 'Orin', title: 'Chasseur des marées', rarity: 'R', ability: 'echo_merge', ability_label: 'Écho jumeau', color: '#22d3ee', faction: 'Cercle des Marées', role: 'Combo', element: 'Eau', quote: 'Une vague revient toujours deux fois.', biography: 'Orin entend les échos des fusions futures et reproduit leurs ondes dans le présent.' }, ['cascade_window_ms', 200, 'Ressac', 'Fenêtre de cascade +200 ms'], ['score_bonus_pct', 10, 'Marée montante', 'Score +10 %']),
+          guardian(4, { id: 'talia', name: 'Talia', title: 'Messagère des zéphyrs', rarity: 'R', ability: 'time_bloom', ability_label: 'Danse suspendue', color: '#67e8f9', faction: 'Veilleurs Boréaux', role: 'Vitesse', element: 'Vent', quote: 'Respire. Le ciel te laisse une seconde.', biography: 'Talia traverse les tempêtes pour transmettre les ordres de l’Observatoire dans un silence absolu.' }, ['cooldown_reduction_ms', 45, 'Pas de brise', 'Recharge des orbes −45 ms'], ['slow_on_cascade_ms', 900, 'Courant calme', 'Ralenti 0,9 s sur cascade ×3']),
+          guardian(5, { id: 'joren', name: 'Joren', title: 'Porte-bouclier lunaire', rarity: 'R', ability: 'aegis', ability_label: 'Rempart lunaire', color: '#94a3b8', faction: 'Ordre du Croissant', role: 'Protection', element: 'Lune', quote: 'Derrière moi, aucune étoile ne tombe.', biography: 'Dernier gardien d’un temple effondré, Joren porte un éclat de lune en guise de bouclier.' }, ['overflow_grace_ms', 300, 'Garde blanche', 'Grâce de débordement +300 ms'], ['score_bonus_pct', 7, 'Serment', 'Score +7 %']),
+          guardian(6, { id: 'phae', name: 'Phaé', title: 'Herboriste de comète', rarity: 'R', ability: 'ascension', ability_label: 'Pollen ascendant', color: '#bef264', faction: 'Jardins Sidéraux', role: 'Soutien', element: 'Nature', quote: 'Même le vide peut refleurir.', biography: 'Phaé cultive des graines nées dans les queues de comètes et soigne les constellations blessées.' }, ['start_charge', 12, 'Graine vive', 'Commence avec 12 % de charge'], ['charge_per_drop', 1, 'Floraison', '+1 charge par orbe']),
+          guardian(7, { id: 'ciro', name: 'Ciro', title: 'Archiviste errant', rarity: 'R', ability: 'shatter_top', ability_label: 'Page tranchante', color: '#fca5a5', faction: 'Bibliothèque du Nexus', role: 'Précision', element: 'Solaire', quote: 'Une erreur bien lue devient une victoire.', biography: 'Ciro collectionne les cartes des ciels disparus et sait exactement quel orbe retirer du chaos.' }, ['score_bonus_pct', 9, 'Annotation', 'Score +9 %'], ['eclat_bonus_pct', 8, 'Index secret', 'Éclats de fusion +8 %']),
+          guardian(8, { id: 'lys', name: 'Lys', title: 'Gardienne des secondes', rarity: 'SR', ability: 'time_bloom', ability_label: 'Temps suspendu', color: '#60a5fa', faction: 'Horloge Astrale', role: 'Contrôle', element: 'Temps', quote: 'Une seconde suffit à changer un destin.', biography: 'Lys surveille les secondes perdues depuis la fracture et les restitue aux invocateurs audacieux.' }, ['slow_on_cascade_ms', 1500, 'Rosée persistante', 'Ralenti 1,5 s sur cascade ×3'], ['cascade_window_ms', 300, 'Sablier fêlé', 'Fenêtre de cascade +300 ms']),
+          guardian(9, { id: 'noor', name: 'Noor', title: "Porteuse d'aurore", rarity: 'SR', ability: 'ascension', ability_label: 'Ascension', color: '#f472b6', faction: 'Forge Solaire', role: 'Soutien', element: 'Solaire', quote: 'L’aube est une promesse, pas un souvenir.', biography: 'Noor porte dans sa lanterne la première lumière du monde, assez vive pour élever les astres.' }, ['start_charge', 20, 'Aube claire', 'Commence avec 20 % de charge'], ['charge_merge_bonus', 3, 'Élan céleste', '+3 charge par fusion']),
+          guardian(10, { id: 'vesper', name: 'Vesper', title: 'Sentinelle du soir', rarity: 'SR', ability: 'aegis', ability_label: 'Voile stellaire', color: '#94a3b8', faction: 'Ordre du Croissant', role: 'Protection', element: 'Ombre', quote: 'Le crépuscule n’est pas une fin.', biography: 'Vesper veille là où la lumière hésite et repousse le débordement par un voile impénétrable.' }, ['overflow_grace_ms', 400, 'Garde du soir', 'Grâce de débordement +400 ms'], ['cooldown_reduction_ms', 60, 'Pas feutré', 'Recharge des orbes −60 ms']),
+          guardian(11, { id: 'saphira', name: 'Saphira', title: 'Lame de cristal', rarity: 'SR', ability: 'shatter_top', ability_label: 'Éclat pur', color: '#7dd3fc', faction: 'Prisme Royal', role: 'Dégâts', element: 'Cristal', quote: 'La perfection possède un tranchant.', biography: 'Duelliste du Prisme Royal, Saphira fend les formations impossibles d’un seul geste lumineux.' }, ['score_bonus_pct', 12, 'Tranchant', 'Score +12 %'], ['eclat_bonus_pct', 8, 'Facettes', 'Éclats de fusion +8 %']),
+          guardian(12, { id: 'nyx', name: 'Nyx', title: 'Murmure du vide', rarity: 'SR', ability: 'void_swap', ability_label: 'Bascule du vide', color: '#6366f1', faction: 'Exilés du Vide', role: 'Manipulation', element: 'Vide', quote: 'Le vide ne ment jamais.', biography: 'Nyx a traversé la Nuit sans constellation et en a rapporté l’art d’inverser les lois du Puits.' }, ['cooldown_reduction_ms', 50, 'Ombre utile', 'Recharge des orbes −50 ms'], ['charge_per_drop', 3, 'Regard du vide', '+3 charge par orbe']),
+          guardian(13, { id: 'ilyra', name: 'Ilyra', title: 'Cantatrice des anneaux', rarity: 'SR', ability: 'constellation', ability_label: 'Accord orbital', color: '#d8b4fe', faction: 'Chœur Céleste', role: 'Combo', element: 'Son', quote: 'Chaque orbite attend sa note.', biography: 'La voix d’Ilyra relie les orbes distants et prolonge les cascades au-delà du possible.' }, ['cascade_window_ms', 280, 'Legato', 'Fenêtre de cascade +280 ms'], ['charge_merge_bonus', 3, 'Harmonique', '+3 charge par fusion']),
+          guardian(14, { id: 'caelum', name: 'Caelum', title: 'Lancetoile impérial', rarity: 'SR', ability: 'starfall', ability_label: 'Javelot céleste', color: '#38bdf8', faction: 'Légion d’Astra', role: 'Dégâts', element: 'Foudre', quote: 'Je trace la ligne que suivra l’éclair.', biography: 'Champion de la Légion, Caelum concentre les pluies stellaires en impacts d’une précision brutale.' }, ['score_bonus_pct', 13, 'Pointe d’azur', 'Score +13 %'], ['eclat_bonus_pct', 10, 'Arc ionique', 'Éclats de fusion +10 %']),
+          guardian(15, { id: 'rhea', name: 'Rhéa', title: 'Oracle des marées', rarity: 'SR', ability: 'echo_merge', ability_label: 'Double présage', color: '#06b6d4', faction: 'Cercle des Marées', role: 'Combo', element: 'Eau', quote: 'J’ai déjà vu la prochaine vague.', biography: 'Rhéa lit les futurs possibles dans l’eau stellaire et choisit celui qui produit la cascade parfaite.' }, ['cascade_window_ms', 320, 'Présage fluide', 'Fenêtre de cascade +320 ms'], ['score_bonus_pct', 11, 'Seconde vague', 'Score +11 %']),
+          guardian(16, { id: 'talos', name: 'Talos', title: 'Colosse magnétique', rarity: 'SR', ability: 'gravity_well', ability_label: 'Cœur magnétique', color: '#a78bfa', faction: 'Forge Solaire', role: 'Contrôle', element: 'Métal', quote: 'Tout finit par graviter autour d’une volonté.', biography: 'Armure antique animée par un noyau conscient, Talos attire les orbes comme des satellites.' }, ['overflow_grace_ms', 450, 'Blindage orbital', 'Grâce de débordement +450 ms'], ['charge_merge_bonus', 3, 'Induction', '+3 charge par fusion']),
+          guardian(17, { id: 'maelys', name: 'Maëlys', title: 'Dompteuse de nébuleuses', rarity: 'SR', ability: 'forge_next', ability_label: 'Nébuleuse captive', color: '#fb7185', faction: 'Jardins Sidéraux', role: 'Amplificateur', element: 'Cosmos', quote: 'Les nuages du ciel ont aussi un cœur.', biography: 'Maëlys apprivoise les nébuleuses vivantes et condense leur poussière en orbes de rang supérieur.' }, ['charge_per_drop', 3, 'Poussière vive', '+3 charge par orbe'], ['score_bonus_pct', 12, 'Nuage royal', 'Score +12 %']),
+          guardian(18, { id: 'aster', name: 'Aster', title: 'Héritière du Nexus', rarity: 'SSR', ability: 'supernova', ability_label: 'Supernova', color: '#facc15', faction: 'Trône du Nexus', role: 'Dégâts', element: 'Nexus', quote: 'Je rallumerai chaque royaume, un astre après l’autre.', biography: 'Héritière de la couronne brisée, Aster transforme les fusions en une supernova capable de repousser la Nuit.' }, ['charge_merge_bonus', 4, 'Héritage', '+4 charge par fusion'], ['score_bonus_pct', 15, 'Noblesse', 'Score +15 %']),
+          guardian(19, { id: 'elya', name: 'Élya', title: 'Voix des constellations', rarity: 'SSR', ability: 'constellation', ability_label: 'Constellation', color: '#e879f9', faction: 'Chœur Céleste', role: 'Combo', element: 'Son', quote: 'Le ciel se souvient de notre refrain.', biography: 'Élya chante les noms véritables des constellations et force leurs fragments à se reconnaître.' }, ['eclat_bonus_pct', 15, 'Chœur mineur', 'Éclats de fusion +15 %'], ['cascade_window_ms', 350, 'Harmonie', 'Fenêtre de cascade +350 ms']),
+          guardian(20, { id: 'solveig', name: 'Solveig', title: 'Aube éternelle', rarity: 'SSR', ability: 'aurora', ability_label: 'Aurore boréale', color: '#fb923c', faction: 'Veilleurs Boréaux', role: 'Amplificateur', element: 'Aurore', quote: 'La nuit reculera tant que je respire.', biography: 'Vedette de l’Aurore Boréale, Solveig double les fusions pendant une danse de lumière polaire.' }, ['start_charge', 30, 'Premier rayon', 'Commence avec 30 % de charge'], ['slow_on_cascade_ms', 2000, 'Chaleur douce', 'Ralenti 2 s sur cascade ×3']),
+          guardian(21, { id: 'seraphiel', name: 'Séraphiel', title: 'Juge des sept soleils', rarity: 'SSR', ability: 'starfall', ability_label: 'Sentence solaire', color: '#fde68a', faction: 'Trône du Nexus', role: 'Dégâts', element: 'Solaire', quote: 'Sept soleils, un seul verdict.', biography: 'Séraphiel descend lorsque les cieux sont condamnés et fait pleuvoir une sentence de feu pur.' }, ['score_bonus_pct', 18, 'Septième sceau', 'Score +18 %'], ['charge_merge_bonus', 5, 'Justice ardente', '+5 charge par fusion']),
+          guardian(22, { id: 'vaelora', name: 'Vaelora', title: 'Impératrice du vide', rarity: 'SSR', ability: 'void_swap', ability_label: 'Renversement absolu', color: '#8b5cf6', faction: 'Exilés du Vide', role: 'Manipulation', element: 'Vide', quote: 'Je ne crains pas la Nuit. Elle me craint.', biography: 'Ancienne souveraine exilée, Vaelora retourne la corruption contre elle-même et réordonne le Puits.' }, ['cooldown_reduction_ms', 90, 'Autorité noire', 'Recharge des orbes −90 ms'], ['eclat_bonus_pct', 18, 'Tribut du vide', 'Éclats de fusion +18 %']),
+          guardian(23, { id: 'orion', name: 'Orion', title: 'Architecte primordial', rarity: 'SSR', ability: 'gravity_well', ability_label: 'Architecture céleste', color: '#5eead4', faction: 'Bâtisseurs Premiers', role: 'Contrôle', element: 'Nexus', quote: 'Une constellation est une cité qui sait danser.', biography: 'Orion dessina les premières orbites. Son retour annonce la reconstruction du ciel originel.' }, ['overflow_grace_ms', 650, 'Fondation', 'Grâce de débordement +650 ms'], ['start_charge', 35, 'Plan primordial', 'Commence avec 35 % de charge']),
+        ],
+      },
+      economy_disclosure: {
+        paid_currency: false,
+        currency_source: 'earned by merges, cascades and Nexus completion',
+        duplicate_resource: 'essence',
+        duplicate_compensation: { R: 15, SR: 35, SSR: 80 },
+        duplicate_sink: 'essence awakens Guardian ultimates (5 levels, published costs)',
+        duplicate_evolution: 'each Guardian duplicate grants an evolution star (max 5) unlocking skills at 1 and 3 stars',
+        rates: { R: '70%', SR: '25%', SSR: '5%' },
+        pity: 'SSR guaranteed no later than pull 30; a non-featured SSR guarantees the featured SSR on the next SSR pull',
+        ten_pull: '900 shards for 10 pulls with at least one SR or better guaranteed',
+        relic_banner: '80 shards per pull (720 for 10, SR+ guaranteed); duplicates level items up to 5 then convert to essence',
+      },
+    } as Record<string, unknown>,
+    style: {
+      palette,
+      dimension: '2d',
+      mood: 'astral_arcade_collection',
+    },
+    systems: MERGE_DROP_SYSTEMS,
+    entities: [
+      {
+        id: 'player',
+        type: 'game_controller',
+        assets: {},
+        components: [{ transform: { x: 360, y: 224 } }],
+      },
+    ],
+    scenes: [
+      {
+        id: sceneId,
+        title: 'Le Puits des Constellations',
+        entities: ['player'],
+        background: background('#07131d', opts),
+        camera: { mode: 'fixed', bounds: true },
+        depth: { mode: 'flat', sort_key: 'feet_y' },
+        layout,
+        spawn: layout.spawn,
+        board: productionBoard(preset, opts),
+        story_beats: [
+          { id: 'opening', trigger: 'first_drop', text: 'Le ciel d Astra s est brise. Chaque fusion restaure une constellation.' },
+          { id: 'power', trigger: 'first_ability', text: 'Les Veilleurs pretent leur pouvoir a ceux qui savent ordonner les astres.' },
+          { id: 'nexus', trigger: 'target_reached', text: 'Le Nexus rallume une route vers le prochain ciel.' },
+        ],
+      },
+    ],
+    ui: {
+      orientation: 'portrait',
+      surfaces: ['score', 'next_orb', 'loss_line', 'hero_roster', 'ability_button', 'earned_summon', 'rates_disclosure'],
+      touch_targets_min_css_px: 44,
+    },
+    narrative: {
+      hook: 'Lead twenty-four Guardians across three shattered skies, master astral trials and defeat the Void Leviathans.',
+      first_run_objective: 'Complete the first constellation mission, recruit a squad and restore the road to the Nexus.',
+    },
+  });
+
+  return GameDefinitionSchema.parse(enhanceGdlWithPlayableSlice(base, {
+    preset,
+    title,
+    prompt: opts.prompt,
+    sourceImages: opts.boardImages,
+    qualityTarget: 'vertical_slice',
+  }));
+}
+
 export interface StarterGdlOptions {
   title?: string;
   palette?: string[];
   /** Already generated asset paths: hero sprite, background, etc. */
   heroSprite?: string;
   backgroundImage?: string;
+  /** Optional six-column portrait atlas for the twenty-four merge-drop Guardians. */
+  heroPortraitSheet?: string;
   /** Board/key-art/source references used to build a real playable volume contract. */
   boardImages?: string[];
   /** Raw prompt retained in meta.prototype_board for downstream agents. */
@@ -567,6 +772,9 @@ export interface StarterGdlOptions {
 }
 
 export function buildStarterGdl(preset: ProductionPreset, opts: StarterGdlOptions = {}): GameDefinition {
+  if (isMergeDrop(preset)) {
+    return buildMergeDropGdl(preset, opts);
+  }
   if (isLaneAction(preset)) {
     return buildLaneActionGdl(preset, opts);
   }

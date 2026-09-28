@@ -1,0 +1,120 @@
+{
+  "source": "C:\\Users\\phili\\Downloads\\Shadow_Echoes_Dernieres_Creations_2026-09-25.zip",
+  "pngCount": 21,
+  "modelFiles": 0,
+  "checks": [
+    {
+      "path": "01_Documentation/Shadow_Echoes_Bible_de_conception_V1.docx",
+      "status": "absent-from-archive"
+    },
+    {
+      "path": "01_Documentation/Shadow_Echoes_Bible_de_conception_V1.pdf",
+      "status": "absent-from-archive"
+    },
+    {
+      "path": "02_Transformation_Seraphine/01_recherches_initiales.png",
+      "status": "verified",
+      "bytes": 2912758
+    },
+    {
+      "path": "02_Transformation_Seraphine/02_approfondissement_concept_art.png",
+      "status": "verified",
+      "bytes": 2925973
+    },
+    {
+      "path": "02_Transformation_Seraphine/03_modele_final_2_5D.png",
+      "status": "verified",
+      "bytes": 2782158
+    },
+    {
+      "path": "02_Transformation_Seraphine/04_pipeline_visuel_detaille.png",
+      "status": "verified",
+      "bytes": 2370528
+    },
+    {
+      "path": "03_Transformation_Interface/avant_apres_interface_mythiques.png",
+      "status": "verified",
+      "bytes": 2363427
+    },
+    {
+      "path": "04_Transformation_10_Mythiques/01_Astrae.png",
+      "status": "verified",
+      "bytes": 2764259
+    },
+    {
+      "path": "04_Transformation_10_Mythiques/02_Ragnar.png",
+      "status": "verified",
+      "bytes": 2855005
+    },
+    {
+      "path": "04_Transformation_10_Mythiques/03_Nyxara.png",
+      "status": "verified",
+      "bytes": 2830834
+    },
+    {
+      "path": "04_Transformation_10_Mythiques/04_Solmira.png",
+      "status": "verified",
+      "bytes": 2802838
+    },
+    {
+      "path": "04_Transformation_10_Mythiques/05_Caelum.png",
+      "status": "verified",
+      "bytes": 2771720
+    },
+    {
+      "path": "04_Transformation_10_Mythiques/06_Eirlys.png",
+      "status": "verified",
+      "bytes": 2876675
+    },
+    {
+      "path": "04_Transformation_10_Mythiques/07_Voren.png",
+      "status": "verified",
+      "bytes": 2756068
+    },
+    {
+      "path": "04_Transformation_10_Mythiques/08_Lysael.png",
+      "status": "verified",
+      "bytes": 2935358
+    },
+    {
+      "path": "04_Transformation_10_Mythiques/09_Zareth.png",
+      "status": "verified",
+      "bytes": 2717397
+    },
+    {
+      "path": "04_Transformation_10_Mythiques/10_Ophelia.png",
+      "status": "verified",
+      "bytes": 2813719
+    },
+    {
+      "path": "05_Transformation_Niveaux/01_planche_exploratoire.png",
+      "status": "verified",
+      "bytes": 2729943
+    },
+    {
+      "path": "05_Transformation_Niveaux/02_comparaison_niveaux_et_personnages.png",
+      "status": "verified",
+      "bytes": 2821441
+    },
+    {
+      "path": "05_Transformation_Niveaux/03_variations_et_jeu.png",
+      "status": "verified",
+      "bytes": 2783445
+    },
+    {
+      "path": "05_Transformation_Niveaux/04_variantes_jeu.png",
+      "status": "verified",
+      "bytes": 2783973
+    },
+    {
+      "path": "05_Transformation_Niveaux/05_explorations_visuelles.png",
+      "status": "verified",
+      "bytes": 2741246
+    },
+    {
+      "path": "05_Transformation_Niveaux/06_environnement_et_integration.png",
+      "status": "verified",
+      "bytes": 2715897
+    }
+  ]
+}

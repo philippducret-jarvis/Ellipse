@@ -1,0 +1,225 @@
+{
+  "date": "2026-09-24T18:58:56.816Z",
+  "user_lot": 2,
+  "production_lot": 6,
+  "passed": true,
+  "unit_tests": {
+    "passed": 47,
+    "failed": 0,
+    "command": "node --test tools/lib/shadow-echoes/*.test.mjs",
+    "commands": [
+      "Suite de 46 tests validée",
+      "progression.test.mjs : 9 tests validés après ajout du test du deuxième palier (47 tests distincts au total)"
+    ]
+  },
+  "studio_typecheck": "passed",
+  "browser": {
+    "edition-browser-report": [
+      "Fiches, apprentissage limité, achat, équipement, amélioration et transfert uniques via les commandes",
+      "Carnet de test importé par l’interface : ascension, XP conservée, prérequis des talents, réinitialisation et rechargement",
+      "Huit écrans supplémentaires contrôlés à 390 px sans débordement",
+      "Trois cinématiques : sceau, rassemblement, silhouette, dévoilement, résultat ; coût et fragments contrôlés"
+    ],
+    "edition-combat-report": [
+      "Les quatre personnages ont des images d’attente différentes à deux instants, bases assistées coupées",
+      "Base manuelle, énergie, super animé et pause visuelle vérifiés",
+      "Ouvrir les règles du hub suspend le combat embarqué et permet de le reprendre"
+    ],
+    "citadel-browser-report": [
+      "Hub, quatre héros, invocation réelle, fragments, élévation, sélection et quête sans double paiement",
+      "Niveaux runes, alchimie, expédition, mémoire, dés et pêche gagnés par leurs commandes",
+      "Sauvegarde, rechargement, export, import valide avec confirmation et rejet d’un fichier corrompu",
+      "Sept écrans du hub vérifiés à 390 px sans débordement"
+    ],
+    "citadel-adventures-report": [
+      "caravan : premier niveau gagné, récompense enregistrée",
+      "race : premier niveau gagné, récompense enregistrée",
+      "survival : premier niveau gagné, récompense enregistrée",
+      "campaign : trois phases gagnées, message du bon iframe, récompense et relique uniques"
+    ]
+  },
+  "levels_won": 10,
+  "mobile_width": 390,
+  "assets": [
+    {
+      "path": "03_assets/enemies/guardians-v2.png",
+      "width": 2172,
+      "height": 724,
+      "alpha": true,
+      "sha256": "869f1fa538de81461b29b342f7b6beeeb5d3fc136cb832f10a779541213827b7"
+    },
+    {
+      "path": "03_assets/items/equipment-atlas-v1.png",
+      "width": 1254,
+      "height": 1254,
+      "alpha": true,
+      "sha256": "6d13e7b0773abb350947b3224bd493ae9b1cb0c23bc2f86e3943fe5b311b82e8"
+    }
+  ],
+  "runtime": [
+    {
+      "file": "activities.mjs",
+      "sha256": "a77222d67f641c5e023e8c270324205ca3ff2a16a68171b110f159ca173f71e9"
+    },
+    {
+      "file": "activity-view.mjs",
+      "sha256": "54956834b9f32daf82cda5e40ca82178d151511ca6b8a81f661074378ef9bc64"
+    },
+    {
+      "file": "app.mjs",
+      "sha256": "4a5c9fa7e209e22cf9664acdedd65f7ef0f2472980013c06443def3e12716d6e"
+    },
+    {
+      "file": "battle-app.mjs",
+      "sha256": "2d4953c259bda1e9bcf867a85f29dd48097adfb1da4bb24b7445aceaeb0c9502"
+    },
+    {
+      "file": "battle-edition.css",
+      "sha256": "c6dca95f6a0fa6cbd5119ee2e2bff7f23cacbfdd40c32e5c68bcc67d5bfb1c22"
+    },
+    {
+      "file": "battle.css",
+      "sha256": "fbc3f7d91ff3b624d6315303bd59baeb2e2519f81fa9090ce361d391664f3267"
+    },
+    {
+      "file": "battle.mjs",
+      "sha256": "ddbe276e80b9980dd87a8278680409aa20f032bdd24f85736cd0eebd00d9da33"
+    },
+    {
+      "file": "cinematic.mjs",
+      "sha256": "f30753c8ae69c5261db0d8b7e258c78495477137c6e9c563ce7d4d7001a62086"
+    },
+    {
+      "file": "citadel-app.mjs",
+      "sha256": "11eb693daecb288fbfd4f8df3abf1a17071b8c39003f0725312f5b3834106458"
+    },
+    {
+      "file": "citadel-data.mjs",
+      "sha256": "59f9752afa03a9034a47784f629e640ef5f3e44a491f7269d805a9b70dc61059"
+    },
+    {
+      "file": "citadel.css",
+      "sha256": "470bb0038a4f1391e5b02526938e6113f57e97611fbe5f7e8aa7bb824b6e0400"
+    },
+    {
+      "file": "citadel.html",
+      "sha256": "539e5b31c462db001d2ce66bdf7650998c3727da790e2703a4653bb4fa41c6a5"
+    },
+    {
+      "file": "edition-data.mjs",
+      "sha256": "c52956c96a673f283601bd652393552cc873c1ae173024db4fe4c85935613496"
+    },
+    {
+      "file": "edition.css",
+      "sha256": "ecbf57622e3160ba9cbbbccad77267f69baf6b2534ebb19d55c465db2e7edbb8"
+    },
+    {
+      "file": "hero-lab.mjs",
+      "sha256": "ea87facd71fcc840a7ffff54a4698ea0627d7c9e34260d8acc52c28a7ddce205"
+    },
+    {
+      "file": "hero-sheet.css",
+      "sha256": "35ab8ba48e144d35c9415453a54f91ab86aa90b4d28dd7d6a56cec04d88aa3ea"
+    },
+    {
+      "file": "hero-sheet.mjs",
+      "sha256": "e2253843be001dcdf6095310bb5ca9367774f62e9aeaa6ec227bc8de5ddfcb4a"
+    },
+    {
+      "file": "heroes.css",
+      "sha256": "5a7efca23e3c73ec5f41e0c66ce74ecef0deb375612ea325b901d14b84f06d6a"
+    },
+    {
+      "file": "heroes.html",
+      "sha256": "f1cc81356dc61b57f74669fd9c3555936ee2c63e8c9cac72b8128a852c434129"
+    },
+    {
+      "file": "heroes.mjs",
+      "sha256": "65714fd8bf9a86082bdb0258bdeebf342b8754fea44ce24af1518d007c3af46d"
+    },
+    {
+      "file": "layer-motion.mjs",
+      "sha256": "6124c3bd8e53faf585d0a018c3d34290213b66dc3baf143ec0abfc5b4b128ce4"
+    },
+    {
+      "file": "layer-rig.mjs",
+      "sha256": "a020f186fcc69f85bd1026ee312e2dda5446be8c2bc65e756d8a51bb833fae0d"
+    },
+    {
+      "file": "layers-app.mjs",
+      "sha256": "f15c639f952ec6e36a4a1b119b2793d8a84c164fe69df7a04bb4416418d51436"
+    },
+    {
+      "file": "layers.css",
+      "sha256": "0c01f2b7ba84eef4305c2fb6650824f99a965d6e1b7fcac57f949a3ebc25e540"
+    },
+    {
+      "file": "layers.html",
+      "sha256": "c03abf1adcac3ec8d3cec43039832099c1f6d20435b10337289ed3825fea2e7a"
+    },
+    {
+      "file": "motion-app.mjs",
+      "sha256": "b452e503d87b171203e8346183a6219f648c81f27c12c9b0981f4cca2546232e"
+    },
+    {
+      "file": "motion.css",
+      "sha256": "0555acc4918c4ced6ff3b08460a382901c4a1a7b13f85e5c1dcbddf1c059660e"
+    },
+    {
+      "file": "motion.html",
+      "sha256": "727d68d46d6f0324197535b8099e2e8a55b4b5a25fc0378bc5d5e566059b994b"
+    },
+    {
+      "file": "play.html",
+      "sha256": "dea56108f5ec4a5524818f3c48cf00dee12a03974209ce004a6f563c56a4a3fb"
+    },
+    {
+      "file": "preview.html",
+      "sha256": "539e5b31c462db001d2ce66bdf7650998c3727da790e2703a4653bb4fa41c6a5"
+    },
+    {
+      "file": "profile.mjs",
+      "sha256": "5fc5516b6eb02299b2fd3af0949d23b6dc443e91d311693053e5c8fd2aeaad3e"
+    },
+    {
+      "file": "progression.mjs",
+      "sha256": "ce1bd0b9c996d2ddee825d365401aac864c8cbbf9140183d8c132f6189ba8a55"
+    },
+    {
+      "file": "rig-data.mjs",
+      "sha256": "af372df878dc1970c67805066f8d37169e1c166a6ad1a65cf09595b2930ac93b"
+    },
+    {
+      "file": "rig-motion.mjs",
+      "sha256": "277543b6f40a46804af7a79cc12d5a1ad1023c0eb2149d94ad9aba742e5194a1"
+    },
+    {
+      "file": "rig-renderer.mjs",
+      "sha256": "1e0f1d639d282245e5094c0b8f86de13e0fe2bde5dbbc090ba3d72a0a678ac4e"
+    },
+    {
+      "file": "stage-effects.mjs",
+      "sha256": "318f6f87045394df227179cbf3a99e67c9c6b4f4fb8b7ac7b1197bd15a73ea8a"
+    }
+  ],
+  "limits": [
+    "Test d’ascension sur carnet de palier importé par les contrôles officiels ; pas de campagne complète 1–30 jouée dans le navigateur.",
+    "Animation hybride maillage/calques, profondeur et effets. Rigs anatomiques complets et fidélité artistique finale non certifiés.",
+    "Équipement fonctionnel sans changement de tenue illustrée.",
+    "Solo local, un niveau par activité."
+  ],
+  "portable": {
+    "passed": true,
+    "port": 4316,
+    "requires": "Node.js 22+",
+    "checks": [
+      "Redirection vers le hub autonome",
+      "Dix activités",
+      "Fiches et dépendances de progression incluses",
+      "Atlas du grimoire et équipements chargés",
+      "Invocation de convergence complète",
+      "Combat embarqué et ennemi illustré"
+    ],
+    "errors": []
+  }
+}

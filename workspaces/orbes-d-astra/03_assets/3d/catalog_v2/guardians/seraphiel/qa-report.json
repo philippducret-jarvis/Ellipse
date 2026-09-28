@@ -1,0 +1,41 @@
+{
+  "guardian": "seraphiel",
+  "displayName": "Séraphiel",
+  "adultConfirmed": true,
+  "presentation": "homme",
+  "element": "Solaire",
+  "role": "Dégâts",
+  "status": "integration_ready_humanoid_base",
+  "bodySource": "MPFB 2.0.17 / MakeHuman CC0",
+  "blender": "4.5.10 LTS",
+  "dimensionsMeters": [
+    0.5743,
+    0.2731,
+    1.5239
+  ],
+  "meshObjects": 24,
+  "trianglesBeforeExportModifiers": 137403,
+  "deformBones": 55,
+  "animationClips": [
+    "seraphiel_Idle_Glamour"
+  ],
+  "sockets": [
+    "socket_weapon_r",
+    "socket_artifact_l",
+    "socket_back",
+    "socket_head_fx"
+  ],
+  "glbBytes": 10857584,
+  "qualityGate": {
+    "realHumanoidTopology": true,
+    "gameEngineRig": true,
+    "texturedSkin": true,
+    "eyesHairTeeth": true,
+    "customAstraCostume": true,
+    "signatureWeapon": true,
+    "roundTripPending": true,
+    "commercialFinalSculpt": false,
+    "fullAnimationSet": false,
+    "finalLods": false
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "nebulin",
+  "displayName": "Nebulin",
+  "affinity": "Nexus",
+  "kind": "rigged_familiar",
+  "status": "integration_ready_animated_source",
+  "sourceLicense": "CC0",
+  "sourcePack": "Quaternius Cute Animated Monsters Pack",
+  "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/nebulin/nebulin_source.blend",
+  "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/nebulin/nebulin_lod0.glb",
+  "runtime": "res://assets/3d/summons_v2/nebulin/nebulin_lod0.glb",
+  "animations": [
+    "Bite_Front",
+    "Bite_InPlace",
+    "Dance",
+    "Death",
+    "HitRecieve",
+    "Idle",
+    "Jump",
+    "No",
+    "Walk",
+    "Yes"
+  ],
+  "detachedMissingImages": [],
+  "deformBones": 7,
+  "triangles": 1720,
+  "bytes": 432100,
+  "commercialFinal": false
+}

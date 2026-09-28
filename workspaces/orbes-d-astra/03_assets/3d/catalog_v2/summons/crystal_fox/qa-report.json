@@ -1,0 +1,32 @@
+{
+  "id": "crystal_fox",
+  "displayName": "Renard de cristal",
+  "affinity": "Cristal",
+  "kind": "rigged_familiar",
+  "status": "integration_ready_animated_source",
+  "sourceLicense": "CC0",
+  "sourcePack": "Quaternius Cute Animated Monsters Pack",
+  "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/crystal_fox/crystal_fox_source.blend",
+  "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/crystal_fox/crystal_fox_lod0.glb",
+  "runtime": "res://assets/3d/summons_v2/crystal_fox/crystal_fox_lod0.glb",
+  "animations": [
+    "Bite_Front",
+    "Bite_InPlace",
+    "Dance",
+    "Death",
+    "HitRecieve",
+    "Idle",
+    "Jump",
+    "No",
+    "Walk",
+    "Yes"
+  ],
+  "detachedMissingImages": [
+    "Panda_Texture.png.001",
+    "Texture.png"
+  ],
+  "deformBones": 7,
+  "triangles": 1428,
+  "bytes": 241544,
+  "commercialFinal": false
+}

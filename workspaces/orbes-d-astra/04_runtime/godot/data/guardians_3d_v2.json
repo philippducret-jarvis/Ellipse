@@ -1,0 +1,655 @@
+{
+  "schemaVersion": 2,
+  "generator": "tools/blender/build_orbes_guardians_v2.py",
+  "bodySource": "MPFB 2.0.17 / MakeHuman CC0",
+  "truth": {
+    "integrationReady": true,
+    "commercialFinalSculpts": false,
+    "finalRetopology": false,
+    "fullAnimations": false,
+    "finalLods": false
+  },
+  "standards": {
+    "format": "glTF 2.0 GLB",
+    "units": "meters",
+    "skeleton": "orbes_astra_humanoid_v2",
+    "idleClip": "<guardian_id>_Idle_Glamour",
+    "sockets": [
+      "socket_weapon_r",
+      "socket_artifact_l",
+      "socket_back",
+      "socket_head_fx"
+    ]
+  },
+  "guardians": [
+    {
+      "id": "aster",
+      "displayName": "Aster",
+      "presentation": "femme",
+      "element": "Nexus",
+      "role": "Dégâts",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/aster/aster_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/aster/aster_lod0.glb",
+      "runtime": "res://assets/3d/guardians_v2/aster/aster_lod0.glb",
+      "preview": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/aster/aster_preview.png",
+      "metrics": {
+        "triangles": 95628,
+        "bytes": 6025792,
+        "deformBones": 55
+      },
+      "animationClips": [
+        "aster_Idle_Glamour"
+      ],
+      "sockets": [
+        "socket_weapon_r",
+        "socket_artifact_l",
+        "socket_back",
+        "socket_head_fx"
+      ],
+      "status": "integration_ready_humanoid_base"
+    },
+    {
+      "id": "brann",
+      "displayName": "Brann",
+      "presentation": "homme",
+      "element": "Feu",
+      "role": "Amplificateur",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/brann/brann_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/brann/brann_lod0.glb",
+      "runtime": "res://assets/3d/guardians_v2/brann/brann_lod0.glb",
+      "preview": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/brann/brann_preview.png",
+      "metrics": {
+        "triangles": 100566,
+        "bytes": 14741768,
+        "deformBones": 55
+      },
+      "animationClips": [
+        "brann_Idle_Glamour"
+      ],
+      "sockets": [
+        "socket_weapon_r",
+        "socket_artifact_l",
+        "socket_back",
+        "socket_head_fx"
+      ],
+      "status": "integration_ready_humanoid_base"
+    },
+    {
+      "id": "caelum",
+      "displayName": "Caelum",
+      "presentation": "homme",
+      "element": "Foudre",
+      "role": "Dégâts",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/caelum/caelum_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/caelum/caelum_lod0.glb",
+      "runtime": "res://assets/3d/guardians_v2/caelum/caelum_lod0.glb",
+      "preview": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/caelum/caelum_preview.png",
+      "metrics": {
+        "triangles": 193226,
+        "bytes": 15008224,
+        "deformBones": 55
+      },
+      "animationClips": [
+        "caelum_Idle_Glamour"
+      ],
+      "sockets": [
+        "socket_weapon_r",
+        "socket_artifact_l",
+        "socket_back",
+        "socket_head_fx"
+      ],
+      "status": "integration_ready_humanoid_base"
+    },
+    {
+      "id": "ciro",
+      "displayName": "Ciro",
+      "presentation": "homme",
+      "element": "Solaire",
+      "role": "Précision",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/ciro/ciro_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/ciro/ciro_lod0.glb",
+      "runtime": "res://assets/3d/guardians_v2/ciro/ciro_lod0.glb",
+      "preview": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/ciro/ciro_preview.png",
+      "metrics": {
+        "triangles": 107888,
+        "bytes": 13358276,
+        "deformBones": 55
+      },
+      "animationClips": [
+        "ciro_Idle_Glamour"
+      ],
+      "sockets": [
+        "socket_weapon_r",
+        "socket_artifact_l",
+        "socket_back",
+        "socket_head_fx"
+      ],
+      "status": "integration_ready_humanoid_base"
+    },
+    {
+      "id": "elya",
+      "displayName": "Élya",
+      "presentation": "femme",
+      "element": "Son",
+      "role": "Combo",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/elya/elya_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/elya/elya_lod0.glb",
+      "runtime": "res://assets/3d/guardians_v2/elya/elya_lod0.glb",
+      "preview": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/elya/elya_preview.png",
+      "metrics": {
+        "triangles": 98857,
+        "bytes": 15059876,
+        "deformBones": 55
+      },
+      "animationClips": [
+        "elya_Idle_Glamour"
+      ],
+      "sockets": [
+        "socket_weapon_r",
+        "socket_artifact_l",
+        "socket_back",
+        "socket_head_fx"
+      ],
+      "status": "integration_ready_humanoid_base"
+    },
+    {
+      "id": "ilyra",
+      "displayName": "Ilyra",
+      "presentation": "femme",
+      "element": "Son",
+      "role": "Combo",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/ilyra/ilyra_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/ilyra/ilyra_lod0.glb",
+      "runtime": "res://assets/3d/guardians_v2/ilyra/ilyra_lod0.glb",
+      "preview": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/ilyra/ilyra_preview.png",
+      "metrics": {
+        "triangles": 116493,
+        "bytes": 14317404,
+        "deformBones": 55
+      },
+      "animationClips": [
+        "ilyra_Idle_Glamour"
+      ],
+      "sockets": [
+        "socket_weapon_r",
+        "socket_artifact_l",
+        "socket_back",
+        "socket_head_fx"
+      ],
+      "status": "integration_ready_humanoid_base"
+    },
+    {
+      "id": "joren",
+      "displayName": "Joren",
+      "presentation": "homme",
+      "element": "Lune",
+      "role": "Protection",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/joren/joren_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/joren/joren_lod0.glb",
+      "runtime": "res://assets/3d/guardians_v2/joren/joren_lod0.glb",
+      "preview": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/joren/joren_preview.png",
+      "metrics": {
+        "triangles": 98470,
+        "bytes": 9508868,
+        "deformBones": 55
+      },
+      "animationClips": [
+        "joren_Idle_Glamour"
+      ],
+      "sockets": [
+        "socket_weapon_r",
+        "socket_artifact_l",
+        "socket_back",
+        "socket_head_fx"
+      ],
+      "status": "integration_ready_humanoid_base"
+    },
+    {
+      "id": "kael",
+      "displayName": "Kael",
+      "presentation": "homme",
+      "element": "Vent",
+      "role": "Dégâts",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/kael/kael_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/kael/kael_lod0.glb",
+      "runtime": "res://assets/3d/guardians_v2/kael/kael_lod0.glb",
+      "preview": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/kael/kael_preview.png",
+      "metrics": {
+        "triangles": 181120,
+        "bytes": 16089160,
+        "deformBones": 55
+      },
+      "animationClips": [
+        "kael_Idle_Glamour"
+      ],
+      "sockets": [
+        "socket_weapon_r",
+        "socket_artifact_l",
+        "socket_back",
+        "socket_head_fx"
+      ],
+      "status": "integration_ready_humanoid_base"
+    },
+    {
+      "id": "lys",
+      "displayName": "Lys",
+      "presentation": "femme",
+      "element": "Temps",
+      "role": "Contrôle",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/lys/lys_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/lys/lys_lod0.glb",
+      "runtime": "res://assets/3d/guardians_v2/lys/lys_lod0.glb",
+      "preview": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/lys/lys_preview.png",
+      "metrics": {
+        "triangles": 105800,
+        "bytes": 13006524,
+        "deformBones": 55
+      },
+      "animationClips": [
+        "lys_Idle_Glamour"
+      ],
+      "sockets": [
+        "socket_weapon_r",
+        "socket_artifact_l",
+        "socket_back",
+        "socket_head_fx"
+      ],
+      "status": "integration_ready_humanoid_base"
+    },
+    {
+      "id": "maelys",
+      "displayName": "Maëlys",
+      "presentation": "femme",
+      "element": "Cosmos",
+      "role": "Amplificateur",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/maelys/maelys_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/maelys/maelys_lod0.glb",
+      "runtime": "res://assets/3d/guardians_v2/maelys/maelys_lod0.glb",
+      "preview": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/maelys/maelys_preview.png",
+      "metrics": {
+        "triangles": 82408,
+        "bytes": 11818112,
+        "deformBones": 55
+      },
+      "animationClips": [
+        "maelys_Idle_Glamour"
+      ],
+      "sockets": [
+        "socket_weapon_r",
+        "socket_artifact_l",
+        "socket_back",
+        "socket_head_fx"
+      ],
+      "status": "integration_ready_humanoid_base"
+    },
+    {
+      "id": "mira",
+      "displayName": "Mira",
+      "presentation": "femme",
+      "element": "Lune",
+      "role": "Contrôle",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/mira/mira_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/mira/mira_lod0.glb",
+      "runtime": "res://assets/3d/guardians_v2/mira/mira_lod0.glb",
+      "preview": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/mira/mira_preview.png",
+      "metrics": {
+        "triangles": 69186,
+        "bytes": 12473508,
+        "deformBones": 55
+      },
+      "animationClips": [
+        "mira_Idle_Glamour"
+      ],
+      "sockets": [
+        "socket_weapon_r",
+        "socket_artifact_l",
+        "socket_back",
+        "socket_head_fx"
+      ],
+      "status": "integration_ready_humanoid_base"
+    },
+    {
+      "id": "noor",
+      "displayName": "Noor",
+      "presentation": "femme",
+      "element": "Solaire",
+      "role": "Soutien",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/noor/noor_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/noor/noor_lod0.glb",
+      "runtime": "res://assets/3d/guardians_v2/noor/noor_lod0.glb",
+      "preview": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/noor/noor_preview.png",
+      "metrics": {
+        "triangles": 117902,
+        "bytes": 14156088,
+        "deformBones": 55
+      },
+      "animationClips": [
+        "noor_Idle_Glamour"
+      ],
+      "sockets": [
+        "socket_weapon_r",
+        "socket_artifact_l",
+        "socket_back",
+        "socket_head_fx"
+      ],
+      "status": "integration_ready_humanoid_base"
+    },
+    {
+      "id": "nyx",
+      "displayName": "Nyx",
+      "presentation": "femme",
+      "element": "Vide",
+      "role": "Manipulation",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/nyx/nyx_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/nyx/nyx_lod0.glb",
+      "runtime": "res://assets/3d/guardians_v2/nyx/nyx_lod0.glb",
+      "preview": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/nyx/nyx_preview.png",
+      "metrics": {
+        "triangles": 82896,
+        "bytes": 12658460,
+        "deformBones": 55
+      },
+      "animationClips": [
+        "nyx_Idle_Glamour"
+      ],
+      "sockets": [
+        "socket_weapon_r",
+        "socket_artifact_l",
+        "socket_back",
+        "socket_head_fx"
+      ],
+      "status": "integration_ready_humanoid_base"
+    },
+    {
+      "id": "orin",
+      "displayName": "Orin",
+      "presentation": "homme",
+      "element": "Eau",
+      "role": "Combo",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/orin/orin_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/orin/orin_lod0.glb",
+      "runtime": "res://assets/3d/guardians_v2/orin/orin_lod0.glb",
+      "preview": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/orin/orin_preview.png",
+      "metrics": {
+        "triangles": 151760,
+        "bytes": 14365740,
+        "deformBones": 55
+      },
+      "animationClips": [
+        "orin_Idle_Glamour"
+      ],
+      "sockets": [
+        "socket_weapon_r",
+        "socket_artifact_l",
+        "socket_back",
+        "socket_head_fx"
+      ],
+      "status": "integration_ready_humanoid_base"
+    },
+    {
+      "id": "orion",
+      "displayName": "Orion",
+      "presentation": "homme",
+      "element": "Nexus",
+      "role": "Contrôle",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/orion/orion_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/orion/orion_lod0.glb",
+      "runtime": "res://assets/3d/guardians_v2/orion/orion_lod0.glb",
+      "preview": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/orion/orion_preview.png",
+      "metrics": {
+        "triangles": 133490,
+        "bytes": 13751400,
+        "deformBones": 55
+      },
+      "animationClips": [
+        "orion_Idle_Glamour"
+      ],
+      "sockets": [
+        "socket_weapon_r",
+        "socket_artifact_l",
+        "socket_back",
+        "socket_head_fx"
+      ],
+      "status": "integration_ready_humanoid_base"
+    },
+    {
+      "id": "phae",
+      "displayName": "Phaé",
+      "presentation": "femme",
+      "element": "Nature",
+      "role": "Soutien",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/phae/phae_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/phae/phae_lod0.glb",
+      "runtime": "res://assets/3d/guardians_v2/phae/phae_lod0.glb",
+      "preview": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/phae/phae_preview.png",
+      "metrics": {
+        "triangles": 93400,
+        "bytes": 13983504,
+        "deformBones": 55
+      },
+      "animationClips": [
+        "phae_Idle_Glamour"
+      ],
+      "sockets": [
+        "socket_weapon_r",
+        "socket_artifact_l",
+        "socket_back",
+        "socket_head_fx"
+      ],
+      "status": "integration_ready_humanoid_base"
+    },
+    {
+      "id": "rhea",
+      "displayName": "Rhéa",
+      "presentation": "femme",
+      "element": "Eau",
+      "role": "Combo",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/rhea/rhea_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/rhea/rhea_lod0.glb",
+      "runtime": "res://assets/3d/guardians_v2/rhea/rhea_lod0.glb",
+      "preview": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/rhea/rhea_preview.png",
+      "metrics": {
+        "triangles": 95662,
+        "bytes": 11862884,
+        "deformBones": 55
+      },
+      "animationClips": [
+        "rhea_Idle_Glamour"
+      ],
+      "sockets": [
+        "socket_weapon_r",
+        "socket_artifact_l",
+        "socket_back",
+        "socket_head_fx"
+      ],
+      "status": "integration_ready_humanoid_base"
+    },
+    {
+      "id": "saphira",
+      "displayName": "Saphira",
+      "presentation": "femme",
+      "element": "Cristal",
+      "role": "Dégâts",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/saphira/saphira_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/saphira/saphira_lod0.glb",
+      "runtime": "res://assets/3d/guardians_v2/saphira/saphira_lod0.glb",
+      "preview": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/saphira/saphira_preview.png",
+      "metrics": {
+        "triangles": 95426,
+        "bytes": 14002008,
+        "deformBones": 55
+      },
+      "animationClips": [
+        "saphira_Idle_Glamour"
+      ],
+      "sockets": [
+        "socket_weapon_r",
+        "socket_artifact_l",
+        "socket_back",
+        "socket_head_fx"
+      ],
+      "status": "integration_ready_humanoid_base"
+    },
+    {
+      "id": "seraphiel",
+      "displayName": "Séraphiel",
+      "presentation": "homme",
+      "element": "Solaire",
+      "role": "Dégâts",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/seraphiel/seraphiel_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/seraphiel/seraphiel_lod0.glb",
+      "runtime": "res://assets/3d/guardians_v2/seraphiel/seraphiel_lod0.glb",
+      "preview": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/seraphiel/seraphiel_preview.png",
+      "metrics": {
+        "triangles": 137403,
+        "bytes": 10857584,
+        "deformBones": 55
+      },
+      "animationClips": [
+        "seraphiel_Idle_Glamour"
+      ],
+      "sockets": [
+        "socket_weapon_r",
+        "socket_artifact_l",
+        "socket_back",
+        "socket_head_fx"
+      ],
+      "status": "integration_ready_humanoid_base"
+    },
+    {
+      "id": "solveig",
+      "displayName": "Solveig",
+      "presentation": "femme",
+      "element": "Aurore",
+      "role": "Amplificateur",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/solveig/solveig_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/solveig/solveig_lod0.glb",
+      "runtime": "res://assets/3d/guardians_v2/solveig/solveig_lod0.glb",
+      "preview": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/solveig/solveig_preview.png",
+      "metrics": {
+        "triangles": 241082,
+        "bytes": 15553544,
+        "deformBones": 55
+      },
+      "animationClips": [
+        "solveig_Idle_Glamour"
+      ],
+      "sockets": [
+        "socket_weapon_r",
+        "socket_artifact_l",
+        "socket_back",
+        "socket_head_fx"
+      ],
+      "status": "integration_ready_humanoid_base"
+    },
+    {
+      "id": "talia",
+      "displayName": "Talia",
+      "presentation": "femme",
+      "element": "Vent",
+      "role": "Vitesse",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/talia/talia_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/talia/talia_lod0.glb",
+      "runtime": "res://assets/3d/guardians_v2/talia/talia_lod0.glb",
+      "preview": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/talia/talia_preview.png",
+      "metrics": {
+        "triangles": 91124,
+        "bytes": 11788484,
+        "deformBones": 55
+      },
+      "animationClips": [
+        "talia_Idle_Glamour"
+      ],
+      "sockets": [
+        "socket_weapon_r",
+        "socket_artifact_l",
+        "socket_back",
+        "socket_head_fx"
+      ],
+      "status": "integration_ready_humanoid_base"
+    },
+    {
+      "id": "talos",
+      "displayName": "Talos",
+      "presentation": "homme",
+      "element": "Métal",
+      "role": "Contrôle",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/talos/talos_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/talos/talos_lod0.glb",
+      "runtime": "res://assets/3d/guardians_v2/talos/talos_lod0.glb",
+      "preview": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/talos/talos_preview.png",
+      "metrics": {
+        "triangles": 95760,
+        "bytes": 9962540,
+        "deformBones": 55
+      },
+      "animationClips": [
+        "talos_Idle_Glamour"
+      ],
+      "sockets": [
+        "socket_weapon_r",
+        "socket_artifact_l",
+        "socket_back",
+        "socket_head_fx"
+      ],
+      "status": "integration_ready_humanoid_base"
+    },
+    {
+      "id": "vaelora",
+      "displayName": "Vaelora",
+      "presentation": "femme",
+      "element": "Vide",
+      "role": "Manipulation",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/vaelora/vaelora_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/vaelora/vaelora_lod0.glb",
+      "runtime": "res://assets/3d/guardians_v2/vaelora/vaelora_lod0.glb",
+      "preview": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/vaelora/vaelora_preview.png",
+      "metrics": {
+        "triangles": 80128,
+        "bytes": 12832984,
+        "deformBones": 55
+      },
+      "animationClips": [
+        "vaelora_Idle_Glamour"
+      ],
+      "sockets": [
+        "socket_weapon_r",
+        "socket_artifact_l",
+        "socket_back",
+        "socket_head_fx"
+      ],
+      "status": "integration_ready_humanoid_base"
+    },
+    {
+      "id": "vesper",
+      "displayName": "Vesper",
+      "presentation": "homme",
+      "element": "Ombre",
+      "role": "Protection",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/vesper/vesper_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/vesper/vesper_lod0.glb",
+      "runtime": "res://assets/3d/guardians_v2/vesper/vesper_lod0.glb",
+      "preview": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/guardians/vesper/vesper_preview.png",
+      "metrics": {
+        "triangles": 233322,
+        "bytes": 14584704,
+        "deformBones": 55
+      },
+      "animationClips": [
+        "vesper_Idle_Glamour"
+      ],
+      "sockets": [
+        "socket_weapon_r",
+        "socket_artifact_l",
+        "socket_back",
+        "socket_head_fx"
+      ],
+      "status": "integration_ready_humanoid_base"
+    }
+  ],
+  "summary": {
+    "guardians": 24,
+    "bytes": 311767436,
+    "triangles": 2898997
+  }
+}

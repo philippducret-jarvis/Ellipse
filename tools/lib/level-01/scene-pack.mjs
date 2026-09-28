@@ -3,7 +3,7 @@ import { GDL_PATH, LEVEL_01_GROUND_Y, LEVEL_01_HEIGHT, LEVEL_01_WIDTH, LEVEL_SCE
 import { readJson, writeJson, writeText } from './io.mjs';
 import { buildEchoesSceneGdl } from '../hd-faithful/depth-gdl.mjs';
 
-function buildLayout() {
+export function buildLayout() {
   return {
     world_size: { width: LEVEL_01_WIDTH, height: LEVEL_01_HEIGHT },
     ground_y: LEVEL_01_GROUND_Y,

@@ -6,7 +6,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && vite build --config vite.browser.config.ts",
     "build:browser": "vite build --config vite.browser.config.ts",
     "dev": "vite",
     "typecheck": "tsc --noEmit",

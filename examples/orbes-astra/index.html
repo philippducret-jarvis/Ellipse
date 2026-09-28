@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#07131d" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Orbes d'Astra" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="./assets/app-icon-512.png" />
+    <title>Orbes d'Astra</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main id="game-shell" aria-live="polite">
+      <section id="experience-screen" aria-label="Menu Orbes d'Astra">
+        <div id="experience-content"></div>
+      </section>
+      <section id="game-stage" aria-label="Mission Orbes d'Astra" hidden>
+        <div id="super-overlay" class="super-overlay" aria-hidden="true">
+          <div class="super-overlay__magic"></div>
+          <div class="super-overlay__portrait"></div>
+          <div class="super-overlay__copy">
+            <small>MAGIE ASTRALE</small>
+            <strong id="super-hero-name">Gardien</strong>
+            <span id="super-ability-name">Ultime</span>
+          </div>
+        </div>
+        <aside class="stage-panel stage-panel--mission" aria-label="Objectif de mission">
+          <button id="hub-button" class="stage-back" type="button" aria-label="Retourner à l’observatoire">← Observatoire</button>
+          <p class="stage-eyebrow">MISSION ACTIVE</p>
+          <h2 id="stage-mission-title">Route céleste</h2>
+          <p id="stage-mission-objective">Réunissez les Astres.</p>
+          <div id="stage-mission-reward" class="stage-reward"></div>
+          <div class="stage-squad" id="stage-squad"></div>
+        </aside>
+        <div class="stage-canvas-frame">
+          <div class="stage-crown" aria-hidden="true"><i></i><span>ORBeS D’ASTRA</span><i></i></div>
+          <div id="game" aria-label="Plateau de mission d'Orbes d'Astra"></div>
+        </div>
+        <aside class="stage-panel stage-panel--controls" aria-label="Commandes PC">
+          <p class="stage-eyebrow">COMMANDES PC</p>
+          <h2>Maîtriser le Puits</h2>
+          <dl class="control-list">
+            <div><dt>Souris</dt><dd>Viser et lâcher</dd></div>
+            <div><dt>← / →</dt><dd>Déplacer l’orbe</dd></div>
+            <div><dt>Espace</dt><dd>Lâcher / ultime</dd></div>
+            <div><dt>R</dt><dd>Recommencer</dd></div>
+            <div><dt>Échap</dt><dd>Observatoire</dd></div>
+          </dl>
+          <button id="stage-restart" type="button">Recommencer la mission</button>
+          <p class="stage-tip">Astuce : préparez les cascades avant d’activer l’ultime de votre Gardien.</p>
+        </aside>
+      </section>
+      <p id="boot-status" role="status">Chargement...</p>
+    </main>
+    <script>
+      (() => {
+        const bootStatus = document.querySelector('#boot-status');
+        const showBootFailure = (reason) => {
+          if (!bootStatus || bootStatus.textContent?.trim() !== 'Chargement...') return;
+          bootStatus.textContent = `Erreur de lancement : ${reason || 'module navigateur indisponible'}`;
+          bootStatus.dataset.state = 'error';
+        };
+        window.addEventListener('error', (event) => {
+          const source = event.filename ? ` (${event.filename.split('/').pop()})` : '';
+          showBootFailure(`${event.message || 'échec du script'}${source}`);
+        });
+        window.addEventListener('unhandledrejection', (event) => {
+          const reason = event.reason instanceof Error ? event.reason.message : String(event.reason || 'promesse rejetée');
+          showBootFailure(reason);
+        });
+        window.setTimeout(() => showBootFailure('le moteur ne répond pas après 30 secondes'), 30_000);
+      })();
+    </script>
+    <script type="module" src="./game.js"></script>
+    <script>
+      if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./service-worker.js').catch(() => {
+            // Le jeu reste entièrement jouable en ligne si le cache hors connexion échoue.
+          });
+        });
+      }
+    </script>
+  </body>
+</html>

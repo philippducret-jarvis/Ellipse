@@ -1,0 +1,13 @@
+{
+  "date": "2026-09-24T12:18:03.049Z",
+  "unit_tests": 38,
+  "passed": true,
+  "activities_won_in_browser": 10,
+  "mobile_width": 390,
+  "studio_typecheck": "passed",
+  "reports": [
+    "citadel-browser-report.json",
+    "citadel-adventures-report.json"
+  ],
+  "artistic_fidelity_approved": false
+}

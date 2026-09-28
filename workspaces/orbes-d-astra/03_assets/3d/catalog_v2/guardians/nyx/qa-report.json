@@ -1,0 +1,41 @@
+{
+  "guardian": "nyx",
+  "displayName": "Nyx",
+  "adultConfirmed": true,
+  "presentation": "femme",
+  "element": "Vide",
+  "role": "Manipulation",
+  "status": "integration_ready_humanoid_base",
+  "bodySource": "MPFB 2.0.17 / MakeHuman CC0",
+  "blender": "4.5.10 LTS",
+  "dimensionsMeters": [
+    0.6958,
+    0.3038,
+    1.7211
+  ],
+  "meshObjects": 25,
+  "trianglesBeforeExportModifiers": 82896,
+  "deformBones": 55,
+  "animationClips": [
+    "nyx_Idle_Glamour"
+  ],
+  "sockets": [
+    "socket_weapon_r",
+    "socket_artifact_l",
+    "socket_back",
+    "socket_head_fx"
+  ],
+  "glbBytes": 12658460,
+  "qualityGate": {
+    "realHumanoidTopology": true,
+    "gameEngineRig": true,
+    "texturedSkin": true,
+    "eyesHairTeeth": true,
+    "customAstraCostume": true,
+    "signatureWeapon": true,
+    "roundTripPending": true,
+    "commercialFinalSculpt": false,
+    "fullAnimationSet": false,
+    "finalLods": false
+  }
+}

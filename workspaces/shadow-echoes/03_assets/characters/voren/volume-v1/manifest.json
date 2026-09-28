@@ -1,0 +1,10 @@
+{
+  "hero": "voren",
+  "path": "03_assets/characters/voren/volume-v1/hero.glb",
+  "bytes": 10386380,
+  "nodes": 173,
+  "meshes": 105,
+  "clips": 42,
+  "representation": "Hierarchical articulated meshes; rigid attachment at joints, no continuous skin weights",
+  "quality": "Procedural volume study; not final reference-quality art"
+}

@@ -45,6 +45,9 @@ describe('training-roadmap', () => {
   it('construit un snapshot de progression', () => {
     const snap = buildTrainingProgressSnapshot({ asset_pipeline: 70, gameplay_systems: 65 });
     expect(snap.current_phase_id).toBeTruthy();
+    expect(snap.report_type).toBe('training_curriculum');
+    expect(snap.release_gate).toBe(false);
+    expect(snap.commercial_ready).toBe(false);
     expect(Object.keys(snap.phase_scores).length).toBe(6);
   });
 

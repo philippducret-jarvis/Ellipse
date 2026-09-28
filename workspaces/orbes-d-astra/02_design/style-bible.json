@@ -1,0 +1,10 @@
+{
+  "id": "orbes-d-astra-style",
+  "render": "painterly anime-inspired 2D mobile game art with crisp gameplay readability",
+  "palette": ["#07131d", "#2dd4bf", "#38bdf8", "#fb7185", "#f59e0b", "#f8fafc"],
+  "background_rule": "The center remains calm. Architecture and spectacle stay on the edges.",
+  "orb_rule": "Every tier differs by radius, hue and numeric rune. Art radius must match collision radius.",
+  "character_rule": "The same four-column portrait atlas is used for roster, selection and summon results.",
+  "fx_rule": "Merge effects last less than 600 ms and never hide the loss line or next drop.",
+  "ui_rule": "Portrait mobile, stable dimensions, minimum 44 CSS px touch targets, rates and pity always inspectable."
+}

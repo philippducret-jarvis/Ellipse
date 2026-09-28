@@ -19,16 +19,20 @@ export function getDatabaseUrl(): string {
 export function getPool(): pg.Pool {
   if (!pool) {
     loadEnv();
-    pool = new Pool({ connectionString: getDatabaseUrl() });
+    pool = new Pool({ connectionString: getDatabaseUrl(), connectionTimeoutMillis: 5000 });
+    // Une interruption PostgreSQL ne doit pas faire tomber l’orchestrateur
+    // lorsqu’une connexion inactive du pool émet une erreur.
+    pool.on('error', (error: Error & { code?: string }) => {
+      console.warn('[db] Connexion inactive interrompue:', error.code ?? error.name);
+    });
   }
   return pool;
 }
 
 export async function checkDatabaseConnection(): Promise<boolean> {
   try {
-    const client = await getPool().connect();
-    await client.query('SELECT 1');
-    client.release();
+    // pool.query restitue aussi la connexion en cas d’échec de SELECT.
+    await getPool().query('SELECT 1');
     return true;
   } catch {
     return false;

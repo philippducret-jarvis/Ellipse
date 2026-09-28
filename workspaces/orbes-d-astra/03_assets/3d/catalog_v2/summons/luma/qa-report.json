@@ -1,0 +1,23 @@
+{
+  "id": "luma",
+  "displayName": "Luma",
+  "affinity": "Solaire",
+  "kind": "rigged_familiar",
+  "status": "integration_ready_animated_source",
+  "sourceLicense": "CC0",
+  "sourcePack": "Quaternius Cute Animated Monsters Pack",
+  "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/luma/luma_source.blend",
+  "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/luma/luma_lod0.glb",
+  "runtime": "res://assets/3d/summons_v2/luma/luma_lod0.glb",
+  "animations": [
+    "Bite_Front",
+    "Death",
+    "Flying",
+    "HitRecieve"
+  ],
+  "detachedMissingImages": [],
+  "deformBones": 9,
+  "triangles": 1492,
+  "bytes": 376508,
+  "commercialFinal": false
+}

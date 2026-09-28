@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "checks": [
+    "Scène 3D initialisée, quatre héros et session de campagne sauvegardée",
+    "Cadrage tactique réversible et commandes adaptées à la caméra",
+    "Changement de héros et compétence avec recharge",
+    "Pause : temps et rendu figés",
+    "Règles accessibles et éclairage aube/nuit",
+    "Déplacement clavier effectif, esquive et lancement de compétence",
+    "390 px : commandes et scène sans débordement",
+    "Entrée Campagne de la Citadelle dirigée vers le niveau 2,5D",
+    "Émulation tactile : pavé de déplacement visible et déplacement effectif"
+  ],
+  "errors": [],
+  "scope": "Chromium desktop and 390 px viewport; not a real-device performance benchmark."
+}

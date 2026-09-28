@@ -1,0 +1,3178 @@
+{
+  "schemaVersion": 1,
+  "generator": "tools/blender/build_orbes_3d_catalog.py",
+  "status": "procedural_production_blockout",
+  "truth": {
+    "commercialReady": false,
+    "finalSculpts": false,
+    "finalRetopology": false,
+    "finalTextures": false,
+    "purpose": "complete integration-ready 3D catalog and art-direction blockout"
+  },
+  "standards": {
+    "format": "glTF 2.0 GLB",
+    "units": "meters",
+    "upAxis": "+Y in Godot / +Z in Blender",
+    "guardianHeight": "1.72–2.08 m",
+    "lods": [
+      "lod0",
+      "lod1",
+      "lod2"
+    ],
+    "outfits": [
+      "combat",
+      "awakened",
+      "celestial_evening",
+      "seasonal"
+    ],
+    "guardianSockets": [
+      "socket_weapon_r",
+      "socket_artifact_l",
+      "socket_back",
+      "socket_head_fx"
+    ],
+    "animationClips": [
+      "Idle",
+      "Walk",
+      "SkillCast",
+      "Ultimate",
+      "Victory"
+    ]
+  },
+  "assets": [
+    {
+      "id": "archive_shelf",
+      "kind": "shared_prop",
+      "source": "props/archive_shelf.glb",
+      "runtime": "res://assets/3d/props/archive_shelf.glb",
+      "metrics": {
+        "meshes": 5,
+        "triangles": 336,
+        "bytes": 40932
+      }
+    },
+    {
+      "id": "armor_aster",
+      "kind": "signature_armor_set",
+      "source": "armor/armor_aster.glb",
+      "runtime": "res://assets/3d/armor/armor_aster.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2098,
+        "bytes": 67264
+      },
+      "guardian": "aster",
+      "parts": [
+        "chest",
+        "waist",
+        "belt",
+        "pauldrons",
+        "greaves",
+        "crown"
+      ]
+    },
+    {
+      "id": "armor_brann",
+      "kind": "signature_armor_set",
+      "source": "armor/armor_brann.glb",
+      "runtime": "res://assets/3d/armor/armor_brann.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2098,
+        "bytes": 67248
+      },
+      "guardian": "brann",
+      "parts": [
+        "chest",
+        "waist",
+        "belt",
+        "pauldrons",
+        "greaves",
+        "crown"
+      ]
+    },
+    {
+      "id": "armor_caelum",
+      "kind": "signature_armor_set",
+      "source": "armor/armor_caelum.glb",
+      "runtime": "res://assets/3d/armor/armor_caelum.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2098,
+        "bytes": 67260
+      },
+      "guardian": "caelum",
+      "parts": [
+        "chest",
+        "waist",
+        "belt",
+        "pauldrons",
+        "greaves",
+        "crown"
+      ]
+    },
+    {
+      "id": "armor_ciro",
+      "kind": "signature_armor_set",
+      "source": "armor/armor_ciro.glb",
+      "runtime": "res://assets/3d/armor/armor_ciro.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2098,
+        "bytes": 67272
+      },
+      "guardian": "ciro",
+      "parts": [
+        "chest",
+        "waist",
+        "belt",
+        "pauldrons",
+        "greaves",
+        "crown"
+      ]
+    },
+    {
+      "id": "armor_elya",
+      "kind": "signature_armor_set",
+      "source": "armor/armor_elya.glb",
+      "runtime": "res://assets/3d/armor/armor_elya.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2098,
+        "bytes": 67264
+      },
+      "guardian": "elya",
+      "parts": [
+        "chest",
+        "waist",
+        "belt",
+        "pauldrons",
+        "greaves",
+        "crown"
+      ]
+    },
+    {
+      "id": "armor_ilyra",
+      "kind": "signature_armor_set",
+      "source": "armor/armor_ilyra.glb",
+      "runtime": "res://assets/3d/armor/armor_ilyra.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2098,
+        "bytes": 67268
+      },
+      "guardian": "ilyra",
+      "parts": [
+        "chest",
+        "waist",
+        "belt",
+        "pauldrons",
+        "greaves",
+        "crown"
+      ]
+    },
+    {
+      "id": "armor_joren",
+      "kind": "signature_armor_set",
+      "source": "armor/armor_joren.glb",
+      "runtime": "res://assets/3d/armor/armor_joren.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2098,
+        "bytes": 67264
+      },
+      "guardian": "joren",
+      "parts": [
+        "chest",
+        "waist",
+        "belt",
+        "pauldrons",
+        "greaves",
+        "crown"
+      ]
+    },
+    {
+      "id": "armor_kael",
+      "kind": "signature_armor_set",
+      "source": "armor/armor_kael.glb",
+      "runtime": "res://assets/3d/armor/armor_kael.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2098,
+        "bytes": 67288
+      },
+      "guardian": "kael",
+      "parts": [
+        "chest",
+        "waist",
+        "belt",
+        "pauldrons",
+        "greaves",
+        "crown"
+      ]
+    },
+    {
+      "id": "armor_lys",
+      "kind": "signature_armor_set",
+      "source": "armor/armor_lys.glb",
+      "runtime": "res://assets/3d/armor/armor_lys.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2098,
+        "bytes": 67244
+      },
+      "guardian": "lys",
+      "parts": [
+        "chest",
+        "waist",
+        "belt",
+        "pauldrons",
+        "greaves",
+        "crown"
+      ]
+    },
+    {
+      "id": "armor_maelys",
+      "kind": "signature_armor_set",
+      "source": "armor/armor_maelys.glb",
+      "runtime": "res://assets/3d/armor/armor_maelys.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2098,
+        "bytes": 67272
+      },
+      "guardian": "maelys",
+      "parts": [
+        "chest",
+        "waist",
+        "belt",
+        "pauldrons",
+        "greaves",
+        "crown"
+      ]
+    },
+    {
+      "id": "armor_mira",
+      "kind": "signature_armor_set",
+      "source": "armor/armor_mira.glb",
+      "runtime": "res://assets/3d/armor/armor_mira.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2098,
+        "bytes": 67264
+      },
+      "guardian": "mira",
+      "parts": [
+        "chest",
+        "waist",
+        "belt",
+        "pauldrons",
+        "greaves",
+        "crown"
+      ]
+    },
+    {
+      "id": "armor_noor",
+      "kind": "signature_armor_set",
+      "source": "armor/armor_noor.glb",
+      "runtime": "res://assets/3d/armor/armor_noor.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2098,
+        "bytes": 67248
+      },
+      "guardian": "noor",
+      "parts": [
+        "chest",
+        "waist",
+        "belt",
+        "pauldrons",
+        "greaves",
+        "crown"
+      ]
+    },
+    {
+      "id": "armor_nyx",
+      "kind": "signature_armor_set",
+      "source": "armor/armor_nyx.glb",
+      "runtime": "res://assets/3d/armor/armor_nyx.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2098,
+        "bytes": 67260
+      },
+      "guardian": "nyx",
+      "parts": [
+        "chest",
+        "waist",
+        "belt",
+        "pauldrons",
+        "greaves",
+        "crown"
+      ]
+    },
+    {
+      "id": "armor_orin",
+      "kind": "signature_armor_set",
+      "source": "armor/armor_orin.glb",
+      "runtime": "res://assets/3d/armor/armor_orin.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2098,
+        "bytes": 67268
+      },
+      "guardian": "orin",
+      "parts": [
+        "chest",
+        "waist",
+        "belt",
+        "pauldrons",
+        "greaves",
+        "crown"
+      ]
+    },
+    {
+      "id": "armor_orion",
+      "kind": "signature_armor_set",
+      "source": "armor/armor_orion.glb",
+      "runtime": "res://assets/3d/armor/armor_orion.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2098,
+        "bytes": 67260
+      },
+      "guardian": "orion",
+      "parts": [
+        "chest",
+        "waist",
+        "belt",
+        "pauldrons",
+        "greaves",
+        "crown"
+      ]
+    },
+    {
+      "id": "armor_phae",
+      "kind": "signature_armor_set",
+      "source": "armor/armor_phae.glb",
+      "runtime": "res://assets/3d/armor/armor_phae.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2098,
+        "bytes": 67248
+      },
+      "guardian": "phae",
+      "parts": [
+        "chest",
+        "waist",
+        "belt",
+        "pauldrons",
+        "greaves",
+        "crown"
+      ]
+    },
+    {
+      "id": "armor_rhea",
+      "kind": "signature_armor_set",
+      "source": "armor/armor_rhea.glb",
+      "runtime": "res://assets/3d/armor/armor_rhea.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2098,
+        "bytes": 67248
+      },
+      "guardian": "rhea",
+      "parts": [
+        "chest",
+        "waist",
+        "belt",
+        "pauldrons",
+        "greaves",
+        "crown"
+      ]
+    },
+    {
+      "id": "armor_saphira",
+      "kind": "signature_armor_set",
+      "source": "armor/armor_saphira.glb",
+      "runtime": "res://assets/3d/armor/armor_saphira.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2098,
+        "bytes": 67284
+      },
+      "guardian": "saphira",
+      "parts": [
+        "chest",
+        "waist",
+        "belt",
+        "pauldrons",
+        "greaves",
+        "crown"
+      ]
+    },
+    {
+      "id": "armor_seraphiel",
+      "kind": "signature_armor_set",
+      "source": "armor/armor_seraphiel.glb",
+      "runtime": "res://assets/3d/armor/armor_seraphiel.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2098,
+        "bytes": 67260
+      },
+      "guardian": "seraphiel",
+      "parts": [
+        "chest",
+        "waist",
+        "belt",
+        "pauldrons",
+        "greaves",
+        "crown"
+      ]
+    },
+    {
+      "id": "armor_solveig",
+      "kind": "signature_armor_set",
+      "source": "armor/armor_solveig.glb",
+      "runtime": "res://assets/3d/armor/armor_solveig.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2098,
+        "bytes": 67288
+      },
+      "guardian": "solveig",
+      "parts": [
+        "chest",
+        "waist",
+        "belt",
+        "pauldrons",
+        "greaves",
+        "crown"
+      ]
+    },
+    {
+      "id": "armor_talia",
+      "kind": "signature_armor_set",
+      "source": "armor/armor_talia.glb",
+      "runtime": "res://assets/3d/armor/armor_talia.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2098,
+        "bytes": 67284
+      },
+      "guardian": "talia",
+      "parts": [
+        "chest",
+        "waist",
+        "belt",
+        "pauldrons",
+        "greaves",
+        "crown"
+      ]
+    },
+    {
+      "id": "armor_talos",
+      "kind": "signature_armor_set",
+      "source": "armor/armor_talos.glb",
+      "runtime": "res://assets/3d/armor/armor_talos.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2098,
+        "bytes": 67264
+      },
+      "guardian": "talos",
+      "parts": [
+        "chest",
+        "waist",
+        "belt",
+        "pauldrons",
+        "greaves",
+        "crown"
+      ]
+    },
+    {
+      "id": "armor_vaelora",
+      "kind": "signature_armor_set",
+      "source": "armor/armor_vaelora.glb",
+      "runtime": "res://assets/3d/armor/armor_vaelora.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2098,
+        "bytes": 67272
+      },
+      "guardian": "vaelora",
+      "parts": [
+        "chest",
+        "waist",
+        "belt",
+        "pauldrons",
+        "greaves",
+        "crown"
+      ]
+    },
+    {
+      "id": "armor_vesper",
+      "kind": "signature_armor_set",
+      "source": "armor/armor_vesper.glb",
+      "runtime": "res://assets/3d/armor/armor_vesper.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2098,
+        "bytes": 67292
+      },
+      "guardian": "vesper",
+      "parts": [
+        "chest",
+        "waist",
+        "belt",
+        "pauldrons",
+        "greaves",
+        "crown"
+      ]
+    },
+    {
+      "id": "artifact_aster",
+      "kind": "signature_artifact",
+      "source": "artifacts/artifact_aster.glb",
+      "runtime": "res://assets/3d/artifacts/artifact_aster.glb",
+      "metrics": {
+        "meshes": 10,
+        "triangles": 1470,
+        "bytes": 48324
+      },
+      "guardian": "aster",
+      "attachSocket": "socket_artifact_l"
+    },
+    {
+      "id": "artifact_brann",
+      "kind": "signature_artifact",
+      "source": "artifacts/artifact_brann.glb",
+      "runtime": "res://assets/3d/artifacts/artifact_brann.glb",
+      "metrics": {
+        "meshes": 9,
+        "triangles": 1452,
+        "bytes": 46748
+      },
+      "guardian": "brann",
+      "attachSocket": "socket_artifact_l"
+    },
+    {
+      "id": "artifact_caelum",
+      "kind": "signature_artifact",
+      "source": "artifacts/artifact_caelum.glb",
+      "runtime": "res://assets/3d/artifacts/artifact_caelum.glb",
+      "metrics": {
+        "meshes": 10,
+        "triangles": 1470,
+        "bytes": 48336
+      },
+      "guardian": "caelum",
+      "attachSocket": "socket_artifact_l"
+    },
+    {
+      "id": "artifact_ciro",
+      "kind": "signature_artifact",
+      "source": "artifacts/artifact_ciro.glb",
+      "runtime": "res://assets/3d/artifacts/artifact_ciro.glb",
+      "metrics": {
+        "meshes": 11,
+        "triangles": 1488,
+        "bytes": 49644
+      },
+      "guardian": "ciro",
+      "attachSocket": "socket_artifact_l"
+    },
+    {
+      "id": "artifact_elya",
+      "kind": "signature_artifact",
+      "source": "artifacts/artifact_elya.glb",
+      "runtime": "res://assets/3d/artifacts/artifact_elya.glb",
+      "metrics": {
+        "meshes": 11,
+        "triangles": 1488,
+        "bytes": 49644
+      },
+      "guardian": "elya",
+      "attachSocket": "socket_artifact_l"
+    },
+    {
+      "id": "artifact_ilyra",
+      "kind": "signature_artifact",
+      "source": "artifacts/artifact_ilyra.glb",
+      "runtime": "res://assets/3d/artifacts/artifact_ilyra.glb",
+      "metrics": {
+        "meshes": 9,
+        "triangles": 1452,
+        "bytes": 46744
+      },
+      "guardian": "ilyra",
+      "attachSocket": "socket_artifact_l"
+    },
+    {
+      "id": "artifact_joren",
+      "kind": "signature_artifact",
+      "source": "artifacts/artifact_joren.glb",
+      "runtime": "res://assets/3d/artifacts/artifact_joren.glb",
+      "metrics": {
+        "meshes": 9,
+        "triangles": 1452,
+        "bytes": 46744
+      },
+      "guardian": "joren",
+      "attachSocket": "socket_artifact_l"
+    },
+    {
+      "id": "artifact_kael",
+      "kind": "signature_artifact",
+      "source": "artifacts/artifact_kael.glb",
+      "runtime": "res://assets/3d/artifacts/artifact_kael.glb",
+      "metrics": {
+        "meshes": 10,
+        "triangles": 1470,
+        "bytes": 48304
+      },
+      "guardian": "kael",
+      "attachSocket": "socket_artifact_l"
+    },
+    {
+      "id": "artifact_lys",
+      "kind": "signature_artifact",
+      "source": "artifacts/artifact_lys.glb",
+      "runtime": "res://assets/3d/artifacts/artifact_lys.glb",
+      "metrics": {
+        "meshes": 8,
+        "triangles": 1434,
+        "bytes": 45248
+      },
+      "guardian": "lys",
+      "attachSocket": "socket_artifact_l"
+    },
+    {
+      "id": "artifact_maelys",
+      "kind": "signature_artifact",
+      "source": "artifacts/artifact_maelys.glb",
+      "runtime": "res://assets/3d/artifacts/artifact_maelys.glb",
+      "metrics": {
+        "meshes": 9,
+        "triangles": 1452,
+        "bytes": 46760
+      },
+      "guardian": "maelys",
+      "attachSocket": "socket_artifact_l"
+    },
+    {
+      "id": "artifact_mira",
+      "kind": "signature_artifact",
+      "source": "artifacts/artifact_mira.glb",
+      "runtime": "res://assets/3d/artifacts/artifact_mira.glb",
+      "metrics": {
+        "meshes": 8,
+        "triangles": 1434,
+        "bytes": 45252
+      },
+      "guardian": "mira",
+      "attachSocket": "socket_artifact_l"
+    },
+    {
+      "id": "artifact_noor",
+      "kind": "signature_artifact",
+      "source": "artifacts/artifact_noor.glb",
+      "runtime": "res://assets/3d/artifacts/artifact_noor.glb",
+      "metrics": {
+        "meshes": 9,
+        "triangles": 1452,
+        "bytes": 46740
+      },
+      "guardian": "noor",
+      "attachSocket": "socket_artifact_l"
+    },
+    {
+      "id": "artifact_nyx",
+      "kind": "signature_artifact",
+      "source": "artifacts/artifact_nyx.glb",
+      "runtime": "res://assets/3d/artifacts/artifact_nyx.glb",
+      "metrics": {
+        "meshes": 8,
+        "triangles": 1434,
+        "bytes": 45264
+      },
+      "guardian": "nyx",
+      "attachSocket": "socket_artifact_l"
+    },
+    {
+      "id": "artifact_orin",
+      "kind": "signature_artifact",
+      "source": "artifacts/artifact_orin.glb",
+      "runtime": "res://assets/3d/artifacts/artifact_orin.glb",
+      "metrics": {
+        "meshes": 11,
+        "triangles": 1488,
+        "bytes": 49644
+      },
+      "guardian": "orin",
+      "attachSocket": "socket_artifact_l"
+    },
+    {
+      "id": "artifact_orion",
+      "kind": "signature_artifact",
+      "source": "artifacts/artifact_orion.glb",
+      "runtime": "res://assets/3d/artifacts/artifact_orion.glb",
+      "metrics": {
+        "meshes": 11,
+        "triangles": 1488,
+        "bytes": 49664
+      },
+      "guardian": "orion",
+      "attachSocket": "socket_artifact_l"
+    },
+    {
+      "id": "artifact_phae",
+      "kind": "signature_artifact",
+      "source": "artifacts/artifact_phae.glb",
+      "runtime": "res://assets/3d/artifacts/artifact_phae.glb",
+      "metrics": {
+        "meshes": 10,
+        "triangles": 1470,
+        "bytes": 48332
+      },
+      "guardian": "phae",
+      "attachSocket": "socket_artifact_l"
+    },
+    {
+      "id": "artifact_rhea",
+      "kind": "signature_artifact",
+      "source": "artifacts/artifact_rhea.glb",
+      "runtime": "res://assets/3d/artifacts/artifact_rhea.glb",
+      "metrics": {
+        "meshes": 11,
+        "triangles": 1488,
+        "bytes": 49644
+      },
+      "guardian": "rhea",
+      "attachSocket": "socket_artifact_l"
+    },
+    {
+      "id": "artifact_saphira",
+      "kind": "signature_artifact",
+      "source": "artifacts/artifact_saphira.glb",
+      "runtime": "res://assets/3d/artifacts/artifact_saphira.glb",
+      "metrics": {
+        "meshes": 11,
+        "triangles": 1488,
+        "bytes": 49648
+      },
+      "guardian": "saphira",
+      "attachSocket": "socket_artifact_l"
+    },
+    {
+      "id": "artifact_seraphiel",
+      "kind": "signature_artifact",
+      "source": "artifacts/artifact_seraphiel.glb",
+      "runtime": "res://assets/3d/artifacts/artifact_seraphiel.glb",
+      "metrics": {
+        "meshes": 9,
+        "triangles": 1452,
+        "bytes": 46756
+      },
+      "guardian": "seraphiel",
+      "attachSocket": "socket_artifact_l"
+    },
+    {
+      "id": "artifact_solveig",
+      "kind": "signature_artifact",
+      "source": "artifacts/artifact_solveig.glb",
+      "runtime": "res://assets/3d/artifacts/artifact_solveig.glb",
+      "metrics": {
+        "meshes": 8,
+        "triangles": 1434,
+        "bytes": 45260
+      },
+      "guardian": "solveig",
+      "attachSocket": "socket_artifact_l"
+    },
+    {
+      "id": "artifact_talia",
+      "kind": "signature_artifact",
+      "source": "artifacts/artifact_talia.glb",
+      "runtime": "res://assets/3d/artifacts/artifact_talia.glb",
+      "metrics": {
+        "meshes": 8,
+        "triangles": 1434,
+        "bytes": 45256
+      },
+      "guardian": "talia",
+      "attachSocket": "socket_artifact_l"
+    },
+    {
+      "id": "artifact_talos",
+      "kind": "signature_artifact",
+      "source": "artifacts/artifact_talos.glb",
+      "runtime": "res://assets/3d/artifacts/artifact_talos.glb",
+      "metrics": {
+        "meshes": 8,
+        "triangles": 1434,
+        "bytes": 45288
+      },
+      "guardian": "talos",
+      "attachSocket": "socket_artifact_l"
+    },
+    {
+      "id": "artifact_vaelora",
+      "kind": "signature_artifact",
+      "source": "artifacts/artifact_vaelora.glb",
+      "runtime": "res://assets/3d/artifacts/artifact_vaelora.glb",
+      "metrics": {
+        "meshes": 10,
+        "triangles": 1470,
+        "bytes": 48328
+      },
+      "guardian": "vaelora",
+      "attachSocket": "socket_artifact_l"
+    },
+    {
+      "id": "artifact_vesper",
+      "kind": "signature_artifact",
+      "source": "artifacts/artifact_vesper.glb",
+      "runtime": "res://assets/3d/artifacts/artifact_vesper.glb",
+      "metrics": {
+        "meshes": 10,
+        "triangles": 1470,
+        "bytes": 48340
+      },
+      "guardian": "vesper",
+      "attachSocket": "socket_artifact_l"
+    },
+    {
+      "id": "astral_elevator",
+      "kind": "shared_prop",
+      "source": "props/astral_elevator.glb",
+      "runtime": "res://assets/3d/props/astral_elevator.glb",
+      "metrics": {
+        "meshes": 4,
+        "triangles": 684,
+        "bytes": 41436
+      }
+    },
+    {
+      "id": "banner_frame",
+      "kind": "shared_prop",
+      "source": "props/banner_frame.glb",
+      "runtime": "res://assets/3d/props/banner_frame.glb",
+      "metrics": {
+        "meshes": 4,
+        "triangles": 684,
+        "bytes": 41448
+      }
+    },
+    {
+      "id": "boss_gate",
+      "kind": "shared_prop",
+      "source": "props/boss_gate.glb",
+      "runtime": "res://assets/3d/props/boss_gate.glb",
+      "metrics": {
+        "meshes": 4,
+        "triangles": 684,
+        "bytes": 41452
+      }
+    },
+    {
+      "id": "brass_beetle",
+      "kind": "summon_familiar",
+      "source": "summons/familiars/brass_beetle.glb",
+      "runtime": "res://assets/3d/summons/brass_beetle.glb",
+      "metrics": {
+        "meshes": 9,
+        "triangles": 1648,
+        "bytes": 54224
+      },
+      "animations": [
+        "Idle",
+        "Appear",
+        "Celebrate",
+        "Dismiss"
+      ]
+    },
+    {
+      "id": "clock_drake",
+      "kind": "summon_familiar",
+      "source": "summons/familiars/clock_drake.glb",
+      "runtime": "res://assets/3d/summons/clock_drake.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1688,
+        "bytes": 51288
+      },
+      "animations": [
+        "Idle",
+        "Appear",
+        "Celebrate",
+        "Dismiss"
+      ]
+    },
+    {
+      "id": "constellation_door",
+      "kind": "shared_prop",
+      "source": "props/constellation_door.glb",
+      "runtime": "res://assets/3d/props/constellation_door.glb",
+      "metrics": {
+        "meshes": 4,
+        "triangles": 684,
+        "bytes": 41440
+      }
+    },
+    {
+      "id": "crystal_fox",
+      "kind": "summon_familiar",
+      "source": "summons/familiars/crystal_fox.glb",
+      "runtime": "res://assets/3d/summons/crystal_fox.glb",
+      "metrics": {
+        "meshes": 9,
+        "triangles": 1648,
+        "bytes": 54204
+      },
+      "animations": [
+        "Idle",
+        "Appear",
+        "Celebrate",
+        "Dismiss"
+      ]
+    },
+    {
+      "id": "forge_sprite",
+      "kind": "summon_familiar",
+      "source": "summons/familiars/forge_sprite.glb",
+      "runtime": "res://assets/3d/summons/forge_sprite.glb",
+      "metrics": {
+        "meshes": 9,
+        "triangles": 1648,
+        "bytes": 54216
+      },
+      "animations": [
+        "Idle",
+        "Appear",
+        "Celebrate",
+        "Dismiss"
+      ]
+    },
+    {
+      "id": "guardian_mira_lod0",
+      "kind": "rigged_guardian",
+      "source": "guardians/mira/mira_lod0.glb",
+      "runtime": "res://assets/3d/guardians/mira_lod0.glb",
+      "metrics": {
+        "meshes": 48,
+        "triangles": 11834,
+        "bytes": 439868
+      },
+      "guardian": "mira",
+      "lod": "lod0",
+      "outfit": "combat",
+      "animations": [
+        "Mira_Idle",
+        "Mira_Walk",
+        "Mira_SkillCast",
+        "Mira_Ultimate",
+        "Mira_Victory"
+      ]
+    },
+    {
+      "id": "guardian_mira_lod1",
+      "kind": "rigged_guardian",
+      "source": "guardians/mira/mira_lod1.glb",
+      "runtime": "res://assets/3d/guardians/mira_lod1.glb",
+      "metrics": {
+        "meshes": 48,
+        "triangles": 6162,
+        "bytes": 333808
+      },
+      "guardian": "mira",
+      "lod": "lod1",
+      "outfit": "combat",
+      "animations": [
+        "Mira_Idle",
+        "Mira_Walk",
+        "Mira_SkillCast",
+        "Mira_Ultimate",
+        "Mira_Victory"
+      ]
+    },
+    {
+      "id": "guardian_mira_lod2",
+      "kind": "rigged_guardian",
+      "source": "guardians/mira/mira_lod2.glb",
+      "runtime": "res://assets/3d/guardians/mira_lod2.glb",
+      "metrics": {
+        "meshes": 48,
+        "triangles": 3906,
+        "bytes": 317360
+      },
+      "guardian": "mira",
+      "lod": "lod2",
+      "outfit": "combat",
+      "animations": [
+        "Mira_Idle",
+        "Mira_Walk",
+        "Mira_SkillCast",
+        "Mira_Ultimate",
+        "Mira_Victory"
+      ]
+    },
+    {
+      "id": "guild_board",
+      "kind": "shared_prop",
+      "source": "props/guild_board.glb",
+      "runtime": "res://assets/3d/props/guild_board.glb",
+      "metrics": {
+        "meshes": 5,
+        "triangles": 336,
+        "bytes": 40932
+      }
+    },
+    {
+      "id": "luma",
+      "kind": "summon_familiar",
+      "source": "summons/familiars/luma.glb",
+      "runtime": "res://assets/3d/summons/luma.glb",
+      "metrics": {
+        "meshes": 9,
+        "triangles": 1648,
+        "bytes": 54212
+      },
+      "animations": [
+        "Idle",
+        "Appear",
+        "Celebrate",
+        "Dismiss"
+      ]
+    },
+    {
+      "id": "mission_table",
+      "kind": "shared_prop",
+      "source": "props/mission_table.glb",
+      "runtime": "res://assets/3d/props/mission_table.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 2336,
+        "bytes": 61484
+      }
+    },
+    {
+      "id": "moon_hare",
+      "kind": "summon_familiar",
+      "source": "summons/familiars/moon_hare.glb",
+      "runtime": "res://assets/3d/summons/moon_hare.glb",
+      "metrics": {
+        "meshes": 9,
+        "triangles": 1648,
+        "bytes": 54252
+      },
+      "animations": [
+        "Idle",
+        "Appear",
+        "Celebrate",
+        "Dismiss"
+      ]
+    },
+    {
+      "id": "music_stage",
+      "kind": "shared_prop",
+      "source": "props/music_stage.glb",
+      "runtime": "res://assets/3d/props/music_stage.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 2336,
+        "bytes": 61516
+      }
+    },
+    {
+      "id": "nebulin",
+      "kind": "summon_familiar",
+      "source": "summons/familiars/nebulin.glb",
+      "runtime": "res://assets/3d/summons/nebulin.glb",
+      "metrics": {
+        "meshes": 9,
+        "triangles": 1648,
+        "bytes": 54212
+      },
+      "animations": [
+        "Idle",
+        "Appear",
+        "Celebrate",
+        "Dismiss"
+      ]
+    },
+    {
+      "id": "nexus_whale",
+      "kind": "summon_familiar",
+      "source": "summons/familiars/nexus_whale.glb",
+      "runtime": "res://assets/3d/summons/nexus_whale.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1688,
+        "bytes": 51292
+      },
+      "animations": [
+        "Idle",
+        "Appear",
+        "Celebrate",
+        "Dismiss"
+      ]
+    },
+    {
+      "id": "oracle_moth",
+      "kind": "summon_familiar",
+      "source": "summons/familiars/oracle_moth.glb",
+      "runtime": "res://assets/3d/summons/oracle_moth.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 1492,
+        "bytes": 48164
+      },
+      "animations": [
+        "Idle",
+        "Appear",
+        "Celebrate",
+        "Dismiss"
+      ]
+    },
+    {
+      "id": "orb_comet",
+      "kind": "living_orb",
+      "source": "summons/orbs/orb_comet.glb",
+      "runtime": "res://assets/3d/summons/orb_comet.glb",
+      "metrics": {
+        "meshes": 10,
+        "triangles": 1862,
+        "bytes": 58436
+      },
+      "displayName": "Kori",
+      "animations": [
+        "Idle",
+        "Fall",
+        "Bounce",
+        "Merge",
+        "Happy",
+        "Danger"
+      ]
+    },
+    {
+      "id": "orb_crown",
+      "kind": "living_orb",
+      "source": "summons/orbs/orb_crown.glb",
+      "runtime": "res://assets/3d/summons/orb_crown.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 1898,
+        "bytes": 61268
+      },
+      "displayName": "Auriel",
+      "animations": [
+        "Idle",
+        "Fall",
+        "Bounce",
+        "Merge",
+        "Happy",
+        "Danger"
+      ]
+    },
+    {
+      "id": "orb_dew",
+      "kind": "living_orb",
+      "source": "summons/orbs/orb_dew.glb",
+      "runtime": "res://assets/3d/summons/orb_dew.glb",
+      "metrics": {
+        "meshes": 8,
+        "triangles": 1826,
+        "bytes": 55580
+      },
+      "displayName": "Lumi",
+      "animations": [
+        "Idle",
+        "Fall",
+        "Bounce",
+        "Merge",
+        "Happy",
+        "Danger"
+      ]
+    },
+    {
+      "id": "orb_moon",
+      "kind": "living_orb",
+      "source": "summons/orbs/orb_moon.glb",
+      "runtime": "res://assets/3d/summons/orb_moon.glb",
+      "metrics": {
+        "meshes": 9,
+        "triangles": 1844,
+        "bytes": 56960
+      },
+      "displayName": "Séla",
+      "animations": [
+        "Idle",
+        "Fall",
+        "Bounce",
+        "Merge",
+        "Happy",
+        "Danger"
+      ]
+    },
+    {
+      "id": "orb_nexus",
+      "kind": "living_orb",
+      "source": "summons/orbs/orb_nexus.glb",
+      "runtime": "res://assets/3d/summons/orb_nexus.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 1934,
+        "bytes": 64160
+      },
+      "displayName": "Astra",
+      "animations": [
+        "Idle",
+        "Fall",
+        "Bounce",
+        "Merge",
+        "Happy",
+        "Danger"
+      ]
+    },
+    {
+      "id": "orb_spark",
+      "kind": "living_orb",
+      "source": "summons/orbs/orb_spark.glb",
+      "runtime": "res://assets/3d/summons/orb_spark.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 1808,
+        "bytes": 54136
+      },
+      "displayName": "Pio",
+      "animations": [
+        "Idle",
+        "Fall",
+        "Bounce",
+        "Merge",
+        "Happy",
+        "Danger"
+      ]
+    },
+    {
+      "id": "orb_sun",
+      "kind": "living_orb",
+      "source": "summons/orbs/orb_sun.glb",
+      "runtime": "res://assets/3d/summons/orb_sun.glb",
+      "metrics": {
+        "meshes": 11,
+        "triangles": 1880,
+        "bytes": 59836
+      },
+      "displayName": "Hélio",
+      "animations": [
+        "Idle",
+        "Fall",
+        "Bounce",
+        "Merge",
+        "Happy",
+        "Danger"
+      ]
+    },
+    {
+      "id": "orb_world",
+      "kind": "living_orb",
+      "source": "summons/orbs/orb_world.glb",
+      "runtime": "res://assets/3d/summons/orb_world.glb",
+      "metrics": {
+        "meshes": 13,
+        "triangles": 1916,
+        "bytes": 62660
+      },
+      "displayName": "Gaïa",
+      "animations": [
+        "Idle",
+        "Fall",
+        "Bounce",
+        "Merge",
+        "Happy",
+        "Danger"
+      ]
+    },
+    {
+      "id": "orrery_large",
+      "kind": "shared_prop",
+      "source": "props/orrery_large.glb",
+      "runtime": "res://assets/3d/props/orrery_large.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 2336,
+        "bytes": 61480
+      }
+    },
+    {
+      "id": "orrery_small",
+      "kind": "shared_prop",
+      "source": "props/orrery_small.glb",
+      "runtime": "res://assets/3d/props/orrery_small.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 2336,
+        "bytes": 61472
+      }
+    },
+    {
+      "id": "outfit_aster_awakened",
+      "kind": "modular_outfit",
+      "source": "outfits/aster/aster_awakened.glb",
+      "runtime": "res://assets/3d/outfits/aster_awakened.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 2940,
+        "bytes": 91020
+      },
+      "guardian": "aster",
+      "variant": "awakened",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_aster_celestial_evening",
+      "kind": "modular_outfit",
+      "source": "outfits/aster/aster_celestial_evening.glb",
+      "runtime": "res://assets/3d/outfits/aster_celestial_evening.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2080,
+        "bytes": 66056
+      },
+      "guardian": "aster",
+      "variant": "celestial_evening",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_aster_combat",
+      "kind": "modular_outfit",
+      "source": "outfits/aster/aster_combat.glb",
+      "runtime": "res://assets/3d/outfits/aster_combat.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 2008,
+        "bytes": 60308
+      },
+      "guardian": "aster",
+      "variant": "combat",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_aster_seasonal",
+      "kind": "modular_outfit",
+      "source": "outfits/aster/aster_seasonal.glb",
+      "runtime": "res://assets/3d/outfits/aster_seasonal.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1752,
+        "bytes": 50056
+      },
+      "guardian": "aster",
+      "variant": "seasonal",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_brann_awakened",
+      "kind": "modular_outfit",
+      "source": "outfits/brann/brann_awakened.glb",
+      "runtime": "res://assets/3d/outfits/brann_awakened.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 2940,
+        "bytes": 90988
+      },
+      "guardian": "brann",
+      "variant": "awakened",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_brann_celestial_evening",
+      "kind": "modular_outfit",
+      "source": "outfits/brann/brann_celestial_evening.glb",
+      "runtime": "res://assets/3d/outfits/brann_celestial_evening.glb",
+      "metrics": {
+        "meshes": 8,
+        "triangles": 1872,
+        "bytes": 55172
+      },
+      "guardian": "brann",
+      "variant": "celestial_evening",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_brann_combat",
+      "kind": "modular_outfit",
+      "source": "outfits/brann/brann_combat.glb",
+      "runtime": "res://assets/3d/outfits/brann_combat.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 2008,
+        "bytes": 60280
+      },
+      "guardian": "brann",
+      "variant": "combat",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_brann_seasonal",
+      "kind": "modular_outfit",
+      "source": "outfits/brann/brann_seasonal.glb",
+      "runtime": "res://assets/3d/outfits/brann_seasonal.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1752,
+        "bytes": 50028
+      },
+      "guardian": "brann",
+      "variant": "seasonal",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_caelum_awakened",
+      "kind": "modular_outfit",
+      "source": "outfits/caelum/caelum_awakened.glb",
+      "runtime": "res://assets/3d/outfits/caelum_awakened.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 2940,
+        "bytes": 90996
+      },
+      "guardian": "caelum",
+      "variant": "awakened",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_caelum_celestial_evening",
+      "kind": "modular_outfit",
+      "source": "outfits/caelum/caelum_celestial_evening.glb",
+      "runtime": "res://assets/3d/outfits/caelum_celestial_evening.glb",
+      "metrics": {
+        "meshes": 8,
+        "triangles": 1872,
+        "bytes": 55192
+      },
+      "guardian": "caelum",
+      "variant": "celestial_evening",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_caelum_combat",
+      "kind": "modular_outfit",
+      "source": "outfits/caelum/caelum_combat.glb",
+      "runtime": "res://assets/3d/outfits/caelum_combat.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 2008,
+        "bytes": 60288
+      },
+      "guardian": "caelum",
+      "variant": "combat",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_caelum_seasonal",
+      "kind": "modular_outfit",
+      "source": "outfits/caelum/caelum_seasonal.glb",
+      "runtime": "res://assets/3d/outfits/caelum_seasonal.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1752,
+        "bytes": 50076
+      },
+      "guardian": "caelum",
+      "variant": "seasonal",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_ciro_awakened",
+      "kind": "modular_outfit",
+      "source": "outfits/ciro/ciro_awakened.glb",
+      "runtime": "res://assets/3d/outfits/ciro_awakened.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 2940,
+        "bytes": 91004
+      },
+      "guardian": "ciro",
+      "variant": "awakened",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_ciro_celestial_evening",
+      "kind": "modular_outfit",
+      "source": "outfits/ciro/ciro_celestial_evening.glb",
+      "runtime": "res://assets/3d/outfits/ciro_celestial_evening.glb",
+      "metrics": {
+        "meshes": 8,
+        "triangles": 1872,
+        "bytes": 55188
+      },
+      "guardian": "ciro",
+      "variant": "celestial_evening",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_ciro_combat",
+      "kind": "modular_outfit",
+      "source": "outfits/ciro/ciro_combat.glb",
+      "runtime": "res://assets/3d/outfits/ciro_combat.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 2008,
+        "bytes": 60300
+      },
+      "guardian": "ciro",
+      "variant": "combat",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_ciro_seasonal",
+      "kind": "modular_outfit",
+      "source": "outfits/ciro/ciro_seasonal.glb",
+      "runtime": "res://assets/3d/outfits/ciro_seasonal.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1752,
+        "bytes": 50032
+      },
+      "guardian": "ciro",
+      "variant": "seasonal",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_elya_awakened",
+      "kind": "modular_outfit",
+      "source": "outfits/elya/elya_awakened.glb",
+      "runtime": "res://assets/3d/outfits/elya_awakened.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 2940,
+        "bytes": 91012
+      },
+      "guardian": "elya",
+      "variant": "awakened",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_elya_celestial_evening",
+      "kind": "modular_outfit",
+      "source": "outfits/elya/elya_celestial_evening.glb",
+      "runtime": "res://assets/3d/outfits/elya_celestial_evening.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2080,
+        "bytes": 66052
+      },
+      "guardian": "elya",
+      "variant": "celestial_evening",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_elya_combat",
+      "kind": "modular_outfit",
+      "source": "outfits/elya/elya_combat.glb",
+      "runtime": "res://assets/3d/outfits/elya_combat.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 2008,
+        "bytes": 60304
+      },
+      "guardian": "elya",
+      "variant": "combat",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_elya_seasonal",
+      "kind": "modular_outfit",
+      "source": "outfits/elya/elya_seasonal.glb",
+      "runtime": "res://assets/3d/outfits/elya_seasonal.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1752,
+        "bytes": 50024
+      },
+      "guardian": "elya",
+      "variant": "seasonal",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_ilyra_awakened",
+      "kind": "modular_outfit",
+      "source": "outfits/ilyra/ilyra_awakened.glb",
+      "runtime": "res://assets/3d/outfits/ilyra_awakened.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 2940,
+        "bytes": 91012
+      },
+      "guardian": "ilyra",
+      "variant": "awakened",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_ilyra_celestial_evening",
+      "kind": "modular_outfit",
+      "source": "outfits/ilyra/ilyra_celestial_evening.glb",
+      "runtime": "res://assets/3d/outfits/ilyra_celestial_evening.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2080,
+        "bytes": 66052
+      },
+      "guardian": "ilyra",
+      "variant": "celestial_evening",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_ilyra_combat",
+      "kind": "modular_outfit",
+      "source": "outfits/ilyra/ilyra_combat.glb",
+      "runtime": "res://assets/3d/outfits/ilyra_combat.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 2008,
+        "bytes": 60304
+      },
+      "guardian": "ilyra",
+      "variant": "combat",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_ilyra_seasonal",
+      "kind": "modular_outfit",
+      "source": "outfits/ilyra/ilyra_seasonal.glb",
+      "runtime": "res://assets/3d/outfits/ilyra_seasonal.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1752,
+        "bytes": 50024
+      },
+      "guardian": "ilyra",
+      "variant": "seasonal",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_joren_awakened",
+      "kind": "modular_outfit",
+      "source": "outfits/joren/joren_awakened.glb",
+      "runtime": "res://assets/3d/outfits/joren_awakened.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 2940,
+        "bytes": 91000
+      },
+      "guardian": "joren",
+      "variant": "awakened",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_joren_celestial_evening",
+      "kind": "modular_outfit",
+      "source": "outfits/joren/joren_celestial_evening.glb",
+      "runtime": "res://assets/3d/outfits/joren_celestial_evening.glb",
+      "metrics": {
+        "meshes": 8,
+        "triangles": 1872,
+        "bytes": 55172
+      },
+      "guardian": "joren",
+      "variant": "celestial_evening",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_joren_combat",
+      "kind": "modular_outfit",
+      "source": "outfits/joren/joren_combat.glb",
+      "runtime": "res://assets/3d/outfits/joren_combat.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 2008,
+        "bytes": 60296
+      },
+      "guardian": "joren",
+      "variant": "combat",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_joren_seasonal",
+      "kind": "modular_outfit",
+      "source": "outfits/joren/joren_seasonal.glb",
+      "runtime": "res://assets/3d/outfits/joren_seasonal.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1752,
+        "bytes": 50024
+      },
+      "guardian": "joren",
+      "variant": "seasonal",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_kael_awakened",
+      "kind": "modular_outfit",
+      "source": "outfits/kael/kael_awakened.glb",
+      "runtime": "res://assets/3d/outfits/kael_awakened.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 2940,
+        "bytes": 91020
+      },
+      "guardian": "kael",
+      "variant": "awakened",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_kael_celestial_evening",
+      "kind": "modular_outfit",
+      "source": "outfits/kael/kael_celestial_evening.glb",
+      "runtime": "res://assets/3d/outfits/kael_celestial_evening.glb",
+      "metrics": {
+        "meshes": 8,
+        "triangles": 1872,
+        "bytes": 55188
+      },
+      "guardian": "kael",
+      "variant": "celestial_evening",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_kael_combat",
+      "kind": "modular_outfit",
+      "source": "outfits/kael/kael_combat.glb",
+      "runtime": "res://assets/3d/outfits/kael_combat.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 2008,
+        "bytes": 60316
+      },
+      "guardian": "kael",
+      "variant": "combat",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_kael_seasonal",
+      "kind": "modular_outfit",
+      "source": "outfits/kael/kael_seasonal.glb",
+      "runtime": "res://assets/3d/outfits/kael_seasonal.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1752,
+        "bytes": 50032
+      },
+      "guardian": "kael",
+      "variant": "seasonal",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_lys_awakened",
+      "kind": "modular_outfit",
+      "source": "outfits/lys/lys_awakened.glb",
+      "runtime": "res://assets/3d/outfits/lys_awakened.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 2940,
+        "bytes": 90992
+      },
+      "guardian": "lys",
+      "variant": "awakened",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_lys_celestial_evening",
+      "kind": "modular_outfit",
+      "source": "outfits/lys/lys_celestial_evening.glb",
+      "runtime": "res://assets/3d/outfits/lys_celestial_evening.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2080,
+        "bytes": 66052
+      },
+      "guardian": "lys",
+      "variant": "celestial_evening",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_lys_combat",
+      "kind": "modular_outfit",
+      "source": "outfits/lys/lys_combat.glb",
+      "runtime": "res://assets/3d/outfits/lys_combat.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 2008,
+        "bytes": 60284
+      },
+      "guardian": "lys",
+      "variant": "combat",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_lys_seasonal",
+      "kind": "modular_outfit",
+      "source": "outfits/lys/lys_seasonal.glb",
+      "runtime": "res://assets/3d/outfits/lys_seasonal.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1752,
+        "bytes": 50024
+      },
+      "guardian": "lys",
+      "variant": "seasonal",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_maelys_awakened",
+      "kind": "modular_outfit",
+      "source": "outfits/maelys/maelys_awakened.glb",
+      "runtime": "res://assets/3d/outfits/maelys_awakened.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 2940,
+        "bytes": 91020
+      },
+      "guardian": "maelys",
+      "variant": "awakened",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_maelys_celestial_evening",
+      "kind": "modular_outfit",
+      "source": "outfits/maelys/maelys_celestial_evening.glb",
+      "runtime": "res://assets/3d/outfits/maelys_celestial_evening.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2080,
+        "bytes": 66056
+      },
+      "guardian": "maelys",
+      "variant": "celestial_evening",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_maelys_combat",
+      "kind": "modular_outfit",
+      "source": "outfits/maelys/maelys_combat.glb",
+      "runtime": "res://assets/3d/outfits/maelys_combat.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 2008,
+        "bytes": 60308
+      },
+      "guardian": "maelys",
+      "variant": "combat",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_maelys_seasonal",
+      "kind": "modular_outfit",
+      "source": "outfits/maelys/maelys_seasonal.glb",
+      "runtime": "res://assets/3d/outfits/maelys_seasonal.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1752,
+        "bytes": 50052
+      },
+      "guardian": "maelys",
+      "variant": "seasonal",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_mira_awakened",
+      "kind": "modular_outfit",
+      "source": "outfits/mira/mira_awakened.glb",
+      "runtime": "res://assets/3d/outfits/mira_awakened.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 2940,
+        "bytes": 91012
+      },
+      "guardian": "mira",
+      "variant": "awakened",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_mira_celestial_evening",
+      "kind": "modular_outfit",
+      "source": "outfits/mira/mira_celestial_evening.glb",
+      "runtime": "res://assets/3d/outfits/mira_celestial_evening.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2080,
+        "bytes": 66052
+      },
+      "guardian": "mira",
+      "variant": "celestial_evening",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_mira_combat",
+      "kind": "modular_outfit",
+      "source": "outfits/mira/mira_combat.glb",
+      "runtime": "res://assets/3d/outfits/mira_combat.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 2008,
+        "bytes": 60304
+      },
+      "guardian": "mira",
+      "variant": "combat",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_mira_seasonal",
+      "kind": "modular_outfit",
+      "source": "outfits/mira/mira_seasonal.glb",
+      "runtime": "res://assets/3d/outfits/mira_seasonal.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1752,
+        "bytes": 50028
+      },
+      "guardian": "mira",
+      "variant": "seasonal",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_noor_awakened",
+      "kind": "modular_outfit",
+      "source": "outfits/noor/noor_awakened.glb",
+      "runtime": "res://assets/3d/outfits/noor_awakened.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 2940,
+        "bytes": 91000
+      },
+      "guardian": "noor",
+      "variant": "awakened",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_noor_celestial_evening",
+      "kind": "modular_outfit",
+      "source": "outfits/noor/noor_celestial_evening.glb",
+      "runtime": "res://assets/3d/outfits/noor_celestial_evening.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2080,
+        "bytes": 66052
+      },
+      "guardian": "noor",
+      "variant": "celestial_evening",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_noor_combat",
+      "kind": "modular_outfit",
+      "source": "outfits/noor/noor_combat.glb",
+      "runtime": "res://assets/3d/outfits/noor_combat.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 2008,
+        "bytes": 60288
+      },
+      "guardian": "noor",
+      "variant": "combat",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_noor_seasonal",
+      "kind": "modular_outfit",
+      "source": "outfits/noor/noor_seasonal.glb",
+      "runtime": "res://assets/3d/outfits/noor_seasonal.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1752,
+        "bytes": 50028
+      },
+      "guardian": "noor",
+      "variant": "seasonal",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_nyx_awakened",
+      "kind": "modular_outfit",
+      "source": "outfits/nyx/nyx_awakened.glb",
+      "runtime": "res://assets/3d/outfits/nyx_awakened.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 2940,
+        "bytes": 90992
+      },
+      "guardian": "nyx",
+      "variant": "awakened",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_nyx_celestial_evening",
+      "kind": "modular_outfit",
+      "source": "outfits/nyx/nyx_celestial_evening.glb",
+      "runtime": "res://assets/3d/outfits/nyx_celestial_evening.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2080,
+        "bytes": 66040
+      },
+      "guardian": "nyx",
+      "variant": "celestial_evening",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_nyx_combat",
+      "kind": "modular_outfit",
+      "source": "outfits/nyx/nyx_combat.glb",
+      "runtime": "res://assets/3d/outfits/nyx_combat.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 2008,
+        "bytes": 60288
+      },
+      "guardian": "nyx",
+      "variant": "combat",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_nyx_seasonal",
+      "kind": "modular_outfit",
+      "source": "outfits/nyx/nyx_seasonal.glb",
+      "runtime": "res://assets/3d/outfits/nyx_seasonal.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1752,
+        "bytes": 50036
+      },
+      "guardian": "nyx",
+      "variant": "seasonal",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_orin_awakened",
+      "kind": "modular_outfit",
+      "source": "outfits/orin/orin_awakened.glb",
+      "runtime": "res://assets/3d/outfits/orin_awakened.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 2940,
+        "bytes": 91004
+      },
+      "guardian": "orin",
+      "variant": "awakened",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_orin_celestial_evening",
+      "kind": "modular_outfit",
+      "source": "outfits/orin/orin_celestial_evening.glb",
+      "runtime": "res://assets/3d/outfits/orin_celestial_evening.glb",
+      "metrics": {
+        "meshes": 8,
+        "triangles": 1872,
+        "bytes": 55188
+      },
+      "guardian": "orin",
+      "variant": "celestial_evening",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_orin_combat",
+      "kind": "modular_outfit",
+      "source": "outfits/orin/orin_combat.glb",
+      "runtime": "res://assets/3d/outfits/orin_combat.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 2008,
+        "bytes": 60300
+      },
+      "guardian": "orin",
+      "variant": "combat",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_orin_seasonal",
+      "kind": "modular_outfit",
+      "source": "outfits/orin/orin_seasonal.glb",
+      "runtime": "res://assets/3d/outfits/orin_seasonal.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1752,
+        "bytes": 50028
+      },
+      "guardian": "orin",
+      "variant": "seasonal",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_orion_awakened",
+      "kind": "modular_outfit",
+      "source": "outfits/orion/orion_awakened.glb",
+      "runtime": "res://assets/3d/outfits/orion_awakened.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 2940,
+        "bytes": 91000
+      },
+      "guardian": "orion",
+      "variant": "awakened",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_orion_celestial_evening",
+      "kind": "modular_outfit",
+      "source": "outfits/orion/orion_celestial_evening.glb",
+      "runtime": "res://assets/3d/outfits/orion_celestial_evening.glb",
+      "metrics": {
+        "meshes": 8,
+        "triangles": 1872,
+        "bytes": 55172
+      },
+      "guardian": "orion",
+      "variant": "celestial_evening",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_orion_combat",
+      "kind": "modular_outfit",
+      "source": "outfits/orion/orion_combat.glb",
+      "runtime": "res://assets/3d/outfits/orion_combat.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 2008,
+        "bytes": 60292
+      },
+      "guardian": "orion",
+      "variant": "combat",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_orion_seasonal",
+      "kind": "modular_outfit",
+      "source": "outfits/orion/orion_seasonal.glb",
+      "runtime": "res://assets/3d/outfits/orion_seasonal.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1752,
+        "bytes": 50044
+      },
+      "guardian": "orion",
+      "variant": "seasonal",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_phae_awakened",
+      "kind": "modular_outfit",
+      "source": "outfits/phae/phae_awakened.glb",
+      "runtime": "res://assets/3d/outfits/phae_awakened.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 2940,
+        "bytes": 90996
+      },
+      "guardian": "phae",
+      "variant": "awakened",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_phae_celestial_evening",
+      "kind": "modular_outfit",
+      "source": "outfits/phae/phae_celestial_evening.glb",
+      "runtime": "res://assets/3d/outfits/phae_celestial_evening.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2080,
+        "bytes": 66048
+      },
+      "guardian": "phae",
+      "variant": "celestial_evening",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_phae_combat",
+      "kind": "modular_outfit",
+      "source": "outfits/phae/phae_combat.glb",
+      "runtime": "res://assets/3d/outfits/phae_combat.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 2008,
+        "bytes": 60288
+      },
+      "guardian": "phae",
+      "variant": "combat",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_phae_seasonal",
+      "kind": "modular_outfit",
+      "source": "outfits/phae/phae_seasonal.glb",
+      "runtime": "res://assets/3d/outfits/phae_seasonal.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1752,
+        "bytes": 50052
+      },
+      "guardian": "phae",
+      "variant": "seasonal",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_rhea_awakened",
+      "kind": "modular_outfit",
+      "source": "outfits/rhea/rhea_awakened.glb",
+      "runtime": "res://assets/3d/outfits/rhea_awakened.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 2940,
+        "bytes": 90992
+      },
+      "guardian": "rhea",
+      "variant": "awakened",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_rhea_celestial_evening",
+      "kind": "modular_outfit",
+      "source": "outfits/rhea/rhea_celestial_evening.glb",
+      "runtime": "res://assets/3d/outfits/rhea_celestial_evening.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2080,
+        "bytes": 66048
+      },
+      "guardian": "rhea",
+      "variant": "celestial_evening",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_rhea_combat",
+      "kind": "modular_outfit",
+      "source": "outfits/rhea/rhea_combat.glb",
+      "runtime": "res://assets/3d/outfits/rhea_combat.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 2008,
+        "bytes": 60284
+      },
+      "guardian": "rhea",
+      "variant": "combat",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_rhea_seasonal",
+      "kind": "modular_outfit",
+      "source": "outfits/rhea/rhea_seasonal.glb",
+      "runtime": "res://assets/3d/outfits/rhea_seasonal.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1752,
+        "bytes": 50020
+      },
+      "guardian": "rhea",
+      "variant": "seasonal",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_saphira_awakened",
+      "kind": "modular_outfit",
+      "source": "outfits/saphira/saphira_awakened.glb",
+      "runtime": "res://assets/3d/outfits/saphira_awakened.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 2940,
+        "bytes": 91024
+      },
+      "guardian": "saphira",
+      "variant": "awakened",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_saphira_celestial_evening",
+      "kind": "modular_outfit",
+      "source": "outfits/saphira/saphira_celestial_evening.glb",
+      "runtime": "res://assets/3d/outfits/saphira_celestial_evening.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2080,
+        "bytes": 66052
+      },
+      "guardian": "saphira",
+      "variant": "celestial_evening",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_saphira_combat",
+      "kind": "modular_outfit",
+      "source": "outfits/saphira/saphira_combat.glb",
+      "runtime": "res://assets/3d/outfits/saphira_combat.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 2008,
+        "bytes": 60312
+      },
+      "guardian": "saphira",
+      "variant": "combat",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_saphira_seasonal",
+      "kind": "modular_outfit",
+      "source": "outfits/saphira/saphira_seasonal.glb",
+      "runtime": "res://assets/3d/outfits/saphira_seasonal.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1752,
+        "bytes": 50040
+      },
+      "guardian": "saphira",
+      "variant": "seasonal",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_seraphiel_awakened",
+      "kind": "modular_outfit",
+      "source": "outfits/seraphiel/seraphiel_awakened.glb",
+      "runtime": "res://assets/3d/outfits/seraphiel_awakened.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 2940,
+        "bytes": 91012
+      },
+      "guardian": "seraphiel",
+      "variant": "awakened",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_seraphiel_celestial_evening",
+      "kind": "modular_outfit",
+      "source": "outfits/seraphiel/seraphiel_celestial_evening.glb",
+      "runtime": "res://assets/3d/outfits/seraphiel_celestial_evening.glb",
+      "metrics": {
+        "meshes": 8,
+        "triangles": 1872,
+        "bytes": 55188
+      },
+      "guardian": "seraphiel",
+      "variant": "celestial_evening",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_seraphiel_combat",
+      "kind": "modular_outfit",
+      "source": "outfits/seraphiel/seraphiel_combat.glb",
+      "runtime": "res://assets/3d/outfits/seraphiel_combat.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 2008,
+        "bytes": 60300
+      },
+      "guardian": "seraphiel",
+      "variant": "combat",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_seraphiel_seasonal",
+      "kind": "modular_outfit",
+      "source": "outfits/seraphiel/seraphiel_seasonal.glb",
+      "runtime": "res://assets/3d/outfits/seraphiel_seasonal.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1752,
+        "bytes": 50044
+      },
+      "guardian": "seraphiel",
+      "variant": "seasonal",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_solveig_awakened",
+      "kind": "modular_outfit",
+      "source": "outfits/solveig/solveig_awakened.glb",
+      "runtime": "res://assets/3d/outfits/solveig_awakened.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 2940,
+        "bytes": 91024
+      },
+      "guardian": "solveig",
+      "variant": "awakened",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_solveig_celestial_evening",
+      "kind": "modular_outfit",
+      "source": "outfits/solveig/solveig_celestial_evening.glb",
+      "runtime": "res://assets/3d/outfits/solveig_celestial_evening.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2080,
+        "bytes": 66052
+      },
+      "guardian": "solveig",
+      "variant": "celestial_evening",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_solveig_combat",
+      "kind": "modular_outfit",
+      "source": "outfits/solveig/solveig_combat.glb",
+      "runtime": "res://assets/3d/outfits/solveig_combat.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 2008,
+        "bytes": 60312
+      },
+      "guardian": "solveig",
+      "variant": "combat",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_solveig_seasonal",
+      "kind": "modular_outfit",
+      "source": "outfits/solveig/solveig_seasonal.glb",
+      "runtime": "res://assets/3d/outfits/solveig_seasonal.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1752,
+        "bytes": 50040
+      },
+      "guardian": "solveig",
+      "variant": "seasonal",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_talia_awakened",
+      "kind": "modular_outfit",
+      "source": "outfits/talia/talia_awakened.glb",
+      "runtime": "res://assets/3d/outfits/talia_awakened.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 2940,
+        "bytes": 91020
+      },
+      "guardian": "talia",
+      "variant": "awakened",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_talia_celestial_evening",
+      "kind": "modular_outfit",
+      "source": "outfits/talia/talia_celestial_evening.glb",
+      "runtime": "res://assets/3d/outfits/talia_celestial_evening.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2080,
+        "bytes": 66036
+      },
+      "guardian": "talia",
+      "variant": "celestial_evening",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_talia_combat",
+      "kind": "modular_outfit",
+      "source": "outfits/talia/talia_combat.glb",
+      "runtime": "res://assets/3d/outfits/talia_combat.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 2008,
+        "bytes": 60308
+      },
+      "guardian": "talia",
+      "variant": "combat",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_talia_seasonal",
+      "kind": "modular_outfit",
+      "source": "outfits/talia/talia_seasonal.glb",
+      "runtime": "res://assets/3d/outfits/talia_seasonal.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1752,
+        "bytes": 50032
+      },
+      "guardian": "talia",
+      "variant": "seasonal",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_talos_awakened",
+      "kind": "modular_outfit",
+      "source": "outfits/talos/talos_awakened.glb",
+      "runtime": "res://assets/3d/outfits/talos_awakened.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 2940,
+        "bytes": 91000
+      },
+      "guardian": "talos",
+      "variant": "awakened",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_talos_celestial_evening",
+      "kind": "modular_outfit",
+      "source": "outfits/talos/talos_celestial_evening.glb",
+      "runtime": "res://assets/3d/outfits/talos_celestial_evening.glb",
+      "metrics": {
+        "meshes": 8,
+        "triangles": 1872,
+        "bytes": 55172
+      },
+      "guardian": "talos",
+      "variant": "celestial_evening",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_talos_combat",
+      "kind": "modular_outfit",
+      "source": "outfits/talos/talos_combat.glb",
+      "runtime": "res://assets/3d/outfits/talos_combat.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 2008,
+        "bytes": 60296
+      },
+      "guardian": "talos",
+      "variant": "combat",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_talos_seasonal",
+      "kind": "modular_outfit",
+      "source": "outfits/talos/talos_seasonal.glb",
+      "runtime": "res://assets/3d/outfits/talos_seasonal.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1752,
+        "bytes": 50056
+      },
+      "guardian": "talos",
+      "variant": "seasonal",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_vaelora_awakened",
+      "kind": "modular_outfit",
+      "source": "outfits/vaelora/vaelora_awakened.glb",
+      "runtime": "res://assets/3d/outfits/vaelora_awakened.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 2940,
+        "bytes": 91008
+      },
+      "guardian": "vaelora",
+      "variant": "awakened",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_vaelora_celestial_evening",
+      "kind": "modular_outfit",
+      "source": "outfits/vaelora/vaelora_celestial_evening.glb",
+      "runtime": "res://assets/3d/outfits/vaelora_celestial_evening.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 2080,
+        "bytes": 66048
+      },
+      "guardian": "vaelora",
+      "variant": "celestial_evening",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_vaelora_combat",
+      "kind": "modular_outfit",
+      "source": "outfits/vaelora/vaelora_combat.glb",
+      "runtime": "res://assets/3d/outfits/vaelora_combat.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 2008,
+        "bytes": 60300
+      },
+      "guardian": "vaelora",
+      "variant": "combat",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_vaelora_seasonal",
+      "kind": "modular_outfit",
+      "source": "outfits/vaelora/vaelora_seasonal.glb",
+      "runtime": "res://assets/3d/outfits/vaelora_seasonal.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1752,
+        "bytes": 50052
+      },
+      "guardian": "vaelora",
+      "variant": "seasonal",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_vesper_awakened",
+      "kind": "modular_outfit",
+      "source": "outfits/vesper/vesper_awakened.glb",
+      "runtime": "res://assets/3d/outfits/vesper_awakened.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 2940,
+        "bytes": 91028
+      },
+      "guardian": "vesper",
+      "variant": "awakened",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_vesper_celestial_evening",
+      "kind": "modular_outfit",
+      "source": "outfits/vesper/vesper_celestial_evening.glb",
+      "runtime": "res://assets/3d/outfits/vesper_celestial_evening.glb",
+      "metrics": {
+        "meshes": 8,
+        "triangles": 1872,
+        "bytes": 55192
+      },
+      "guardian": "vesper",
+      "variant": "celestial_evening",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_vesper_combat",
+      "kind": "modular_outfit",
+      "source": "outfits/vesper/vesper_combat.glb",
+      "runtime": "res://assets/3d/outfits/vesper_combat.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 2008,
+        "bytes": 60324
+      },
+      "guardian": "vesper",
+      "variant": "combat",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "outfit_vesper_seasonal",
+      "kind": "modular_outfit",
+      "source": "outfits/vesper/vesper_seasonal.glb",
+      "runtime": "res://assets/3d/outfits/vesper_seasonal.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1752,
+        "bytes": 50076
+      },
+      "guardian": "vesper",
+      "variant": "seasonal",
+      "socketStandard": "orbes_astra_humanoid_v1"
+    },
+    {
+      "id": "photo_podium",
+      "kind": "shared_prop",
+      "source": "props/photo_podium.glb",
+      "runtime": "res://assets/3d/props/photo_podium.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 2336,
+        "bytes": 61480
+      }
+    },
+    {
+      "id": "relic_forge",
+      "kind": "shared_prop",
+      "source": "props/relic_forge.glb",
+      "runtime": "res://assets/3d/props/relic_forge.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 2336,
+        "bytes": 61484
+      }
+    },
+    {
+      "id": "reward_chest",
+      "kind": "shared_prop",
+      "source": "props/reward_chest.glb",
+      "runtime": "res://assets/3d/props/reward_chest.glb",
+      "metrics": {
+        "meshes": 5,
+        "triangles": 336,
+        "bytes": 40936
+      }
+    },
+    {
+      "id": "ritual_brazier",
+      "kind": "shared_prop",
+      "source": "props/ritual_brazier.glb",
+      "runtime": "res://assets/3d/props/ritual_brazier.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 992,
+        "bytes": 34396
+      }
+    },
+    {
+      "id": "solar_bird",
+      "kind": "summon_familiar",
+      "source": "summons/familiars/solar_bird.glb",
+      "runtime": "res://assets/3d/summons/solar_bird.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 1492,
+        "bytes": 48144
+      },
+      "animations": [
+        "Idle",
+        "Appear",
+        "Celebrate",
+        "Dismiss"
+      ]
+    },
+    {
+      "id": "summon_altar",
+      "kind": "shared_prop",
+      "source": "props/summon_altar.glb",
+      "runtime": "res://assets/3d/props/summon_altar.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 2336,
+        "bytes": 61480
+      }
+    },
+    {
+      "id": "tailor_table",
+      "kind": "shared_prop",
+      "source": "props/tailor_table.glb",
+      "runtime": "res://assets/3d/props/tailor_table.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 2336,
+        "bytes": 61504
+      }
+    },
+    {
+      "id": "target_launcher",
+      "kind": "shared_prop",
+      "source": "props/target_launcher.glb",
+      "runtime": "res://assets/3d/props/target_launcher.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 992,
+        "bytes": 34380
+      }
+    },
+    {
+      "id": "telescope",
+      "kind": "shared_prop",
+      "source": "props/telescope.glb",
+      "runtime": "res://assets/3d/props/telescope.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 992,
+        "bytes": 34372
+      }
+    },
+    {
+      "id": "tide_otter",
+      "kind": "summon_familiar",
+      "source": "summons/familiars/tide_otter.glb",
+      "runtime": "res://assets/3d/summons/tide_otter.glb",
+      "metrics": {
+        "meshes": 6,
+        "triangles": 1688,
+        "bytes": 51300
+      },
+      "animations": [
+        "Idle",
+        "Appear",
+        "Celebrate",
+        "Dismiss"
+      ]
+    },
+    {
+      "id": "training_dummy",
+      "kind": "shared_prop",
+      "source": "props/training_dummy.glb",
+      "runtime": "res://assets/3d/props/training_dummy.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 992,
+        "bytes": 34360
+      }
+    },
+    {
+      "id": "void_cat",
+      "kind": "summon_familiar",
+      "source": "summons/familiars/void_cat.glb",
+      "runtime": "res://assets/3d/summons/void_cat.glb",
+      "metrics": {
+        "meshes": 9,
+        "triangles": 1648,
+        "bytes": 54252
+      },
+      "animations": [
+        "Idle",
+        "Appear",
+        "Celebrate",
+        "Dismiss"
+      ]
+    },
+    {
+      "id": "wardrobe_mirror",
+      "kind": "shared_prop",
+      "source": "props/wardrobe_mirror.glb",
+      "runtime": "res://assets/3d/props/wardrobe_mirror.glb",
+      "metrics": {
+        "meshes": 4,
+        "triangles": 684,
+        "bytes": 41440
+      }
+    },
+    {
+      "id": "weapon_aster",
+      "kind": "signature_weapon",
+      "source": "weapons/weapon_aster.glb",
+      "runtime": "res://assets/3d/weapons/weapon_aster.glb",
+      "metrics": {
+        "meshes": 4,
+        "triangles": 1180,
+        "bytes": 35556
+      },
+      "guardian": "aster",
+      "weaponType": "astrolabe_staff",
+      "attachSocket": "socket_weapon_r"
+    },
+    {
+      "id": "weapon_brann",
+      "kind": "signature_weapon",
+      "source": "weapons/weapon_brann.glb",
+      "runtime": "res://assets/3d/weapons/weapon_brann.glb",
+      "metrics": {
+        "meshes": 3,
+        "triangles": 512,
+        "bytes": 25012
+      },
+      "guardian": "brann",
+      "weaponType": "hammer",
+      "attachSocket": "socket_weapon_r"
+    },
+    {
+      "id": "weapon_caelum",
+      "kind": "signature_weapon",
+      "source": "weapons/weapon_caelum.glb",
+      "runtime": "res://assets/3d/weapons/weapon_caelum.glb",
+      "metrics": {
+        "meshes": 3,
+        "triangles": 534,
+        "bytes": 18836
+      },
+      "guardian": "caelum",
+      "weaponType": "spear",
+      "attachSocket": "socket_weapon_r"
+    },
+    {
+      "id": "weapon_ciro",
+      "kind": "signature_weapon",
+      "source": "weapons/weapon_ciro.glb",
+      "runtime": "res://assets/3d/weapons/weapon_ciro.glb",
+      "metrics": {
+        "meshes": 4,
+        "triangles": 904,
+        "bytes": 26208
+      },
+      "guardian": "ciro",
+      "weaponType": "bow",
+      "attachSocket": "socket_weapon_r"
+    },
+    {
+      "id": "weapon_elya",
+      "kind": "signature_weapon",
+      "source": "weapons/weapon_elya.glb",
+      "runtime": "res://assets/3d/weapons/weapon_elya.glb",
+      "metrics": {
+        "meshes": 5,
+        "triangles": 1600,
+        "bytes": 46944
+      },
+      "guardian": "elya",
+      "weaponType": "orbital_staff",
+      "attachSocket": "socket_weapon_r"
+    },
+    {
+      "id": "weapon_ilyra",
+      "kind": "signature_weapon",
+      "source": "weapons/weapon_ilyra.glb",
+      "runtime": "res://assets/3d/weapons/weapon_ilyra.glb",
+      "metrics": {
+        "meshes": 5,
+        "triangles": 1600,
+        "bytes": 46944
+      },
+      "guardian": "ilyra",
+      "weaponType": "orbital_staff",
+      "attachSocket": "socket_weapon_r"
+    },
+    {
+      "id": "weapon_joren",
+      "kind": "signature_weapon",
+      "source": "weapons/weapon_joren.glb",
+      "runtime": "res://assets/3d/weapons/weapon_joren.glb",
+      "metrics": {
+        "meshes": 4,
+        "triangles": 524,
+        "bytes": 32712
+      },
+      "guardian": "joren",
+      "weaponType": "sword_shield",
+      "attachSocket": "socket_weapon_r"
+    },
+    {
+      "id": "weapon_kael",
+      "kind": "signature_weapon",
+      "source": "weapons/weapon_kael.glb",
+      "runtime": "res://assets/3d/weapons/weapon_kael.glb",
+      "metrics": {
+        "meshes": 4,
+        "triangles": 904,
+        "bytes": 26208
+      },
+      "guardian": "kael",
+      "weaponType": "bow",
+      "attachSocket": "socket_weapon_r"
+    },
+    {
+      "id": "weapon_lys",
+      "kind": "signature_weapon",
+      "source": "weapons/weapon_lys.glb",
+      "runtime": "res://assets/3d/weapons/weapon_lys.glb",
+      "metrics": {
+        "meshes": 5,
+        "triangles": 1600,
+        "bytes": 46936
+      },
+      "guardian": "lys",
+      "weaponType": "orbital_staff",
+      "attachSocket": "socket_weapon_r"
+    },
+    {
+      "id": "weapon_maelys",
+      "kind": "signature_weapon",
+      "source": "weapons/weapon_maelys.glb",
+      "runtime": "res://assets/3d/weapons/weapon_maelys.glb",
+      "metrics": {
+        "meshes": 3,
+        "triangles": 512,
+        "bytes": 25028
+      },
+      "guardian": "maelys",
+      "weaponType": "hammer",
+      "attachSocket": "socket_weapon_r"
+    },
+    {
+      "id": "weapon_mira",
+      "kind": "signature_weapon",
+      "source": "weapons/weapon_mira.glb",
+      "runtime": "res://assets/3d/weapons/weapon_mira.glb",
+      "metrics": {
+        "meshes": 4,
+        "triangles": 1180,
+        "bytes": 35536
+      },
+      "guardian": "mira",
+      "weaponType": "astrolabe_staff",
+      "attachSocket": "socket_weapon_r"
+    },
+    {
+      "id": "weapon_noor",
+      "kind": "signature_weapon",
+      "source": "weapons/weapon_noor.glb",
+      "runtime": "res://assets/3d/weapons/weapon_noor.glb",
+      "metrics": {
+        "meshes": 4,
+        "triangles": 1180,
+        "bytes": 35536
+      },
+      "guardian": "noor",
+      "weaponType": "astrolabe_staff",
+      "attachSocket": "socket_weapon_r"
+    },
+    {
+      "id": "weapon_nyx",
+      "kind": "signature_weapon",
+      "source": "weapons/weapon_nyx.glb",
+      "runtime": "res://assets/3d/weapons/weapon_nyx.glb",
+      "metrics": {
+        "meshes": 4,
+        "triangles": 1180,
+        "bytes": 35548
+      },
+      "guardian": "nyx",
+      "weaponType": "astrolabe_staff",
+      "attachSocket": "socket_weapon_r"
+    },
+    {
+      "id": "weapon_orin",
+      "kind": "signature_weapon",
+      "source": "weapons/weapon_orin.glb",
+      "runtime": "res://assets/3d/weapons/weapon_orin.glb",
+      "metrics": {
+        "meshes": 4,
+        "triangles": 148,
+        "bytes": 9728
+      },
+      "guardian": "orin",
+      "weaponType": "twin_blades",
+      "attachSocket": "socket_weapon_r"
+    },
+    {
+      "id": "weapon_orion",
+      "kind": "signature_weapon",
+      "source": "weapons/weapon_orion.glb",
+      "runtime": "res://assets/3d/weapons/weapon_orion.glb",
+      "metrics": {
+        "meshes": 4,
+        "triangles": 904,
+        "bytes": 26228
+      },
+      "guardian": "orion",
+      "weaponType": "bow",
+      "attachSocket": "socket_weapon_r"
+    },
+    {
+      "id": "weapon_phae",
+      "kind": "signature_weapon",
+      "source": "weapons/weapon_phae.glb",
+      "runtime": "res://assets/3d/weapons/weapon_phae.glb",
+      "metrics": {
+        "meshes": 4,
+        "triangles": 1180,
+        "bytes": 35564
+      },
+      "guardian": "phae",
+      "weaponType": "astrolabe_staff",
+      "attachSocket": "socket_weapon_r"
+    },
+    {
+      "id": "weapon_rhea",
+      "kind": "signature_weapon",
+      "source": "weapons/weapon_rhea.glb",
+      "runtime": "res://assets/3d/weapons/weapon_rhea.glb",
+      "metrics": {
+        "meshes": 4,
+        "triangles": 148,
+        "bytes": 9728
+      },
+      "guardian": "rhea",
+      "weaponType": "twin_blades",
+      "attachSocket": "socket_weapon_r"
+    },
+    {
+      "id": "weapon_saphira",
+      "kind": "signature_weapon",
+      "source": "weapons/weapon_saphira.glb",
+      "runtime": "res://assets/3d/weapons/weapon_saphira.glb",
+      "metrics": {
+        "meshes": 4,
+        "triangles": 430,
+        "bytes": 17332
+      },
+      "guardian": "saphira",
+      "weaponType": "rapier",
+      "attachSocket": "socket_weapon_r"
+    },
+    {
+      "id": "weapon_seraphiel",
+      "kind": "signature_weapon",
+      "source": "weapons/weapon_seraphiel.glb",
+      "runtime": "res://assets/3d/weapons/weapon_seraphiel.glb",
+      "metrics": {
+        "meshes": 3,
+        "triangles": 534,
+        "bytes": 18816
+      },
+      "guardian": "seraphiel",
+      "weaponType": "spear",
+      "attachSocket": "socket_weapon_r"
+    },
+    {
+      "id": "weapon_solveig",
+      "kind": "signature_weapon",
+      "source": "weapons/weapon_solveig.glb",
+      "runtime": "res://assets/3d/weapons/weapon_solveig.glb",
+      "metrics": {
+        "meshes": 3,
+        "triangles": 534,
+        "bytes": 18812
+      },
+      "guardian": "solveig",
+      "weaponType": "spear",
+      "attachSocket": "socket_weapon_r"
+    },
+    {
+      "id": "weapon_talia",
+      "kind": "signature_weapon",
+      "source": "weapons/weapon_talia.glb",
+      "runtime": "res://assets/3d/weapons/weapon_talia.glb",
+      "metrics": {
+        "meshes": 5,
+        "triangles": 1600,
+        "bytes": 46944
+      },
+      "guardian": "talia",
+      "weaponType": "orbital_staff",
+      "attachSocket": "socket_weapon_r"
+    },
+    {
+      "id": "weapon_talos",
+      "kind": "signature_weapon",
+      "source": "weapons/weapon_talos.glb",
+      "runtime": "res://assets/3d/weapons/weapon_talos.glb",
+      "metrics": {
+        "meshes": 4,
+        "triangles": 1180,
+        "bytes": 35568
+      },
+      "guardian": "talos",
+      "weaponType": "astrolabe_staff",
+      "attachSocket": "socket_weapon_r"
+    },
+    {
+      "id": "weapon_vaelora",
+      "kind": "signature_weapon",
+      "source": "weapons/weapon_vaelora.glb",
+      "runtime": "res://assets/3d/weapons/weapon_vaelora.glb",
+      "metrics": {
+        "meshes": 4,
+        "triangles": 1180,
+        "bytes": 35560
+      },
+      "guardian": "vaelora",
+      "weaponType": "astrolabe_staff",
+      "attachSocket": "socket_weapon_r"
+    },
+    {
+      "id": "weapon_vesper",
+      "kind": "signature_weapon",
+      "source": "weapons/weapon_vesper.glb",
+      "runtime": "res://assets/3d/weapons/weapon_vesper.glb",
+      "metrics": {
+        "meshes": 4,
+        "triangles": 524,
+        "bytes": 32748
+      },
+      "guardian": "vesper",
+      "weaponType": "sword_shield",
+      "attachSocket": "socket_weapon_r"
+    }
+  ],
+  "summary": {
+    "total": 211,
+    "byKind": {
+      "shared_prop": 20,
+      "signature_armor_set": 24,
+      "signature_artifact": 24,
+      "summon_familiar": 12,
+      "rigged_guardian": 3,
+      "living_orb": 8,
+      "modular_outfit": 96,
+      "signature_weapon": 24
+    },
+    "bytes": 12940412,
+    "triangles": 399366
+  }
+}

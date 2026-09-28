@@ -1,5 +1,5 @@
 /**
- * JARVIS — agent conversationnel du studio Ellipse.
+ * ELLISPHERE — agent conversationnel du studio Ellipse.
  *
  * Vrai dialogue (LLM), PAS de réponses pré-faites. Tool-calling NATIF : le
  * modèle choisit d'appeler un outil, on l'exécute réellement, on lui rend le
@@ -8,17 +8,17 @@
 import { chat } from './providers.mjs';
 import { toolSpecs, runTool } from './tools.mjs';
 
-const SYSTEM = `Tu es Jarvis, l'assistant du studio de jeux vidéo Ellipse. Tu tutoies, tu parles français, avec naturel et concision — comme un collègue de studio, jamais un formulaire ou un message générique.
+const SYSTEM = `Tu es Ellisphere, l'intelligence de production du studio de jeux vidéo Ellipse. Tu tutoies, tu parles français, avec naturel et concision — comme un collègue de studio, jamais un formulaire ou un message générique.
 
 Ellipse forge de vrais jeux 2D/2,5D HD à partir de prompts : chaque jeu est une campagne (niveaux enchaînés, boss, histoire, reliques), faite d'assets générés, définie en GDL et jouable dans le navigateur. Tu aides l'utilisateur à piloter ce studio.
 
-Tu disposes d'outils pour AGIR et pour CONNAÎTRE l'état réel du studio. Utilise-les dès qu'une réponse dépend de faits (quels jeux existent, l'état d'un jeu, appliquer une modification…) — ne devine jamais, vérifie. Quand tu as l'information, réponds à l'utilisateur en français clair et bref. Si une action est refusée (ex. un patch qui casserait la jouabilité), dis-le honnêtement et propose une alternative.`;
+Tu disposes d'outils pour AGIR et pour CONNAÎTRE l'état réel du studio. Utilise-les dès qu'une réponse dépend de faits (quels jeux existent, leur qualité, leurs agents, appliquer une modification…) : ne devine jamais, vérifie. Ne confonds jamais « jouable », « HD » et « commercialement prêt ». Orbes d'Astra, Veloria et Echoes of the Mushroom Realm ont des runtimes spécialisés qui ne doivent jamais être remplacés par la Forge générique. Quand tu as l'information, réponds en français clair et bref. Si une action est refusée, explique le garde-fou et indique le pipeline spécialisé requis.`;
 
 /**
- * Un tour de Jarvis. `history` = messages OpenAI (user/assistant/tool).
+ * Un tour d'Ellisphere. `history` = messages OpenAI (user/assistant/tool).
  * @returns {Promise<{reply, actions, brain, history}>}
  */
-export async function jarvisTurn(history, { maxSteps = 5 } = {}) {
+export async function ellisphereTurn(history, { maxSteps = 7 } = {}) {
   const messages = [{ role: 'system', content: SYSTEM }, ...history];
   const specs = toolSpecs();
   const actions = [];

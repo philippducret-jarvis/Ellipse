@@ -39,6 +39,7 @@ export class VeloriaHazardLayer {
     }
 
     const color = parseColor(script?.visual?.color ?? 'rgba(158, 79, 92, 0.75)');
+    const active = v.hazardPhase === 'active';
     for (const laneId of activeLaneIds(v, this.opts.lanes)) {
       const zone = this.opts.zones.find((z) => z.id === laneId);
       const lane = this.opts.lanes.find((l) => l.id === laneId);
@@ -47,8 +48,8 @@ export class VeloriaHazardLayer {
       } else if (lane) {
         this.gfx.rect(lane.center_x - 90, 140, 180, this.opts.groundY - 140);
       }
-      this.gfx.fill(color);
-      this.gfx.stroke({ color: 0xf0d9a6, width: 2, alpha: 0.6 });
+      this.gfx.fill({ color, alpha: active ? 0.38 : 0.14 });
+      this.gfx.stroke({ color: active ? 0xffd5b0 : 0xf0d9a6, width: active ? 3 : 2, alpha: active ? 0.9 : 0.58 });
     }
   }
 

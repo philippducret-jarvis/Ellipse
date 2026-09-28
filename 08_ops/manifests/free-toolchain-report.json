@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T04:36:48.164Z",
+  "generated_at": "2026-07-29T14:47:55.296Z",
   "install_winget": false,
   "total_tools": 15,
   "available": 8,
@@ -21,8 +21,8 @@
       "status": "available",
       "commands": {
         "node": "C:\\Program Files\\nodejs\\node.exe",
-        "git": "C:\\Program Files\\Git\\mingw64\\bin\\git.exe",
-        "python": "C:\\Workplace\\Test_IA\\Projet_Jarvis\\venv\\Scripts\\python.exe"
+        "git": "C:\\Program Files\\Git\\cmd\\git.exe",
+        "python": "C:\\Python314\\python.exe"
       },
       "pnpm": "9.15.0"
     },

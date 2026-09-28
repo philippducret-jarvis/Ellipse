@@ -1,0 +1,28 @@
+{
+  "hero_id": "voren",
+  "checked_at": "2026-09-24T06:59:24.617Z",
+  "technical_passed": true,
+  "width": 1024,
+  "height": 1536,
+  "sha256": "fc3fe5834c5a055cc746d89d9fdab1a6e398e2f44f5807d84760c2be70660ac8",
+  "alpha": {
+    "present": true,
+    "fully_transparent_fraction": 0.43492889404296875,
+    "solid_fraction": 0.5098959604899088
+  },
+  "visual_status": "review",
+  "fidelity_approved": false,
+  "runtime_ready": false,
+  "observations": [
+    "Longue chevelure argentée, couronne noire embrasée",
+    "Torse découvert et proportions puissantes de la référence",
+    "Armure volcanique noire, bordures d’or et fissures de braise",
+    "Grande hache, cape rouge déchirée et épaulières à pointes"
+  ],
+  "remaining": [
+    "Comparer les détails du visage et des ornements à la référence",
+    "Nettoyer les éventuels halos et pixels de fond",
+    "Séparer les éléments pour le rig",
+    "Produire et vérifier les animations en mouvement"
+  ]
+}

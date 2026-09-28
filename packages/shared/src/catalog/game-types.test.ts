@@ -88,6 +88,14 @@ describe('dérivation de preset', () => {
     expect(p.systems).toContain('falling_blocks');
     expect(p.systems).toContain('line_clear');
   });
+
+  it('derive un jeu de fusion de billes avec runtime specialise', () => {
+    const p = derivePreset({ game_type: 'merge_drop_gacha', mechanic_modules: ['merge_drop'] });
+    expect(p.map_kind).toBe('board');
+    expect(p.systems).toContain('merge_drop_physics');
+    expect(p.systems).toContain('merge_cascade');
+    expect(p.asset_families).toContain('orb_tiers');
+  });
 });
 
 describe('modules de mécaniques & références', () => {

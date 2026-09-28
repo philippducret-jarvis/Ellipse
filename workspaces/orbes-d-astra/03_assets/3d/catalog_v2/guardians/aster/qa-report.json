@@ -1,0 +1,41 @@
+{
+  "guardian": "aster",
+  "displayName": "Aster",
+  "adultConfirmed": true,
+  "presentation": "femme",
+  "element": "Nexus",
+  "role": "Dégâts",
+  "status": "integration_ready_humanoid_base",
+  "bodySource": "MPFB 2.0.17 / MakeHuman CC0",
+  "blender": "4.5.10 LTS",
+  "dimensionsMeters": [
+    0.4925,
+    0.2534,
+    1.4919
+  ],
+  "meshObjects": 24,
+  "trianglesBeforeExportModifiers": 95628,
+  "deformBones": 55,
+  "animationClips": [
+    "aster_Idle_Glamour"
+  ],
+  "sockets": [
+    "socket_weapon_r",
+    "socket_artifact_l",
+    "socket_back",
+    "socket_head_fx"
+  ],
+  "glbBytes": 6025792,
+  "qualityGate": {
+    "realHumanoidTopology": true,
+    "gameEngineRig": true,
+    "texturedSkin": true,
+    "eyesHairTeeth": true,
+    "customAstraCostume": true,
+    "signatureWeapon": true,
+    "roundTripPending": true,
+    "commercialFinalSculpt": false,
+    "fullAnimationSet": false,
+    "finalLods": false
+  }
+}

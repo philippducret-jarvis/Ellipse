@@ -43,6 +43,62 @@ export function ProjectCommandBar({ snap, onPreview }: Props) {
         />
       </div>
       <div className="es-command-bar-links">
+        {snap.project.slug === 'shadow-echoes' ? (
+          <ActionLink
+            label="Campagne tactique — quatre rangs"
+            hint="Combats, déplacement et compétences selon la position"
+            href={`${base}/07_exports/web/tactics.html`}
+            external
+          />
+        ) : null}
+        {snap.project.slug === 'shadow-echoes' ? (
+          <ActionLink
+            label="Séraphine V3 — revue 3D"
+            hint="Comparer la cible au visage et au corset UV/PBR en mouvement"
+            href={`${base}/07_exports/web/asset-lab.html?hero=seraphine&model=surface`}
+            external
+          />
+        ) : null}
+        {snap.project.slug === 'shadow-echoes' ? (
+          <ActionLink
+            label="Entrer dans la Citadelle — lot 2"
+            hint="Hub, dix activités, quatre Mythiques, invocations, reliques et progression"
+            href={`${base}/07_exports/web/citadel.html`}
+            external
+          />
+        ) : null}
+        {snap.project.slug === 'shadow-echoes' ? (
+          <ActionLink
+            label="Calques de Séraphine — lot 04"
+            hint="Corps reconstruit, bras et épée indépendants : assemblage en revue"
+            href={`${base}/07_exports/web/layers.html`}
+            external
+          />
+        ) : null}
+        {snap.project.slug === 'shadow-echoes' ? (
+          <ActionLink
+            label="Atelier du mouvement — lot 03"
+            hint="Rigs des quatre Mythiques : ralentir, comparer et inspecter les articulations"
+            href={`${base}/07_exports/web/motion.html`}
+            external
+          />
+        ) : null}
+        {snap.project.slug === 'shadow-echoes' ? (
+          <ActionLink
+            label="Jouer l’Épreuve des Échos — lot 02"
+            hint="Les quatre Mythiques dans une épreuve de combat en trois phases"
+            href={`${base}/07_exports/web/play.html`}
+            external
+          />
+        ) : null}
+        {snap.project.slug === 'shadow-echoes' ? (
+          <ActionLink
+            label="Atelier des mythiques — lot 01"
+            hint="Séraphine, Nyxara, Lysael et Voren : bases HD, comparaison aux références et banc de compétences"
+            href={`${base}/07_exports/web/heroes.html`}
+            external
+          />
+        ) : null}
         <ActionLink
           label="GDL runtime"
           hint="Définition déclarative du jeu — entités, scènes, systèmes"

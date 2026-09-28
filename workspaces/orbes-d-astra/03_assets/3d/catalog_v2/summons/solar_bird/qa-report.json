@@ -1,0 +1,31 @@
+{
+  "id": "solar_bird",
+  "displayName": "Oiseau solaire",
+  "affinity": "Solaire",
+  "kind": "rigged_familiar",
+  "status": "integration_ready_animated_source",
+  "sourceLicense": "CC0",
+  "sourcePack": "Quaternius Cute Animated Monsters Pack",
+  "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/solar_bird/solar_bird_source.blend",
+  "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/solar_bird/solar_bird_lod0.glb",
+  "runtime": "res://assets/3d/summons_v2/solar_bird/solar_bird_lod0.glb",
+  "animations": [
+    "Bite_Front",
+    "Bite_InPlace",
+    "Dance",
+    "Death",
+    "HitRecieve",
+    "Idle",
+    "Jump",
+    "No",
+    "Walk",
+    "Yes"
+  ],
+  "detachedMissingImages": [
+    "Texture.png"
+  ],
+  "deformBones": 6,
+  "triangles": 1040,
+  "bytes": 417584,
+  "commercialFinal": false
+}

@@ -1,0 +1,41 @@
+{
+  "guardian": "kael",
+  "displayName": "Kael",
+  "adultConfirmed": true,
+  "presentation": "homme",
+  "element": "Vent",
+  "role": "Dégâts",
+  "status": "integration_ready_humanoid_base",
+  "bodySource": "MPFB 2.0.17 / MakeHuman CC0",
+  "blender": "4.5.10 LTS",
+  "dimensionsMeters": [
+    0.8161,
+    0.2711,
+    1.3372
+  ],
+  "meshObjects": 27,
+  "trianglesBeforeExportModifiers": 181120,
+  "deformBones": 55,
+  "animationClips": [
+    "kael_Idle_Glamour"
+  ],
+  "sockets": [
+    "socket_weapon_r",
+    "socket_artifact_l",
+    "socket_back",
+    "socket_head_fx"
+  ],
+  "glbBytes": 16089160,
+  "qualityGate": {
+    "realHumanoidTopology": true,
+    "gameEngineRig": true,
+    "texturedSkin": true,
+    "eyesHairTeeth": true,
+    "customAstraCostume": true,
+    "signatureWeapon": true,
+    "roundTripPending": true,
+    "commercialFinalSculpt": false,
+    "fullAnimationSet": false,
+    "finalLods": false
+  }
+}

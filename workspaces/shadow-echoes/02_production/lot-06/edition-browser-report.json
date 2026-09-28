@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "checks": [
+    "Fiches, apprentissage limité, achat, équipement, amélioration et transfert uniques via les commandes",
+    "Carnet de test importé par l’interface : ascension, XP conservée, prérequis des talents, réinitialisation et rechargement",
+    "Huit écrans supplémentaires contrôlés à 390 px sans débordement",
+    "Trois cinématiques : sceau, rassemblement, silhouette, dévoilement, résultat ; coût et fragments contrôlés"
+  ],
+  "errors": []
+}

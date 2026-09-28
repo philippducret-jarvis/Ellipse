@@ -1,67 +1,138 @@
 #!/usr/bin/env node
-/**
- * Echoes — build scène INTÉGRÉE + moteur 2.5D (@ellipse/engine).
- *   pnpm echoes:hd
- */
-import { writeFile, mkdir, copyFile } from 'node:fs/promises';
+/** Build reproductible du runtime spécialisé Echoes. */
+import { existsSync } from 'node:fs';
+import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { generateEchoesIntegratedScene } from './lib/seed-echoes/integrated-scene.mjs';
-import { buildScenePack } from './lib/level-01/scene-pack.mjs';
+import { generateEchoesFaithfulHd } from './lib/seed-echoes/faithful-hd.mjs';
+import { buildEchoesGdl, ECHOES_RUNTIME_MODE } from './lib/echoes/gdl-assembler.mjs';
+import { buildEchoesPreviewFiles } from './lib/echoes/preview.mjs';
 import { buildEngineBrowserBundle } from './lib/engine-preview/build-browser-bundle.mjs';
 
 const ROOT = process.cwd();
-const WS = join(ROOT, 'workspaces', 'echoes-of-the-mushroom-realm');
+const SLUG = 'echoes-of-the-mushroom-realm';
+const WS = join(ROOT, 'workspaces', SLUG);
+const PREVIEW_URL = `/workspaces/${SLUG}/07_exports/web/preview.html`;
+const GDL_URL = `/workspaces/${SLUG}/05_runtime/gdl/echoes.preview.gdl.json`;
 
 async function main() {
   console.log('═══════════════════════════════════════════════════════');
-  console.log('  ECHOES — Scène INTÉGRÉE + moteur 2.5D');
-  console.log('  Parallax2D · YSort · GDL depth · @ellipse/engine');
-  console.log('═══════════════════════════════════════════════════════\n');
+  console.log('  ECHOES — RUNTIME SPÉCIALISÉ HD');
+  console.log('  Menu canonique · platformer · boss · armes · tactile');
+  console.log('═══════════════════════════════════════════════════════');
+  const startedAt = Date.now();
 
-  const t0 = Date.now();
-  const manifest = await generateEchoesIntegratedScene();
+  const faithful = await generateEchoesFaithfulHd();
+  console.log(`  · ${faithful.sprites.length} sprites et playfield fidèle reconstruits`);
 
-  console.log('  · sync GDL depth (scene-pack)');
-  await buildScenePack();
+  const gdl = buildEchoesGdl();
+  const gdlDir = join(WS, '05_runtime', 'gdl');
+  await mkdir(gdlDir, { recursive: true });
+  await writeFile(join(gdlDir, 'echoes.preview.gdl.json'), `${JSON.stringify(gdl, null, 2)}\n`, 'utf8');
+  console.log('  · GDL spécialisé synchronisé');
 
   const webDir = join(WS, '07_exports', 'web');
+  await rm(webDir, { recursive: true, force: true });
   await mkdir(webDir, { recursive: true });
-  await copyFile(
-    join(WS, '03_assets', 'integrated', 'integrated-manifest.json'),
-    join(webDir, 'integrated-manifest.json'),
-  );
-  await copyFile(join(webDir, 'integrated-manifest.json'), join(webDir, 'faithful-manifest.json'));
-
-  console.log('  · bundle @ellipse/engine navigateur');
+  const preview = buildEchoesPreviewFiles();
+  await Promise.all([
+    writeFile(join(webDir, 'preview.html'), preview.html, 'utf8'),
+    writeFile(join(webDir, 'index.html'), preview.html, 'utf8'),
+    writeFile(join(webDir, 'preview.css'), preview.css, 'utf8'),
+    writeFile(join(webDir, 'preview.js'), preview.js, 'utf8'),
+  ]);
   await buildEngineBrowserBundle(webDir);
+  const generatedAt = new Date().toISOString();
+  await writeFile(join(webDir, 'preview-manifest.json'), `${JSON.stringify({
+    generated_at: generatedAt,
+    title: 'Echoes of the Mushroom Realm',
+    slug: SLUG,
+    flagship: true,
+    mode: ECHOES_RUNTIME_MODE,
+    preview_url: PREVIEW_URL,
+    gdl: '../../05_runtime/gdl/echoes.preview.gdl.json',
+    resolution: [1280, 720],
+    orientation: 'landscape',
+    legacy_forge_shipping: false,
+  }, null, 2)}\n`, 'utf8');
+  console.log('  · export web atomique et bundle Pixi reconstruits');
 
-  const runtimeSrc = join(ROOT, 'tools', 'lib', 'seed-echoes', 'static', 'preview', 'engine-preview.js');
-  const legacySrc = join(ROOT, 'tools', 'lib', 'seed-echoes', 'static', 'preview', 'integrated-runtime.js');
-  await copyFile(runtimeSrc, join(webDir, 'preview.js'));
-  await copyFile(legacySrc, join(webDir, 'integrated-runtime.js'));
-  await copyFile(
-    join(ROOT, 'tools', 'lib', 'hd-faithful', 'depth-runtime.mjs'),
-    join(webDir, 'depth-runtime.mjs'),
+  const workspacePath = join(WS, 'workspace.json');
+  const workspace = JSON.parse(await readFile(workspacePath, 'utf8'));
+  workspace.title = 'Echoes of the Mushroom Realm';
+  workspace.status = 'playable_hd';
+  workspace.dimension = '2.5d';
+  workspace.genre = 'action_platformer';
+  workspace.runtime = ECHOES_RUNTIME_MODE;
+  workspace.camera_mode = 'side_scroll_cinematic';
+  workspace.preview_url = PREVIEW_URL;
+  workspace.gdl_url = GDL_URL;
+  workspace.updated_at = generatedAt;
+  delete workspace.forge;
+  delete workspace.experience;
+  delete workspace.legacy_preview_url;
+  await writeFile(workspacePath, `${JSON.stringify(workspace, null, 2)}\n`, 'utf8');
+
+  const required = [
+    join(webDir, 'preview.html'),
+    join(webDir, 'preview.css'),
+    join(webDir, 'preview.js'),
+    join(webDir, 'engine', 'ellipse-engine.js'),
+    join(gdlDir, 'echoes.preview.gdl.json'),
+    join(WS, '03_assets', 'faithful', 'menu_keyart.jpeg'),
+    join(WS, '03_assets', 'faithful', 'playfield.png'),
+    join(WS, '03_assets', 'faithful', 'hero.png'),
+    join(WS, '03_assets', 'faithful', 'boss_root_guardian.png'),
+  ];
+  const checks = required.map((path) => ({ id: path.slice(WS.length + 1).replaceAll('\\', '/'), status: existsSync(path) ? 'pass' : 'fail' }));
+  checks.push(
+    { id: 'runtime_specialized', status: gdl.meta.runtime === ECHOES_RUNTIME_MODE ? 'pass' : 'fail' },
+    { id: 'fixed_step_simulation', status: gdl.systems.includes('fixed_step_simulation') ? 'pass' : 'fail' },
+    { id: 'boss_three_phases', status: gdl.meta.echoes.boss_phases.length === 3 ? 'pass' : 'fail' },
+    { id: 'legacy_forge_absent_from_export', status: !existsSync(join(webDir, 'main.js')) ? 'pass' : 'fail' },
   );
-
+  const passed = checks.filter((check) => check.status === 'pass').length;
+  const verification = {
+    generated_at: generatedAt,
+    status: passed === checks.length ? 'pass' : 'fail',
+    summary: { passed, total: checks.length },
+    checks,
+  };
   const opsDir = join(WS, '08_ops', 'manifests');
   await mkdir(opsDir, { recursive: true });
-  manifest.runtime = {
-    web: '/workspaces/echoes-of-the-mushroom-realm/07_exports/web/preview.html',
-    mode: 'ellipse_engine_25d',
-    renderer: 'engine-preview.js',
-    depth_engine: '@ellipse/engine',
-  };
-  await writeFile(join(opsDir, 'integrated-scene-build.json'), JSON.stringify(manifest, null, 2), 'utf-8');
+  await Promise.all([
+    writeFile(join(opsDir, 'priority-hd-verification.json'), `${JSON.stringify(verification, null, 2)}\n`, 'utf8'),
+    writeFile(join(opsDir, 'faithful-hd-build.json'), `${JSON.stringify({
+      ...faithful,
+      generated_at: generatedAt,
+      runtime: { mode: ECHOES_RUNTIME_MODE, preview_url: PREVIEW_URL, gdl_url: GDL_URL },
+      verification: verification.summary,
+    }, null, 2)}\n`, 'utf8'),
+    writeFile(join(opsDir, 'flagship-deliverable.json'), `${JSON.stringify({
+      generated_at: generatedAt,
+      game: { slug: SLUG, title: 'Echoes of the Mushroom Realm', genre: 'action_platformer', dimension: '2.5d' },
+      deliverable: {
+        status: 'playable_hd',
+        commercial_ready: false,
+        checks: `${passed}/${checks.length}`,
+        preview_url: PREVIEW_URL,
+        gdl_url: GDL_URL,
+        runtime: ECHOES_RUNTIME_MODE,
+        remaining_release_gates: [
+          'golden screenshots composed in a real browser',
+          'side-by-side art-direction approval',
+          'touch, gamepad and performance validation on target devices',
+          'final music and sound design mix',
+        ],
+      },
+    }, null, 2)}\n`, 'utf8'),
+  ]);
 
-  const dt = ((Date.now() - t0) / 1000).toFixed(1);
-  console.log(`\n  Terminé (${dt}s) — ${manifest.actors.length} acteurs · playfield ${manifest.level.width}px`);
-  console.log('  Renderer : @ellipse/engine (Parallax2D + YSort)');
-  console.log('  Legacy   : integrated-runtime.js?legacy=1');
-  console.log('  Jouer    : 07_exports/web/preview.html\n');
+  if (verification.status !== 'pass') throw new Error(`Gate Echoes refusé (${passed}/${checks.length})`);
+  console.log(`  · gate statique ${passed}/${checks.length}`);
+  console.log(`  Terminé en ${((Date.now() - startedAt) / 1000).toFixed(1)} s — ${PREVIEW_URL}`);
 }
 
-main().catch((err) => {
-  console.error('ÉCHEC build scène intégrée Echoes:', err);
-  process.exit(1);
+main().catch((error) => {
+  console.error('ÉCHEC build Echoes HD:', error);
+  process.exitCode = 1;
 });

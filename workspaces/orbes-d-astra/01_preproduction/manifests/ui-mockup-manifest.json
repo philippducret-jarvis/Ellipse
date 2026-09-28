@@ -1,0 +1,753 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-29T14:51:22.442Z",
+  "status": "ux_drafts_complete_art_approval_pending",
+  "screenCount": 31,
+  "variantCount": 93,
+  "generated": [
+    {
+      "screen": "title",
+      "variant": "pc",
+      "file": "mockups/wireframes/title--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "title",
+      "variant": "mobile",
+      "file": "mockups/wireframes/title--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "title",
+      "variant": "accessible",
+      "file": "mockups/wireframes/title--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "onboarding",
+      "variant": "pc",
+      "file": "mockups/wireframes/onboarding--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "onboarding",
+      "variant": "mobile",
+      "file": "mockups/wireframes/onboarding--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "onboarding",
+      "variant": "accessible",
+      "file": "mockups/wireframes/onboarding--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "hub_pc",
+      "variant": "pc",
+      "file": "mockups/wireframes/hub_pc--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "hub_pc",
+      "variant": "mobile",
+      "file": "mockups/wireframes/hub_pc--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "hub_pc",
+      "variant": "accessible",
+      "file": "mockups/wireframes/hub_pc--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "hub_mobile",
+      "variant": "pc",
+      "file": "mockups/wireframes/hub_mobile--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "hub_mobile",
+      "variant": "mobile",
+      "file": "mockups/wireframes/hub_mobile--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "hub_mobile",
+      "variant": "accessible",
+      "file": "mockups/wireframes/hub_mobile--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "world_map",
+      "variant": "pc",
+      "file": "mockups/wireframes/world_map--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "world_map",
+      "variant": "mobile",
+      "file": "mockups/wireframes/world_map--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "world_map",
+      "variant": "accessible",
+      "file": "mockups/wireframes/world_map--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "mission_brief",
+      "variant": "pc",
+      "file": "mockups/wireframes/mission_brief--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "mission_brief",
+      "variant": "mobile",
+      "file": "mockups/wireframes/mission_brief--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "mission_brief",
+      "variant": "accessible",
+      "file": "mockups/wireframes/mission_brief--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "combat_pc",
+      "variant": "pc",
+      "file": "mockups/wireframes/combat_pc--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "combat_pc",
+      "variant": "mobile",
+      "file": "mockups/wireframes/combat_pc--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "combat_pc",
+      "variant": "accessible",
+      "file": "mockups/wireframes/combat_pc--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "combat_mobile",
+      "variant": "pc",
+      "file": "mockups/wireframes/combat_mobile--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "combat_mobile",
+      "variant": "mobile",
+      "file": "mockups/wireframes/combat_mobile--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "combat_mobile",
+      "variant": "accessible",
+      "file": "mockups/wireframes/combat_mobile--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "boss_phase_3",
+      "variant": "pc",
+      "file": "mockups/wireframes/boss_phase_3--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "boss_phase_3",
+      "variant": "mobile",
+      "file": "mockups/wireframes/boss_phase_3--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "boss_phase_3",
+      "variant": "accessible",
+      "file": "mockups/wireframes/boss_phase_3--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "guardian_switch",
+      "variant": "pc",
+      "file": "mockups/wireframes/guardian_switch--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "guardian_switch",
+      "variant": "mobile",
+      "file": "mockups/wireframes/guardian_switch--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "guardian_switch",
+      "variant": "accessible",
+      "file": "mockups/wireframes/guardian_switch--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "ultimate",
+      "variant": "pc",
+      "file": "mockups/wireframes/ultimate--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "ultimate",
+      "variant": "mobile",
+      "file": "mockups/wireframes/ultimate--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "ultimate",
+      "variant": "accessible",
+      "file": "mockups/wireframes/ultimate--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "overdrive",
+      "variant": "pc",
+      "file": "mockups/wireframes/overdrive--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "overdrive",
+      "variant": "mobile",
+      "file": "mockups/wireframes/overdrive--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "overdrive",
+      "variant": "accessible",
+      "file": "mockups/wireframes/overdrive--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "victory",
+      "variant": "pc",
+      "file": "mockups/wireframes/victory--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "victory",
+      "variant": "mobile",
+      "file": "mockups/wireframes/victory--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "victory",
+      "variant": "accessible",
+      "file": "mockups/wireframes/victory--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "defeat",
+      "variant": "pc",
+      "file": "mockups/wireframes/defeat--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "defeat",
+      "variant": "mobile",
+      "file": "mockups/wireframes/defeat--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "defeat",
+      "variant": "accessible",
+      "file": "mockups/wireframes/defeat--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "roster",
+      "variant": "pc",
+      "file": "mockups/wireframes/roster--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "roster",
+      "variant": "mobile",
+      "file": "mockups/wireframes/roster--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "roster",
+      "variant": "accessible",
+      "file": "mockups/wireframes/roster--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "guardian_detail",
+      "variant": "pc",
+      "file": "mockups/wireframes/guardian_detail--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "guardian_detail",
+      "variant": "mobile",
+      "file": "mockups/wireframes/guardian_detail--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "guardian_detail",
+      "variant": "accessible",
+      "file": "mockups/wireframes/guardian_detail--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "equipment",
+      "variant": "pc",
+      "file": "mockups/wireframes/equipment--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "equipment",
+      "variant": "mobile",
+      "file": "mockups/wireframes/equipment--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "equipment",
+      "variant": "accessible",
+      "file": "mockups/wireframes/equipment--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "wardrobe",
+      "variant": "pc",
+      "file": "mockups/wireframes/wardrobe--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "wardrobe",
+      "variant": "mobile",
+      "file": "mockups/wireframes/wardrobe--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "wardrobe",
+      "variant": "accessible",
+      "file": "mockups/wireframes/wardrobe--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "bond",
+      "variant": "pc",
+      "file": "mockups/wireframes/bond--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "bond",
+      "variant": "mobile",
+      "file": "mockups/wireframes/bond--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "bond",
+      "variant": "accessible",
+      "file": "mockups/wireframes/bond--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "summon_single",
+      "variant": "pc",
+      "file": "mockups/wireframes/summon_single--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "summon_single",
+      "variant": "mobile",
+      "file": "mockups/wireframes/summon_single--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "summon_single",
+      "variant": "accessible",
+      "file": "mockups/wireframes/summon_single--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "summon_ten",
+      "variant": "pc",
+      "file": "mockups/wireframes/summon_ten--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "summon_ten",
+      "variant": "mobile",
+      "file": "mockups/wireframes/summon_ten--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "summon_ten",
+      "variant": "accessible",
+      "file": "mockups/wireframes/summon_ten--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "shop",
+      "variant": "pc",
+      "file": "mockups/wireframes/shop--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "shop",
+      "variant": "mobile",
+      "file": "mockups/wireframes/shop--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "shop",
+      "variant": "accessible",
+      "file": "mockups/wireframes/shop--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "rates_history",
+      "variant": "pc",
+      "file": "mockups/wireframes/rates_history--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "rates_history",
+      "variant": "mobile",
+      "file": "mockups/wireframes/rates_history--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "rates_history",
+      "variant": "accessible",
+      "file": "mockups/wireframes/rates_history--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "rift",
+      "variant": "pc",
+      "file": "mockups/wireframes/rift--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "rift",
+      "variant": "mobile",
+      "file": "mockups/wireframes/rift--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "rift",
+      "variant": "accessible",
+      "file": "mockups/wireframes/rift--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "rhythm_game",
+      "variant": "pc",
+      "file": "mockups/wireframes/rhythm_game--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "rhythm_game",
+      "variant": "mobile",
+      "file": "mockups/wireframes/rhythm_game--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "rhythm_game",
+      "variant": "accessible",
+      "file": "mockups/wireframes/rhythm_game--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "astral_hunt",
+      "variant": "pc",
+      "file": "mockups/wireframes/astral_hunt--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "astral_hunt",
+      "variant": "mobile",
+      "file": "mockups/wireframes/astral_hunt--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "astral_hunt",
+      "variant": "accessible",
+      "file": "mockups/wireframes/astral_hunt--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "outfit_workshop",
+      "variant": "pc",
+      "file": "mockups/wireframes/outfit_workshop--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "outfit_workshop",
+      "variant": "mobile",
+      "file": "mockups/wireframes/outfit_workshop--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "outfit_workshop",
+      "variant": "accessible",
+      "file": "mockups/wireframes/outfit_workshop--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "settings",
+      "variant": "pc",
+      "file": "mockups/wireframes/settings--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "settings",
+      "variant": "mobile",
+      "file": "mockups/wireframes/settings--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "settings",
+      "variant": "accessible",
+      "file": "mockups/wireframes/settings--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "accessibility",
+      "variant": "pc",
+      "file": "mockups/wireframes/accessibility--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "accessibility",
+      "variant": "mobile",
+      "file": "mockups/wireframes/accessibility--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "accessibility",
+      "variant": "accessible",
+      "file": "mockups/wireframes/accessibility--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "download_content",
+      "variant": "pc",
+      "file": "mockups/wireframes/download_content--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "download_content",
+      "variant": "mobile",
+      "file": "mockups/wireframes/download_content--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "download_content",
+      "variant": "accessible",
+      "file": "mockups/wireframes/download_content--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "network_error",
+      "variant": "pc",
+      "file": "mockups/wireframes/network_error--pc.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    },
+    {
+      "screen": "network_error",
+      "variant": "mobile",
+      "file": "mockups/wireframes/network_error--mobile.svg",
+      "width": 900,
+      "height": 1600,
+      "status": "draft"
+    },
+    {
+      "screen": "network_error",
+      "variant": "accessible",
+      "file": "mockups/wireframes/network_error--accessible.svg",
+      "width": 1600,
+      "height": 900,
+      "status": "draft"
+    }
+  ]
+}

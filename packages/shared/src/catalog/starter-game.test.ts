@@ -12,6 +12,7 @@ describe('buildStarterGdl - preset to playable GDL', () => {
     'survivors_like',
     'falling_block',
     'visual_novel',
+    'merge_drop_gacha',
   ])('produit un GDL valide pour %s', (gameType) => {
     const gdl = buildStarterGdl(derivePreset({ game_type: gameType }));
     expect(() => GameDefinitionSchema.parse(gdl)).not.toThrow();
@@ -89,5 +90,34 @@ describe('buildStarterGdl - preset to playable GDL', () => {
     expect(contract.qa_gates?.length).toBeGreaterThan(0);
     expect(contract.procedural_chain?.some((step) => step.id === '03_board_to_world')).toBe(true);
     expect(contract.work_order_templates?.some((order) => order.id === 'animation:cast_or_summon')).toBe(true);
+  });
+
+  it('fusion de billes produit une boucle physique, roster et economie auditable', () => {
+    const gdl = buildStarterGdl(derivePreset({ game_type: 'merge_drop_gacha', mechanic_modules: ['merge_drop'] }), {
+      title: "Orbes d'Astra",
+      prompt: 'billes a empiler qui fusionnent avec personnages gacha',
+    });
+    expect(gdl.systems).toContain('merge_drop_physics');
+    expect(gdl.systems).toContain('hero_abilities');
+    expect(gdl.meta.resolution).toEqual([720, 1280]);
+    const meta = gdl.meta as Record<string, unknown>;
+    const config = meta.merge_drop as {
+      tiers?: Array<{ persona?: string }>;
+      heroes?: Array<{ ability?: string }>;
+      summon_rates?: Record<string, number>;
+      summon10_cost?: number;
+      relic_summon_cost?: number;
+      evolution_max_stars?: number;
+    };
+    expect(config.tiers).toHaveLength(8);
+    expect(config.tiers?.every((tier) => typeof tier.persona === 'string' && tier.persona.length > 0)).toBe(true);
+    expect(config.heroes).toHaveLength(12);
+    expect(new Set(config.heroes?.map((hero) => hero.ability)).size).toBe(12);
+    expect(config.summon_rates?.SSR).toBe(0.05);
+    expect(config.summon10_cost).toBe(900);
+    expect(config.relic_summon_cost).toBe(80);
+    expect(config.evolution_max_stars).toBe(5);
+    expect(meta.economy_disclosure).toBeTruthy();
+    expect((gdl.scenes[0] as Record<string, unknown>).playable_volume).toBeTruthy();
   });
 });

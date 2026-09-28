@@ -1,0 +1,41 @@
+{
+  "guardian": "saphira",
+  "displayName": "Saphira",
+  "adultConfirmed": true,
+  "presentation": "femme",
+  "element": "Cristal",
+  "role": "Dégâts",
+  "status": "integration_ready_humanoid_base",
+  "bodySource": "MPFB 2.0.17 / MakeHuman CC0",
+  "blender": "4.5.10 LTS",
+  "dimensionsMeters": [
+    0.1756,
+    0.2239,
+    0.2757
+  ],
+  "meshObjects": 26,
+  "trianglesBeforeExportModifiers": 95426,
+  "deformBones": 55,
+  "animationClips": [
+    "saphira_Idle_Glamour"
+  ],
+  "sockets": [
+    "socket_weapon_r",
+    "socket_artifact_l",
+    "socket_back",
+    "socket_head_fx"
+  ],
+  "glbBytes": 14002008,
+  "qualityGate": {
+    "realHumanoidTopology": true,
+    "gameEngineRig": true,
+    "texturedSkin": true,
+    "eyesHairTeeth": true,
+    "customAstraCostume": true,
+    "signatureWeapon": true,
+    "roundTripPending": true,
+    "commercialFinalSculpt": false,
+    "fullAnimationSet": false,
+    "finalLods": false
+  }
+}

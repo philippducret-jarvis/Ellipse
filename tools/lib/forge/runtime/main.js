@@ -7,11 +7,12 @@
 import { createGame, step } from './logic.js';
 import {
   render, createFx, fxFromEvents, setLevelToast,
-  renderTitle, renderMap, renderDialogue, renderRelicChoice, renderCredits,
+  renderTitle, renderStoryBackdrop, renderHub, renderMap, renderCollection, renderCodex,
+  renderDialogue, renderRelicChoice, renderCredits, renderPause, renderDefeat,
 } from './render.js';
 import {
   createCampaign, startGame, advanceStory, selectLevel, onLevelWon,
-  chooseRelic, relicModifiers, startOutro, resetCampaign,
+  chooseRelic, relicModifiers, startOutro, resetCampaign, returnToHub,
 } from './campaign.js';
 import { createAudio } from './audio.js';
 
@@ -59,10 +60,12 @@ async function boot() {
   const audio = createAudio(gdl);
   let hitstop = 0; // game feel : micro-gel du temps sur les impacts forts
   let game = null;
+  let hubSel = 0;
   let mapSel = Math.min(campaign.unlocked - 1, gdl.levels.length - 1);
   let relicSel = 0;
   let dialogueT = 0;
   let screenT = 0;
+  let lastResult = { score: 0, deaths: 0 };
 
   const bossKind = Object.entries(gdl.entities).find(([, e]) => e.role === 'boss')?.[0];
 
@@ -76,12 +79,13 @@ async function boot() {
   }
 
   // ── input ──
-  const input = { left: false, right: false, jump: false, attack: false, laneLeft: false, laneRight: false };
+  const input = { left: false, right: false, jump: false, attack: false, dodge: false, ability: false, laneLeft: false, laneRight: false };
   const KEYS = {
     ArrowLeft: ['left', 'laneLeft'], KeyA: ['left', 'laneLeft'], KeyQ: ['left', 'laneLeft'],
     ArrowRight: ['right', 'laneRight'], KeyD: ['right', 'laneRight'],
     Space: ['jump'], ArrowUp: ['jump'], KeyW: ['jump'], KeyZ: ['jump'],
     KeyX: ['attack'], KeyJ: ['attack'], Enter: ['attack'],
+    ShiftLeft: ['dodge'], ShiftRight: ['dodge'], KeyC: ['ability'],
   };
   const setKeys = (code, v) => { for (const k of KEYS[code] ?? []) input[k] = v; };
 
@@ -97,10 +101,24 @@ async function boot() {
       else { advanceStory(campaign); audio.dialogue(); dialogueT = 0; screenT = 0; }
       e.preventDefault(); return;
     }
+    if (s === 'hub') {
+      if (e.code === 'ArrowLeft' || e.code === 'KeyA' || e.code === 'KeyQ') { hubSel = Math.max(0, hubSel - 1); audio.ui(); }
+      else if (e.code === 'ArrowRight' || e.code === 'KeyD') { hubSel = Math.min(2, hubSel + 1); audio.ui(); }
+      else if (e.code === 'Enter' || e.code === 'KeyX' || e.code === 'Space') {
+        campaign.screen = hubSel === 0 ? 'map' : hubSel === 1 ? 'collection' : 'codex';
+        audio.ui(); screenT = 0;
+      }
+      e.preventDefault(); return;
+    }
     if (s === 'map') {
-      if (e.code === 'ArrowLeft' || e.code === 'KeyA' || e.code === 'KeyQ') { mapSel = Math.max(0, mapSel - 1); audio.ui(); }
+      if (e.code === 'Escape' || e.code === 'Backspace') { returnToHub(campaign); screenT = 0; }
+      else if (e.code === 'ArrowLeft' || e.code === 'KeyA' || e.code === 'KeyQ') { mapSel = Math.max(0, mapSel - 1); audio.ui(); }
       else if (e.code === 'ArrowRight' || e.code === 'KeyD') { mapSel = Math.min(gdl.levels.length - 1, mapSel + 1); audio.ui(); }
       else if (e.code === 'Enter' || e.code === 'KeyX' || e.code === 'Space') { startLevel(mapSel); audio.ambient(false); }
+      e.preventDefault(); return;
+    }
+    if (s === 'collection' || s === 'codex') {
+      if (e.code === 'Escape' || e.code === 'Backspace' || e.code === 'Enter' || e.code === 'Space') { returnToHub(campaign); screenT = 0; audio.ui(); }
       e.preventDefault(); return;
     }
     if (s === 'relic') {
@@ -116,11 +134,48 @@ async function boot() {
       if (e.code === 'KeyR') { resetCampaign(campaign); audio.ambient(false); screenT = 0; }
       return;
     }
+    if (s === 'pause') {
+      if (e.code === 'KeyH') { returnToHub(campaign); game = null; audio.ambient(true); }
+      else if (e.code === 'Escape' || e.code === 'Enter') campaign.screen = 'level';
+      e.preventDefault(); return;
+    }
+    if (s === 'defeat') {
+      if (e.code === 'Escape') { returnToHub(campaign); game = null; audio.ambient(true); }
+      else if (e.code === 'Enter' || e.code === 'Space') { startLevel(campaign.levelIndex); audio.ambient(false); }
+      e.preventDefault(); return;
+    }
+    if (s === 'level' && e.code === 'Escape') {
+      campaign.screen = 'pause';
+      e.preventDefault(); return;
+    }
     setKeys(e.code, true);
     if (KEYS[e.code]) e.preventDefault();
   });
   addEventListener('keyup', (e) => setKeys(e.code, false));
-  canvas.addEventListener('pointerdown', () => { if (campaign.screen === 'title') { startGame(campaign); screenT = 0; } });
+  canvas.addEventListener('pointerdown', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / Math.max(1, rect.width)) * vp.w;
+    const s = campaign.screen;
+    if (s === 'title') { startGame(campaign); screenT = 0; return; }
+    if (s === 'intro' || s === 'interlude' || s === 'outro') { advanceStory(campaign); dialogueT = 0; return; }
+    if (s === 'hub') {
+      hubSel = Math.max(0, Math.min(2, Math.floor((x / vp.w) * 3)));
+      campaign.screen = hubSel === 0 ? 'map' : hubSel === 1 ? 'collection' : 'codex';
+      screenT = 0; return;
+    }
+    if (s === 'map') {
+      mapSel = Math.max(0, Math.min(gdl.levels.length - 1, Math.round((x / vp.w) * (gdl.levels.length - 1))));
+      if (mapSel < campaign.unlocked) startLevel(mapSel);
+      return;
+    }
+    if (s === 'collection' || s === 'codex') { returnToHub(campaign); return; }
+    if (s === 'relic') {
+      relicSel = x < vp.w / 2 ? 0 : 1;
+      chooseRelic(campaign, campaign.pendingRelicChoice?.[relicSel]?.id); return;
+    }
+    if (s === 'pause') { campaign.screen = 'level'; return; }
+    if (s === 'defeat') { startLevel(campaign.levelIndex); }
+  });
 
   // ── boucle ──
   const bgLayers = arenas[arenaPaths[0]]?.layers;
@@ -145,21 +200,32 @@ async function boot() {
       fxFromEvents(fx, events, game, accent);
       render(ctx, game, { arena: arenas[gdl.levels[campaign.levelIndex].arena], rigs }, dt, fx);
       if (game.phase === 'won') { onLevelWon(campaign, game.score); audio.win(); audio.ambient(true); dialogueT = 0; screenT = 0; game = null; }
+      else if (game.phase === 'lost') { lastResult = { score: game.score, deaths: game.deaths }; campaign.screen = 'defeat'; audio.ambient(true); screenT = 0; }
     } else if (s === 'title') {
       renderTitle(ctx, gdl, vp, screenT, bgLayers);
+    } else if (s === 'hub') {
+      renderHub(ctx, gdl, campaign, vp, screenT, bgLayers, hubSel, heroPortrait);
     } else if (s === 'map') {
       renderMap(ctx, gdl, campaign, vp, screenT, bgLayers, mapSel);
+    } else if (s === 'collection') {
+      renderCollection(ctx, gdl, campaign, vp, screenT, bgLayers);
+    } else if (s === 'codex') {
+      renderCodex(ctx, gdl, campaign, vp, screenT, bgLayers);
     } else if (s === 'intro' || s === 'interlude' || s === 'outro') {
       const beat = campaign.storyQueue[campaign.storyIndex];
       if (beat) {
         dialogueT += dt;
-        renderTitle(ctx, gdl, vp, 0, bgLayers);
+        renderStoryBackdrop(ctx, vp, screenT, bgLayers);
         renderDialogue(ctx, vp, beat, dialogueT, beat.portrait === 'hero' ? heroPortrait : null, accent);
       } else { advanceStory(campaign); }
     } else if (s === 'relic' && campaign.pendingRelicChoice) {
       renderRelicChoice(ctx, vp, campaign.pendingRelicChoice, relicSel, accent, screenT);
     } else if (s === 'credits') {
       renderCredits(ctx, gdl, campaign, vp, screenT);
+    } else if (s === 'pause') {
+      renderPause(ctx, gdl, vp);
+    } else if (s === 'defeat') {
+      renderDefeat(ctx, gdl, vp, lastResult.score, bgLayers, screenT);
     }
     requestAnimationFrame(frame);
   }

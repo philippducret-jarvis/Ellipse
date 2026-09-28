@@ -1,0 +1,21 @@
+# Base Ellipse locale récupérée. Le volume externe doit déjà exister :
+# ne jamais initialiser une base vide pour masquer une perte de données.
+name: ellipse-database
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres-ellisphere
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5435:5432"
+    volumes:
+      - ellipse_database:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "ellisphere", "-d", "ellisphere"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+volumes:
+  ellipse_database:
+    external: true
+    name: ellipse-postgres-data

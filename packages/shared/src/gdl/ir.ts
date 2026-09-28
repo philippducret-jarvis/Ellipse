@@ -305,6 +305,16 @@ export const KNOWN_SYSTEMS = [
   'blessing_draft',
   'hazard_scheduler',
   'boss_phases',
+  // Merge-drop collection
+  'merge_drop_physics',
+  'merge_cascade',
+  'drop_aim',
+  'hero_abilities',
+  'merge_drop_gacha_summon',
+  'merge_drop_roster',
+  'merge_drop_pity',
+  'run_rewards',
+  'local_save',
 ] as const;
 
 export const SystemSchema = z.string();

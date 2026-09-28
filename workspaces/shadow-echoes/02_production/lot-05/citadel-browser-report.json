@@ -1,0 +1,94 @@
+{
+  "passed": true,
+  "checks": [
+    "Hub, quatre héros, invocation réelle, fragments, élévation, sélection et quête sans double paiement",
+    "Niveaux runes, alchimie, expédition, mémoire, dés et pêche gagnés par leurs commandes",
+    "Sauvegarde, rechargement, export, import valide avec confirmation et rejet d’un fichier corrompu",
+    "Sept écrans du hub vérifiés à 390 px sans débordement"
+  ],
+  "errors": [],
+  "profile": {
+    "version": 1,
+    "gold": 910,
+    "sigils": 10,
+    "xp": 600,
+    "selected": "lysael",
+    "heroes": {
+      "seraphine": {
+        "level": 1,
+        "copies": 1,
+        "fragments": 0,
+        "relic": null
+      },
+      "nyxara": {
+        "level": 1,
+        "copies": 1,
+        "fragments": 0,
+        "relic": "moon"
+      },
+      "lysael": {
+        "level": 2,
+        "copies": 2,
+        "fragments": 0,
+        "relic": null
+      },
+      "voren": {
+        "level": 1,
+        "copies": 1,
+        "fragments": 0,
+        "relic": null
+      }
+    },
+    "relics": [
+      "moon",
+      "vial",
+      "mirror",
+      "pearl"
+    ],
+    "modes": {
+      "runes": {
+        "wins": 1,
+        "best": 900,
+        "attempts": 1
+      },
+      "alchemy": {
+        "wins": 1,
+        "best": 1000,
+        "attempts": 1
+      },
+      "expedition": {
+        "wins": 1,
+        "best": 75,
+        "attempts": 1
+      },
+      "memory": {
+        "wins": 1,
+        "best": 800,
+        "attempts": 1
+      },
+      "dice": {
+        "wins": 1,
+        "best": 40,
+        "attempts": 1
+      },
+      "fishing": {
+        "wins": 1,
+        "best": 1000,
+        "attempts": 1
+      }
+    },
+    "summons": 1,
+    "history": [
+      "lysael"
+    ],
+    "claimed": [
+      "summon"
+    ],
+    "active": null,
+    "settings": {
+      "sound": false,
+      "motion": true
+    },
+    "revision": 20
+  }
+}

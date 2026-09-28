@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "entry": "title",
+  "screens": [
+    "title","onboarding","hub_pc","hub_mobile","world_map","mission_brief",
+    "combat_pc","combat_mobile","boss_phase_3","guardian_switch","ultimate","overdrive",
+    "victory","defeat","roster","guardian_detail","equipment","wardrobe","bond",
+    "summon_single","summon_ten","shop","rates_history","rift","rhythm_game",
+    "astral_hunt","outfit_workshop","settings","accessibility","download_content","network_error"
+  ],
+  "edges": [
+    ["title","onboarding"],["title","hub_pc"],["title","hub_mobile"],["title","settings"],["title","accessibility"],
+    ["onboarding","hub_pc"],["hub_pc","title"],["hub_pc","world_map"],["hub_pc","roster"],
+    ["hub_pc","guardian_detail"],["hub_pc","wardrobe"],["hub_pc","rhythm_game"],
+    ["hub_pc","astral_hunt"],["hub_pc","outfit_workshop"],["hub_pc","shop"],["hub_pc","settings"],
+    ["hub_mobile","mission_brief"],["hub_mobile","world_map"],["hub_mobile","roster"],
+    ["hub_mobile","guardian_detail"],["hub_mobile","wardrobe"],["hub_mobile","rhythm_game"],
+    ["hub_mobile","astral_hunt"],["hub_mobile","outfit_workshop"],["hub_mobile","shop"],["hub_mobile","settings"],
+    ["world_map","hub_pc"],["world_map","mission_brief"],["world_map","rift"],
+    ["mission_brief","world_map"],["mission_brief","roster"],["mission_brief","combat_pc"],["mission_brief","combat_mobile"],
+    ["combat_pc","mission_brief"],["combat_pc","guardian_switch"],["combat_pc","boss_phase_3"],
+    ["combat_pc","ultimate"],["combat_pc","overdrive"],["combat_pc","victory"],["combat_pc","defeat"],
+    ["combat_mobile","mission_brief"],["combat_mobile","guardian_switch"],["combat_mobile","ultimate"],
+    ["combat_mobile","overdrive"],["combat_mobile","victory"],["combat_mobile","defeat"],
+    ["boss_phase_3","combat_pc"],["guardian_switch","combat_pc"],["guardian_switch","roster"],
+    ["ultimate","combat_pc"],["overdrive","combat_pc"],["victory","world_map"],["victory","hub_pc"],
+    ["defeat","mission_brief"],["defeat","hub_pc"],["roster","hub_pc"],["roster","guardian_detail"],
+    ["roster","bond"],["roster","wardrobe"],["roster","rates_history"],["roster","summon_single"],
+    ["roster","summon_ten"],["guardian_detail","roster"],["guardian_detail","equipment"],
+    ["guardian_detail","wardrobe"],["guardian_detail","bond"],["equipment","guardian_detail"],
+    ["wardrobe","guardian_detail"],["bond","guardian_detail"],["summon_single","roster"],
+    ["summon_single","rates_history"],["summon_ten","roster"],["summon_ten","rates_history"],
+    ["shop","hub_pc"],["rates_history","roster"],["rift","world_map"],["rhythm_game","hub_pc"],
+    ["rhythm_game","roster"],["astral_hunt","hub_pc"],["astral_hunt","roster"],
+    ["outfit_workshop","hub_pc"],["outfit_workshop","roster"],["settings","hub_pc"],
+    ["settings","accessibility"],["settings","download_content"],["settings","network_error"],
+    ["accessibility","settings"],["download_content","settings"],["network_error","title"],["network_error","hub_pc"]
+  ]
+}

@@ -1,5 +1,5 @@
 /**
- * SERVEUR JARVIS — petit service HTTP autonome pour l'assistant conversationnel,
+ * SERVEUR ELLISPHERE — service HTTP autonome pour l'intelligence de production,
  * consommé par le Studio (proxy) et testable seul :
  *   pnpm forge:assistant            # écoute sur :4310
  *   POST /assistant { history:[{role,content}] } → { reply, actions, brain, history }
@@ -7,7 +7,7 @@
  * Vit dans tools/ (avec le cerveau, keyless) : pas de dépendance au build TS.
  */
 import http from 'node:http';
-import { jarvisTurn } from './lib/forge/brain/agent.mjs';
+import { ellisphereTurn } from './lib/forge/brain/agent.mjs';
 import { pickBrain } from './lib/forge/brain/providers.mjs';
 
 const port = Number(process.env.FORGE_ASSISTANT_PORT ?? 4310);
@@ -20,7 +20,12 @@ const server = http.createServer(async (req, res) => {
   if (req.method === 'GET' && new URL(req.url, 'http://x').pathname === '/health') {
     const brain = await pickBrain().catch(() => null);
     res.writeHead(200, { 'content-type': 'application/json' });
-    return res.end(JSON.stringify({ ok: Boolean(brain), brain: brain?.name ?? null }));
+    return res.end(JSON.stringify({
+      ok: Boolean(brain),
+      assistant: 'Ellisphere',
+      contract_version: '1.0.0',
+      brain: brain?.name ?? null,
+    }));
   }
 
   if (req.method === 'POST' && new URL(req.url, 'http://x').pathname === '/assistant') {
@@ -29,7 +34,7 @@ const server = http.createServer(async (req, res) => {
     req.on('end', async () => {
       try {
         const { history = [] } = JSON.parse(body || '{}');
-        const turn = await jarvisTurn(history);
+        const turn = await ellisphereTurn(history);
         res.writeHead(200, { 'content-type': 'application/json; charset=utf-8' });
         res.end(JSON.stringify(turn));
       } catch (e) {
@@ -43,4 +48,4 @@ const server = http.createServer(async (req, res) => {
 });
 
 const brain = await pickBrain().catch(() => null);
-server.listen(port, () => console.log(`🤖 Jarvis HTTP sur http://localhost:${port}/ (cerveau : ${brain?.name ?? 'aucun'})`));
+server.listen(port, () => console.log(`✦ Ellisphere HTTP sur http://localhost:${port}/ (cerveau : ${brain?.name ?? 'aucun'})`));

@@ -1,0 +1,10 @@
+{
+  "hero": "seraphine",
+  "path": "03_assets/characters/seraphine/volume-v1/hero.glb",
+  "bytes": 11728096,
+  "nodes": 186,
+  "meshes": 114,
+  "clips": 42,
+  "representation": "Hierarchical articulated meshes; rigid attachment at joints, no continuous skin weights",
+  "quality": "Procedural volume study; not final reference-quality art"
+}

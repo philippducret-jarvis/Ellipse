@@ -1,0 +1,83 @@
+{
+  "schema": "shadow-layer-rig-2",
+  "heroId": "seraphine",
+  "status": "combat_study_review",
+  "fidelity_approved": false,
+  "frame": {
+    "width": 1024,
+    "height": 1536,
+    "paddingX": 600,
+    "paddingY": 150
+  },
+  "files": {
+    "body": "../../03_assets/characters/seraphine/layers-v1/body.png",
+    "arm": "../../03_assets/characters/seraphine/layers-v1/arm-sword-v2.png"
+  },
+  "sourceAnchors": [
+    [
+      545,
+      180
+    ],
+    [
+      438,
+      596
+    ],
+    [
+      40,
+      1509
+    ]
+  ],
+  "targetAnchors": [
+    [
+      422,
+      337
+    ],
+    [
+      342,
+      708
+    ],
+    [
+      18,
+      1438
+    ]
+  ],
+  "pivot": [
+    422,
+    337
+  ],
+  "shoulderOccluder": [
+    [
+      378,
+      270
+    ],
+    [
+      454,
+      278
+    ],
+    [
+      477,
+      330
+    ],
+    [
+      451,
+      395
+    ],
+    [
+      374,
+      364
+    ]
+  ],
+  "limits": {
+    "angleMin": -80,
+    "angleMax": 12
+  },
+  "alignment": [
+    0.9096453879812013,
+    0.5162720803806886,
+    0.041663597389395526,
+    1.024618059136379,
+    -81.25618397984591,
+    -128.7995344520235
+  ],
+  "source_sha256": "8ce57c326c464177a80ec8c8944223d568aedffb9cfb114d622fa26f813d81d9"
+}

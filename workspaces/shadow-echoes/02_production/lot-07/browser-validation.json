@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "checks": [
+    "seraphine : modèle, attente, attaque et pause",
+    "nyxara : modèle, attente, attaque et pause",
+    "lysael : modèle, attente, attaque et pause",
+    "voren : modèle, attente, attaque et pause",
+    "Fiche : commandes de présentation, sauvegarde existante disponible",
+    "Campagne : quatre modèles articulés, attaque liée à la commande, pause stable",
+    "Survie : déplacement associé à une course articulée",
+    "Fiche à 390 px sans débordement horizontal",
+    "Mouvement réduit : pose fixe et contrôle utilisateur conservé"
+  ],
+  "errors": [],
+  "screenshots": [
+    "tmp/shadow-echoes/volume-seraphine.png",
+    "tmp/shadow-echoes/volume-nyxara.png",
+    "tmp/shadow-echoes/volume-lysael.png",
+    "tmp/shadow-echoes/volume-voren.png"
+  ],
+  "scope": "Desktop headless browser and 390 px viewport. No real-phone performance certification.",
+  "artStatus": "Functional volumetric study; reference-level artwork not achieved."
+}

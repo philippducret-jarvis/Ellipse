@@ -36,7 +36,7 @@ jobs:
       - name: Forge smoke (GDL + auto-play headless)
         run: pnpm forge:smoke
 
-      - name: Forge brain smoke (Jarvis outils, hors-ligne)
+      - name: Ellisphere brain smoke (outils hors-ligne)
         run: pnpm forge:brain-smoke
 
       - name: Build

@@ -1,0 +1,74 @@
+{
+  "id": "lysael",
+  "name": "Lysael",
+  "title": "Chant des Mondes",
+  "rarity": "mythique",
+  "element": "Lumière",
+  "role": "Soutien · soin",
+  "accent": "#ddcc8c",
+  "symbol": "❋",
+  "quote": "Que les mondes s’épanouissent, et que jamais l’espoir ne se tarisse.",
+  "description": "Une lumière vivante tissée d’or, de fleurs blanches et de racines. Chaque note protège ceux qui avancent à ses côtés.",
+  "reference": "partie-1/fiche_héroïne_mythique_lysael.png",
+  "board": "partie-1/lysael_chant_des_mondes.png",
+  "invariants": [
+    "Cheveux ivoire ondulés, traits doux et couronne de branches",
+    "Robe ivoire, or végétal, feuillage vert et fleurs blanches",
+    "Bâton floral à cage lumineuse sphérique",
+    "Drapés fins, bijoux verts et sandales végétales"
+  ],
+  "skills": [
+    {
+      "id": "light",
+      "name": "Racine de lumière",
+      "type": "damage",
+      "power": 85,
+      "cooldown": 1.4,
+      "energyGain": 20,
+      "description": "85 dégâts et 20 points d’énergie."
+    },
+    {
+      "id": "harmony",
+      "name": "Harmonie des sources",
+      "type": "heal",
+      "healing": 280,
+      "cooldown": 8,
+      "energyGain": 15,
+      "description": "Rend jusqu’à 280 PV à chacun des quatre héros."
+    },
+    {
+      "id": "worldsong",
+      "name": "Chant des Mondes",
+      "type": "sanctuary",
+      "healing": 520,
+      "shield": 240,
+      "cooldown": 18,
+      "cost": 100,
+      "description": "Rend 520 PV et accorde 240 points de bouclier à chacun. Coût : 100 énergie."
+    }
+  ],
+  "stats": {
+    "maxHp": 2700,
+    "attack": 85,
+    "defense": 110
+  },
+  "motion_study": {
+    "stage": "deformation_study_review",
+    "rig": "03_assets/characters/lysael/mesh-rig-v1.json",
+    "qa": "03_assets/characters/lysael/mesh-qa-v1.json",
+    "fidelity_approved": false
+  },
+  "presentation": "03_assets/characters/lysael/presentation-v1.png",
+  "source_reference": "01_inputs/references/partie-1/fiche_héroïne_mythique_lysael.png",
+  "rarity_evidence": {
+    "method": "visual_reading",
+    "text": "Mythique",
+    "source": "01_inputs/references/partie-1/fiche_héroïne_mythique_lysael.png"
+  },
+  "quality_target": "Fidélité aux designs fournis : identité, proportions, costume, matériaux et finesse.",
+  "production_stage": "hd_base_review",
+  "skill_status": "prototype_proposal",
+  "rig": null,
+  "animations": [],
+  "qa": "03_assets/characters/lysael/qa-v1.json"
+}

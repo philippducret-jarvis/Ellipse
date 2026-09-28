@@ -1,0 +1,41 @@
+{
+  "guardian": "caelum",
+  "displayName": "Caelum",
+  "adultConfirmed": true,
+  "presentation": "homme",
+  "element": "Foudre",
+  "role": "Dégâts",
+  "status": "integration_ready_humanoid_base",
+  "bodySource": "MPFB 2.0.17 / MakeHuman CC0",
+  "blender": "4.5.10 LTS",
+  "dimensionsMeters": [
+    0.8182,
+    0.2962,
+    1.4385
+  ],
+  "meshObjects": 26,
+  "trianglesBeforeExportModifiers": 193226,
+  "deformBones": 55,
+  "animationClips": [
+    "caelum_Idle_Glamour"
+  ],
+  "sockets": [
+    "socket_weapon_r",
+    "socket_artifact_l",
+    "socket_back",
+    "socket_head_fx"
+  ],
+  "glbBytes": 15008224,
+  "qualityGate": {
+    "realHumanoidTopology": true,
+    "gameEngineRig": true,
+    "texturedSkin": true,
+    "eyesHairTeeth": true,
+    "customAstraCostume": true,
+    "signatureWeapon": true,
+    "roundTripPending": true,
+    "commercialFinalSculpt": false,
+    "fullAnimationSet": false,
+    "finalLods": false
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "astral_koi",
+  "displayName": "Koï astral",
+  "affinity": "Cosmos",
+  "kind": "rigged_familiar",
+  "status": "integration_ready_animated_source",
+  "sourceLicense": "CC0",
+  "sourcePack": "Quaternius Cute Animated Monsters Pack",
+  "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/astral_koi/astral_koi_source.blend",
+  "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/astral_koi/astral_koi_lod0.glb",
+  "runtime": "res://assets/3d/summons_v2/astral_koi/astral_koi_lod0.glb",
+  "animations": [
+    "Bite_Front",
+    "Bite_InPlace",
+    "Dance",
+    "Death",
+    "HitRecieve",
+    "Idle",
+    "Jump",
+    "No",
+    "Walk",
+    "Yes"
+  ],
+  "detachedMissingImages": [],
+  "deformBones": 7,
+  "triangles": 1000,
+  "bytes": 349764,
+  "commercialFinal": false
+}

@@ -1,0 +1,26 @@
+{
+  "idle": {
+    "median_m": 0.0054,
+    "max_m": 0.1828
+  },
+  "walk": {
+    "median_m": 0.0069,
+    "max_m": 0.0844
+  },
+  "attack1": {
+    "median_m": 0.1283,
+    "max_m": 0.6226
+  },
+  "skill1Cast": {
+    "median_m": 0.0059,
+    "max_m": 0.6804
+  },
+  "ultimateCast": {
+    "median_m": 0.0046,
+    "max_m": 0.1244
+  },
+  "death": {
+    "median_m": 0.3999,
+    "max_m": 0.6155
+  }
+}

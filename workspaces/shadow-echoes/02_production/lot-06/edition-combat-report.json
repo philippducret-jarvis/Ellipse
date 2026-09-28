@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "checks": [
+    "Les quatre personnages ont des images d’attente différentes à deux instants, bases assistées coupées",
+    "Base manuelle, énergie, super animé et pause visuelle vérifiés",
+    "Ouvrir les règles du hub suspend le combat embarqué et permet de le reprendre"
+  ],
+  "errors": []
+}

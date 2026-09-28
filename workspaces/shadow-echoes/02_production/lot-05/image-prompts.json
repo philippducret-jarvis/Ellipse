@@ -1,0 +1,15 @@
+{
+  "tool": "image_gen",
+  "mode": "built_in",
+  "assets": [
+    {
+      "output": "03_assets/environments/citadel-v1.png",
+      "reference": "01_inputs/references/partie-3/la_citadelle_des_échos_rouges.png",
+      "prompt": "Create a finished landscape 1536x1024 dark fantasy game hub environment using the attached image as strict architectural and art direction reference. Remove ALL user interface, text, icons, borders, panels, numbers, labels and watermarks. Wide panoramic view of the Citadel of Echoes: enormous black gothic cathedral at the center back silhouetted against an immense muted blood red moon, intricate pointed spires, stone bridges above misty ravines, warm amber braziers, wet cobblestones. Left midground a violet summoning sanctuary under a stone arch, right midground a warmly lit tavern and apothecary, a small turquoise lake and stone dock further right. Foreground a broad open stone terrace with elegant ruined balustrade, no giant characters, no foreground objects blocking game character placements. Refined lavish painterly realistic RPG background, extraordinary architectural detail, restrained black gold crimson color palette, blue mist separating depth layers, atmospheric cinematic lighting. Full bleed image, no letters anywhere. Compose central cathedral near x800, left bottom darker for a UI title overlay, preserve readable broad silhouettes, high-end fantasy art quality."
+    },
+    {
+      "output": "03_assets/items/citadel-atlas-v1.png",
+      "prompt": "A production sprite atlas for a refined gothic dark fantasy RPG. Square 1536x1536 transparent RGBA image arranged in EXACTLY 3 columns and 3 rows, 9 equal 512x512 invisible cells. Every object fully inside its cell with 65 pixels of transparent margin; no overlap across cells, no text, no labels, no visible grid, no frames, no background. Each object centered and crisp with exquisite realistic blackened gold filigree, detailed materials, painterly high-end game art. Row1 left: a crimson crystal rose pendant; row1 center: an obsidian crown with ember cracks; row1 right: a crescent moon amethyst talisman. Row2 left: an antique oval hand mirror with black-gold frame and violet reflection; row2 center: a luminous turquoise pearl in an open silver shell; row2 right: a luminous emerald alchemy vial in gold vine fittings. Row3 left: side view gothic wooden caravan wagon, two visible wheels, curved red canopy, lantern, facing right, no horse. Row3 center: side view black spectral horse galloping right, silver mane, crimson saddle, four readable legs, no rider. Row3 right: a single menacing floating armored wraith with tattered black cloak, subtle purple edges and two bright violet eyes, facing left three-quarter, complete figure. The wraith is a game enemy and must have a readable silhouette. Consistent muted highlights, excellent small-size readability, genuine transparency all around all objects."
+    }
+  ]
+}

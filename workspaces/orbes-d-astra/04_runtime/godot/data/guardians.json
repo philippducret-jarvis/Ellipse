@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "adult_only": true,
+  "guardians": [
+    {"id":"mira","name":"Mira","age":27,"rarity":"R","role":"Contrôle","element":"Lune","title":"Oracle des marées","faction":"Cercle des Marées","art":"res://assets/guardians/guardian-00.png","ability":"Puits astral","accent":"#54DFF2"},
+    {"id":"brann","name":"Brann","age":34,"rarity":"R","role":"Amplificateur","element":"Feu","title":"Rempart volcanique","faction":"Forge Solaire","art":"res://assets/guardians/guardian-01.png","ability":"Cœur de braise","accent":"#F6C768"},
+    {"id":"kael","name":"Kael","age":29,"rarity":"R","role":"Dégâts","element":"Vent","title":"Chasseur d’étoiles","faction":"Veilleurs Boréaux","art":"res://assets/guardians/guardian-02.png","ability":"Rafale sidérale","accent":"#5EEAD4"},
+    {"id":"orin","name":"Orin","age":31,"rarity":"R","role":"Combo","element":"Eau","title":"Navigateur des abysses","faction":"Cercle des Marées","art":"res://assets/guardians/guardian-03.png","ability":"Marée jumelle","accent":"#60A5FA"},
+    {"id":"talia","name":"Talia","age":24,"rarity":"R","role":"Vitesse","element":"Vent","title":"Messagère du zéphyr","faction":"Veilleurs Boréaux","art":"res://assets/guardians/guardian-04.png","ability":"Pas du ciel","accent":"#5EEAD4"},
+    {"id":"joren","name":"Joren","age":38,"rarity":"R","role":"Protection","element":"Lune","title":"Gardien du croissant","faction":"Ordre Lunaire","art":"res://assets/guardians/guardian-05.png","ability":"Égide lunaire","accent":"#A78BFA"},
+    {"id":"phae","name":"Phaé","age":26,"rarity":"R","role":"Soutien","element":"Nature","title":"Floraison astrale","faction":"Jardins du Vide","art":"res://assets/guardians/guardian-06.png","ability":"Sève céleste","accent":"#86EFAC"},
+    {"id":"ciro","name":"Ciro","age":30,"rarity":"R","role":"Précision","element":"Solaire","title":"Œil de l’aurore","faction":"Héliarques","art":"res://assets/guardians/guardian-07.png","ability":"Trait solaire","accent":"#FBBF24"},
+    {"id":"lys","name":"Lys","age":28,"rarity":"SR","role":"Contrôle","element":"Temps","title":"Horlogère des songes","faction":"Conclave du Temps","art":"res://assets/guardians/guardian-08.png","ability":"Seconde suspendue","accent":"#C4B5FD"},
+    {"id":"noor","name":"Noor","age":25,"rarity":"SR","role":"Soutien","element":"Solaire","title":"Cantatrice de l’aube","faction":"Héliarques","art":"res://assets/guardians/guardian-09.png","ability":"Hymne radiant","accent":"#FDE68A"},
+    {"id":"vesper","name":"Vesper","age":33,"rarity":"SR","role":"Protection","element":"Ombre","title":"Sentinelle nocturne","faction":"Cour Nocturne","art":"res://assets/guardians/guardian-10.png","ability":"Voile d’ombre","accent":"#C084FC"},
+    {"id":"saphira","name":"Saphira","age":27,"rarity":"SR","role":"Dégâts","element":"Cristal","title":"Dame aux mille prismes","faction":"Palais Prismatique","art":"res://assets/guardians/guardian-11.png","ability":"Éclat royal","accent":"#67E8F9"},
+    {"id":"nyx","name":"Nyx","age":29,"rarity":"SR","role":"Manipulation","element":"Vide","title":"Tisseuse de l’abîme","faction":"Jardins du Vide","art":"res://assets/guardians/guardian-12.png","ability":"Nœud du vide","accent":"#D946EF"},
+    {"id":"ilyra","name":"Ilyra","age":26,"rarity":"SR","role":"Combo","element":"Son","title":"Virtuose des constellations","faction":"Chœur Céleste","art":"res://assets/guardians/guardian-13.png","ability":"Accord parfait","accent":"#F472B6"},
+    {"id":"caelum","name":"Caelum","age":32,"rarity":"SR","role":"Dégâts","element":"Foudre","title":"Prince des orages","faction":"Citadelle Boréale","art":"res://assets/guardians/guardian-14.png","ability":"Foudre souveraine","accent":"#38BDF8"},
+    {"id":"rhea","name":"Rhéa","age":35,"rarity":"SR","role":"Combo","element":"Eau","title":"Reine des courants","faction":"Cercle des Marées","art":"res://assets/guardians/guardian-15.png","ability":"Danse des marées","accent":"#22D3EE"},
+    {"id":"talos","name":"Talos","age":42,"rarity":"SR","role":"Contrôle","element":"Métal","title":"Architecte de guerre","faction":"Forge Solaire","art":"res://assets/guardians/guardian-16.png","ability":"Prison d’acier","accent":"#CBD5E1"},
+    {"id":"maelys","name":"Maëlys","age":28,"rarity":"SR","role":"Amplificateur","element":"Cosmos","title":"Astromancienne impériale","faction":"Observatoire Astra","art":"res://assets/guardians/guardian-17.png","ability":"Couronne cosmique","accent":"#F0ABFC"},
+    {"id":"aster","name":"Aster","age":24,"rarity":"SSR","role":"Dégâts","element":"Nexus","title":"Arcaniste stellaire","faction":"Observatoire Astra","art":"res://assets/guardians/guardian-18.png","ability":"Supernova","accent":"#A78BFA"},
+    {"id":"elya","name":"Élya","age":27,"rarity":"SSR","role":"Combo","element":"Son","title":"Prima du firmament","faction":"Chœur Céleste","art":"res://assets/guardians/guardian-19.png","ability":"Symphonie astrale","accent":"#F9A8D4"},
+    {"id":"solveig","name":"Solveig","age":30,"rarity":"SSR","role":"Amplificateur","element":"Aurore","title":"Valkyrie boréale","faction":"Citadelle Boréale","art":"res://assets/guardians/guardian-20.png","ability":"Aurore invincible","accent":"#7DD3FC"},
+    {"id":"seraphiel","name":"Séraphiel","age":36,"rarity":"SSR","role":"Dégâts","element":"Solaire","title":"Héraut de l’empyrée","faction":"Héliarques","art":"res://assets/guardians/guardian-21.png","ability":"Jugement solaire","accent":"#FCD34D"},
+    {"id":"vaelora","name":"Vaelora Noctis","age":34,"rarity":"SSR","role":"Manipulation","element":"Vide","title":"Impératrice astrale","faction":"Cour Nocturne","art":"res://assets/guardians/guardian-22.png","fullbody_art":"res://assets/guardians/fullbody/guardian-22-fullbody-v7.png","ability":"Couronne du vide","accent":"#C084FC"},
+    {"id":"orion","name":"Orion","age":48,"rarity":"SSR","role":"Contrôle","element":"Nexus","title":"Archonte du Nexus","faction":"Observatoire Astra","art":"res://assets/guardians/guardian-23.png","ability":"Mandat céleste","accent":"#F6C768"}
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "id": "citadelle-05",
+  "status": "playable_first_edition",
+  "modes": [
+    {
+      "id": "campaign",
+      "name": "Campagne",
+      "levels": 1
+    },
+    {
+      "id": "survival",
+      "name": "Survie des ombres",
+      "levels": 1
+    },
+    {
+      "id": "expedition",
+      "name": "Expédition",
+      "levels": 1
+    },
+    {
+      "id": "caravan",
+      "name": "Défense de caravane",
+      "levels": 1
+    },
+    {
+      "id": "race",
+      "name": "Course de montures",
+      "levels": 1
+    },
+    {
+      "id": "fishing",
+      "name": "Pêche maudite",
+      "levels": 1
+    },
+    {
+      "id": "dice",
+      "name": "Les dés du destin",
+      "levels": 1
+    },
+    {
+      "id": "memory",
+      "name": "Échos de mémoire",
+      "levels": 1
+    },
+    {
+      "id": "runes",
+      "name": "Sanctuaire des runes",
+      "levels": 1
+    },
+    {
+      "id": "alchemy",
+      "name": "Alchimie",
+      "levels": 1
+    }
+  ],
+  "heroes": 4,
+  "relics": 6,
+  "features": [
+    "Hub central",
+    "Dix niveaux jouables",
+    "Invocations et fragments",
+    "Élévation des héros",
+    "Reliques équipables avec effets",
+    "Quêtes et sauvegarde locale exportable"
+  ],
+  "assets": [
+    {
+      "path": "03_assets/environments/citadel-v1.png",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "c7446f4a62d3abc389448f03fc7a96aa5d87ad1bd3a6db1ada6574abbfe8aff8"
+    },
+    {
+      "path": "03_assets/items/citadel-atlas-v1.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "e43509f936ff1c444ba3a12b270fdd395abd6d8ebb1eff4529eefd7187638be0"
+    }
+  ],
+  "scope": "Solo local sans services en ligne",
+  "quality_status": "Première édition en revue ; fidélité artistique et animations finales en production",
+  "qa_report": "02_production/lot-05/validation.json"
+}

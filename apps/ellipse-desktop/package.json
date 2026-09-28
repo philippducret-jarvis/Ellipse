@@ -18,7 +18,7 @@
     },
     "win": {
       "target": ["nsis"],
-      "icon": "assets/icon.png"
+      "icon": "assets/ellipse-app.ico"
     },
     "nsis": {
       "oneClick": false,

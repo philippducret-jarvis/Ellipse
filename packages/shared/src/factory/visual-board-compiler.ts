@@ -48,7 +48,7 @@ export interface PlayableSliceSpec {
     perspective: ProductionPreset['perspective'];
     depth_mode: DepthMode;
     camera: string;
-    navigation: 'platform_path' | 'topdown_walkable_space' | 'lane_combat';
+    navigation: 'platform_path' | 'topdown_walkable_space' | 'lane_combat' | 'merge_drop_board';
     collision_truth: string;
   };
   volume_layers: PlayableVolumeLayer[];
@@ -89,6 +89,7 @@ function includesAny(text: string, words: string[]): boolean {
 }
 
 function depthModeFor(preset: ProductionPreset): DepthMode {
+  if (preset.game_type === 'merge_drop_gacha') return 'flat';
   if (preset.game_type === 'survivors_like' || preset.game_type === 'gacha_rpg') return 'lane_perspective';
   if (preset.perspective === 'top_down' || preset.perspective === 'isometric') return 'top_down_axis';
   if (preset.dimension === '2.5d') return 'lane_perspective';
@@ -96,6 +97,7 @@ function depthModeFor(preset: ProductionPreset): DepthMode {
 }
 
 function navigationFor(preset: ProductionPreset): PlayableSliceSpec['spatial_model']['navigation'] {
+  if (preset.game_type === 'merge_drop_gacha') return 'merge_drop_board';
   if (preset.game_type === 'survivors_like' || preset.game_type === 'gacha_rpg') return 'lane_combat';
   if (preset.perspective === 'top_down' || preset.perspective === 'isometric') return 'topdown_walkable_space';
   return 'platform_path';
@@ -103,6 +105,7 @@ function navigationFor(preset: ProductionPreset): PlayableSliceSpec['spatial_mod
 
 function commercialPromise(input: BoardCompilerInput): string {
   const text = `${input.title ?? ''} ${input.prompt ?? ''}`;
+  if (input.preset.game_type === 'merge_drop_gacha') return 'stack matching orbs, trigger cascades, charge a hero power and earn an astral summon';
   if (input.preset.game_type === 'gacha_rpg') return 'summon a hero, survive a readable combat run, earn a roster reward';
   if (input.preset.game_type === 'souls_like_2d' || includesAny(text, DARK_FANTASY_WORDS)) {
     return 'cross a hostile dark fantasy space, learn enemy timing, reach the boss gate';
@@ -133,6 +136,16 @@ function sourceRefs(input: BoardCompilerInput): BoardSourceRef[] {
 }
 
 function volumeLayers(preset: ProductionPreset): PlayableVolumeLayer[] {
+  if (preset.game_type === 'merge_drop_gacha') {
+    return [
+      { id: 'constellation_backdrop', role: 'far_background', depth: 0.05, parallax: 0.06, collision: false, asset_family: 'board_bg', extraction_rule: 'keep the backdrop calm so every orb remains readable' },
+      { id: 'merge_well_housing', role: 'midground', depth: 0.3, parallax: 0.1, collision: false, asset_family: 'merge_well_frame', extraction_rule: 'frame the physical well without painting fake collision boundaries' },
+      { id: 'circle_physics_well', role: 'playfield', depth: 0.7, parallax: 1, collision: true, asset_family: 'circle_collision_world', extraction_rule: 'author walls, floor, loss line, radii and restitution as deterministic data' },
+      { id: 'orb_and_power_plane', role: 'actor_plane', depth: 0.82, parallax: 1, collision: true, asset_family: 'orb_tiers_and_hero_abilities', extraction_rule: 'render tier, rarity and ability effects above the collision truth' },
+      { id: 'roster_dock', role: 'foreground_occluder', depth: 0.95, parallax: 1, collision: false, asset_family: 'hero_roster_ui', extraction_rule: 'reserve a stable touch-safe dock outside the physical well' },
+      { id: 'merge_and_summon_fx', role: 'fx_lighting', depth: 1, parallax: 1, collision: false, asset_family: 'merge_rarity_fx', extraction_rule: 'feedback may flash or burst but must never hide the next drop or loss line' },
+    ];
+  }
   const twoFive = preset.dimension === '2.5d' || preset.perspective === 'isometric';
   return [
     {
@@ -194,8 +207,17 @@ function volumeLayers(preset: ProductionPreset): PlayableVolumeLayer[] {
 
 function zonesFromLayout(layout: GdlLayout | undefined, preset: ProductionPreset): NonNullable<GdlLayout['zones']> {
   if (layout?.zones?.length) return layout.zones;
-  const width = layout?.width ?? (preset.game_type === 'gacha_rpg' ? 720 : 1280);
-  const height = layout?.height ?? (preset.game_type === 'gacha_rpg' ? 1280 : 720);
+  const portrait = preset.game_type === 'gacha_rpg' || preset.game_type === 'merge_drop_gacha';
+  const width = layout?.width ?? (portrait ? 720 : 1280);
+  const height = layout?.height ?? (portrait ? 1280 : 720);
+  if (navigationFor(preset) === 'merge_drop_board') {
+    return [
+      { id: 'drop_preview', label: 'Drop Preview', x: 0, y: 0, w: width, h: Math.round(height * 0.15), theme: 'setup' },
+      { id: 'merge_well', label: 'Merge Well', x: 0, y: Math.round(height * 0.15), w: width, h: Math.round(height * 0.64), theme: 'physics_puzzle' },
+      { id: 'roster_and_power', label: 'Roster and Power', x: 0, y: Math.round(height * 0.79), w: width, h: Math.round(height * 0.13), theme: 'hero_ability' },
+      { id: 'earned_summon', label: 'Earned Summon', x: 0, y: Math.round(height * 0.92), w: width, h: Math.round(height * 0.08), theme: 'reward' },
+    ];
+  }
   if (navigationFor(preset) === 'lane_combat') {
     return [
       { id: 'summon_or_loadout', label: 'Summon or Loadout', x: 0, y: 0, w: width, h: Math.round(height * 0.22), theme: 'setup' },
@@ -213,6 +235,22 @@ function zonesFromLayout(layout: GdlLayout | undefined, preset: ProductionPreset
 
 function criticalPath(input: BoardCompilerInput, zones: NonNullable<GdlLayout['zones']>): CriticalPathBeat[] {
   const promise = commercialPromise(input);
+  if (input.preset.game_type === 'merge_drop_gacha') {
+    const actions = [
+      ['aim the first orb and read the next-orb preview', 'teach one-touch control', 'first_drop_registered'],
+      ['stack two identical orbs and trigger a visible merge', 'prove the core physical rule', 'first_merge_registered'],
+      ['build a cascade and cast the selected hero ability', 'connect puzzle mastery to character identity', 'hero_ability_cast'],
+      ['earn an invocation, unlock or duplicate a hero, then pursue the Nexus tier', 'close the run-to-roster loop', 'summon_and_target_progress_saved'],
+    ];
+    return zones.slice(0, 4).map((zone, index) => ({
+      id: `beat_${index + 1}_${zone.id}`,
+      zone_id: zone.id,
+      screen_goal: index === 0 ? 'understand drop, next orb and loss line in one screen' : index === 3 ? 'see how the run feeds collection progress' : `complete ${zone.label}`,
+      player_action: actions[index]?.[0] ?? 'merge matching orbs',
+      story_function: actions[index]?.[1] ?? promise,
+      runtime_gate: actions[index]?.[2] ?? 'merge_rule_verified',
+    }));
+  }
   return zones.slice(0, 4).map((zone, index) => {
     const first = index === 0;
     const last = index === Math.min(zones.length, 4) - 1;
@@ -234,6 +272,16 @@ function criticalPath(input: BoardCompilerInput, zones: NonNullable<GdlLayout['z
 }
 
 function encounterPlan(preset: ProductionPreset, zones: NonNullable<GdlLayout['zones']>): PlayableSliceSpec['encounters'] {
+  if (preset.game_type === 'merge_drop_gacha') {
+    return zones.slice(1, 4).map((zone, index) => ({
+      id: `pressure_${index + 1}_${zone.id}`,
+      zone_id: zone.id,
+      enemy_budget: 0,
+      purpose: index === 0 ? 'teach pair fusion' : index === 1 ? 'force a meaningful hero-power decision' : 'convert run mastery into collection progress',
+      fail_state: index < 2 ? 'settled orb crosses the telegraphed loss line' : 'insufficient earned currency leaves summon available later without monetization pressure',
+      reward: index === 0 ? 'score, charge and merge feedback' : index === 1 ? 'cascade multiplier and ability recovery' : 'hero unlock, duplicate essence or Nexus progress',
+    }));
+  }
   const combatZones = zones.filter((zone) => /trial|combat|risk|boss|gate|lane/i.test(`${zone.id} ${zone.theme ?? ''}`));
   const selected = combatZones.length ? combatZones : zones.slice(1, 3);
   return selected.slice(0, 3).map((zone, index) => ({
@@ -248,6 +296,34 @@ function encounterPlan(preset: ProductionPreset, zones: NonNullable<GdlLayout['z
 
 function storyBeats(input: BoardCompilerInput, zones: NonNullable<GdlLayout['zones']>): PlayableSliceSpec['story_beats'] {
   const promise = commercialPromise(input);
+  if (input.preset.game_type === 'merge_drop_gacha') {
+    return [
+      {
+        id: 'story_astral_opening',
+        trigger: 'run_start',
+        text: 'The observatory is collapsing. Rebuild the Astra constellation one resonance at a time.',
+        objective: 'Give the first drop an immediate fictional purpose.',
+      },
+      {
+        id: 'story_first_resonance',
+        trigger: 'first_merge_registered',
+        text: 'Two matching fragments recover a lost star-memory and awaken the selected Keeper.',
+        objective: 'Connect the merge rule to world restoration and character identity.',
+      },
+      {
+        id: 'story_keeper_oath',
+        trigger: 'hero_ability_cast',
+        text: 'The Keeper bends the well, revealing that every hero changes how the same board is mastered.',
+        objective: 'Turn roster collection into gameplay expression instead of a detached menu.',
+      },
+      {
+        id: 'story_nexus_hook',
+        trigger: 'target_reached:nexus',
+        text: 'The Nexus opens a new celestial region, its orb family and the next missing Keeper.',
+        objective: 'Promise the next chapter, board rules and collection goal.',
+      },
+    ];
+  }
   const first = zones[0]?.id ?? 'entry_read';
   const last = zones[zones.length - 1]?.id ?? 'exit_hook';
   return [
@@ -273,6 +349,15 @@ function storyBeats(input: BoardCompilerInput, zones: NonNullable<GdlLayout['zon
 }
 
 function assetManifest(input: BoardCompilerInput): BoardAssetExtractionSpec[] {
+  if (input.preset.game_type === 'merge_drop_gacha') {
+    return [
+      { id: 'orb_tier_pack', family: 'orb_tiers', source_role: 'prompt_and_style_board', output: 'eight_scale_locked_orb_skins', needed_for: ['merge readability', 'tier progression', 'collision radius binding'], acceptance: ['each tier reads at gameplay size', 'visual radius matches collision radius', 'adjacent tiers differ by silhouette, color and size'] },
+      { id: 'merge_well_pack', family: 'board_bg', source_role: 'visual_board', output: 'backdrop_frame_and_collision_manifest', needed_for: ['world identity', 'stable portrait composition', 'loss line clarity'], acceptance: ['walls and floor come from data', 'background never fakes physics', 'loss line remains visible under FX'] },
+      { id: 'hero_roster_pack', family: 'hero_portraits', source_role: 'character_board_or_prompt', output: 'four_portraits_rarity_cards_and_ability_icons', needed_for: ['hero selection', 'summon reveal', 'ability identity'], acceptance: ['portrait consistency locked', 'rarity is not color-only', 'ability icon matches runtime effect'] },
+      { id: 'merge_fx_pack', family: 'merge_rarity_fx', source_role: 'orb_palette_and_rarity_rules', output: 'drop_bounce_merge_cascade_ability_and_summon_fx', needed_for: ['game feel', 'cascade feedback', 'reward reveal'], acceptance: ['FX duration under 600ms during play', 'next drop remains visible', 'no photosensitive full-screen strobe'] },
+      { id: 'mobile_ui_pack', family: 'ui_kit', source_role: 'portrait_gameplay_board', output: 'score_next_orb_roster_ability_summon_and_rates_ui', needed_for: ['one-thumb play', 'progress clarity', 'gacha compliance'], acceptance: ['touch targets at least 44 CSS px', 'rates and pity visible', 'no paid currency CTA in the vertical slice'] },
+    ];
+  }
   const gacha = input.preset.game_type === 'gacha_rpg';
   return [
     {
@@ -321,6 +406,21 @@ function assetManifest(input: BoardCompilerInput): BoardAssetExtractionSpec[] {
 }
 
 function commercialGates(input: BoardCompilerInput): string[] {
+  if (input.preset.game_type === 'merge_drop_gacha') {
+    return [
+      'first 30 seconds: player reads next orb, loss line, objective and first merge without a tutorial modal',
+      'input loop: aim, drop, merge, cascade, failure and restart all respond in runtime',
+      'physics gate: circle stacking remains stable at 60, 30 and 20 FPS simulation steps',
+      'merge gate: only equal tiers merge and every cascade is deterministic',
+      'progression gate: a run earns score, ability charge, currency and persistent roster progress',
+      'character gate: each hero ability produces a distinct, testable board-state change',
+      'narrative gate: run start, first merge, first power and Nexus completion advance the Astra premise',
+      'mobile gate: aim, drop, hero selection, ability and summon are touch-operable',
+      'collection gate: rates, pity, duplicate compensation and earned currency source are disclosed',
+      'asset gate: orb radii, portraits, FX and collision truth remain readable at final portrait scale',
+      'QA gate: deterministic tests cover merge, ability, pity, overflow and Nexus completion',
+    ];
+  }
   const gates = [
     'first 30 seconds: player sees objective, danger and exit direction',
     'input loop: movement, feedback, failure and reward all respond in runtime',
@@ -337,6 +437,15 @@ function commercialGates(input: BoardCompilerInput): string[] {
 }
 
 function productionGaps(input: BoardCompilerInput): string[] {
+  if (input.preset.game_type === 'merge_drop_gacha') {
+    return [
+      'generated orb art must be bound to exact runtime radii before shipping',
+      'hero portraits need identity-lock variants for roster, summon and ability states',
+      'merge, bounce and overflow sound layers need a mobile loudness pass',
+      'long-session balance needs telemetry for board height, tier frequency and ability value',
+      ...(input.sourceImages?.length ? ['source board needs approval for palette, UI density and gameplay-scale readability'] : ['generate and approve one gameplay board plus one character roster board']),
+    ];
+  }
   const gaps = [
     'board segmentation must output separate actor, prop, environment and collision candidates',
     'animation must be authored per runtime clip, not just a static sheet',
@@ -367,9 +476,17 @@ export function compileVisualBoardToPlayableSlice(
       dimension: input.preset.dimension,
       perspective: input.preset.perspective,
       depth_mode: depthMode,
-      camera: depthMode === 'top_down_axis' ? 'top_down_follow_with_ysort' : depthMode === 'lane_perspective' ? 'follow_or_fixed_with_depth_lanes' : 'horizontal_follow',
+      camera: input.preset.game_type === 'merge_drop_gacha'
+        ? 'fixed_portrait_board'
+        : depthMode === 'top_down_axis'
+          ? 'top_down_follow_with_ysort'
+          : depthMode === 'lane_perspective'
+            ? 'follow_or_fixed_with_depth_lanes'
+            : 'horizontal_follow',
       navigation: navigationFor(input.preset),
-      collision_truth: 'GDL layout collision, tilemap, blockers and hazards are the source of truth; painted pixels are reference only',
+      collision_truth: input.preset.game_type === 'merge_drop_gacha'
+        ? 'GDL circle radii, well bounds, gravity, restitution and loss line are the source of truth; painted pixels are visual skin only'
+        : 'GDL layout collision, tilemap, blockers and hazards are the source of truth; painted pixels are reference only',
     },
     volume_layers: volumeLayers(input.preset),
     critical_path: criticalPath(input, zones),
@@ -386,6 +503,7 @@ function ensureSceneLayout(scene: Scene, preset: ProductionPreset): GdlLayout | 
   if (!layout) return layout;
   const zones = zonesFromLayout(layout, preset);
   const next: GdlLayout = { ...layout, zones };
+  if (preset.game_type === 'merge_drop_gacha') return next;
 
   if (!next.checkpoints?.length && zones[1]) {
     next.checkpoints = [{ x: zones[1].x + Math.round(zones[1].w * 0.5), y: (layout.ground_y ?? layout.height) - 76, label: 'Midpoint' }];

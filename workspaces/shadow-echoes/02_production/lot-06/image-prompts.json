@@ -1,0 +1,18 @@
+{
+  "tool": "image_gen built-in",
+  "references": [
+    "01_inputs/references/partie-3/combat_contre_le_gardien_cendrelame.png",
+    "01_inputs/references/partie-1/atlas_gothique_des_équipements_légendaires.png"
+  ],
+  "assets": [
+    {
+      "path": "03_assets/enemies/guardians-v2.png",
+      "prompt": "Use case: stylized-concept. Asset type: production transparent enemy sprite atlas for the Shadow Echoes gothic 2.5D RPG. Reference image is ART DIRECTION only: use the same ornate realistic dark metal, tattered scarlet cloth, detailed high-end painted dark fantasy finish. Create a WIDE atlas of EXACTLY THREE equally sized square cells in ONE horizontal row, no lines between cells, transparent RGBA background. Each enemy is full body, weapon entirely inside its own cell with 8 percent padding, face and attack direction toward LEFT, feet same baseline. Left cell: hooded black armored threshold sentinel, long narrow pale steel sword, crimson scarf. Center: floating violet wraith cantor, faceless crown and layered ornate black robes, hands casting purple wisps, no sword. Right: imposing Cendrelame guardian as in reference, heavy ornate scorched plate, horned crown helmet, tattered red cape, glowing molten greatsword diagonally pointing LEFT. Exactly one character per cell, distinct silhouettes, crisp detailed edges, readable at game scale. NO ground, no background scenery, no text, no UI, no watermark. Real transparent background. Three cells same width, identical camera distance.",
+      "correction": "Use case: precise-object-edit. Edit this enemy atlas for strict runtime sprite cropping. Preserve exactly these three highly detailed enemy designs, materials, poses and transparent background. Output horizontal THREE EQUAL SQUARE CELLS with NO visible grid, aspect ratio 3:1. In each cell REDUCE the entire character and all weapons/aura uniformly to 75 percent of that cell size. Ensure there are wide completely empty TRANSPARENT gutters between characters. First sentinel and ENTIRE sword confined to LEFT THIRD; middle purple sorcerer and both hands/aura confined to MIDDLE THIRD; final flaming knight and ENTIRE greatsword confined to RIGHT THIRD. All feet baseline 85 percent down, tops at least 10 percent below edge, NOTHING clipped at any outer edge or across cell boundaries. No text, no background, no extra elements. Separation and consistent cell layout are essential, preserve rich visual detail."
+    },
+    {
+      "path": "03_assets/items/equipment-atlas-v1.png",
+      "prompt": "Use case: stylized-concept. Asset type: Shadow Echoes RPG equipment inventory atlas. Reference is style direction only: ornate black metal and antique gold, intricate engraved gothic details, luminous gemstones, realistic premium fantasy painting. Create EXACTLY NINE separate objects in a strict 3 by 3 grid on a genuinely transparent RGBA background, square overall canvas. Each object centered INSIDE its own equal square cell, 15 percent transparent padding around it, no touching other cells, consistent scale. Top row left to right: slender crimson rose rapier; black silver staff with violet crescent crystal; ivory gold living branch staff with luminous pale green leaves. Middle row left to right: heavy double-bladed molten orange axe; complete purple embroidered mage tunic with sleeves, no body; black ornate plate chest armor with gold details and crimson central gem, no body. Bottom row left to right: flowing crimson cloak displayed alone; black gothic ring with faceted ruby; silver star-shaped pendant with blood-red crystal. All shafts must fit entirely within their cell. No characters, no text, no frame, no grid lines, no background, no watermark. Rich detailed objects with clean transparent edges."
+    }
+  ]
+}

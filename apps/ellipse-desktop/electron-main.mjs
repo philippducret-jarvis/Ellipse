@@ -75,7 +75,7 @@ function createWindow() {
     width: 1400,
     height: 900,
     title: 'Ellipse Studio',
-    icon: join(__dirname, 'assets', 'icon.png'),
+    icon: join(__dirname, 'assets', 'ellipse-app.png'),
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -101,7 +101,7 @@ app.whenReady().then(async () => {
 
 app.on('window-all-closed', () => {
   for (const c of children) c.kill('SIGTERM');
-  if process.platform !== 'darwin') app.quit();
+  if (process.platform !== 'darwin') app.quit();
 });
 
 app.on('before-quit', () => {

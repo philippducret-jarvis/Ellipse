@@ -104,6 +104,10 @@ function mapBlueprints(gameType: GameType | undefined): string[] {
   if (systems.includes('turn_based_battle')) blueprints.push('obj_turn_manager', 'obj_battle_participant');
   if (systems.includes('grid_match')) blueprints.push('obj_grid_cell', 'obj_match_piece');
   if (systems.includes('falling_blocks')) blueprints.push('obj_falling_piece', 'obj_grid_board');
+  if (systems.includes('merge_drop_physics')) {
+    blueprints.push('obj_merge_well', 'obj_drop_cursor', 'obj_merge_orb', 'obj_overflow_line', 'obj_hero_ability');
+  }
+  if (systems.includes('merge_drop_gacha_summon')) blueprints.push('obj_astral_summon', 'obj_roster_slot');
   if (systems.includes('hotspots')) blueprints.push('obj_hotspot', 'obj_cursor');
   if (systems.includes('deck_system')) blueprints.push('obj_deck', 'obj_discard_pile');
   if (systems.includes('idle_production')) blueprints.push('obj_generator', 'obj_upgrade_button');
@@ -149,6 +153,8 @@ function eventHooks(gameType: GameType | undefined): string[] {
   if (systems.includes('boss_phases')) hooks.push('on_boss_phase_change', 'on_boss_defeated');
   if (systems.includes('collectibles') || systems.includes('inventory') || systems.includes('loot_system')) hooks.push('on_item_pickup', 'on_inventory_changed');
   if (systems.includes('gacha_summon')) hooks.push('on_banner_open', 'on_pull_started', 'on_pull_resolved', 'on_pity_changed');
+  if (systems.includes('merge_drop_physics')) hooks.push('on_orb_drop', 'on_orb_collision', 'on_orb_merge', 'on_overflow_warning');
+  if (systems.includes('merge_drop_gacha_summon')) hooks.push('on_astral_pull', 'on_hero_unlocked', 'on_merge_pity_changed');
   if (systems.includes('wave_spawner') || systems.includes('horde_spawner')) hooks.push('on_wave_start', 'on_wave_clear', 'on_elite_spawn');
   if (systems.includes('turn_based_battle') || systems.includes('turn_system')) hooks.push('on_turn_start', 'on_action_selected', 'on_turn_end');
   if (systems.includes('dialogue') || systems.includes('branching_choices')) hooks.push('on_dialogue_start', 'on_choice_selected', 'on_dialogue_end');
@@ -173,6 +179,7 @@ function animationClips(gameType: GameType | undefined): string[] {
   if (systems.some((s) => s.includes('combat') || s.includes('shooting') || s.includes('battle'))) clips.push('attack', 'attack_2', 'cast', 'victory');
   if (systems.includes('stamina_combat')) clips.push('dodge', 'parry', 'guard_break');
   if (systems.includes('gacha_summon')) clips.push('portrait_idle', 'summon_reveal', 'rarity_burst');
+  if (systems.includes('merge_drop_physics')) clips.push('orb_drop', 'merge_burst', 'cascade_pulse', 'overflow_warning', 'hero_ability_cast');
   if (systems.includes('wave_spawner') || systems.includes('horde_spawner')) clips.push('level_up', 'pickup_magnet');
   if (systems.includes('turn_based_battle')) clips.push('battle_idle', 'skill_cast', 'ultimate');
   if (systems.includes('rhythm_input')) clips.push('note_hit', 'combo_pulse');
@@ -214,6 +221,8 @@ function uiSurfaces(gameType: GameType | undefined): string[] {
   if (systems.includes('inventory')) ui.push('inventory_panel');
   if (systems.includes('dialogue')) ui.push('dialogue_box', 'choice_panel');
   if (systems.includes('gacha_summon')) ui.push('summon_banner', 'roster_screen', 'rarity_reveal');
+  if (systems.includes('merge_drop_physics')) ui.push('merge_well_hud', 'next_orb_preview', 'ability_meter', 'overflow_warning');
+  if (systems.includes('merge_drop_gacha_summon')) ui.push('astral_summon_button', 'hero_roster_cards', 'pity_counter', 'rates_disclosure');
   if (systems.includes('skill_tree') || systems.includes('upgrade_tree')) ui.push('skill_tree_screen');
   if (systems.includes('wave_spawner') || systems.includes('horde_spawner')) ui.push('wave_counter', 'level_up_draft');
   if (systems.includes('turn_based_battle') || systems.includes('turn_system')) ui.push('turn_order_bar', 'action_menu');
@@ -237,6 +246,8 @@ function audioCues(gameType: GameType | undefined): string[] {
   if (loops.includes('management')) cues.push('currency_tick', 'upgrade_unlock');
   if (loops.includes('narrative')) cues.push('dialogue_advance', 'choice_confirm', 'story_stinger');
   if (systems.includes('gacha_summon')) cues.push('banner_open', 'pull_roll', 'ssr_reveal');
+  if (systems.includes('merge_drop_physics')) cues.push('orb_drop', 'orb_bounce', 'merge_chime', 'cascade_rise', 'overflow_alarm');
+  if (systems.includes('merge_drop_gacha_summon')) cues.push('astral_pull', 'hero_unlock', 'merge_ssr_reveal');
   if (systems.includes('boss_phases')) cues.push('boss_intro', 'phase_transition', 'boss_defeat');
   if (systems.includes('wave_spawner') || systems.includes('horde_spawner')) cues.push('wave_start', 'wave_clear');
   if (systems.includes('rhythm_input')) cues.push('beat_tick', 'perfect_hit', 'combo_break');
@@ -369,6 +380,36 @@ export const GAME_SUBTYPES: GameSubtype[] = [
       environment_kits: ['summon_hub', 'combat_lanes', 'boss_arena', 'rarity_reveal_fx', 'reward_screen'],
       content_units: ['banner_intro', 'first_pull', 'wave_run', 'blessing_choice', 'boss_reward'],
       qa_gates: [...COMMON_QA, 'summon economy sanity', 'lane hazard readability', 'reward loop clarity'],
+    },
+  },
+  {
+    id: 'merge_drop_astral_collection',
+    game_type: 'merge_drop_gacha',
+    label: 'Astral orb merge collection',
+    intent_keywords: ['bille', 'billes', 'boule', 'ball', 'orb', 'fusion', 'merge', 'empiler', 'stack', 'suika', 'gacha', 'gatcha'],
+    design_pillars: ['one-touch physical clarity', 'satisfying merge cascades', 'heroes that change the board rules', 'earned collection progression'],
+    base_library: {
+      asset_families: ['orb_tiers', 'hero_portraits', 'board_bg', 'ui_kit', 'rarity_fx', 'ability_fx', 'merge_fx'],
+      systems: [
+        'merge_drop_physics',
+        'merge_cascade',
+        'drop_aim',
+        'hero_abilities',
+        'merge_drop_gacha_summon',
+        'merge_drop_roster',
+        'merge_drop_pity',
+        'run_rewards',
+        'local_save',
+      ],
+      animation_clips: ['orb_drop', 'orb_bounce', 'merge_burst', 'cascade_pulse', 'hero_ability_cast', 'summon_reveal', 'overflow_warning'],
+      environment_kits: ['astral_merge_well', 'danger_line', 'constellation_backdrop', 'hero_roster_dock', 'summon_reveal_overlay'],
+      content_units: ['first_pair_tutorial', 'three_step_cascade', 'ability_unlock', 'earned_summon', 'nexus_target'],
+      object_blueprints: ['obj_merge_well', 'obj_drop_cursor', 'obj_merge_orb', 'obj_overflow_line', 'obj_hero_ability', 'obj_astral_summon'],
+      room_templates: ['rm_merge_run', 'rm_roster_collection'],
+      event_hooks: ['on_orb_drop', 'on_orb_merge', 'on_cascade', 'on_ability_ready', 'on_astral_pull', 'on_nexus_created'],
+      ui_surfaces: ['merge_well_hud', 'next_orb_preview', 'hero_roster_cards', 'ability_meter', 'summon_result', 'rates_disclosure'],
+      audio_cues: ['orb_drop', 'orb_bounce', 'merge_chime', 'cascade_rise', 'ability_cast', 'astral_pull', 'hero_unlock'],
+      qa_gates: [...COMMON_QA, 'deterministic merge rules', 'stable circle stacking', 'touch target ergonomics', 'overflow fairness', 'gacha rates disclosed', 'no paid currency dependency'],
     },
   },
   {

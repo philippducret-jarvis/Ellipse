@@ -1,0 +1,31 @@
+{
+  "id": "orbes-d-astra",
+  "title": "Orbes d'Astra",
+  "genre": "merge_drop_gacha",
+  "orientation": "portrait",
+  "pitch": "Empiler des graines astrales, fusionner les rangs identiques et restaurer le Nexus avec les pouvoirs de quatre Gardiens.",
+  "core_loop": [
+    "viser et lacher une bille",
+    "empiler deux rangs identiques",
+    "declencher une fusion ou une cascade",
+    "charger et lancer le pouvoir du heros",
+    "gagner des eclats",
+    "invoquer et enrichir le roster",
+    "atteindre le Nexus"
+  ],
+  "failure": "Une bille stabilisee reste au-dessus de la ligne de danger pendant 1,6 seconde.",
+  "heroes": [
+    { "id": "mira", "rarity": "R", "ability": "Puits astral", "effect": "Recentre et compacte la pile." },
+    { "id": "brann", "rarity": "R", "ability": "Frappe runique", "effect": "Augmente le rang de la prochaine bille." },
+    { "id": "lys", "rarity": "SR", "ability": "Floraison du temps", "effect": "Ralentit la gravite et sauve la bille la plus haute." },
+    { "id": "aster", "rarity": "SSR", "ability": "Supernova", "effect": "Fusionne une paire disponible de chaque rang." }
+  ],
+  "economy": {
+    "paid_currency": false,
+    "summon_cost": 100,
+    "rates": { "R": 0.7, "SR": 0.25, "SSR": 0.05 },
+    "pity": 10,
+    "duplicate_compensation": true
+  },
+  "commercial_scope": "Vertical slice jouable. Equilibrage longue duree, audio final, accessibilite complete et certification stores restent requis avant vente."
+}

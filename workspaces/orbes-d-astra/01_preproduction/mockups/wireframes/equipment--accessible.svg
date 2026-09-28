@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <radialGradient id="portal"><stop offset="0" stop-color="#67e8f9" stop-opacity=".7"/><stop offset=".48" stop-color="#6d28d9" stop-opacity=".45"/><stop offset="1" stop-color="#050711" stop-opacity="0"/></radialGradient>
+    <linearGradient id="gauge"><stop stop-color="#67e8f9"/><stop offset=".55" stop-color="#a78bfa"/><stop offset="1" stop-color="#f472b6"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1600" height="900" fill="#000000"/>
+  <circle cx="1248" cy="144" r="430" fill="#111c3c" opacity=".45"/>
+  <text x="70" y="78" fill="#fff4dc" font-family="Inter,Segoe UI,sans-serif" font-size="45.239999999999995" font-weight="850" text-anchor="start">ÉQUIPEMENT ASTRAL</text>
+  <text x="70" y="120" fill="#ffffff" font-family="Inter,Segoe UI,sans-serif" font-size="23.2" font-weight="450" text-anchor="start">Comparer clairement gain, perte et coût de renforcement</text>
+  <text x="1530" y="78" fill="#ffe066" font-family="Inter,Segoe UI,sans-serif" font-size="18" font-weight="800" text-anchor="end">ACCESSIBLE • UX DRAFT</text>
+  
+    <rect x="70" y="150" width="300" height="610" rx="26" fill="#111111" stroke="#292f49"/>
+    
+      <rect x="94" y="188" width="252" height="70" rx="16" fill="#1b3144" stroke="#ffe066"/>
+      <text x="117" y="232" fill="#fff4dc" font-family="Inter,Segoe UI,sans-serif" font-size="23.2" font-weight="700" text-anchor="start">Astrolabe +12</text>
+    
+      <rect x="94" y="286" width="252" height="70" rx="16" fill="#0b0e1a" stroke="#292f49"/>
+      <text x="117" y="330" fill="#ffffff" font-family="Inter,Segoe UI,sans-serif" font-size="23.2" font-weight="500" text-anchor="start">+8,4 % rupture</text>
+    
+      <rect x="94" y="384" width="252" height="70" rx="16" fill="#0b0e1a" stroke="#292f49"/>
+      <text x="117" y="428" fill="#ffffff" font-family="Inter,Segoe UI,sans-serif" font-size="23.2" font-weight="500" text-anchor="start">Set 2/4</text>
+    
+  <rect x="394" y="150" width="1136" height="610" rx="30" fill="#090d1c" stroke="#252c47" stroke-width="2"/>
+  <rect x="422" y="210" width="341.3333333333333" height="210" rx="22" fill="#111111" stroke="#ffe066" stroke-width="4"/><circle cx="592.6666666666666" cy="292" r="52" fill="#1c7690"/><text x="446" y="375" fill="#fff4dc" font-family="Inter,Segoe UI,sans-serif" font-size="20" font-weight="700" text-anchor="start">OPTION 1</text><text x="446" y="410" fill="#ffffff" font-family="Inter,Segoe UI,sans-serif" font-size="17" font-weight="500" text-anchor="start">Sélectionnée</text><rect x="791.3333333333333" y="210" width="341.3333333333333" height="210" rx="22" fill="#111111" stroke="#3a405d" stroke-width="2"/><circle cx="961.9999999999999" cy="292" r="52" fill="#5b3e91"/><text x="815.3333333333333" y="375" fill="#fff4dc" font-family="Inter,Segoe UI,sans-serif" font-size="20" font-weight="700" text-anchor="start">OPTION 2</text><text x="815.3333333333333" y="410" fill="#ffffff" font-family="Inter,Segoe UI,sans-serif" font-size="17" font-weight="500" text-anchor="start">Comparer</text><rect x="1160.6666666666665" y="210" width="341.3333333333333" height="210" rx="22" fill="#111111" stroke="#3a405d" stroke-width="2"/><circle cx="1331.3333333333333" cy="292" r="52" fill="#9b6432"/><text x="1184.6666666666665" y="375" fill="#fff4dc" font-family="Inter,Segoe UI,sans-serif" font-size="20" font-weight="700" text-anchor="start">OPTION 3</text><text x="1184.6666666666665" y="410" fill="#ffffff" font-family="Inter,Segoe UI,sans-serif" font-size="17" font-weight="500" text-anchor="start">Comparer</text><rect x="422" y="448" width="341.3333333333333" height="210" rx="22" fill="#111111" stroke="#3a405d" stroke-width="2"/><circle cx="592.6666666666666" cy="530" r="52" fill="#1c7690"/><text x="446" y="613" fill="#fff4dc" font-family="Inter,Segoe UI,sans-serif" font-size="20" font-weight="700" text-anchor="start">OPTION 4</text><text x="446" y="648" fill="#ffffff" font-family="Inter,Segoe UI,sans-serif" font-size="17" font-weight="500" text-anchor="start">Comparer</text><rect x="791.3333333333333" y="448" width="341.3333333333333" height="210" rx="22" fill="#111111" stroke="#3a405d" stroke-width="2"/><circle cx="961.9999999999999" cy="530" r="52" fill="#5b3e91"/><text x="815.3333333333333" y="613" fill="#fff4dc" font-family="Inter,Segoe UI,sans-serif" font-size="20" font-weight="700" text-anchor="start">OPTION 5</text><text x="815.3333333333333" y="648" fill="#ffffff" font-family="Inter,Segoe UI,sans-serif" font-size="17" font-weight="500" text-anchor="start">Comparer</text><rect x="1160.6666666666665" y="448" width="341.3333333333333" height="210" rx="22" fill="#111111" stroke="#3a405d" stroke-width="2"/><circle cx="1331.3333333333333" cy="530" r="52" fill="#9b6432"/><text x="1184.6666666666665" y="613" fill="#fff4dc" font-family="Inter,Segoe UI,sans-serif" font-size="20" font-weight="700" text-anchor="start">OPTION 6</text><text x="1184.6666666666665" y="648" fill="#ffffff" font-family="Inter,Segoe UI,sans-serif" font-size="17" font-weight="500" text-anchor="start">Comparer</text>
+  
+  <rect x="1150" y="792" width="380" height="62" rx="22" fill="#ffe066" stroke="#ffe066" stroke-width="3"/>
+  <text x="1340" y="832" fill="#000" font-family="Inter,Segoe UI,sans-serif" font-size="24.36" font-weight="850" text-anchor="middle">ÉQUIPER</text>
+  <text x="70" y="876" fill="#ffffff" font-family="Inter,Segoe UI,sans-serif" font-size="15" font-weight="600" text-anchor="start">MAQUETTE UX — COMPOSITION ET HIÉRARCHIE, PAS UN ASSET FINAL</text>
+</svg>

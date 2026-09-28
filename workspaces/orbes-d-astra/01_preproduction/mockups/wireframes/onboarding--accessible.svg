@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <radialGradient id="portal"><stop offset="0" stop-color="#67e8f9" stop-opacity=".7"/><stop offset=".48" stop-color="#6d28d9" stop-opacity=".45"/><stop offset="1" stop-color="#050711" stop-opacity="0"/></radialGradient>
+    <linearGradient id="gauge"><stop stop-color="#67e8f9"/><stop offset=".55" stop-color="#a78bfa"/><stop offset="1" stop-color="#f472b6"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1600" height="900" fill="#000000"/>
+  <circle cx="1248" cy="144" r="430" fill="#111c3c" opacity=".45"/>
+  <text x="70" y="78" fill="#fff4dc" font-family="Inter,Segoe UI,sans-serif" font-size="45.239999999999995" font-weight="850" text-anchor="start">ÉVEIL DE L’ASTRAL</text>
+  <text x="70" y="120" fill="#ffffff" font-family="Inter,Segoe UI,sans-serif" font-size="23.2" font-weight="450" text-anchor="start">Apprendre déplacer, fusionner puis déclencher une compétence</text>
+  <text x="1530" y="78" fill="#ffe066" font-family="Inter,Segoe UI,sans-serif" font-size="18" font-weight="800" text-anchor="end">ACCESSIBLE • UX DRAFT</text>
+  
+    <rect x="70" y="150" width="300" height="610" rx="26" fill="#111111" stroke="#292f49"/>
+    
+      <rect x="94" y="188" width="252" height="70" rx="16" fill="#1b3144" stroke="#ffe066"/>
+      <text x="117" y="232" fill="#fff4dc" font-family="Inter,Segoe UI,sans-serif" font-size="23.2" font-weight="700" text-anchor="start">Étape 2/3</text>
+    
+      <rect x="94" y="286" width="252" height="70" rx="16" fill="#0b0e1a" stroke="#292f49"/>
+      <text x="117" y="330" fill="#ffffff" font-family="Inter,Segoe UI,sans-serif" font-size="23.2" font-weight="500" text-anchor="start">Démonstration interactive</text>
+    
+      <rect x="94" y="384" width="252" height="70" rx="16" fill="#0b0e1a" stroke="#292f49"/>
+      <text x="117" y="428" fill="#ffffff" font-family="Inter,Segoe UI,sans-serif" font-size="23.2" font-weight="500" text-anchor="start">Passer</text>
+    
+  <rect x="394" y="150" width="1136" height="610" rx="30" fill="#090d1c" stroke="#252c47" stroke-width="2"/>
+  
+      <path d="M 434 690 C 614 230, 1310 230, 1490 690" fill="none" stroke="#ffe066" stroke-width="4" stroke-dasharray="12 14"/>
+      <circle cx="514" cy="535" r="62" fill="#111111" stroke="#ffe066" stroke-width="5"/><text x="514" y="544" fill="#fff4dc" font-family="Inter,Segoe UI,sans-serif" font-size="28" font-weight="800" text-anchor="middle">1</text><circle cx="962" cy="335" r="62" fill="#111111" stroke="#f6c768" stroke-width="5"/><text x="962" y="344" fill="#fff4dc" font-family="Inter,Segoe UI,sans-serif" font-size="28" font-weight="800" text-anchor="middle">2</text><circle cx="1410" cy="535" r="62" fill="#111111" stroke="#ffe066" stroke-width="5"/><text x="1410" y="544" fill="#fff4dc" font-family="Inter,Segoe UI,sans-serif" font-size="28" font-weight="800" text-anchor="middle">3</text>
+  
+  <rect x="1150" y="792" width="380" height="62" rx="22" fill="#ffe066" stroke="#ffe066" stroke-width="3"/>
+  <text x="1340" y="832" fill="#000" font-family="Inter,Segoe UI,sans-serif" font-size="24.36" font-weight="850" text-anchor="middle">ESSAYER</text>
+  <text x="70" y="876" fill="#ffffff" font-family="Inter,Segoe UI,sans-serif" font-size="15" font-weight="600" text-anchor="start">MAQUETTE UX — COMPOSITION ET HIÉRARCHIE, PAS UN ASSET FINAL</text>
+</svg>

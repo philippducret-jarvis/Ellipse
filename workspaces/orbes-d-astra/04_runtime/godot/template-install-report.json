@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "source": "https://godot-releases.nbg1.your-objectstorage.com/4.7-stable/Godot_v4.7-stable_export_templates.tpz",
+  "officialArchiveBytes": 1279207690,
+  "downloadedCompressedBytes": 20425521,
+  "requestedPlatform": "web",
+  "templateDir": "C:\\Users\\phili\\AppData\\Roaming\\Godot\\export_templates\\4.7.stable",
+  "installed": [
+    {
+      "sourceEntry": "templates/web_nothreads_release.zip",
+      "output": "C:\\Users\\phili\\AppData\\Roaming\\Godot\\export_templates\\4.7.stable\\web_nothreads_release.zip",
+      "bytes": 10243416
+    },
+    {
+      "sourceEntry": "templates/web_nothreads_debug.zip",
+      "output": "C:\\Users\\phili\\AppData\\Roaming\\Godot\\export_templates\\4.7.stable\\web_nothreads_debug.zip",
+      "bytes": 10227986
+    },
+    {
+      "sourceEntry": "templates/version.txt",
+      "output": "C:\\Users\\phili\\AppData\\Roaming\\Godot\\export_templates\\4.7.stable\\version.txt",
+      "bytes": 11
+    }
+  ]
+}

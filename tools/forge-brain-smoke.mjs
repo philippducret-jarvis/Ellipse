@@ -1,5 +1,5 @@
 /**
- * SMOKE BRAIN — vérifie les pièces PURES de Jarvis sans réseau ni LLM :
+ * SMOKE BRAIN — vérifie les pièces PURES d'Ellisphere sans réseau ni LLM :
  * specs d'outils bien formés, exécution réelle des outils de lecture,
  * nettoyage de la pub keyless, parsing tolérant. CI-safe.
  */
@@ -19,6 +19,12 @@ check(Array.isArray(games.games), `list_games renvoie ${games.games?.length ?? 0
 
 const status = await runTool('game_status', { id: 'veloria-veille-des-lames' });
 check(status.title?.includes('Veloria') || status.error, `game_status répond (${status.title ?? status.error})`);
+
+const quality = await runTool('quality_status', { id: 'orbes-d-astra' });
+check(typeof quality.commercial_ready === 'boolean' || quality.error, 'quality_status distingue le statut commercial');
+
+const protectedIteration = await runTool('iterate_game', { id: 'echoes-of-the-mushroom-realm', instruction: 'remplace le runtime' });
+check(protectedIteration.protected === true || protectedIteration.error, 'les trois runtimes spécialisés sont protégés');
 
 const unknown = await runTool('game_status', { id: 'nexiste-pas' });
 check(Boolean(unknown.error), 'game_status : jeu inconnu → erreur propre');

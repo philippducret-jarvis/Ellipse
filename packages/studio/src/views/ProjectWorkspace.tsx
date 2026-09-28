@@ -62,9 +62,18 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
   const [previewOpen, setPreviewOpen] = useState(false);
 
   useEffect(() => {
+    let cancelled = false;
+    setPreviewOpen(false);
     void fetchGameProject(projectId)
-      .then((data) => startTransition(() => setSnap(data)))
-      .catch(() => setSnap(null));
+      .then((data) => {
+        if (!cancelled && useStudioStore.getState().activeProjectId === projectId) {
+          startTransition(() => setSnap(data));
+        }
+      })
+      .catch(() => {
+        if (!cancelled && useStudioStore.getState().activeProjectId === projectId) setSnap(null);
+      });
+    return () => { cancelled = true; };
   }, [projectId, setSnap]);
 
   const onSnapshotUpdate = (updated: typeof snap) => {

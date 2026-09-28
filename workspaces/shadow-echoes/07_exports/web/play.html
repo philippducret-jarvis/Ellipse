@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark"><title>Shadow Echoes · L’Épreuve des Échos</title>
+  <link rel="stylesheet" href="./battle.css"><link rel="stylesheet" href="./battle-edition.css">
+<link rel="stylesheet" href="./volume-3d.css"></head>
+<body>
+  <header class="topbar"><a class="brand" href="./play.html"><span>✥</span> SHADOW ECHOES<small>L’ÉCHO NE MEURT JAMAIS</small></a><nav><a href="./citadel.html" target="_top">Citadelle ↗</a><a href="./motion-3d.html">Atelier du mouvement ↗</a><a href="./heroes.html">Collection des Mythiques ↗</a><button id="sound" aria-pressed="false" title="Activer les effets sonores">Son désactivé</button><button id="pause">Pause · P</button></nav></header>
+  <main>
+    <section class="chapter"><div><p class="eyebrow">LES RUINES DE L’AUBE · ÉPREUVE DES MYTHIQUES</p><h1>Le serment des quatre.</h1></div><div class="chapter-note"><span class="edition">LES MYTHIQUES · VOLUME 3D</span><p>Quatre âmes face à une même faille.</p></div></section>
+    <ol id="journey" class="journey" aria-label="Progression de l’épreuve"></ol>
+    <section id="arena" class="arena" aria-label="Champ de bataille">
+      <div class="landscape"></div><div class="atmosphere"></div>
+      <div class="arena-top"><span id="phase-label"></span><span id="time">00:00</span></div>
+      <div class="enemy-status"><p class="eyebrow" id="enemy-rank">MANIFESTATION DU NÉANT</p><h2 id="enemy-name"></h2><div class="healthbar enemy-bar"><i id="enemy-hp"></i></div><small id="enemy-health"></small></div>
+      <div id="fighters" class="fighters"></div>
+      <div id="echo" class="echo" aria-hidden="true"><div class="echo-ring"></div><div class="echo-ring second"></div><div class="echo-core"></div><div class="echo-base"></div></div>
+      <div id="vfx" class="vfx" aria-hidden="true"></div>
+      <div class="arena-bottom"><span id="arena-caption">Les Mythiques attendent votre signal.</span><span>RUINES DE L’AUBE</span></div>
+      <div id="danger" class="danger" role="status" aria-live="polite" hidden><span>⚠</span><div><strong id="danger-name"></strong><small id="danger-target"></small><div class="healthbar"><i id="danger-bar"></i></div></div><b id="danger-count"></b></div>
+      <div id="pause-banner" class="pause-banner" hidden><strong>Le temps est suspendu.</strong><span>Changez de héros, préparez votre prochaine action.</span><button id="resume" class="primary">Reprendre</button></div>
+    </section>
+    <section class="command" aria-label="Commandes de l’équipe">
+      <div class="command-heading"><p class="eyebrow">VOTRE ÉQUIPE <span>· FLÈCHES POUR CHANGER DE HÉROS</span></p><label><input id="motion" type="checkbox" checked> Héros animés</label><label><input id="layers-mode" type="checkbox" checked disabled> Articulation de Séraphine</label><label><input id="auto" type="checkbox" checked> Attaques de base assistées</label></div>
+      <div id="team" class="team"></div>
+      <div class="skill-heading"><h2 id="selected-name"></h2><span id="selected-role"></span><span id="energy-label"></span></div>
+      <div class="actions"><div id="skills" class="skills"></div><button id="guard" class="guard"><span class="key">ESPACE</span><strong>Garde d’équipe</strong><p>−65 % de dégâts pendant 3 s.<br>À déclencher avant l’impact.</p><small id="guard-state">Prête · recharge 12 s</small></button></div>
+      <p id="feedback" class="feedback" role="status" aria-live="polite">Sélectionnez un héros et lancez l’épreuve.</p>
+    </section>
+    <footer><span>SÉRAPHINE SUR CALQUES · ANIMATIONS EN REVUE</span><details><summary>Commandes et fonctionnement</summary><p>← → : héros · 1 / 2 / 3 : compétences · Espace : garde · P : pause. Les attaques assistées utilisent uniquement la compétence de base. Gérez les soins, interruptions et ultimes. Une pause automatique protège la partie quand vous quittez l’onglet. Entre deux phases, les survivants récupèrent 15 % de leur vie maximale. Les héros tombés ne sont pas ressuscités. L’option Héros animés active les mouvements. Séraphine articulée utilise le corps reconstruit et le bras/épée séparé ; décochez cette option pour comparer au maillage précédent. Coude et poignet restent solidaires, animations et fidélité en revue.</p></details></footer>
+  </main>
+  <dialog id="briefing"><p class="eyebrow">SHADOW ECHOES · ÉPREUVE 01</p><h2>Entendez-vous<br><em>leur appel ?</em></h2><p>Au pied de la citadelle, une faille réveille les souvenirs du monde brisé. Séraphine, Nyxara, Lysael et Voren devront unir leurs pouvoirs pour la refermer.</p><div class="brief-facts"><span><b>04</b> Mythiques</span><span><b>03</b> Phases</span><span><b>01</b> Serment</span></div><div class="battle-rule-link"><a href="./citadel.html#codex" target="_blank" rel="noopener">Grimoire : ennemis, pouvoirs & règles ↗</a></div><p class="tip"><b>1 : attaque de base · 2 : compétence · 3 : super (100 énergie) · Espace : garde.</b><br>Les attaques de base sont assistées. À vous de choisir les compétences, de protéger l’équipe et d’interrompre les coups dangereux.</p><p id="saved-record" class="record"></p><button id="start" class="primary">Entrer dans les ruines <span>→</span></button><a class="minor" href="./heroes.html">Revoir les héros et leurs références</a></dialog>
+  <dialog id="result"><p class="eyebrow" id="result-kicker"></p><h2 id="result-title"></h2><p id="result-story"></p><div id="result-stats" class="result-stats"></div><p id="save-status" class="record"></p><button id="continue" class="primary"></button><button id="return" class="secondary">Retour à la préparation</button></dialog>
+  <script type="module" src="./battle-app.mjs"></script>
+</body>
+</html>

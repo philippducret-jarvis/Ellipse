@@ -2,7 +2,7 @@
  * Génère un bundle preview HTML5 générique depuis le GDL workspace (tous genres 2D).
  */
 import { existsSync } from 'node:fs';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { copyFile, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import {
   GameDefinitionSchema,
@@ -15,11 +15,14 @@ export interface PreviewBuildResult {
   exportDir: string;
   previewHtml: string;
   previewUrl: string;
-  mode: 'survivors' | 'topdown' | 'platformer';
+  mode: 'survivors' | 'topdown' | 'platformer' | 'merge_drop';
 }
 
-function detectMode(gdl: { systems?: string[] }): 'survivors' | 'topdown' | 'platformer' {
+function detectMode(gdl: { systems?: string[] }): 'survivors' | 'topdown' | 'platformer' | 'merge_drop' {
   const systems = gdl.systems ?? [];
+  if (systems.includes('merge_drop_physics')) {
+    return 'merge_drop';
+  }
   if (systems.some((s) => ['lane_runner', 'wave_spawner', 'blessing_draft'].includes(s))) {
     return 'survivors';
   }
@@ -29,8 +32,12 @@ function detectMode(gdl: { systems?: string[] }): 'survivors' | 'topdown' | 'pla
   return 'platformer';
 }
 
+export function previewGdlRelativeUrl(slug: string): string {
+  return '../../' + resolveGdlPreviewRelativePath(slug).replace(/\\/g, '/');
+}
+
 function buildHtml(title: string, slug: string, mode: string): string {
-  const gdlRel = '../' + resolveGdlPreviewRelativePath(slug).replace(/\\/g, '/');
+  const gdlRel = previewGdlRelativeUrl(slug);
   return `<!doctype html>
 <html lang="fr">
   <head>
@@ -45,7 +52,7 @@ function buildHtml(title: string, slug: string, mode: string): string {
         <div>
           <p class="eyebrow">Ellipse · preview HD 2D</p>
           <h1>${title}</h1>
-          <p class="lede" id="lede">Mode ${mode} · flèches ou WASD · ${mode === 'survivors' ? 'touches 1-3 bénédictions' : mode === 'platformer' ? 'Espace saut' : 'exploration top-down'}</p>
+          <p class="lede" id="lede">Mode ${mode} · ${mode === 'merge_drop' ? 'toucher pour lacher, ESPACE pouvoir, G invocation' : mode === 'survivors' ? 'flèches ou WASD, touches 1-3 bénédictions' : mode === 'platformer' ? 'flèches ou WASD, Espace saut' : 'flèches ou WASD, exploration top-down'}</p>
         </div>
         <div class="stats" id="stats"></div>
       </section>
@@ -83,7 +90,14 @@ body {
 .stat-chip { padding: 6px 10px; border: 1px solid rgba(201, 162, 39, 0.35); border-radius: 999px; font-size: 0.82rem; }
 .canvas-panel { display: flex; flex-direction: column; align-items: center; gap: 8px; }
 canvas { width: min(100%, 360px); height: auto; border: 1px solid rgba(201, 162, 39, 0.25); border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.45); background: #120f18; }
+.merge-host { width: min(100%, 420px); }
+.merge-host canvas { width: 100%; display: block; }
 .status-bar { font-size: 0.85rem; color: var(--muted); text-align: center; min-height: 1.2em; }
+@media (max-width: 480px) {
+  .app-shell { padding: 0; }
+  .hud-panel, .status-bar { padding: 12px; }
+  .merge-host { width: 100%; }
+}
 `;
 
 const PREVIEW_JS = `const meta = JSON.parse(document.getElementById('ellipse-meta').textContent);
@@ -115,6 +129,23 @@ function isSurvivors(gdl) {
 
 function isTopdown(gdl) {
   return (gdl.systems || []).includes('physics_topdown');
+}
+
+function isMergeDrop(gdl) {
+  return (gdl.systems || []).includes('merge_drop_physics');
+}
+
+async function initMergeDrop(gdl) {
+  canvas.style.display = 'none';
+  const host = document.createElement('div');
+  host.className = 'merge-host';
+  canvas.before(host);
+  const { MergeDropEngine } = await import('./engine/ellipse-engine.js');
+  const engine = new MergeDropEngine();
+  await engine.init({ container: host, width: canvas.width, height: canvas.height });
+  await engine.loadGDL(gdl);
+  statsEl.replaceChildren(chip('Mode', 'Fusion'), chip('Sauvegarde', 'Locale'));
+  statusEl.textContent = 'Orbes: toucher pour lacher, ESPACE pouvoir, G invocation';
 }
 
 function resizeCanvas(gdl) {
@@ -382,9 +413,10 @@ function initSurvivors(gdl) {
   tick();
 }
 
-loadGdl().then(gdl => {
+loadGdl().then(async gdl => {
   resizeCanvas(gdl);
-  if (isSurvivors(gdl)) initSurvivors(gdl);
+  if (isMergeDrop(gdl)) await initMergeDrop(gdl);
+  else if (isSurvivors(gdl)) initSurvivors(gdl);
   else if (isTopdown(gdl)) initTopdown(gdl);
   else initPlatformer(gdl);
 }).catch(err => { statusEl.textContent = 'Erreur: ' + err.message; });
@@ -413,6 +445,15 @@ export async function buildGenericPreviewBundle(
   await writeFile(previewHtml, buildHtml(title, slug, mode));
   await writeFile(join(exportDir, 'preview.css'), PREVIEW_CSS);
   await writeFile(join(exportDir, 'preview.js'), PREVIEW_JS);
+  if (mode === 'merge_drop') {
+    const engineDir = join(exportDir, 'engine');
+    const browserBundle = join(workspaceRoot, '..', '..', 'packages', 'engine', 'dist-browser', 'ellipse-engine.js');
+    if (!existsSync(browserBundle)) {
+      throw new Error('Bundle navigateur @ellipse/engine absent. Executer le build du moteur avant export.');
+    }
+    await mkdir(engineDir, { recursive: true });
+    await copyFile(browserBundle, join(engineDir, 'ellipse-engine.js'));
+  }
 
   const manifest = {
     generated_at: new Date().toISOString(),

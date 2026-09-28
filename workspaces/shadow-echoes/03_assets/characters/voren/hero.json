@@ -1,0 +1,76 @@
+{
+  "id": "voren",
+  "name": "Voren",
+  "title": "Empereur des Cendres",
+  "rarity": "mythique",
+  "element": "Feu · Ténèbres",
+  "role": "Guerrier · berserker",
+  "accent": "#f1985b",
+  "symbol": "♜",
+  "quote": "Tout brûle. Et des cendres naît mon empire.",
+  "description": "Un souverain de cendre, cuirassé de métal volcanique. Son immense hache ouvre la voie au milieu des braises.",
+  "reference": "partie-2/fiche_héros_gothique_de_voren.png",
+  "board": "partie-1/voren_empereur_des_cendres.png",
+  "invariants": [
+    "Longue chevelure argentée, couronne noire embrasée",
+    "Torse découvert et proportions puissantes de la référence",
+    "Armure volcanique noire, bordures d’or et fissures de braise",
+    "Grande hache, cape rouge déchirée et épaulières à pointes"
+  ],
+  "skills": [
+    {
+      "id": "axe",
+      "name": "Fendoir impérial",
+      "type": "damage",
+      "power": 160,
+      "cooldown": 1.7,
+      "energyGain": 15,
+      "description": "160 dégâts et 15 points d’énergie."
+    },
+    {
+      "id": "ashes",
+      "name": "Décret de cendres",
+      "type": "burn",
+      "power": 190,
+      "dot": 45,
+      "duration": 4,
+      "cooldown": 9,
+      "energyGain": 20,
+      "description": "190 dégâts, puis 45 dégâts de brûlure par seconde pendant 4 secondes."
+    },
+    {
+      "id": "empire",
+      "name": "L’Empire renaît",
+      "type": "fortifiedStrike",
+      "power": 620,
+      "shield": 480,
+      "cooldown": 18,
+      "cost": 100,
+      "description": "620 dégâts et 480 points de bouclier pour Voren. Coût : 100 énergie."
+    }
+  ],
+  "stats": {
+    "maxHp": 3400,
+    "attack": 160,
+    "defense": 160
+  },
+  "motion_study": {
+    "stage": "deformation_study_review",
+    "rig": "03_assets/characters/voren/mesh-rig-v1.json",
+    "qa": "03_assets/characters/voren/mesh-qa-v1.json",
+    "fidelity_approved": false
+  },
+  "presentation": "03_assets/characters/voren/presentation-v1.png",
+  "source_reference": "01_inputs/references/partie-2/fiche_héros_gothique_de_voren.png",
+  "rarity_evidence": {
+    "method": "visual_reading",
+    "text": "Mythique",
+    "source": "01_inputs/references/partie-2/fiche_héros_gothique_de_voren.png"
+  },
+  "quality_target": "Fidélité aux designs fournis : identité, proportions, costume, matériaux et finesse.",
+  "production_stage": "hd_base_review",
+  "skill_status": "prototype_proposal",
+  "rig": null,
+  "animations": [],
+  "qa": "03_assets/characters/voren/qa-v1.json"
+}

@@ -1,0 +1,41 @@
+{
+  "guardian": "talos",
+  "displayName": "Talos",
+  "adultConfirmed": true,
+  "presentation": "homme",
+  "element": "Métal",
+  "role": "Contrôle",
+  "status": "integration_ready_humanoid_base",
+  "bodySource": "MPFB 2.0.17 / MakeHuman CC0",
+  "blender": "4.5.10 LTS",
+  "dimensionsMeters": [
+    0.713,
+    0.3012,
+    1.5141
+  ],
+  "meshObjects": 25,
+  "trianglesBeforeExportModifiers": 95760,
+  "deformBones": 55,
+  "animationClips": [
+    "talos_Idle_Glamour"
+  ],
+  "sockets": [
+    "socket_weapon_r",
+    "socket_artifact_l",
+    "socket_back",
+    "socket_head_fx"
+  ],
+  "glbBytes": 9962540,
+  "qualityGate": {
+    "realHumanoidTopology": true,
+    "gameEngineRig": true,
+    "texturedSkin": true,
+    "eyesHairTeeth": true,
+    "customAstraCostume": true,
+    "signatureWeapon": true,
+    "roundTripPending": true,
+    "commercialFinalSculpt": false,
+    "fullAnimationSet": false,
+    "finalLods": false
+  }
+}

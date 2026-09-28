@@ -1,0 +1,136 @@
+{
+  "id": "citadelle-06",
+  "user_lot": 2,
+  "title": "Les Gardiens — deuxième lot",
+  "status": "playable_second_lot",
+  "updated_at": "2026-09-27T22:38:51.817Z",
+  "modes": [
+    {
+      "id": "campaign",
+      "name": "Campagne",
+      "levels": 1
+    },
+    {
+      "id": "survival",
+      "name": "Survie des ombres",
+      "levels": 1
+    },
+    {
+      "id": "expedition",
+      "name": "Expédition",
+      "levels": 1
+    },
+    {
+      "id": "caravan",
+      "name": "Défense de caravane",
+      "levels": 1
+    },
+    {
+      "id": "race",
+      "name": "Course de montures",
+      "levels": 1
+    },
+    {
+      "id": "fishing",
+      "name": "Pêche maudite",
+      "levels": 1
+    },
+    {
+      "id": "dice",
+      "name": "Les dés du destin",
+      "levels": 1
+    },
+    {
+      "id": "memory",
+      "name": "Échos de mémoire",
+      "levels": 1
+    },
+    {
+      "id": "runes",
+      "name": "Sanctuaire des runes",
+      "levels": 1
+    },
+    {
+      "id": "alchemy",
+      "name": "Alchimie",
+      "levels": 1
+    }
+  ],
+  "heroes": 4,
+  "relics": 6,
+  "equipment": 9,
+  "enemies": 3,
+  "rituals": [
+    {
+      "id": 1,
+      "name": "Appel",
+      "cost": 1,
+      "fragments": 20,
+      "duration": 4200,
+      "description": "Le sceau s’ouvre. Une silhouette répond."
+    },
+    {
+      "id": 2,
+      "name": "Résonance",
+      "cost": 2,
+      "fragments": 45,
+      "duration": 6000,
+      "description": "Deux cercles se rejoignent. Le voile se déchire."
+    },
+    {
+      "id": 3,
+      "name": "Convergence",
+      "cost": 3,
+      "fragments": 75,
+      "duration": 7800,
+      "description": "La constellation s’aligne. Le Mythique se manifeste."
+    }
+  ],
+  "progression": {
+    "maxLevel": 30,
+    "ascensions": 2,
+    "talentsPerHero": 9,
+    "ranksPerTalent": 3,
+    "equipmentMaxRank": 3
+  },
+  "features": [
+    "Fiches avec navigation latérale",
+    "Trois gardiens illustrés et animés",
+    "Bases, compétences et supers en campagne et action",
+    "Trois scripts d’invocation",
+    "Équipement, transfert et amélioration",
+    "XP des héros, paliers et ascension",
+    "Talents sélectionnables et bonus effectifs",
+    "Transitions et gestes d’attente",
+    "Migration des anciens carnets"
+  ],
+  "assets": [
+    {
+      "path": "03_assets/environments/citadel-v1.png",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "c7446f4a62d3abc389448f03fc7a96aa5d87ad1bd3a6db1ada6574abbfe8aff8"
+    },
+    {
+      "path": "03_assets/items/citadel-atlas-v1.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "e43509f936ff1c444ba3a12b270fdd395abd6d8ebb1eff4529eefd7187638be0"
+    },
+    {
+      "path": "03_assets/enemies/guardians-v2.png",
+      "width": 2172,
+      "height": 724,
+      "sha256": "869f1fa538de81461b29b342f7b6beeeb5d3fc136cb832f10a779541213827b7"
+    },
+    {
+      "path": "03_assets/items/equipment-atlas-v1.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "6d13e7b0773abb350947b3224bd493ae9b1cb0c23bc2f86e3943fe5b311b82e8"
+    }
+  ],
+  "scope": "Solo local, quatre Mythiques, aucun achat réel",
+  "quality_status": "Fonctionnalités jouables ; direction artistique en revue. Animation hybride maillage/calques/effets ; rigs anatomiques complets et fidélité finale aux planches non certifiés.",
+  "qa_report": "02_production/lot-06/validation.json"
+}

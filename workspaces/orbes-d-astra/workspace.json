@@ -1,0 +1,14 @@
+{
+  "project_id": "3d1dd85e-0f06-452d-9979-b31938df6300",
+  "slug": "orbes-d-astra",
+  "title": "Orbes d'Astra",
+  "status": "playable_hd",
+  "dimension": "2d",
+  "genre": "merge_drop_gacha",
+  "runtime": "merge_drop_engine",
+  "camera_mode": "responsive_desktop_mobile_stage",
+  "preview_url": "/workspaces/orbes-d-astra/07_exports/web/index.html",
+  "gdl_url": "/workspaces/orbes-d-astra/05_runtime/gdl/orbes.preview.gdl.json",
+  "created_at": "2026-07-15T21:34:07.248Z",
+  "updated_at": "2026-07-29T12:12:05.755Z"
+}

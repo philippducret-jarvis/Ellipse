@@ -1,0 +1,41 @@
+{
+  "guardian": "rhea",
+  "displayName": "Rhéa",
+  "adultConfirmed": true,
+  "presentation": "femme",
+  "element": "Eau",
+  "role": "Combo",
+  "status": "integration_ready_humanoid_base",
+  "bodySource": "MPFB 2.0.17 / MakeHuman CC0",
+  "blender": "4.5.10 LTS",
+  "dimensionsMeters": [
+    0.5947,
+    0.2804,
+    1.5545
+  ],
+  "meshObjects": 25,
+  "trianglesBeforeExportModifiers": 95662,
+  "deformBones": 55,
+  "animationClips": [
+    "rhea_Idle_Glamour"
+  ],
+  "sockets": [
+    "socket_weapon_r",
+    "socket_artifact_l",
+    "socket_back",
+    "socket_head_fx"
+  ],
+  "glbBytes": 11862884,
+  "qualityGate": {
+    "realHumanoidTopology": true,
+    "gameEngineRig": true,
+    "texturedSkin": true,
+    "eyesHairTeeth": true,
+    "customAstraCostume": true,
+    "signatureWeapon": true,
+    "roundTripPending": true,
+    "commercialFinalSculpt": false,
+    "fullAnimationSet": false,
+    "finalLods": false
+  }
+}

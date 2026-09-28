@@ -1,0 +1,443 @@
+{
+  "schema": "orbes.astra.summons.v2",
+  "status": "integration_ready",
+  "items": [
+    {
+      "id": "astral_koi",
+      "displayName": "Koï astral",
+      "affinity": "Cosmos",
+      "kind": "rigged_familiar",
+      "status": "integration_ready_animated_source",
+      "sourceLicense": "CC0",
+      "sourcePack": "Quaternius Cute Animated Monsters Pack",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/astral_koi/astral_koi_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/astral_koi/astral_koi_lod0.glb",
+      "runtime": "res://assets/3d/summons_v2/astral_koi/astral_koi_lod0.glb",
+      "animations": [
+        "Bite_Front",
+        "Bite_InPlace",
+        "Dance",
+        "Death",
+        "HitRecieve",
+        "Idle",
+        "Jump",
+        "No",
+        "Walk",
+        "Yes"
+      ],
+      "detachedMissingImages": [],
+      "deformBones": 7,
+      "triangles": 1000,
+      "bytes": 349764,
+      "commercialFinal": false
+    },
+    {
+      "id": "clock_drake",
+      "displayName": "Drake horloge",
+      "affinity": "Temps",
+      "kind": "rigged_familiar",
+      "status": "integration_ready_animated_source",
+      "sourceLicense": "CC0",
+      "sourcePack": "Quaternius Cute Animated Monsters Pack",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/clock_drake/clock_drake_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/clock_drake/clock_drake_lod0.glb",
+      "runtime": "res://assets/3d/summons_v2/clock_drake/clock_drake_lod0.glb",
+      "animations": [
+        "Bite_Front",
+        "Death",
+        "Flying",
+        "HitRecieve"
+      ],
+      "detachedMissingImages": [],
+      "deformBones": 17,
+      "triangles": 1592,
+      "bytes": 464528,
+      "commercialFinal": false
+    },
+    {
+      "id": "crystal_fox",
+      "displayName": "Renard de cristal",
+      "affinity": "Cristal",
+      "kind": "rigged_familiar",
+      "status": "integration_ready_animated_source",
+      "sourceLicense": "CC0",
+      "sourcePack": "Quaternius Cute Animated Monsters Pack",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/crystal_fox/crystal_fox_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/crystal_fox/crystal_fox_lod0.glb",
+      "runtime": "res://assets/3d/summons_v2/crystal_fox/crystal_fox_lod0.glb",
+      "animations": [
+        "Bite_Front",
+        "Bite_InPlace",
+        "Dance",
+        "Death",
+        "HitRecieve",
+        "Idle",
+        "Jump",
+        "No",
+        "Walk",
+        "Yes"
+      ],
+      "detachedMissingImages": [
+        "Panda_Texture.png.001",
+        "Texture.png"
+      ],
+      "deformBones": 7,
+      "triangles": 1428,
+      "bytes": 241544,
+      "commercialFinal": false
+    },
+    {
+      "id": "ember_moth",
+      "displayName": "Phalène braise",
+      "affinity": "Feu",
+      "kind": "rigged_familiar",
+      "status": "integration_ready_animated_source",
+      "sourceLicense": "CC0",
+      "sourcePack": "Quaternius Cute Animated Monsters Pack",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/ember_moth/ember_moth_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/ember_moth/ember_moth_lod0.glb",
+      "runtime": "res://assets/3d/summons_v2/ember_moth/ember_moth_lod0.glb",
+      "animations": [
+        "Bite_Front",
+        "Death",
+        "Flying",
+        "HitRecieve"
+      ],
+      "detachedMissingImages": [],
+      "deformBones": 15,
+      "triangles": 1200,
+      "bytes": 393248,
+      "commercialFinal": false
+    },
+    {
+      "id": "forge_sprite",
+      "displayName": "Sprite de forge",
+      "affinity": "Feu",
+      "kind": "rigged_familiar",
+      "status": "integration_ready_animated_source",
+      "sourceLicense": "CC0",
+      "sourcePack": "Quaternius Cute Animated Monsters Pack",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/forge_sprite/forge_sprite_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/forge_sprite/forge_sprite_lod0.glb",
+      "runtime": "res://assets/3d/summons_v2/forge_sprite/forge_sprite_lod0.glb",
+      "animations": [
+        "Bite_Front",
+        "Bite_InPlace",
+        "Dance",
+        "Death",
+        "HitRecieve",
+        "Idle",
+        "Jump",
+        "No",
+        "Walk",
+        "Yes"
+      ],
+      "detachedMissingImages": [],
+      "deformBones": 7,
+      "triangles": 1640,
+      "bytes": 440620,
+      "commercialFinal": false
+    },
+    {
+      "id": "luma",
+      "displayName": "Luma",
+      "affinity": "Solaire",
+      "kind": "rigged_familiar",
+      "status": "integration_ready_animated_source",
+      "sourceLicense": "CC0",
+      "sourcePack": "Quaternius Cute Animated Monsters Pack",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/luma/luma_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/luma/luma_lod0.glb",
+      "runtime": "res://assets/3d/summons_v2/luma/luma_lod0.glb",
+      "animations": [
+        "Bite_Front",
+        "Death",
+        "Flying",
+        "HitRecieve"
+      ],
+      "detachedMissingImages": [],
+      "deformBones": 9,
+      "triangles": 1492,
+      "bytes": 376508,
+      "commercialFinal": false
+    },
+    {
+      "id": "moon_hare",
+      "displayName": "Lièvre lunaire",
+      "affinity": "Lune",
+      "kind": "rigged_familiar",
+      "status": "integration_ready_animated_source",
+      "sourceLicense": "CC0",
+      "sourcePack": "Quaternius Cute Animated Monsters Pack",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/moon_hare/moon_hare_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/moon_hare/moon_hare_lod0.glb",
+      "runtime": "res://assets/3d/summons_v2/moon_hare/moon_hare_lod0.glb",
+      "animations": [
+        "Bite_Front",
+        "Bite_InPlace",
+        "Dance",
+        "Death",
+        "HitRecieve",
+        "Idle",
+        "Jump",
+        "No",
+        "Walk",
+        "Yes"
+      ],
+      "detachedMissingImages": [],
+      "deformBones": 5,
+      "triangles": 1180,
+      "bytes": 439124,
+      "commercialFinal": false
+    },
+    {
+      "id": "nebulin",
+      "displayName": "Nebulin",
+      "affinity": "Nexus",
+      "kind": "rigged_familiar",
+      "status": "integration_ready_animated_source",
+      "sourceLicense": "CC0",
+      "sourcePack": "Quaternius Cute Animated Monsters Pack",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/nebulin/nebulin_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/nebulin/nebulin_lod0.glb",
+      "runtime": "res://assets/3d/summons_v2/nebulin/nebulin_lod0.glb",
+      "animations": [
+        "Bite_Front",
+        "Bite_InPlace",
+        "Dance",
+        "Death",
+        "HitRecieve",
+        "Idle",
+        "Jump",
+        "No",
+        "Walk",
+        "Yes"
+      ],
+      "detachedMissingImages": [],
+      "deformBones": 7,
+      "triangles": 1720,
+      "bytes": 432100,
+      "commercialFinal": false
+    },
+    {
+      "id": "nexus_whale",
+      "displayName": "Baleine du Nexus",
+      "affinity": "Nexus",
+      "kind": "rigged_familiar",
+      "status": "integration_ready_animated_source",
+      "sourceLicense": "CC0",
+      "sourcePack": "Quaternius Cute Animated Monsters Pack",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/nexus_whale/nexus_whale_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/nexus_whale/nexus_whale_lod0.glb",
+      "runtime": "res://assets/3d/summons_v2/nexus_whale/nexus_whale_lod0.glb",
+      "animations": [
+        "Bite_Front",
+        "Death",
+        "Flying",
+        "HitRecieve"
+      ],
+      "detachedMissingImages": [],
+      "deformBones": 16,
+      "triangles": 1576,
+      "bytes": 420888,
+      "commercialFinal": false
+    },
+    {
+      "id": "solar_bird",
+      "displayName": "Oiseau solaire",
+      "affinity": "Solaire",
+      "kind": "rigged_familiar",
+      "status": "integration_ready_animated_source",
+      "sourceLicense": "CC0",
+      "sourcePack": "Quaternius Cute Animated Monsters Pack",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/solar_bird/solar_bird_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/solar_bird/solar_bird_lod0.glb",
+      "runtime": "res://assets/3d/summons_v2/solar_bird/solar_bird_lod0.glb",
+      "animations": [
+        "Bite_Front",
+        "Bite_InPlace",
+        "Dance",
+        "Death",
+        "HitRecieve",
+        "Idle",
+        "Jump",
+        "No",
+        "Walk",
+        "Yes"
+      ],
+      "detachedMissingImages": [
+        "Texture.png"
+      ],
+      "deformBones": 6,
+      "triangles": 1040,
+      "bytes": 417584,
+      "commercialFinal": false
+    },
+    {
+      "id": "tide_otter",
+      "displayName": "Loutre des marées",
+      "affinity": "Eau",
+      "kind": "rigged_familiar",
+      "status": "integration_ready_animated_source",
+      "sourceLicense": "CC0",
+      "sourcePack": "Quaternius Cute Animated Monsters Pack",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/tide_otter/tide_otter_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/tide_otter/tide_otter_lod0.glb",
+      "runtime": "res://assets/3d/summons_v2/tide_otter/tide_otter_lod0.glb",
+      "animations": [
+        "Bite_Front",
+        "Bite_InPlace",
+        "Dance",
+        "Death",
+        "HitRecieve",
+        "Idle",
+        "Jump",
+        "No",
+        "Walk",
+        "Yes"
+      ],
+      "detachedMissingImages": [
+        "Texture.png"
+      ],
+      "deformBones": 6,
+      "triangles": 1040,
+      "bytes": 344076,
+      "commercialFinal": false
+    },
+    {
+      "id": "void_cat",
+      "displayName": "Chat du vide",
+      "affinity": "Vide",
+      "kind": "rigged_familiar",
+      "status": "integration_ready_animated_source",
+      "sourceLicense": "CC0",
+      "sourcePack": "Quaternius Cute Animated Monsters Pack",
+      "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/void_cat/void_cat_source.blend",
+      "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/void_cat/void_cat_lod0.glb",
+      "runtime": "res://assets/3d/summons_v2/void_cat/void_cat_lod0.glb",
+      "animations": [
+        "Bite_Front",
+        "Bite_InPlace",
+        "Dance",
+        "Death",
+        "HitRecieve",
+        "Idle",
+        "Jump",
+        "No",
+        "Walk",
+        "Yes"
+      ],
+      "detachedMissingImages": [
+        "GreenDemon_Texture.png.001"
+      ],
+      "deformBones": 7,
+      "triangles": 1280,
+      "bytes": 233032,
+      "commercialFinal": false
+    }
+  ],
+  "livingOrbs": [
+    {
+      "id": "orb_comet",
+      "kind": "living_orb",
+      "source": "workspaces/orbes-d-astra/03_assets/3d/catalog_v1/summons/orbs/orb_comet.glb",
+      "runtime": "res://assets/3d/summons/orb_comet.glb",
+      "metrics": {
+        "meshes": 10,
+        "triangles": 1862,
+        "bytes": 58436
+      },
+      "status": "stylized_orb_validated"
+    },
+    {
+      "id": "orb_crown",
+      "kind": "living_orb",
+      "source": "workspaces/orbes-d-astra/03_assets/3d/catalog_v1/summons/orbs/orb_crown.glb",
+      "runtime": "res://assets/3d/summons/orb_crown.glb",
+      "metrics": {
+        "meshes": 12,
+        "triangles": 1898,
+        "bytes": 61268
+      },
+      "status": "stylized_orb_validated"
+    },
+    {
+      "id": "orb_dew",
+      "kind": "living_orb",
+      "source": "workspaces/orbes-d-astra/03_assets/3d/catalog_v1/summons/orbs/orb_dew.glb",
+      "runtime": "res://assets/3d/summons/orb_dew.glb",
+      "metrics": {
+        "meshes": 8,
+        "triangles": 1826,
+        "bytes": 55580
+      },
+      "status": "stylized_orb_validated"
+    },
+    {
+      "id": "orb_moon",
+      "kind": "living_orb",
+      "source": "workspaces/orbes-d-astra/03_assets/3d/catalog_v1/summons/orbs/orb_moon.glb",
+      "runtime": "res://assets/3d/summons/orb_moon.glb",
+      "metrics": {
+        "meshes": 9,
+        "triangles": 1844,
+        "bytes": 56960
+      },
+      "status": "stylized_orb_validated"
+    },
+    {
+      "id": "orb_nexus",
+      "kind": "living_orb",
+      "source": "workspaces/orbes-d-astra/03_assets/3d/catalog_v1/summons/orbs/orb_nexus.glb",
+      "runtime": "res://assets/3d/summons/orb_nexus.glb",
+      "metrics": {
+        "meshes": 14,
+        "triangles": 1934,
+        "bytes": 64160
+      },
+      "status": "stylized_orb_validated"
+    },
+    {
+      "id": "orb_spark",
+      "kind": "living_orb",
+      "source": "workspaces/orbes-d-astra/03_assets/3d/catalog_v1/summons/orbs/orb_spark.glb",
+      "runtime": "res://assets/3d/summons/orb_spark.glb",
+      "metrics": {
+        "meshes": 7,
+        "triangles": 1808,
+        "bytes": 54136
+      },
+      "status": "stylized_orb_validated"
+    },
+    {
+      "id": "orb_sun",
+      "kind": "living_orb",
+      "source": "workspaces/orbes-d-astra/03_assets/3d/catalog_v1/summons/orbs/orb_sun.glb",
+      "runtime": "res://assets/3d/summons/orb_sun.glb",
+      "metrics": {
+        "meshes": 11,
+        "triangles": 1880,
+        "bytes": 59836
+      },
+      "status": "stylized_orb_validated"
+    },
+    {
+      "id": "orb_world",
+      "kind": "living_orb",
+      "source": "workspaces/orbes-d-astra/03_assets/3d/catalog_v1/summons/orbs/orb_world.glb",
+      "runtime": "res://assets/3d/summons/orb_world.glb",
+      "metrics": {
+        "meshes": 13,
+        "triangles": 1916,
+        "bytes": 62660
+      },
+      "status": "stylized_orb_validated"
+    }
+  ],
+  "summary": {
+    "familiars": 12,
+    "livingOrbs": 8,
+    "animations": 96,
+    "bytes": 5026052
+  }
+}

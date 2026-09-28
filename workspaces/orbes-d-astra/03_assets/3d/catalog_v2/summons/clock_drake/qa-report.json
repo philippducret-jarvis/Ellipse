@@ -1,0 +1,23 @@
+{
+  "id": "clock_drake",
+  "displayName": "Drake horloge",
+  "affinity": "Temps",
+  "kind": "rigged_familiar",
+  "status": "integration_ready_animated_source",
+  "sourceLicense": "CC0",
+  "sourcePack": "Quaternius Cute Animated Monsters Pack",
+  "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/clock_drake/clock_drake_source.blend",
+  "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/clock_drake/clock_drake_lod0.glb",
+  "runtime": "res://assets/3d/summons_v2/clock_drake/clock_drake_lod0.glb",
+  "animations": [
+    "Bite_Front",
+    "Death",
+    "Flying",
+    "HitRecieve"
+  ],
+  "detachedMissingImages": [],
+  "deformBones": 17,
+  "triangles": 1592,
+  "bytes": 464528,
+  "commercialFinal": false
+}

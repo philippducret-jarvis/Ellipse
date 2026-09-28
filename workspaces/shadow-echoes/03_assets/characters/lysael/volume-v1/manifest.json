@@ -1,0 +1,10 @@
+{
+  "hero": "lysael",
+  "path": "03_assets/characters/lysael/volume-v1/hero.glb",
+  "bytes": 12678088,
+  "nodes": 196,
+  "meshes": 124,
+  "clips": 42,
+  "representation": "Hierarchical articulated meshes; rigid attachment at joints, no continuous skin weights",
+  "quality": "Procedural volume study; not final reference-quality art"
+}

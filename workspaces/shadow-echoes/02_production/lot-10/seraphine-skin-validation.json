@@ -1,0 +1,59 @@
+{
+  "model": "C:\\Users\\phili\\Desktop\\Projet Ellipse\\workspaces\\shadow-echoes\\03_assets\\characters\\seraphine\\modeling\\seraphine-skin-pilot.glb",
+  "skin_count": 1,
+  "mesh_count": 2,
+  "skinned_vertices": 188201,
+  "bones": 72,
+  "clips": {
+    "idle": {
+      "frames": [
+        0,
+        96
+      ],
+      "median_vertex_displacement_m": 0.0049,
+      "max_vertex_displacement_m": 0.1687
+    },
+    "walk": {
+      "frames": [
+        0,
+        26
+      ],
+      "median_vertex_displacement_m": 0.0051,
+      "max_vertex_displacement_m": 0.063
+    },
+    "attack1": {
+      "frames": [
+        0,
+        16
+      ],
+      "median_vertex_displacement_m": 0.1005,
+      "max_vertex_displacement_m": 0.561
+    },
+    "skill1Cast": {
+      "frames": [
+        0,
+        24
+      ],
+      "median_vertex_displacement_m": 0.0057,
+      "max_vertex_displacement_m": 0.6764
+    },
+    "ultimateCast": {
+      "frames": [
+        0,
+        41
+      ],
+      "median_vertex_displacement_m": 0.0033,
+      "max_vertex_displacement_m": 0.092
+    },
+    "death": {
+      "frames": [
+        0,
+        43
+      ],
+      "median_vertex_displacement_m": 0.4229,
+      "max_vertex_displacement_m": 0.6152
+    }
+  },
+  "deforms": true,
+  "plausible_deformation": true
+}

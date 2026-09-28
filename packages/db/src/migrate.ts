@@ -31,6 +31,18 @@ export async function runMigrations(): Promise<void> {
     if (alreadyApplied.rowCount && alreadyApplied.rowCount > 0) continue;
 
     const sql = readFileSync(join(migrationDir, file), 'utf-8');
-    await pool.query(sql);
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
+      await client.query(sql);
+      // Certaines migrations historiques s’enregistraient elles-mêmes, pas toutes.
+      await client.query('INSERT INTO schema_migrations (version) VALUES ($1) ON CONFLICT (version) DO NOTHING', [version]);
+      await client.query('COMMIT');
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
+    }
   }
 }

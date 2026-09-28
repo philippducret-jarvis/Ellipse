@@ -1,0 +1,10 @@
+{
+  "generated_at": "2026-07-29T12:12:06.015Z",
+  "title": "Orbes d'Astra",
+  "slug": "orbes-d-astra",
+  "flagship": true,
+  "mode": "merge_drop_engine",
+  "gdl": "./game.gdl.json",
+  "canonical_gdl": "../../05_runtime/gdl/orbes.preview.gdl.json",
+  "preview_url": "/workspaces/orbes-d-astra/07_exports/web/index.html"
+}

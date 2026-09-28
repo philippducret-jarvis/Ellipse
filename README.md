@@ -87,6 +87,8 @@ Projet Ellipse/
 
 ## Démarrage rapide (développeurs)
 
+Le dépôt de référence est [philippducret-jarvis/Ellipse](https://github.com/philippducret-jarvis/Ellipse). Les sources et assets de **Shadow Echoes** restent dans `workspaces/shadow-echoes/` ; ceux d'**Orbes d'Astra** dans `workspaces/orbes-d-astra/`. Les images, modèles 3D et fichiers Blender utilisent Git LFS : après un clone, exécutez `git lfs install` puis `git lfs pull`. Les caches Godot, sauvegardes Blender et paquets exportés se reconstruisent localement et ne sont pas versionnés.
+
 > Le socle est en cours de construction. Voir [docs/04-roadmap/PHASES.md](docs/04-roadmap/PHASES.md) pour la feuille de route.
 
 ```bash
@@ -116,6 +118,10 @@ Sans GPU : backend keyless (Pollinations/Flux). Avec ComfyUI local : bascule aut
 ---
 
 ## Documentation
+
+### Projets de jeux
+
+- [Shadow Echoes](workspaces/shadow-echoes/README.md) — RPG d’action gothique. Premier lot de quatre héros mythiques : bases HD, comparaison aux designs et banc de douze compétences. Accessible dans « Mes projets » du Studio ; personnages animés et missions à produire.
 
 | Document | Description |
 |----------|-------------|

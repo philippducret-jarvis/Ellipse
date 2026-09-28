@@ -1,0 +1,7 @@
+import {TARGET_BOARDS,TARGET_ROOT} from './target-references.mjs';
+const $=id=>document.getElementById(id);let group='Tout';
+function render(){$('filters').innerHTML=['Tout',...new Set(TARGET_BOARDS.map(b=>b.group))].map(g=>`<button data-group="${g}" aria-pressed="${g===group}">${g}</button>`).join('');$('boards').innerHTML=TARGET_BOARDS.filter(b=>group==='Tout'||b.group===group).map(b=>`<button class="target-card" data-board="${b.id}"><img src="${TARGET_ROOT+b.file}" alt="${b.name}" loading="lazy"><div><small>${b.group}</small><h2>${b.name}</h2><p>${b.note}</p></div></button>`).join('');}
+function open(id){const b=TARGET_BOARDS.find(b=>b.id===id);if(!b)return;$('board-title').textContent=b.name;$('board-image').src=TARGET_ROOT+b.file;$('board-image').alt=b.name;$('original').href=TARGET_ROOT+b.file;if(!$('board-view').open)$('board-view').showModal();}
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.group){group=b.dataset.group;render();}if(b.dataset.board)open(b.dataset.board);if(b.id==='board-close')$('board-view').close();});
+$('board-view').addEventListener('click',e=>{if(e.target===$('board-view')){const r=$('board-view').getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)$('board-view').close();}});
+render();const id=new URLSearchParams(location.search).get('board');if(id)open(id);

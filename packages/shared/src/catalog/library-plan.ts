@@ -42,6 +42,7 @@ const PROCEDURAL_FAMILIES = new Set([
   'hero', 'enemies', 'bosses', 'npcs', 'party', 'fighters', 'units', 'props', 'collectibles',
   'mushroom', 'ui_kit', 'fx', 'icons', 'items', 'loot', 'agents', 'obstacles', 'pickups',
   'craftables', 'resources', 'crates', 'interactables',
+  'orb_tiers', 'hero_portraits', 'rarity_fx', 'ability_fx', 'merge_fx',
 ]);
 
 /** Familles issues de références fournies / décor (découpe CV ou tileset). */
@@ -60,6 +61,7 @@ function recipeFor(family: string): AssetRecipe {
 /** Générateurs de cartes disponibles aujourd'hui (le reste = feuille de route T6). */
 const MAP_GENERATORS: Partial<Record<MapKind, string>> = {
   tilemap: 'world-factory',
+  board: 'merge-drop-board-factory',
 };
 
 /** Systèmes runtime déjà implémentés dans le moteur ECS (cf. mechanics-registry.ts). */

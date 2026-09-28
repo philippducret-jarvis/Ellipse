@@ -1,0 +1,27 @@
+export const MODES=[
+ {id:'campaign',name:'Campagne',place:'Le Pont des Serments',kind:'Exploration et combat en 2,5D',icon:'⚔',duration:'5–8 min',color:'#d56670',desc:'Quatre Mythiques traversent les ruines, libèrent le pont et affrontent le Gardien du Seuil.',rules:'ZQSD, WASD, flèches ou clic : déplacement. J : attaque de base. 1, 2, 3 : compétences. R : super à 100 énergie. Espace : esquive. Tab : changer de Mythique. Déjouez les zones d’impact, libérez les trois passages et vainquez le Gardien.',gold:180,relic:'rose'},
+ {id:'survival',name:'Survie des ombres',place:'La barricade assiégée',kind:'Action',icon:'♜',duration:'60 s',color:'#da9867',desc:'Tenez la cour intérieure contre trois vagues de revenants.',rules:'Déplacez-vous avec ZQSD / les flèches ou le joystick tactile. 1 : attaque de base (assistée par défaut, +12 énergie). 2 / Espace : compétence du héros (8 s). 3 : super à 100 énergie. Séraphine et Voren frappent en zone ; Nyxara immobilise ; Lysael soigne. Survivez 60 secondes.',gold:120,relic:'crown'},
+ {id:'expedition',name:'Expédition',place:'La route d’Azenval',kind:'Exploration',icon:'⌖',duration:'2 min',color:'#cab485',desc:'Choisissez votre voie à travers les terres brisées.',rules:'Traversez cinq étapes en gérant provisions et intégrité. Les choix annoncent leur coût. Rentrez avec au moins un point d’intégrité et le trésor.',gold:100},
+ {id:'caravan',name:'Défense de caravane',place:'Le pont des Veilleurs',kind:'Défense',icon:'♖',duration:'55 s',color:'#d1a66a',desc:'Les lanternes doivent atteindre les portes avant l’arrivée des ombres.',rules:'Cliquez ou touchez les spectres pour les repousser. Deux impacts les dissipent. Les impacts donnent de l’énergie. 1 : base sur la cible proche. 2 / Espace : compétence (8 s). 3 : super (100 énergie). Nyxara immobilise ; Lysael répare le convoi ; Séraphine et Voren frappent en zone. Gardez le convoi en vie 55 secondes.',gold:100},
+ {id:'race',name:'Course de montures',place:'La chevauchée écarlate',kind:'Réflexes',icon:'➳',duration:'45 s',color:'#b7a8e6',desc:'Traversez les trois allées sous la lune rouge.',rules:'Flèches haut/bas ou boutons tactiles : changez d’allée. Évitez les ombres, prenez les éclats dorés. Trois collisions sont tolérées ; franchissez la ligne à 45 secondes.',gold:100},
+ {id:'fishing',name:'Pêche maudite',place:'Le lac des Âmes',kind:'Adresse',icon:'≈',duration:'1–2 min',color:'#82c9c4',desc:'Sous les reflets de la citadelle, trois prises vous attendent.',rules:'Lancez la ligne. Ferrez quand le curseur traverse la zone dorée. Maintenez « Mouliner » pour augmenter la tension, relâchez pour la baisser. Gardez-la dans la zone verte pour remonter trois prises.',gold:90,relic:'pearl'},
+ {id:'dice',name:'Les dés du destin',place:'La taverne du Voile',kind:'Stratégie',icon:'⚄',duration:'2 min',color:'#d4ad78',desc:'La chance sourit à ceux qui savent quitter la table.',rules:'Atteignez 35 points en six manches. Chaque lancer ajoute 2 à 6 points ; un 1 perd les points de la manche. Encaissez pour sécuriser votre score. Aucune mise de monnaie.',gold:80},
+ {id:'memory',name:'Échos de mémoire',place:'La cathédrale oubliée',kind:'Mémoire',icon:'✥',duration:'2 min',color:'#ba94d6',desc:'Retrouvez les six paires scellées dans les vitraux.',rules:'Retournez deux cartes à la fois. Retrouvez les six paires en 24 essais. Les cartes restent dévoilées brièvement en cas d’erreur.',gold:80,relic:'mirror'},
+ {id:'runes',name:'Sanctuaire des runes',place:'Le sceau lunaire',kind:'Puzzle',icon:'◇',duration:'2 min',color:'#8dbbd5',desc:'Rendez la lumière aux neuf pierres du sanctuaire.',rules:'Chaque pierre inverse sa lumière et celle de ses voisines horizontales et verticales. Allumez les neuf pierres en 20 coups. Le puzzle est toujours résoluble.',gold:90,relic:'moon'},
+ {id:'alchemy',name:'Alchimie',place:'L’atelier des Racines',kind:'Observation',icon:'⚗',duration:'2 min',color:'#9fc98e',desc:'Préparez trois essences pour les gardiens de la citadelle.',rules:'Choisissez les ingrédients dans l’ordre de la recette, puis réglez la chaleur. Trois potions réussies ouvrent le coffret. La troisième erreur termine le défi.',gold:90,relic:'vial'},
+];
+export const RELICS=[
+ {id:'rose',name:'Rose de l’Abîme',index:0,stat:'attack',value:8,desc:'+8 % de dégâts',source:'Campagne'},
+ {id:'crown',name:'Couronne des Cendres',index:1,stat:'health',value:12,desc:'+12 % de vie',source:'Survie des ombres'},
+ {id:'moon',name:'Lune du Néant',index:2,stat:'attack',value:6,desc:'+6 % de dégâts',source:'Sanctuaire des runes'},
+ {id:'mirror',name:'Miroir des Échos',index:3,stat:'health',value:10,desc:'+10 % de vie',source:'Échos de mémoire'},
+ {id:'pearl',name:'Perle des Âmes',index:4,stat:'health',value:8,desc:'+8 % de vie',source:'Pêche maudite'},
+ {id:'vial',name:'Essence des Mondes',index:5,stat:'attack',value:5,desc:'+5 % de dégâts',source:'Alchimie'},
+];
+export const QUESTS=[
+ {id:'first',name:'Franchir les portes',desc:'Terminer une activité.',target:1,type:'wins',gold:100,sigils:1},
+ {id:'summon',name:'Un serment renouvelé',desc:'Invoquer un Mythique.',target:1,type:'summons',gold:80,sigils:1},
+ {id:'relic',name:'Mémoire du monde',desc:'Obtenir trois reliques.',target:3,type:'relics',gold:150,sigils:2},
+ {id:'tour',name:'Les dix chemins',desc:'Terminer les dix premiers niveaux.',target:10,type:'modes',gold:500,sigils:5},
+];
+export const ART={hub:'../../03_assets/environments/citadel-v1.png',ruins:'../../03_assets/environments/ruins-trial-v1.png',atlas:'../../03_assets/items/citadel-atlas-v1.png'};

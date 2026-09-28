@@ -1,0 +1,384 @@
+{
+  "schema": "shadow-mesh-rig-1",
+  "heroId": "seraphine",
+  "frame": {
+    "width": 1024,
+    "height": 1536,
+    "padding": 150
+  },
+  "grid": {
+    "columns": 40,
+    "rows": 60
+  },
+  "status": "deformation_study",
+  "anatomical_layers": false,
+  "texture": "../../03_assets/characters/seraphine/presentation-v1.png",
+  "bones": [
+    {
+      "id": "root",
+      "parent": null,
+      "pivot": [
+        530,
+        1450
+      ]
+    },
+    {
+      "id": "spine",
+      "parent": "root",
+      "pivot": [
+        535,
+        580
+      ]
+    },
+    {
+      "id": "head",
+      "parent": "spine",
+      "pivot": [
+        572,
+        256
+      ]
+    },
+    {
+      "id": "arm",
+      "parent": "spine",
+      "pivot": [
+        430,
+        318
+      ]
+    },
+    {
+      "id": "weapon",
+      "parent": "arm",
+      "pivot": [
+        394,
+        510
+      ]
+    },
+    {
+      "id": "capeLeft",
+      "parent": "root",
+      "pivot": [
+        390,
+        600
+      ]
+    },
+    {
+      "id": "capeRight",
+      "parent": "root",
+      "pivot": [
+        698,
+        620
+      ]
+    },
+    {
+      "id": "farArm",
+      "parent": "spine",
+      "pivot": [
+        675,
+        306
+      ]
+    }
+  ],
+  "regions": [
+    {
+      "bone": "capeLeft",
+      "polygon": [
+        [
+          238,
+          470
+        ],
+        [
+          406,
+          573
+        ],
+        [
+          405,
+          956
+        ],
+        [
+          311,
+          1317
+        ],
+        [
+          112,
+          1440
+        ],
+        [
+          40,
+          1392
+        ],
+        [
+          168,
+          973
+        ]
+      ],
+      "feather": 115,
+      "strength": 0.75
+    },
+    {
+      "bone": "capeRight",
+      "polygon": [
+        [
+          692,
+          440
+        ],
+        [
+          939,
+          598
+        ],
+        [
+          1005,
+          1455
+        ],
+        [
+          806,
+          1498
+        ],
+        [
+          644,
+          944
+        ]
+      ],
+      "feather": 115,
+      "strength": 0.75
+    },
+    {
+      "bone": "spine",
+      "polygon": [
+        [
+          350,
+          165
+        ],
+        [
+          737,
+          165
+        ],
+        [
+          751,
+          486
+        ],
+        [
+          674,
+          645
+        ],
+        [
+          437,
+          639
+        ],
+        [
+          328,
+          424
+        ]
+      ],
+      "feather": 125,
+      "strength": 1
+    },
+    {
+      "bone": "head",
+      "polygon": [
+        [
+          390,
+          0
+        ],
+        [
+          705,
+          0
+        ],
+        [
+          719,
+          267
+        ],
+        [
+          610,
+          298
+        ],
+        [
+          485,
+          260
+        ],
+        [
+          374,
+          173
+        ]
+      ],
+      "feather": 45,
+      "strength": 1
+    },
+    {
+      "bone": "farArm",
+      "polygon": [
+        [
+          626,
+          219
+        ],
+        [
+          689,
+          186
+        ],
+        [
+          751,
+          276
+        ],
+        [
+          804,
+          417
+        ],
+        [
+          749,
+          461
+        ],
+        [
+          676,
+          362
+        ]
+      ],
+      "feather": 70,
+      "strength": 0.8
+    },
+    {
+      "bone": "arm",
+      "polygon": [
+        [
+          405,
+          304
+        ],
+        [
+          474,
+          346
+        ],
+        [
+          452,
+          542
+        ],
+        [
+          394,
+          696
+        ],
+        [
+          349,
+          784
+        ],
+        [
+          313,
+          764
+        ],
+        [
+          306,
+          661
+        ],
+        [
+          342,
+          450
+        ]
+      ],
+      "feather": 65,
+      "strength": 1
+    },
+    {
+      "bone": "weapon",
+      "polygon": [
+        [
+          358,
+          650
+        ],
+        [
+          411,
+          691
+        ],
+        [
+          353,
+          799
+        ],
+        [
+          279,
+          1020
+        ],
+        [
+          100,
+          1360
+        ],
+        [
+          13,
+          1474
+        ],
+        [
+          0,
+          1413
+        ],
+        [
+          116,
+          1100
+        ],
+        [
+          259,
+          801
+        ]
+      ],
+      "feather": 85,
+      "strength": 1
+    }
+  ],
+  "motion": {
+    "attack": 1,
+    "skill": 1,
+    "ultimate": 1,
+    "cloth": 1
+  },
+  "limits": {
+    "rotation": "amplitudes limitées ; pas de changement de perspective",
+    "layers": "pas de faces cachées reconstruites"
+  },
+  "source_sha256": "8ce57c326c464177a80ec8c8944223d568aedffb9cfb114d622fa26f813d81d9",
+  "clips": [
+    {
+      "id": "neutral",
+      "label": "Pose de référence",
+      "duration": 1,
+      "loop": true
+    },
+    {
+      "id": "idle",
+      "label": "Attente",
+      "duration": 4,
+      "loop": true
+    },
+    {
+      "id": "attack",
+      "label": "Attaque",
+      "duration": 0.85,
+      "loop": false
+    },
+    {
+      "id": "skill",
+      "label": "Compétence",
+      "duration": 1.25,
+      "loop": false
+    },
+    {
+      "id": "ultimate",
+      "label": "Ultime",
+      "duration": 1.65,
+      "loop": false
+    },
+    {
+      "id": "hit",
+      "label": "Impact",
+      "duration": 0.55,
+      "loop": false
+    },
+    {
+      "id": "guard",
+      "label": "Garde",
+      "duration": 0.8,
+      "loop": false
+    },
+    {
+      "id": "defeat",
+      "label": "Affaiblissement",
+      "duration": 1.2,
+      "loop": false,
+      "hold": true
+    }
+  ],
+  "qa": "mesh-qa-v1.json"
+}

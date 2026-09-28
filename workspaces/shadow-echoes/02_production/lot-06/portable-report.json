@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "port": 4316,
+  "requires": "Node.js 22+",
+  "checks": [
+    "Redirection vers le hub autonome",
+    "Dix activités",
+    "Fiches et dépendances de progression incluses",
+    "Atlas du grimoire et équipements chargés",
+    "Invocation de convergence complète",
+    "Combat embarqué et ennemi illustré"
+  ],
+  "errors": []
+}

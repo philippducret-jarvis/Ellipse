@@ -292,17 +292,8 @@ export async function buildVeloriaGdl() {
 
   });
 
-  let integratedManifest = null;
-  try {
-    const raw = await readFile(join(WORKSPACE_ROOT, '03_assets', 'integrated', 'integrated-manifest.json'), 'utf8');
-    integratedManifest = JSON.parse(raw);
-  } catch {
-    /* scène intégrée optionnelle */
-  }
-
-  const scenesWithDepth = scenes.map((scene, index) =>
-    patchVeloriaSceneDepth(scene, index === 0 ? integratedManifest : null),
-  );
+  // La capture intégrée de la planche est une référence QA, jamais un fond de jeu.
+  const scenesWithDepth = scenes.map((scene) => patchVeloriaSceneDepth(scene, null));
 
   hazardScriptsByScene.default = HAZARD_SCRIPTS.collapsing_floor;
 
@@ -318,15 +309,26 @@ export async function buildVeloriaGdl() {
 
       title: 'Veloria — Veille des Lames',
 
+      dimension: '2.5d',
+
       resolution: [W, H],
 
-      version: '0.4.0',
+      version: '1.0.0',
 
       orientation: 'portrait',
 
       veloria_runtime: runtime,
 
       asset_atlas: registryAtlas,
+
+      asset_render_profiles: {
+        fallen_knight: { width: 158, height: 235 },
+        tomb_hound: { width: 142, height: 102 },
+        gargoyle: { width: 150, height: 145 },
+        fanatic_sister: { width: 142, height: 218 },
+        shadow_acolyte: { width: 146, height: 214 },
+        bourreau: { width: 252, height: 318 },
+      },
 
       hazard_scripts: hazardScriptsByScene,
 
@@ -398,7 +400,11 @@ export async function buildVeloriaGdl() {
 
           sprite: registryAtlas[hero.key] ?? gdlAsset(hero.preview_file),
 
-          frame_count: 11,
+          frame_count: 1,
+
+          render_width: 220,
+
+          render_height: 300,
 
         },
 
@@ -419,6 +425,44 @@ export async function buildVeloriaGdl() {
     ],
 
     scenes: scenesWithDepth,
+
+    narrative: {
+      intro: "La Veille s'ouvre. Auréline doit tenir les trois voies pendant douze vagues.",
+      quests: [
+        {
+          id: 'veloria_survive',
+          title: 'Tenir la Veille',
+          status: 'active',
+          objective: 'Survivre 12 vagues et vaincre le Bourreau du Crépuscule.',
+        },
+      ],
+      dialogues: [
+        {
+          id: 'dlg_boss_intro',
+          speaker: 'Bourreau du Crépuscule',
+          text: 'La Veille exige un tribut de sang.',
+          next: 'dlg_boss_taunt',
+        },
+        {
+          id: 'dlg_boss_taunt',
+          speaker: 'Bourreau du Crépuscule',
+          text: 'Tes lames ne suffiront pas.',
+        },
+      ],
+      npc_routines: [],
+    },
+
+    audio: {
+      bgm: gdlAsset('03_assets/audio/bgm_run_tension.wav'),
+      sfx: {
+        attack: gdlAsset('03_assets/audio/sfx_attack.wav'),
+        dash: gdlAsset('03_assets/audio/sfx_dash.wav'),
+        hit: gdlAsset('03_assets/audio/sfx_boss_hit.wav'),
+        hazard: gdlAsset('03_assets/audio/sfx_hazard.wav'),
+        blessing: gdlAsset('03_assets/audio/sfx_blessing.wav'),
+        confirm: gdlAsset('03_assets/audio/sfx_ui_confirm.wav'),
+      },
+    },
 
   };
 

@@ -1,0 +1,26 @@
+{
+  "hero_id": "seraphine",
+  "checked_at": "2026-09-24T06:57:12.057Z",
+  "source_sha256": "8ce57c326c464177a80ec8c8944223d568aedffb9cfb114d622fa26f813d81d9",
+  "source_unchanged": true,
+  "bones": 8,
+  "vertices": 2501,
+  "triangles": 4800,
+  "sampled_poses": 248,
+  "geometry": {
+    "inverted_triangles": 0,
+    "min_area_ratio": 0.6460719407348366,
+    "max_edge_stretch": 1.3144233463804027,
+    "max_neutral_error_px": 0.00018310546875
+  },
+  "technical_passed": true,
+  "artistic_status": "review",
+  "fidelity_approved": false,
+  "anatomical_layers": false,
+  "limitations": [
+    "Maillage de déformation sur une illustration entière",
+    "Pas de faces cachées ni de rotation en profondeur",
+    "Ornements et rigidité des armes à examiner en mouvement",
+    "Rigs articulés sur calques séparés et animations finales à produire"
+  ]
+}

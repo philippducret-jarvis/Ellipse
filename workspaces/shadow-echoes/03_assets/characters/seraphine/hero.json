@@ -1,0 +1,83 @@
+{
+  "id": "seraphine",
+  "name": "Séraphine",
+  "title": "Fleur de l’Abîme",
+  "rarity": "mythique",
+  "element": "Lumière obscure",
+  "role": "Assassin",
+  "accent": "#ec6379",
+  "symbol": "✥",
+  "quote": "Même dans les ténèbres, il reste une lumière.",
+  "description": "Une lame de cristal écarlate, une couronne de roses et des ronces qui ne laissent aucune échappatoire.",
+  "reference": "partie-3/fiche_héroïne_gothique_de_séraphine.png",
+  "board": "partie-1/invocation_de_seraphine_fleur_de_l_abîme.png",
+  "invariants": [
+    "Visage pâle, yeux rubis, cheveux argentés",
+    "Armure noire à filigranes dorés et étoffes cramoisies",
+    "Couronne de ronces et roses rouges",
+    "Lame de cristal rouge, silhouette élancée"
+  ],
+  "skills": [
+    {
+      "id": "thorn",
+      "name": "Entaille de ronce",
+      "type": "damage",
+      "power": 140,
+      "cooldown": 1.2,
+      "energyGain": 15,
+      "description": "Inflige 140 dégâts et gagne 15 points d’énergie."
+    },
+    {
+      "id": "bloom",
+      "name": "Floraison abyssale",
+      "type": "bleed",
+      "power": 210,
+      "dot": 35,
+      "duration": 4,
+      "cooldown": 8,
+      "energyGain": 20,
+      "description": "210 dégâts, puis 35 dégâts par seconde pendant 4 secondes."
+    },
+    {
+      "id": "requiem",
+      "name": "Requiem des roses",
+      "type": "damage",
+      "power": 720,
+      "cooldown": 16,
+      "cost": 100,
+      "description": "Dépense 100 points d’énergie pour infliger 720 dégâts."
+    }
+  ],
+  "stats": {
+    "maxHp": 2200,
+    "attack": 140,
+    "defense": 80
+  },
+  "motion_study": {
+    "stage": "deformation_study_review",
+    "rig": "03_assets/characters/seraphine/mesh-rig-v1.json",
+    "qa": "03_assets/characters/seraphine/mesh-qa-v1.json",
+    "fidelity_approved": false
+  },
+  "presentation": "03_assets/characters/seraphine/presentation-v1.png",
+  "source_reference": "01_inputs/references/partie-3/fiche_héroïne_gothique_de_séraphine.png",
+  "rarity_evidence": {
+    "method": "visual_reading",
+    "text": "Mythique",
+    "source": "01_inputs/references/partie-3/fiche_héroïne_gothique_de_séraphine.png"
+  },
+  "quality_target": "Fidélité aux designs fournis : identité, proportions, costume, matériaux et finesse.",
+  "production_stage": "hd_base_review",
+  "skill_status": "prototype_proposal",
+  "rig": null,
+  "animations": [],
+  "qa": "03_assets/characters/seraphine/qa-v1.json",
+  "layer_study": {
+    "stage": "combat_layer_study_review",
+    "revision": 2,
+    "fidelity_approved": false,
+    "integrated_in_combat": true,
+    "rig": "03_assets/characters/seraphine/layers-v1/layer-rig-review.json",
+    "qa": "03_assets/characters/seraphine/layers-v1/qa-review.json"
+  }
+}

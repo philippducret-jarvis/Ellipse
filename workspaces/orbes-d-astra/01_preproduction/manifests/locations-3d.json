@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "status": "specification_ready_assets_missing",
+  "locations": [
+    {
+      "id": "astra_observatory",
+      "purpose": "hub central",
+      "zones": [
+        "orrery",
+        "balcony",
+        "war_room"
+      ],
+      "kit": "brass_gothic",
+      "targetModules": 48
+    },
+    {
+      "id": "summoning_sanctuary",
+      "purpose": "gacha et révélations",
+      "zones": [
+        "altar",
+        "mirror_pool",
+        "archive"
+      ],
+      "kit": "crystal_ritual",
+      "targetModules": 32
+    },
+    {
+      "id": "reliquary",
+      "purpose": "équipement et atelier",
+      "zones": [
+        "vault",
+        "forge",
+        "wardrobe"
+      ],
+      "kit": "velvet_metal",
+      "targetModules": 36
+    },
+    {
+      "id": "drowned_harbor",
+      "purpose": "région 1 et boss Léviathan",
+      "zones": [
+        "quays",
+        "lighthouse",
+        "boss_arena"
+      ],
+      "kit": "astral_maritime",
+      "targetModules": 64
+    },
+    {
+      "id": "dead_sun_forge",
+      "purpose": "région 2",
+      "zones": [
+        "furnace",
+        "citadel",
+        "golem_arena"
+      ],
+      "kit": "solar_industrial",
+      "targetModules": 64
+    },
+    {
+      "id": "night_beyond",
+      "purpose": "région 3",
+      "zones": [
+        "inverted_garden",
+        "void_bridge",
+        "abyssion_arena"
+      ],
+      "kit": "void_baroque",
+      "targetModules": 72
+    }
+  ]
+}

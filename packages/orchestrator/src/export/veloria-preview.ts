@@ -1,6 +1,6 @@
 /**
- * Preview Veloria complète (veloria-systems.js + preview.js statiques).
- * Utilisée pour le jeu livrable flagship — pas la preview générique simplifiée.
+ * Export du runtime flagship VeloriaEngine. Aucun fallback Forge/Canvas ne doit
+ * pouvoir remplacer silencieusement ce livrable.
  */
 import { existsSync } from 'node:fs';
 import { copyFile, mkdir, readFile, writeFile } from 'node:fs/promises';
@@ -24,15 +24,14 @@ function buildVeloriaHtml(title: string): string {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>${title} — Preview GACHA</title>
+    <meta name="theme-color" content="#07060a" />
+    <title>${title}</title>
     <link rel="stylesheet" href="./preview.css" />
   </head>
   <body>
-    <main class="gacha-shell">
-      <div class="phone-frame">
-        <canvas id="preview" width="720" height="1280" aria-label="Veloria GACHA HD"></canvas>
-      </div>
-      <p class="status-bar" id="status">Chargement…</p>
+    <main class="game-shell">
+      <div id="engine-host" class="game-frame" role="application" aria-label="Veloria — La Veille des Lames"></div>
+      <p class="status-bar" id="status" role="status">Chargement de Veloria…</p>
     </main>
     <script type="module" src="./preview.js"></script>
   </body>
@@ -41,49 +40,60 @@ function buildVeloriaHtml(title: string): string {
 
 const VELORIA_CSS = `:root {
   --bg: #07060a;
-  --gold: #c9a227;
-  --text: #f0e1ba;
-  --muted: #9a8a72;
+  color-scheme: dark;
 }
 * { box-sizing: border-box; }
 html, body {
-  margin: 0;
-  min-height: 100vh;
-  background: radial-gradient(ellipse at 50% 0%, rgba(90, 58, 114, 0.35), transparent 55%), var(--bg);
-  color: var(--text);
-  font-family: Georgia, "Times New Roman", serif;
-}
-.gacha-shell {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 12px;
-  gap: 10px;
-}
-.phone-frame {
-  width: min(100vw - 24px, 360px);
-  aspect-ratio: 720 / 1280;
-  border-radius: 20px;
-  padding: 3px;
-  background: linear-gradient(145deg, rgba(201, 162, 39, 0.55), rgba(90, 58, 114, 0.45));
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.65), inset 0 0 0 1px rgba(201, 162, 39, 0.2);
-}
-canvas {
-  display: block;
   width: 100%;
-  height: 100%;
-  border-radius: 17px;
-  background: #0a0810;
+  margin: 0;
+  min-height: 100%;
+  overflow: hidden;
+  background: #07060a;
+}
+body {
+  min-height: 100dvh;
+  font-family: Georgia, "Times New Roman", serif;
+  touch-action: none;
+  user-select: none;
+}
+.game-shell {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(ellipse at 50% 12%, rgba(90, 58, 114, 0.28), transparent 48%), #07060a;
+}
+.game-frame {
+  width: min(100vw, calc(100dvh * 0.5625), 540px);
+  height: min(100dvh, calc(100vw * 1.7777778), 960px);
+  aspect-ratio: 9 / 16;
+  position: relative;
+  overflow: hidden;
+  background: #09070d;
+  box-shadow: 0 22px 80px rgba(0, 0, 0, 0.72), 0 0 0 1px rgba(201, 162, 39, 0.35);
+}
+.game-frame canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  touch-action: none;
 }
 .status-bar {
-  margin: 0;
-  font-size: 0.8rem;
-  color: var(--muted);
-  text-align: center;
-  max-width: 360px;
-  line-height: 1.4;
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+@media (max-width: 600px), (max-height: 900px) {
+  .game-frame {
+    width: min(100vw, calc(100dvh * 0.5625));
+    height: min(100dvh, calc(100vw * 1.7777778));
+    box-shadow: none;
+  }
 }`;
 
 export async function buildVeloriaPreviewBundle(
@@ -96,30 +106,17 @@ export async function buildVeloriaPreviewBundle(
   const exportDir = join(workspaceRoot, '07_exports', 'web');
   await mkdir(exportDir, { recursive: true });
 
-  const previewJsSrc = join(staticDir, 'gacha-preview.js');
-  const rendererJsSrc = join(staticDir, 'gacha-renderer.js');
-  const systemsJsSrc = join(staticDir, 'veloria-systems.js');
   const enginePreviewSrc = join(staticDir, 'veloria-engine-preview.js');
 
-  if (!existsSync(previewJsSrc) && !existsSync(enginePreviewSrc)) {
-    throw new Error(`Preview Veloria introuvable dans ${staticDir}`);
+  if (!existsSync(enginePreviewSrc)) {
+    throw new Error(`Entrée flagship Veloria introuvable : ${enginePreviewSrc}`);
   }
 
   await writeFile(join(exportDir, 'preview.html'), buildVeloriaHtml(title));
   await writeFile(join(exportDir, 'preview.css'), VELORIA_CSS);
 
-  if (existsSync(enginePreviewSrc)) {
-    await copyFile(enginePreviewSrc, join(exportDir, 'preview.js'));
-    await tryBuildEngineBundle(exportDir);
-  } else if (existsSync(previewJsSrc)) {
-    await copyFile(previewJsSrc, join(exportDir, 'preview.js'));
-  }
-  if (existsSync(rendererJsSrc)) {
-    await copyFile(rendererJsSrc, join(exportDir, 'gacha-renderer.js'));
-  }
-  if (existsSync(systemsJsSrc)) {
-    await copyFile(systemsJsSrc, join(exportDir, 'veloria-systems.js'));
-  }
+  await copyFile(enginePreviewSrc, join(exportDir, 'preview.js'));
+  await tryBuildEngineBundle(exportDir);
 
   await writeFile(
     join(exportDir, 'preview-manifest.json'),
@@ -156,5 +153,5 @@ export async function ensureVeloriaPreviewFromWorkspace(workspaceRoot: string, s
 
 export async function readVeloriaStaticPreviewJs(): Promise<string> {
   const root = findProjectRoot();
-  return readFile(join(root, 'tools', 'lib', 'veloria', 'static', 'gacha-preview.js'), 'utf-8');
+  return readFile(join(root, 'tools', 'lib', 'veloria', 'static', 'veloria-engine-preview.js'), 'utf-8');
 }

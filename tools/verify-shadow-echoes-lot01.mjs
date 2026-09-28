@@ -1,0 +1,74 @@
+import assert from 'node:assert/strict';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+const { chromium } = await import('playwright').catch(() => import(new URL('../generated/browser-runtime/node_modules/playwright/index.mjs', import.meta.url).href));
+
+const url = process.env.SHADOW_ECHOES_URL ?? 'http://127.0.0.1:4314/';
+const out = new URL('../tmp/shadow-echoes/', import.meta.url);
+await mkdir(out, {recursive:true});
+const browser = await chromium.launch({headless:true});
+const failures = [];
+const checks = [];
+try {
+  const page = await browser.newPage({viewport:{width:1440,height:1100},deviceScaleFactor:1});
+  page.on('pageerror',e=>failures.push(e.message));
+  page.on('response',r=>{if(r.status()>=400)failures.push(`${r.status()} ${r.url()}`);});
+  await page.goto(url, {waitUntil:'networkidle'});
+  await page.waitForFunction(()=>document.querySelector('#hero-name')?.textContent === 'Séraphine');
+  assert.equal(await page.locator('.roster-card').count(),4);
+  for (const hero of ['Séraphine','Nyxara','Lysael','Voren']) {
+    await page.getByRole('button',{name:`Choisir ${hero}`,exact:true}).click();
+    await page.waitForFunction(()=>{const img=document.querySelector('#hero-art');return img.complete&&img.naturalWidth===1024;});
+    assert.equal(await page.locator('#hero-name').textContent(),hero);
+    await page.getByRole('button',{name:'Comparer au design ↗',exact:true}).click();
+    await page.waitForFunction(()=>[...document.querySelectorAll('.comparison img')].every(i=>i.complete&&i.naturalWidth>0));
+    await page.getByRole('button',{name:'Planche complémentaire',exact:true}).click();
+    await page.waitForFunction(()=>document.querySelector('#reference-art').complete&&document.querySelector('#reference-art').naturalWidth>0);
+    await page.keyboard.press('Escape');
+  }
+  checks.push('4 héros, 8 références et images HD chargés');
+  await page.getByRole('button',{name:'Choisir Séraphine',exact:true}).click();
+  await page.getByRole('button',{name:'Réinitialiser',exact:true}).click();
+  await page.locator('.cast').nth(0).click();
+  assert.match(await page.locator('#target-health').textContent(),/49\s?860/);
+  assert.equal(await page.locator('.cast').nth(2).isDisabled(),true);
+  await page.getByRole('button',{name:'Pause',exact:true}).click();
+  const pausedTime = await page.locator('#elapsed').textContent();
+  await page.waitForTimeout(350);
+  assert.equal(await page.locator('#elapsed').textContent(),pausedTime);
+  await page.getByRole('button',{name:'Reprendre',exact:true}).click();
+  await page.getByRole('button',{name:'Réinitialiser',exact:true}).click();
+  checks.push('dégâts, verrouillage ultime, pause et réinitialisation');
+  await page.locator('#incoming').check();
+  await page.waitForTimeout(2100);
+  await page.getByRole('button',{name:'Activer Lysael dans le banc',exact:true}).click();
+  await page.locator('.cast').nth(1).click();
+  assert.notEqual(await page.locator('#total-healing').textContent(),'0');
+  await page.getByRole('button',{name:'Réinitialiser',exact:true}).click();
+  checks.push('riposte et soins réels');
+  await page.getByRole('button',{name:'Choisir Séraphine',exact:true}).click();
+  await page.evaluate(()=>window.scrollTo(0,0));
+  await page.screenshot({path:fileURLToPath(new URL('desktop.png',out)),fullPage:true});
+  await page.getByRole('button',{name:'Comparer au design ↗',exact:true}).click();
+  await page.screenshot({path:fileURLToPath(new URL('comparison.png',out))});
+  await page.keyboard.press('Escape');
+  // Vérifier réellement l’alpha sur fonds contrastés dans le navigateur.
+  await page.evaluate(()=>{const s=document.querySelector('#art-stage');s.style.background='repeating-conic-gradient(#eee 0% 25%, #999 0% 50%) 0 / 24px 24px';});
+  await page.locator('#art-stage').screenshot({path:fileURLToPath(new URL('alpha-check.png',out))});
+  await page.reload({waitUntil:'networkidle'});
+  await page.setViewportSize({width:390,height:844});
+  await page.evaluate(()=>window.scrollTo(0,0));
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Débordement mobile');
+  await page.screenshot({path:fileURLToPath(new URL('mobile.png',out)),fullPage:true});
+  await page.getByRole('button',{name:'Comparer au design ↗',exact:true}).click();
+  assert.ok(await page.locator('#art-dialog').isVisible());
+  await page.keyboard.press('Escape');
+  checks.push('affichage 1440 px / 390 px, comparateur et transparence capturés');
+  await page.getByRole('button',{name:'Choisir Voren',exact:true}).click();
+  await page.reload({waitUntil:'networkidle'});
+  assert.equal(await page.locator('#hero-name').textContent(),'Voren');
+  checks.push('héros sélectionné conservé après rechargement');
+  assert.deepEqual(failures,[]);
+  await writeFile(new URL('browser-report.json',out),JSON.stringify({passed:true,checks,errors:failures},null,2));
+  console.log(JSON.stringify({passed:true,checks,errors:failures},null,2));
+} finally {await browser.close();}

@@ -8,6 +8,7 @@ workspaces/**
 !workspaces/*/02_design/style-bible.json
 node_modules/
 dist/
+packages/engine/dist-browser/
 .turbo/
 .env
 .env.local
@@ -18,6 +19,46 @@ coverage/
 *.glb
 *.png
 !examples/**/*.png
+!apps/ellipse-desktop/assets/ellipse-app.png
+
+# Shadow Echoes : cadrage et catalogue conservés, planches originales locales.
+!workspaces/shadow-echoes/README.md
+!workspaces/shadow-echoes/workspace.json
+!workspaces/shadow-echoes/00_brief/
+!workspaces/shadow-echoes/00_brief/documents/
+!workspaces/shadow-echoes/00_brief/documents/*.md
+!workspaces/shadow-echoes/01_inputs/
+!workspaces/shadow-echoes/01_inputs/reference-index.json
+!workspaces/shadow-echoes/03_assets/
+!workspaces/shadow-echoes/03_assets/registry/
+!workspaces/shadow-echoes/03_assets/registry/studio-asset-catalog.json
+!workspaces/shadow-echoes/02_production/
+!workspaces/shadow-echoes/02_production/lot-01/
+!workspaces/shadow-echoes/02_production/lot-01/*.json
+!workspaces/shadow-echoes/02_production/lot-01/*.md
+!workspaces/shadow-echoes/03_assets/characters/
+!workspaces/shadow-echoes/03_assets/characters/*/
+!workspaces/shadow-echoes/03_assets/characters/*/*.json
+!workspaces/shadow-echoes/03_assets/characters/*/presentation-v1.png
+!workspaces/shadow-echoes/03_assets/environments/
+!workspaces/shadow-echoes/03_assets/environments/*.png
+!workspaces/shadow-echoes/02_production/lot-02/
+!workspaces/shadow-echoes/02_production/lot-02/*.json
+!workspaces/shadow-echoes/02_production/lot-02/*.md
+!workspaces/shadow-echoes/02_production/lot-03/
+!workspaces/shadow-echoes/02_production/lot-03/*.json
+!workspaces/shadow-echoes/02_production/lot-03/*.md
+!workspaces/shadow-echoes/02_production/lot-04/
+!workspaces/shadow-echoes/02_production/lot-04/*.json
+!workspaces/shadow-echoes/02_production/lot-04/*.md
+!workspaces/shadow-echoes/02_production/lot-05/
+!workspaces/shadow-echoes/02_production/lot-05/*.json
+!workspaces/shadow-echoes/02_production/lot-05/*.md
+!workspaces/shadow-echoes/03_assets/items/
+!workspaces/shadow-echoes/03_assets/items/*.png
+!workspaces/shadow-echoes/03_assets/characters/seraphine/layers-v1/
+!workspaces/shadow-echoes/03_assets/characters/seraphine/layers-v1/*.png
+!workspaces/shadow-echoes/03_assets/characters/seraphine/layers-v1/*.json
 
 # Entraînement IA (training/) — venv, datasets, poids ; modèles exportés (racine /models)
 training/.venv/
@@ -29,3 +70,36 @@ __pycache__/
 *.pt
 /models/
 tmp/
+
+# Shadow Echoes — deuxième lot jouable
+!workspaces/shadow-echoes/02_production/lot-06/
+!workspaces/shadow-echoes/02_production/lot-06/*.json
+!workspaces/shadow-echoes/02_production/lot-06/*.md
+!workspaces/shadow-echoes/03_assets/enemies/
+!workspaces/shadow-echoes/03_assets/enemies/*.png
+
+# Projets jouables : conserver les sources et assets de Shadow Echoes et d'Orbes d'Astra.
+!workspaces/shadow-echoes/**
+!workspaces/orbes-d-astra/**
+
+# Caches, sauvegardes et paquets régénérables.
+workspaces/**/.godot/
+workspaces/**/qa/
+workspaces/**/debug/
+workspaces/**/07_exports/releases/
+workspaces/**/*.blend1
+workspaces/**/*.import
+workspaces/**/*.md5
+workspaces/**/*.log
+workspaces/**/telemetry/
+apps/**/release/
+builds/
+Orbes-d-Astra.exe
+
+# Identifiants locaux et clés privées.
+**/.env*
+!**/.env.example
+*.pem
+*.p12
+*.pfx
+*.key

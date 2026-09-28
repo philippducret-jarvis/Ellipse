@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "claim": "preproduction_complete_vertical_slice_blockout_started",
+  "prototypeV1": "preserved_not_target_quality",
+  "activeProduction": {
+    "lot": "vertical_slice",
+    "asset": "mira",
+    "status": "blockout_exported_engine_qa_passed"
+  },
+  "builds": {
+    "windows": "vertical_slice_blockout_exported_smoke_passed",
+    "webMobile": "generated_browser_qa_pending",
+    "android": "blocked_on_jdk_sdk_license_and_signing"
+  },
+  "blockingTools": [
+    {
+      "id": "blender",
+      "status": "available_5.1.2",
+      "requiredFor": [
+        "modeling",
+        "retopology",
+        "rigging",
+        "animation",
+        "gltf export"
+      ]
+    },
+    {
+      "id": "godot",
+      "status": "available_4.7",
+      "requiredFor": [
+        "3d runtime benchmark",
+        "native mobile builds"
+      ]
+    },
+    {
+      "id": "ffmpeg",
+      "status": "missing",
+      "requiredFor": [
+        "capture",
+        "video compression",
+        "qa evidence"
+      ]
+    }
+  ],
+  "commercialGatesGreen": [],
+  "commercialGatesRed": [
+    "gameplay",
+    "content",
+    "3d_art",
+    "performance",
+    "backend",
+    "purchases",
+    "compliance",
+    "accessibility",
+    "security",
+    "certification"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "tool": "image_gen",
+  "mode": "built_in",
+  "source": "03_assets/characters/seraphine/layers-v1/arm-sword.png",
+  "output": "03_assets/characters/seraphine/layers-v1/arm-sword-v2.png",
+  "prompt": "Edit target: the attached RGBA arm and sword game sprite. Surgical edit only to its top shoulder end, preserving the exact 1024x1536 canvas, all existing positions, scale, and angle. Remove the protruding spiky shoulder pauldron at x440..585 y20..205. Replace that top portion with a small smoothly rounded dark black leather upper-arm cap centered at x510 y190, upper edge around y160, 60px wide, joining seamlessly to the existing upper arm below y215. No spikes, gold protrusions or loose fragments above this new rounded cap. This is an overlapping joint that will sit underneath a separate shoulder pauldron on the body. Preserve the entire arm below y215, elbow, glove, hand, sword guard, every red crystal blade detail and the exact sword tip at x40 y1509. Do not reframe, recenter, rescale, redesign, or extend the arm/sword. Genuine transparent alpha everywhere outside the arm and sword; no background or broad glow. No text. Keep the source's fine black/gold filigree and red blade detail below the edit region."
+}

@@ -1,0 +1,41 @@
+{
+  "guardian": "lys",
+  "displayName": "Lys",
+  "adultConfirmed": true,
+  "presentation": "femme",
+  "element": "Temps",
+  "role": "Contrôle",
+  "status": "integration_ready_humanoid_base",
+  "bodySource": "MPFB 2.0.17 / MakeHuman CC0",
+  "blender": "4.5.10 LTS",
+  "dimensionsMeters": [
+    0.8039,
+    0.3106,
+    1.6182
+  ],
+  "meshObjects": 26,
+  "trianglesBeforeExportModifiers": 105800,
+  "deformBones": 55,
+  "animationClips": [
+    "lys_Idle_Glamour"
+  ],
+  "sockets": [
+    "socket_weapon_r",
+    "socket_artifact_l",
+    "socket_back",
+    "socket_head_fx"
+  ],
+  "glbBytes": 13006524,
+  "qualityGate": {
+    "realHumanoidTopology": true,
+    "gameEngineRig": true,
+    "texturedSkin": true,
+    "eyesHairTeeth": true,
+    "customAstraCostume": true,
+    "signatureWeapon": true,
+    "roundTripPending": true,
+    "commercialFinalSculpt": false,
+    "fullAnimationSet": false,
+    "finalLods": false
+  }
+}

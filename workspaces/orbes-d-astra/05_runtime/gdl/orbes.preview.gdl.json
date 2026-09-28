@@ -1,0 +1,3714 @@
+{
+  "meta": {
+    "title": "Orbes d'Astra",
+    "dimension": "2d",
+    "genre": "merge_drop_gacha",
+    "resolution": [
+      720,
+      1280
+    ],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "declared_systems": [
+      "merge_drop_physics",
+      "merge_cascade",
+      "drop_aim",
+      "hero_abilities",
+      "merge_drop_gacha_summon",
+      "merge_drop_roster",
+      "merge_drop_pity",
+      "run_rewards",
+      "local_save"
+    ],
+    "mechanic_modules": [
+      "merge_drop"
+    ],
+    "prototype_board": {
+      "source_prompt": "Gacha RPG HD jouable sur PC et mobile : campagne de fusion astrale en 18 missions, boss à phases, défis, mini-jeux et 24 Gardiens animés à collectionner.",
+      "game_type": "merge_drop_gacha",
+      "dimension": "2d",
+      "perspective": "side",
+      "art_style": "anime",
+      "difficulty": "casual",
+      "mechanic_modules": [
+        "merge_drop"
+      ],
+      "playable_loop": [
+        "aim",
+        "drop_orb",
+        "stack",
+        "merge_equal_tiers",
+        "cascade",
+        "cast_hero_power",
+        "earn_summon",
+        "unlock_roster",
+        "reach_nexus"
+      ],
+      "first_slice_scope": "one_scene_with_win_condition",
+      "quality_gates": [
+        "player_understands_goal_under_30s",
+        "scene_has_no_dead_end",
+        "runtime_uses_only_executable_systems",
+        "declared_systems_preserved_for_agents"
+      ]
+    },
+    "production_contract": {
+      "subtype": {
+        "id": "merge_drop_astral_collection",
+        "label": "Astral orb merge collection",
+        "design_pillars": [
+          "one-touch physical clarity",
+          "satisfying merge cascades",
+          "heroes that change the board rules",
+          "earned collection progression"
+        ]
+      },
+      "type_chain": [
+        "puzzle",
+        "merge_drop_gacha",
+        "merge_drop_astral_collection"
+      ],
+      "north_star": {
+        "prompt": "Gacha RPG HD jouable sur PC et mobile : campagne de fusion astrale en 18 missions, boss à phases, défis, mini-jeux et 24 Gardiens animés à collectionner.",
+        "target_game_type": "merge_drop_gacha",
+        "dimension": "2d",
+        "perspective": "side",
+        "art_style": "anime",
+        "difficulty": "casual",
+        "promise": "A one-touch physical puzzle where equal orbs merge upward, cascades charge hero powers and every run earns transparent collection progress."
+      },
+      "first_playable_slice": {
+        "generated_now": [
+          "runtime_executable_gdl",
+          "player_controller",
+          "one_scene_board",
+          "win_condition",
+          "health_and_score_hud"
+        ],
+        "scope_limit": "This is the first playable slice, not the finished game."
+      },
+      "asset_roadmap": {
+        "procedural_now": [
+          "orb_tiers",
+          "hero_portraits",
+          "ui_kit",
+          "rarity_fx",
+          "ability_fx",
+          "merge_fx"
+        ],
+        "board_or_image_cut_next": [
+          "board_bg"
+        ],
+        "specialized_later": [],
+        "required_families": [
+          {
+            "family": "orb_tiers",
+            "recipe": "procedural_vector"
+          },
+          {
+            "family": "hero_portraits",
+            "recipe": "procedural_vector"
+          },
+          {
+            "family": "board_bg",
+            "recipe": "reference_cut"
+          },
+          {
+            "family": "ui_kit",
+            "recipe": "procedural_vector"
+          },
+          {
+            "family": "rarity_fx",
+            "recipe": "procedural_vector"
+          },
+          {
+            "family": "ability_fx",
+            "recipe": "procedural_vector"
+          },
+          {
+            "family": "merge_fx",
+            "recipe": "procedural_vector"
+          }
+        ],
+        "subtype_families": [
+          "orb_tiers",
+          "hero_portraits",
+          "board_bg",
+          "ui_kit",
+          "rarity_fx",
+          "ability_fx",
+          "merge_fx"
+        ]
+      },
+      "object_blueprint_plan": {
+        "required_blueprints": [
+          "obj_game_controller",
+          "obj_player_spawn",
+          "obj_camera_controller",
+          "obj_goal_marker",
+          "obj_merge_well",
+          "obj_drop_cursor",
+          "obj_merge_orb",
+          "obj_overflow_line",
+          "obj_hero_ability",
+          "obj_astral_summon",
+          "obj_roster_slot"
+        ],
+        "acceptance": [
+          "each object has spawn rules",
+          "each object has runtime events",
+          "placeholder art is tracked when final art is missing"
+        ]
+      },
+      "room_plan": {
+        "templates": [
+          "rm_boot",
+          "rm_first_playable",
+          "rm_results",
+          "rm_management_hub",
+          "rm_upgrade_shop",
+          "rm_merge_run",
+          "rm_roster_collection"
+        ],
+        "content_units": [
+          "spawn",
+          "tutorial_prompt",
+          "challenge",
+          "reward",
+          "exit",
+          "rule_teach",
+          "constraint_twist",
+          "solution_payoff",
+          "economy_intro",
+          "upgrade_decision",
+          "production_review",
+          "first_pair_tutorial",
+          "three_step_cascade",
+          "ability_unlock",
+          "earned_summon",
+          "nexus_target"
+        ],
+        "acceptance": [
+          "room has player entry and exit",
+          "room has objective flow",
+          "room can be generated from board constraints"
+        ]
+      },
+      "event_graph_plan": {
+        "hooks": [
+          "on_game_start",
+          "on_player_spawn",
+          "on_objective_complete",
+          "on_player_death",
+          "on_scene_exit",
+          "on_collision_enter",
+          "on_grounded_changed",
+          "on_orb_drop",
+          "on_orb_collision",
+          "on_orb_merge",
+          "on_overflow_warning",
+          "on_astral_pull",
+          "on_hero_unlocked",
+          "on_merge_pity_changed",
+          "on_cascade",
+          "on_ability_ready",
+          "on_nexus_created"
+        ],
+        "acceptance": [
+          "start/update/end hooks are explicit",
+          "combat or economy hooks feed UI feedback",
+          "events are serializable in GDL metadata"
+        ]
+      },
+      "animation_plan": {
+        "required_clips": [
+          "idle",
+          "run",
+          "jump",
+          "fall",
+          "hurt",
+          "death",
+          "attack_1",
+          "attack_2"
+        ],
+        "model_targets": [
+          "layered_2d_character",
+          "skeletal_2d_rig"
+        ],
+        "acceptance": [
+          "silhouette readable",
+          "feet align with collision",
+          "clips loop cleanly",
+          "attack timing matches combat windows"
+        ],
+        "subtype_clips": [
+          "idle",
+          "hurt",
+          "death",
+          "run",
+          "jump",
+          "fall",
+          "land",
+          "orb_drop",
+          "merge_burst",
+          "cascade_pulse",
+          "overflow_warning",
+          "hero_ability_cast",
+          "orb_bounce",
+          "summon_reveal"
+        ]
+      },
+      "environment_plan": {
+        "map_kind": "board",
+        "generator": "merge-drop-board-factory",
+        "status": "available",
+        "required_layers": [
+          "backdrop",
+          "collision_ground",
+          "decor_props"
+        ],
+        "acceptance": [
+          "clear gameplay readability",
+          "strong first-screen identity",
+          "no collision ambiguity",
+          "visual depth supports camera"
+        ],
+        "subtype_environment_kits": [
+          "starter_scene",
+          "collision_shapes",
+          "goal_marker",
+          "astral_merge_well",
+          "danger_line",
+          "constellation_backdrop",
+          "hero_roster_dock",
+          "summon_reveal_overlay"
+        ]
+      },
+      "gameplay_plan": {
+        "executable_systems": [
+          "merge_drop_physics",
+          "merge_cascade",
+          "drop_aim",
+          "hero_abilities",
+          "merge_drop_gacha_summon",
+          "merge_drop_roster",
+          "merge_drop_pity",
+          "run_rewards",
+          "local_save"
+        ],
+        "systems_to_build": [],
+        "declared_systems": [
+          "merge_drop_physics",
+          "merge_cascade",
+          "drop_aim",
+          "hero_abilities",
+          "merge_drop_gacha_summon",
+          "merge_drop_roster",
+          "merge_drop_pity",
+          "run_rewards",
+          "local_save"
+        ],
+        "mechanic_modules": [
+          "merge_drop"
+        ],
+        "subtype_systems": [
+          "merge_drop_physics",
+          "merge_cascade",
+          "drop_aim",
+          "hero_abilities",
+          "merge_drop_gacha_summon",
+          "merge_drop_roster",
+          "merge_drop_pity",
+          "run_rewards",
+          "local_save"
+        ]
+      },
+      "ui_audio_plan": {
+        "ui_surfaces": [
+          "hud",
+          "pause_menu",
+          "settings_panel",
+          "result_screen",
+          "objective_tracker",
+          "merge_well_hud",
+          "next_orb_preview",
+          "ability_meter",
+          "overflow_warning",
+          "astral_summon_button",
+          "hero_roster_cards",
+          "pity_counter",
+          "rates_disclosure",
+          "resource_bar",
+          "shop_or_build_panel",
+          "summon_result"
+        ],
+        "audio_cues": [
+          "ui_confirm",
+          "ui_cancel",
+          "hit_impact",
+          "pickup_chime",
+          "objective_stinger",
+          "ambient_loop",
+          "astral_pop+merge_sfx+gacha_sfx",
+          "puzzle_select",
+          "puzzle_success",
+          "puzzle_error",
+          "currency_tick",
+          "upgrade_unlock",
+          "orb_drop",
+          "orb_bounce",
+          "merge_chime",
+          "cascade_rise",
+          "overflow_alarm",
+          "astral_pull",
+          "hero_unlock",
+          "merge_ssr_reveal",
+          "ability_cast"
+        ],
+        "acceptance": [
+          "hud communicates objective and danger",
+          "menus expose progression when the subtype needs it",
+          "audio cues cover input, reward and failure"
+        ]
+      },
+      "story_plan": {
+        "required": [
+          "premise",
+          "player_motive",
+          "opposition",
+          "first_scene_objective",
+          "completion_change"
+        ],
+        "status": "seeded_for_agents"
+      },
+      "procedural_libraries": {
+        "asset_families": [
+          "orb_tiers",
+          "hero_portraits",
+          "board_bg",
+          "ui_kit",
+          "rarity_fx",
+          "ability_fx",
+          "merge_fx"
+        ],
+        "object_blueprints": [
+          "obj_game_controller",
+          "obj_player_spawn",
+          "obj_camera_controller",
+          "obj_goal_marker",
+          "obj_merge_well",
+          "obj_drop_cursor",
+          "obj_merge_orb",
+          "obj_overflow_line",
+          "obj_hero_ability",
+          "obj_astral_summon",
+          "obj_roster_slot"
+        ],
+        "room_templates": [
+          "rm_boot",
+          "rm_first_playable",
+          "rm_results",
+          "rm_management_hub",
+          "rm_upgrade_shop",
+          "rm_merge_run",
+          "rm_roster_collection"
+        ],
+        "event_hooks": [
+          "on_game_start",
+          "on_player_spawn",
+          "on_objective_complete",
+          "on_player_death",
+          "on_scene_exit",
+          "on_collision_enter",
+          "on_grounded_changed",
+          "on_orb_drop",
+          "on_orb_collision",
+          "on_orb_merge",
+          "on_overflow_warning",
+          "on_astral_pull",
+          "on_hero_unlocked",
+          "on_merge_pity_changed",
+          "on_cascade",
+          "on_ability_ready",
+          "on_nexus_created"
+        ],
+        "systems": [
+          "merge_drop_physics",
+          "merge_cascade",
+          "drop_aim",
+          "hero_abilities",
+          "merge_drop_gacha_summon",
+          "merge_drop_roster",
+          "merge_drop_pity",
+          "run_rewards",
+          "local_save"
+        ],
+        "animation_clips": [
+          "idle",
+          "hurt",
+          "death",
+          "run",
+          "jump",
+          "fall",
+          "land",
+          "orb_drop",
+          "merge_burst",
+          "cascade_pulse",
+          "overflow_warning",
+          "hero_ability_cast",
+          "orb_bounce",
+          "summon_reveal"
+        ],
+        "environment_kits": [
+          "starter_scene",
+          "collision_shapes",
+          "goal_marker",
+          "astral_merge_well",
+          "danger_line",
+          "constellation_backdrop",
+          "hero_roster_dock",
+          "summon_reveal_overlay"
+        ],
+        "ui_surfaces": [
+          "hud",
+          "pause_menu",
+          "settings_panel",
+          "result_screen",
+          "objective_tracker",
+          "merge_well_hud",
+          "next_orb_preview",
+          "ability_meter",
+          "overflow_warning",
+          "astral_summon_button",
+          "hero_roster_cards",
+          "pity_counter",
+          "rates_disclosure",
+          "resource_bar",
+          "shop_or_build_panel",
+          "summon_result"
+        ],
+        "audio_cues": [
+          "ui_confirm",
+          "ui_cancel",
+          "hit_impact",
+          "pickup_chime",
+          "objective_stinger",
+          "ambient_loop",
+          "astral_pop+merge_sfx+gacha_sfx",
+          "puzzle_select",
+          "puzzle_success",
+          "puzzle_error",
+          "currency_tick",
+          "upgrade_unlock",
+          "orb_drop",
+          "orb_bounce",
+          "merge_chime",
+          "cascade_rise",
+          "overflow_alarm",
+          "astral_pull",
+          "hero_unlock",
+          "merge_ssr_reveal",
+          "ability_cast"
+        ],
+        "content_units": [
+          "spawn",
+          "tutorial_prompt",
+          "challenge",
+          "reward",
+          "exit",
+          "rule_teach",
+          "constraint_twist",
+          "solution_payoff",
+          "economy_intro",
+          "upgrade_decision",
+          "production_review",
+          "first_pair_tutorial",
+          "three_step_cascade",
+          "ability_unlock",
+          "earned_summon",
+          "nexus_target"
+        ],
+        "qa_gates": [
+          "readable first screen",
+          "clear objective",
+          "runtime smoke test",
+          "mobile performance",
+          "solution solvability",
+          "economy sanity",
+          "deterministic merge rules",
+          "stable circle stacking",
+          "touch target ergonomics",
+          "overflow fairness",
+          "gacha rates disclosed",
+          "no paid currency dependency",
+          "loop:puzzle",
+          "loop:management"
+        ]
+      },
+      "procedural_chain": [
+        {
+          "id": "01_intent_contract",
+          "label": "Intent contract",
+          "purpose": "Lock the game fantasy, subtype and production boundaries before assets are created.",
+          "inputs": [
+            "prompt",
+            "boards",
+            "reference_images"
+          ],
+          "outputs": [
+            "north_star",
+            "subtype",
+            "scope",
+            "quality_gates"
+          ],
+          "owner_agents": [
+            "producer",
+            "game_design"
+          ]
+        },
+        {
+          "id": "02_library_resolution",
+          "label": "Base library resolution",
+          "purpose": "Expand the type/subtype into concrete assets, GameMaker-like objects, rooms, events, UI/audio, animation clips and gameplay systems.",
+          "inputs": [
+            "game_type",
+            "subtype",
+            "mechanic_modules"
+          ],
+          "outputs": [
+            "asset_families",
+            "object_blueprints",
+            "room_templates",
+            "event_hooks",
+            "animation_clips",
+            "environment_kits",
+            "ui_surfaces",
+            "audio_cues",
+            "systems"
+          ],
+          "owner_agents": [
+            "producer",
+            "asset_direction"
+          ]
+        },
+        {
+          "id": "03_board_to_world",
+          "label": "Board to world",
+          "purpose": "Convert boards and prompt intent into a playable scene layout with collisions and objective flow.",
+          "inputs": [
+            "boards",
+            "room_templates",
+            "content_units",
+            "map_kind"
+          ],
+          "outputs": [
+            "scene_layout",
+            "room_graph",
+            "encounters",
+            "collision_shapes",
+            "goal"
+          ],
+          "owner_agents": [
+            "level_design"
+          ]
+        },
+        {
+          "id": "04_asset_generation",
+          "label": "Asset generation",
+          "purpose": "Generate or cut every required asset family, with fallback placeholders tracked as missing work.",
+          "inputs": [
+            "asset_families",
+            "reference_images",
+            "art_style"
+          ],
+          "outputs": [
+            "hero",
+            "enemies",
+            "environment_assets",
+            "ui_assets",
+            "fx_assets"
+          ],
+          "owner_agents": [
+            "character",
+            "decor",
+            "ui",
+            "vfx"
+          ]
+        },
+        {
+          "id": "05_animation_and_models",
+          "label": "Animation and 2D/2.5D models",
+          "purpose": "Create layered 2D rigs, sprite sheets and 2.5D billboard/depth variants where needed.",
+          "inputs": [
+            "hero_asset",
+            "enemy_assets",
+            "animation_clips",
+            "dimension"
+          ],
+          "outputs": [
+            "rigs",
+            "clips",
+            "runtime_atlas",
+            "depth_variants"
+          ],
+          "owner_agents": [
+            "animation",
+            "character"
+          ]
+        },
+        {
+          "id": "06_gameplay_systems",
+          "label": "Gameplay systems",
+          "purpose": "Implement or scaffold the systems required by the subtype and bind them to the GDL.",
+          "inputs": [
+            "systems",
+            "object_blueprints",
+            "event_hooks",
+            "entities",
+            "scene_layout"
+          ],
+          "outputs": [
+            "runtime_systems",
+            "components",
+            "event_graph",
+            "balance_tables"
+          ],
+          "owner_agents": [
+            "gameplay",
+            "codegen"
+          ]
+        },
+        {
+          "id": "07_story_and_content",
+          "label": "Story and content",
+          "purpose": "Create the narrative reason for the scene, objectives, NPC hooks and future content queue.",
+          "inputs": [
+            "north_star",
+            "content_units",
+            "ui_surfaces",
+            "audio_cues"
+          ],
+          "outputs": [
+            "story_hook",
+            "quest_objective",
+            "dialogue_seed",
+            "content_units",
+            "future_content_queue"
+          ],
+          "owner_agents": [
+            "narrative"
+          ]
+        },
+        {
+          "id": "08_integration_qa_export",
+          "label": "Integration, QA and export",
+          "purpose": "Validate the slice, measure gaps, then export a playable review build.",
+          "inputs": [
+            "gdl",
+            "assets",
+            "systems",
+            "qa_gates"
+          ],
+          "outputs": [
+            "preview_bundle",
+            "qa_report",
+            "missing_elements",
+            "export_manifest"
+          ],
+          "owner_agents": [
+            "integration",
+            "qa"
+          ]
+        }
+      ],
+      "future_creation_queue": [
+        {
+          "id": "01_intent_contract",
+          "label": "Intent contract",
+          "agents": [
+            "producer",
+            "game_design"
+          ],
+          "expected_outputs": [
+            "north_star",
+            "subtype",
+            "scope",
+            "quality_gates"
+          ]
+        },
+        {
+          "id": "02_library_resolution",
+          "label": "Base library resolution",
+          "agents": [
+            "producer",
+            "asset_direction"
+          ],
+          "expected_outputs": [
+            "asset_families",
+            "object_blueprints",
+            "room_templates",
+            "event_hooks",
+            "animation_clips",
+            "environment_kits",
+            "ui_surfaces",
+            "audio_cues",
+            "systems"
+          ]
+        },
+        {
+          "id": "03_board_to_world",
+          "label": "Board to world",
+          "agents": [
+            "level_design"
+          ],
+          "expected_outputs": [
+            "scene_layout",
+            "room_graph",
+            "encounters",
+            "collision_shapes",
+            "goal"
+          ]
+        },
+        {
+          "id": "04_asset_generation",
+          "label": "Asset generation",
+          "agents": [
+            "character",
+            "decor",
+            "ui",
+            "vfx"
+          ],
+          "expected_outputs": [
+            "hero",
+            "enemies",
+            "environment_assets",
+            "ui_assets",
+            "fx_assets"
+          ]
+        },
+        {
+          "id": "05_animation_and_models",
+          "label": "Animation and 2D/2.5D models",
+          "agents": [
+            "animation",
+            "character"
+          ],
+          "expected_outputs": [
+            "rigs",
+            "clips",
+            "runtime_atlas",
+            "depth_variants"
+          ]
+        },
+        {
+          "id": "06_gameplay_systems",
+          "label": "Gameplay systems",
+          "agents": [
+            "gameplay",
+            "codegen"
+          ],
+          "expected_outputs": [
+            "runtime_systems",
+            "components",
+            "event_graph",
+            "balance_tables"
+          ]
+        },
+        {
+          "id": "07_story_and_content",
+          "label": "Story and content",
+          "agents": [
+            "narrative"
+          ],
+          "expected_outputs": [
+            "story_hook",
+            "quest_objective",
+            "dialogue_seed",
+            "content_units",
+            "future_content_queue"
+          ]
+        },
+        {
+          "id": "08_integration_qa_export",
+          "label": "Integration, QA and export",
+          "agents": [
+            "integration",
+            "qa"
+          ],
+          "expected_outputs": [
+            "preview_bundle",
+            "qa_report",
+            "missing_elements",
+            "export_manifest"
+          ]
+        },
+        {
+          "id": "design",
+          "label": "Conception",
+          "agents": [
+            "cortex_master",
+            "narrative"
+          ],
+          "expected_outputs": [
+            "game_spec",
+            "art_bible"
+          ]
+        },
+        {
+          "id": "art",
+          "label": "Direction artistique & assets",
+          "agents": [
+            "decor",
+            "ui"
+          ],
+          "expected_outputs": [
+            "asset_pack"
+          ]
+        },
+        {
+          "id": "level",
+          "label": "Carte (board)",
+          "agents": [
+            "level"
+          ],
+          "expected_outputs": [
+            "scene",
+            "collision_map"
+          ]
+        },
+        {
+          "id": "systems",
+          "label": "Systèmes de jeu",
+          "agents": [
+            "gameplay",
+            "codegen"
+          ],
+          "expected_outputs": [
+            "merge_drop_physics",
+            "merge_cascade",
+            "drop_aim",
+            "hero_abilities",
+            "merge_drop_gacha_summon",
+            "merge_drop_roster",
+            "merge_drop_pity",
+            "run_rewards",
+            "local_save"
+          ]
+        },
+        {
+          "id": "audio",
+          "label": "Audio",
+          "agents": [
+            "music",
+            "sfx"
+          ],
+          "expected_outputs": [
+            "astral_pop+merge_sfx+gacha_sfx"
+          ]
+        },
+        {
+          "id": "assembly",
+          "label": "Assemblage runtime",
+          "agents": [
+            "integration",
+            "camera"
+          ],
+          "expected_outputs": [
+            "preview_bundle"
+          ]
+        },
+        {
+          "id": "qa",
+          "label": "QA & validation",
+          "agents": [
+            "qa"
+          ],
+          "expected_outputs": [
+            "qa_report"
+          ]
+        }
+      ],
+      "work_order_templates": [
+        {
+          "id": "asset:orb_tiers",
+          "domain": "asset",
+          "output": "orb_tiers",
+          "owner_agent": "character"
+        },
+        {
+          "id": "asset:hero_portraits",
+          "domain": "asset",
+          "output": "hero_portraits",
+          "owner_agent": "character"
+        },
+        {
+          "id": "asset:board_bg",
+          "domain": "asset",
+          "output": "board_bg",
+          "owner_agent": "decor"
+        },
+        {
+          "id": "asset:ui_kit",
+          "domain": "asset",
+          "output": "ui_kit",
+          "owner_agent": "ui"
+        },
+        {
+          "id": "asset:rarity_fx",
+          "domain": "asset",
+          "output": "rarity_fx",
+          "owner_agent": "vfx"
+        },
+        {
+          "id": "asset:ability_fx",
+          "domain": "asset",
+          "output": "ability_fx",
+          "owner_agent": "vfx"
+        },
+        {
+          "id": "asset:merge_fx",
+          "domain": "asset",
+          "output": "merge_fx",
+          "owner_agent": "vfx"
+        },
+        {
+          "id": "object:obj_game_controller",
+          "domain": "object_blueprint",
+          "output": "obj_game_controller",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "object:obj_player_spawn",
+          "domain": "object_blueprint",
+          "output": "obj_player_spawn",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "object:obj_camera_controller",
+          "domain": "object_blueprint",
+          "output": "obj_camera_controller",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "object:obj_goal_marker",
+          "domain": "object_blueprint",
+          "output": "obj_goal_marker",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "object:obj_merge_well",
+          "domain": "object_blueprint",
+          "output": "obj_merge_well",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "object:obj_drop_cursor",
+          "domain": "object_blueprint",
+          "output": "obj_drop_cursor",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "object:obj_merge_orb",
+          "domain": "object_blueprint",
+          "output": "obj_merge_orb",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "object:obj_overflow_line",
+          "domain": "object_blueprint",
+          "output": "obj_overflow_line",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "object:obj_hero_ability",
+          "domain": "object_blueprint",
+          "output": "obj_hero_ability",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "object:obj_astral_summon",
+          "domain": "object_blueprint",
+          "output": "obj_astral_summon",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "object:obj_roster_slot",
+          "domain": "object_blueprint",
+          "output": "obj_roster_slot",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "room:rm_boot",
+          "domain": "room",
+          "output": "rm_boot",
+          "owner_agent": "level_design"
+        },
+        {
+          "id": "room:rm_first_playable",
+          "domain": "room",
+          "output": "rm_first_playable",
+          "owner_agent": "level_design"
+        },
+        {
+          "id": "room:rm_results",
+          "domain": "room",
+          "output": "rm_results",
+          "owner_agent": "level_design"
+        },
+        {
+          "id": "room:rm_management_hub",
+          "domain": "room",
+          "output": "rm_management_hub",
+          "owner_agent": "level_design"
+        },
+        {
+          "id": "room:rm_upgrade_shop",
+          "domain": "room",
+          "output": "rm_upgrade_shop",
+          "owner_agent": "level_design"
+        },
+        {
+          "id": "room:rm_merge_run",
+          "domain": "room",
+          "output": "rm_merge_run",
+          "owner_agent": "level_design"
+        },
+        {
+          "id": "room:rm_roster_collection",
+          "domain": "room",
+          "output": "rm_roster_collection",
+          "owner_agent": "level_design"
+        },
+        {
+          "id": "event:on_game_start",
+          "domain": "event_graph",
+          "output": "on_game_start",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "event:on_player_spawn",
+          "domain": "event_graph",
+          "output": "on_player_spawn",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "event:on_objective_complete",
+          "domain": "event_graph",
+          "output": "on_objective_complete",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "event:on_player_death",
+          "domain": "event_graph",
+          "output": "on_player_death",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "event:on_scene_exit",
+          "domain": "event_graph",
+          "output": "on_scene_exit",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "event:on_collision_enter",
+          "domain": "event_graph",
+          "output": "on_collision_enter",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "event:on_grounded_changed",
+          "domain": "event_graph",
+          "output": "on_grounded_changed",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "event:on_orb_drop",
+          "domain": "event_graph",
+          "output": "on_orb_drop",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "event:on_orb_collision",
+          "domain": "event_graph",
+          "output": "on_orb_collision",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "event:on_orb_merge",
+          "domain": "event_graph",
+          "output": "on_orb_merge",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "event:on_overflow_warning",
+          "domain": "event_graph",
+          "output": "on_overflow_warning",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "event:on_astral_pull",
+          "domain": "event_graph",
+          "output": "on_astral_pull",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "event:on_hero_unlocked",
+          "domain": "event_graph",
+          "output": "on_hero_unlocked",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "event:on_merge_pity_changed",
+          "domain": "event_graph",
+          "output": "on_merge_pity_changed",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "event:on_cascade",
+          "domain": "event_graph",
+          "output": "on_cascade",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "event:on_ability_ready",
+          "domain": "event_graph",
+          "output": "on_ability_ready",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "event:on_nexus_created",
+          "domain": "event_graph",
+          "output": "on_nexus_created",
+          "owner_agent": "codegen"
+        },
+        {
+          "id": "animation:idle",
+          "domain": "animation",
+          "output": "idle",
+          "owner_agent": "animation"
+        },
+        {
+          "id": "animation:hurt",
+          "domain": "animation",
+          "output": "hurt",
+          "owner_agent": "animation"
+        },
+        {
+          "id": "animation:death",
+          "domain": "animation",
+          "output": "death",
+          "owner_agent": "animation"
+        },
+        {
+          "id": "animation:run",
+          "domain": "animation",
+          "output": "run",
+          "owner_agent": "animation"
+        },
+        {
+          "id": "animation:jump",
+          "domain": "animation",
+          "output": "jump",
+          "owner_agent": "animation"
+        },
+        {
+          "id": "animation:fall",
+          "domain": "animation",
+          "output": "fall",
+          "owner_agent": "animation"
+        },
+        {
+          "id": "animation:land",
+          "domain": "animation",
+          "output": "land",
+          "owner_agent": "animation"
+        },
+        {
+          "id": "animation:orb_drop",
+          "domain": "animation",
+          "output": "orb_drop",
+          "owner_agent": "animation"
+        },
+        {
+          "id": "animation:merge_burst",
+          "domain": "animation",
+          "output": "merge_burst",
+          "owner_agent": "animation"
+        },
+        {
+          "id": "animation:cascade_pulse",
+          "domain": "animation",
+          "output": "cascade_pulse",
+          "owner_agent": "animation"
+        },
+        {
+          "id": "animation:overflow_warning",
+          "domain": "animation",
+          "output": "overflow_warning",
+          "owner_agent": "animation"
+        },
+        {
+          "id": "animation:hero_ability_cast",
+          "domain": "animation",
+          "output": "hero_ability_cast",
+          "owner_agent": "animation"
+        },
+        {
+          "id": "animation:orb_bounce",
+          "domain": "animation",
+          "output": "orb_bounce",
+          "owner_agent": "animation"
+        },
+        {
+          "id": "animation:summon_reveal",
+          "domain": "animation",
+          "output": "summon_reveal",
+          "owner_agent": "animation"
+        },
+        {
+          "id": "environment:starter_scene",
+          "domain": "environment",
+          "output": "starter_scene",
+          "owner_agent": "decor"
+        },
+        {
+          "id": "environment:collision_shapes",
+          "domain": "environment",
+          "output": "collision_shapes",
+          "owner_agent": "decor"
+        },
+        {
+          "id": "environment:goal_marker",
+          "domain": "environment",
+          "output": "goal_marker",
+          "owner_agent": "decor"
+        },
+        {
+          "id": "environment:astral_merge_well",
+          "domain": "environment",
+          "output": "astral_merge_well",
+          "owner_agent": "decor"
+        },
+        {
+          "id": "environment:danger_line",
+          "domain": "environment",
+          "output": "danger_line",
+          "owner_agent": "decor"
+        },
+        {
+          "id": "environment:constellation_backdrop",
+          "domain": "environment",
+          "output": "constellation_backdrop",
+          "owner_agent": "decor"
+        },
+        {
+          "id": "environment:hero_roster_dock",
+          "domain": "environment",
+          "output": "hero_roster_dock",
+          "owner_agent": "decor"
+        },
+        {
+          "id": "environment:summon_reveal_overlay",
+          "domain": "environment",
+          "output": "summon_reveal_overlay",
+          "owner_agent": "decor"
+        },
+        {
+          "id": "ui:hud",
+          "domain": "ui",
+          "output": "hud",
+          "owner_agent": "ui"
+        },
+        {
+          "id": "ui:pause_menu",
+          "domain": "ui",
+          "output": "pause_menu",
+          "owner_agent": "ui"
+        },
+        {
+          "id": "ui:settings_panel",
+          "domain": "ui",
+          "output": "settings_panel",
+          "owner_agent": "ui"
+        },
+        {
+          "id": "ui:result_screen",
+          "domain": "ui",
+          "output": "result_screen",
+          "owner_agent": "ui"
+        },
+        {
+          "id": "ui:objective_tracker",
+          "domain": "ui",
+          "output": "objective_tracker",
+          "owner_agent": "ui"
+        },
+        {
+          "id": "ui:merge_well_hud",
+          "domain": "ui",
+          "output": "merge_well_hud",
+          "owner_agent": "ui"
+        },
+        {
+          "id": "ui:next_orb_preview",
+          "domain": "ui",
+          "output": "next_orb_preview",
+          "owner_agent": "ui"
+        },
+        {
+          "id": "ui:ability_meter",
+          "domain": "ui",
+          "output": "ability_meter",
+          "owner_agent": "ui"
+        },
+        {
+          "id": "ui:overflow_warning",
+          "domain": "ui",
+          "output": "overflow_warning",
+          "owner_agent": "ui"
+        },
+        {
+          "id": "ui:astral_summon_button",
+          "domain": "ui",
+          "output": "astral_summon_button",
+          "owner_agent": "ui"
+        },
+        {
+          "id": "ui:hero_roster_cards",
+          "domain": "ui",
+          "output": "hero_roster_cards",
+          "owner_agent": "ui"
+        },
+        {
+          "id": "ui:pity_counter",
+          "domain": "ui",
+          "output": "pity_counter",
+          "owner_agent": "ui"
+        },
+        {
+          "id": "ui:rates_disclosure",
+          "domain": "ui",
+          "output": "rates_disclosure",
+          "owner_agent": "ui"
+        },
+        {
+          "id": "ui:resource_bar",
+          "domain": "ui",
+          "output": "resource_bar",
+          "owner_agent": "ui"
+        },
+        {
+          "id": "ui:shop_or_build_panel",
+          "domain": "ui",
+          "output": "shop_or_build_panel",
+          "owner_agent": "ui"
+        },
+        {
+          "id": "ui:summon_result",
+          "domain": "ui",
+          "output": "summon_result",
+          "owner_agent": "ui"
+        },
+        {
+          "id": "audio:ui_confirm",
+          "domain": "audio",
+          "output": "ui_confirm",
+          "owner_agent": "audio"
+        },
+        {
+          "id": "audio:ui_cancel",
+          "domain": "audio",
+          "output": "ui_cancel",
+          "owner_agent": "audio"
+        },
+        {
+          "id": "audio:hit_impact",
+          "domain": "audio",
+          "output": "hit_impact",
+          "owner_agent": "audio"
+        },
+        {
+          "id": "audio:pickup_chime",
+          "domain": "audio",
+          "output": "pickup_chime",
+          "owner_agent": "audio"
+        },
+        {
+          "id": "audio:objective_stinger",
+          "domain": "audio",
+          "output": "objective_stinger",
+          "owner_agent": "audio"
+        },
+        {
+          "id": "audio:ambient_loop",
+          "domain": "audio",
+          "output": "ambient_loop",
+          "owner_agent": "audio"
+        },
+        {
+          "id": "audio:astral_pop+merge_sfx+gacha_sfx",
+          "domain": "audio",
+          "output": "astral_pop+merge_sfx+gacha_sfx",
+          "owner_agent": "audio"
+        },
+        {
+          "id": "audio:puzzle_select",
+          "domain": "audio",
+          "output": "puzzle_select",
+          "owner_agent": "audio"
+        },
+        {
+          "id": "audio:puzzle_success",
+          "domain": "audio",
+          "output": "puzzle_success",
+          "owner_agent": "audio"
+        },
+        {
+          "id": "audio:puzzle_error",
+          "domain": "audio",
+          "output": "puzzle_error",
+          "owner_agent": "audio"
+        },
+        {
+          "id": "audio:currency_tick",
+          "domain": "audio",
+          "output": "currency_tick",
+          "owner_agent": "audio"
+        },
+        {
+          "id": "audio:upgrade_unlock",
+          "domain": "audio",
+          "output": "upgrade_unlock",
+          "owner_agent": "audio"
+        },
+        {
+          "id": "audio:orb_drop",
+          "domain": "audio",
+          "output": "orb_drop",
+          "owner_agent": "audio"
+        },
+        {
+          "id": "audio:orb_bounce",
+          "domain": "audio",
+          "output": "orb_bounce",
+          "owner_agent": "audio"
+        },
+        {
+          "id": "audio:merge_chime",
+          "domain": "audio",
+          "output": "merge_chime",
+          "owner_agent": "audio"
+        },
+        {
+          "id": "audio:cascade_rise",
+          "domain": "audio",
+          "output": "cascade_rise",
+          "owner_agent": "audio"
+        },
+        {
+          "id": "audio:overflow_alarm",
+          "domain": "audio",
+          "output": "overflow_alarm",
+          "owner_agent": "audio"
+        },
+        {
+          "id": "audio:astral_pull",
+          "domain": "audio",
+          "output": "astral_pull",
+          "owner_agent": "audio"
+        },
+        {
+          "id": "audio:hero_unlock",
+          "domain": "audio",
+          "output": "hero_unlock",
+          "owner_agent": "audio"
+        },
+        {
+          "id": "audio:merge_ssr_reveal",
+          "domain": "audio",
+          "output": "merge_ssr_reveal",
+          "owner_agent": "audio"
+        },
+        {
+          "id": "audio:ability_cast",
+          "domain": "audio",
+          "output": "ability_cast",
+          "owner_agent": "audio"
+        },
+        {
+          "id": "system:merge_drop_physics",
+          "domain": "gameplay",
+          "output": "merge_drop_physics",
+          "owner_agent": "gameplay"
+        },
+        {
+          "id": "system:merge_cascade",
+          "domain": "gameplay",
+          "output": "merge_cascade",
+          "owner_agent": "gameplay"
+        },
+        {
+          "id": "system:drop_aim",
+          "domain": "gameplay",
+          "output": "drop_aim",
+          "owner_agent": "gameplay"
+        },
+        {
+          "id": "system:hero_abilities",
+          "domain": "gameplay",
+          "output": "hero_abilities",
+          "owner_agent": "gameplay"
+        },
+        {
+          "id": "system:merge_drop_gacha_summon",
+          "domain": "gameplay",
+          "output": "merge_drop_gacha_summon",
+          "owner_agent": "gameplay"
+        },
+        {
+          "id": "system:merge_drop_roster",
+          "domain": "gameplay",
+          "output": "merge_drop_roster",
+          "owner_agent": "gameplay"
+        },
+        {
+          "id": "system:merge_drop_pity",
+          "domain": "gameplay",
+          "output": "merge_drop_pity",
+          "owner_agent": "gameplay"
+        },
+        {
+          "id": "system:run_rewards",
+          "domain": "gameplay",
+          "output": "run_rewards",
+          "owner_agent": "gameplay"
+        },
+        {
+          "id": "system:local_save",
+          "domain": "gameplay",
+          "output": "local_save",
+          "owner_agent": "gameplay"
+        },
+        {
+          "id": "content:spawn",
+          "domain": "content",
+          "output": "spawn",
+          "owner_agent": "narrative"
+        },
+        {
+          "id": "content:tutorial_prompt",
+          "domain": "content",
+          "output": "tutorial_prompt",
+          "owner_agent": "narrative"
+        },
+        {
+          "id": "content:challenge",
+          "domain": "content",
+          "output": "challenge",
+          "owner_agent": "narrative"
+        },
+        {
+          "id": "content:reward",
+          "domain": "content",
+          "output": "reward",
+          "owner_agent": "narrative"
+        },
+        {
+          "id": "content:exit",
+          "domain": "content",
+          "output": "exit",
+          "owner_agent": "narrative"
+        },
+        {
+          "id": "content:rule_teach",
+          "domain": "content",
+          "output": "rule_teach",
+          "owner_agent": "narrative"
+        },
+        {
+          "id": "content:constraint_twist",
+          "domain": "content",
+          "output": "constraint_twist",
+          "owner_agent": "narrative"
+        },
+        {
+          "id": "content:solution_payoff",
+          "domain": "content",
+          "output": "solution_payoff",
+          "owner_agent": "narrative"
+        },
+        {
+          "id": "content:economy_intro",
+          "domain": "content",
+          "output": "economy_intro",
+          "owner_agent": "narrative"
+        },
+        {
+          "id": "content:upgrade_decision",
+          "domain": "content",
+          "output": "upgrade_decision",
+          "owner_agent": "narrative"
+        },
+        {
+          "id": "content:production_review",
+          "domain": "content",
+          "output": "production_review",
+          "owner_agent": "narrative"
+        },
+        {
+          "id": "content:first_pair_tutorial",
+          "domain": "content",
+          "output": "first_pair_tutorial",
+          "owner_agent": "narrative"
+        },
+        {
+          "id": "content:three_step_cascade",
+          "domain": "content",
+          "output": "three_step_cascade",
+          "owner_agent": "narrative"
+        },
+        {
+          "id": "content:ability_unlock",
+          "domain": "content",
+          "output": "ability_unlock",
+          "owner_agent": "narrative"
+        },
+        {
+          "id": "content:earned_summon",
+          "domain": "content",
+          "output": "earned_summon",
+          "owner_agent": "narrative"
+        },
+        {
+          "id": "content:nexus_target",
+          "domain": "content",
+          "output": "nexus_target",
+          "owner_agent": "narrative"
+        },
+        {
+          "id": "qa:readable first screen",
+          "domain": "qa",
+          "output": "readable first screen",
+          "owner_agent": "qa"
+        },
+        {
+          "id": "qa:clear objective",
+          "domain": "qa",
+          "output": "clear objective",
+          "owner_agent": "qa"
+        },
+        {
+          "id": "qa:runtime smoke test",
+          "domain": "qa",
+          "output": "runtime smoke test",
+          "owner_agent": "qa"
+        },
+        {
+          "id": "qa:mobile performance",
+          "domain": "qa",
+          "output": "mobile performance",
+          "owner_agent": "qa"
+        },
+        {
+          "id": "qa:solution solvability",
+          "domain": "qa",
+          "output": "solution solvability",
+          "owner_agent": "qa"
+        },
+        {
+          "id": "qa:economy sanity",
+          "domain": "qa",
+          "output": "economy sanity",
+          "owner_agent": "qa"
+        },
+        {
+          "id": "qa:deterministic merge rules",
+          "domain": "qa",
+          "output": "deterministic merge rules",
+          "owner_agent": "qa"
+        },
+        {
+          "id": "qa:stable circle stacking",
+          "domain": "qa",
+          "output": "stable circle stacking",
+          "owner_agent": "qa"
+        },
+        {
+          "id": "qa:touch target ergonomics",
+          "domain": "qa",
+          "output": "touch target ergonomics",
+          "owner_agent": "qa"
+        },
+        {
+          "id": "qa:overflow fairness",
+          "domain": "qa",
+          "output": "overflow fairness",
+          "owner_agent": "qa"
+        },
+        {
+          "id": "qa:gacha rates disclosed",
+          "domain": "qa",
+          "output": "gacha rates disclosed",
+          "owner_agent": "qa"
+        },
+        {
+          "id": "qa:no paid currency dependency",
+          "domain": "qa",
+          "output": "no paid currency dependency",
+          "owner_agent": "qa"
+        },
+        {
+          "id": "qa:loop:puzzle",
+          "domain": "qa",
+          "output": "loop:puzzle",
+          "owner_agent": "qa"
+        },
+        {
+          "id": "qa:loop:management",
+          "domain": "qa",
+          "output": "loop:management",
+          "owner_agent": "qa"
+        }
+      ],
+      "missing_elements": [
+        {
+          "id": "asset:board_bg",
+          "domain": "environment",
+          "reason": "Requires board/image cutting or a dedicated environment pass.",
+          "next_owner": "asset_direction"
+        }
+      ],
+      "qa_gates": [
+        "performance mobile",
+        "lisibilité visuelle",
+        "validation GDL",
+        "smoke test runtime",
+        "solvabilité (au moins une solution)",
+        "équilibrage économie"
+      ],
+      "playable_slice_contract": {
+        "quality_target": "vertical_slice",
+        "spatial_model": {
+          "dimension": "2d",
+          "perspective": "side",
+          "depth_mode": "flat",
+          "camera": "fixed_portrait_board",
+          "navigation": "merge_drop_board",
+          "collision_truth": "GDL circle radii, well bounds, gravity, restitution and loss line are the source of truth; painted pixels are visual skin only"
+        },
+        "critical_path": [
+          {
+            "id": "beat_1_drop_preview",
+            "zone_id": "drop_preview",
+            "screen_goal": "understand drop, next orb and loss line in one screen",
+            "player_action": "aim the first orb and read the next-orb preview",
+            "story_function": "teach one-touch control",
+            "runtime_gate": "first_drop_registered"
+          },
+          {
+            "id": "beat_2_merge_well",
+            "zone_id": "merge_well",
+            "screen_goal": "complete Merge Well",
+            "player_action": "stack two identical orbs and trigger a visible merge",
+            "story_function": "prove the core physical rule",
+            "runtime_gate": "first_merge_registered"
+          },
+          {
+            "id": "beat_3_roster_and_power",
+            "zone_id": "roster_and_power",
+            "screen_goal": "complete Roster and Power",
+            "player_action": "build a cascade and cast the selected hero ability",
+            "story_function": "connect puzzle mastery to character identity",
+            "runtime_gate": "hero_ability_cast"
+          },
+          {
+            "id": "beat_4_earned_summon",
+            "zone_id": "earned_summon",
+            "screen_goal": "see how the run feeds collection progress",
+            "player_action": "earn an invocation, unlock or duplicate a hero, then pursue the Nexus tier",
+            "story_function": "close the run-to-roster loop",
+            "runtime_gate": "summon_and_target_progress_saved"
+          }
+        ],
+        "asset_extraction_manifest": [
+          {
+            "id": "orb_tier_pack",
+            "family": "orb_tiers",
+            "source_role": "prompt_and_style_board",
+            "output": "eight_scale_locked_orb_skins",
+            "needed_for": [
+              "merge readability",
+              "tier progression",
+              "collision radius binding"
+            ],
+            "acceptance": [
+              "each tier reads at gameplay size",
+              "visual radius matches collision radius",
+              "adjacent tiers differ by silhouette, color and size"
+            ]
+          },
+          {
+            "id": "merge_well_pack",
+            "family": "board_bg",
+            "source_role": "visual_board",
+            "output": "backdrop_frame_and_collision_manifest",
+            "needed_for": [
+              "world identity",
+              "stable portrait composition",
+              "loss line clarity"
+            ],
+            "acceptance": [
+              "walls and floor come from data",
+              "background never fakes physics",
+              "loss line remains visible under FX"
+            ]
+          },
+          {
+            "id": "hero_roster_pack",
+            "family": "hero_portraits",
+            "source_role": "character_board_or_prompt",
+            "output": "four_portraits_rarity_cards_and_ability_icons",
+            "needed_for": [
+              "hero selection",
+              "summon reveal",
+              "ability identity"
+            ],
+            "acceptance": [
+              "portrait consistency locked",
+              "rarity is not color-only",
+              "ability icon matches runtime effect"
+            ]
+          },
+          {
+            "id": "merge_fx_pack",
+            "family": "merge_rarity_fx",
+            "source_role": "orb_palette_and_rarity_rules",
+            "output": "drop_bounce_merge_cascade_ability_and_summon_fx",
+            "needed_for": [
+              "game feel",
+              "cascade feedback",
+              "reward reveal"
+            ],
+            "acceptance": [
+              "FX duration under 600ms during play",
+              "next drop remains visible",
+              "no photosensitive full-screen strobe"
+            ]
+          },
+          {
+            "id": "mobile_ui_pack",
+            "family": "ui_kit",
+            "source_role": "portrait_gameplay_board",
+            "output": "score_next_orb_roster_ability_summon_and_rates_ui",
+            "needed_for": [
+              "one-thumb play",
+              "progress clarity",
+              "gacha compliance"
+            ],
+            "acceptance": [
+              "touch targets at least 44 CSS px",
+              "rates and pity visible",
+              "no paid currency CTA in the vertical slice"
+            ]
+          }
+        ],
+        "commercial_gates": [
+          "first 30 seconds: player reads next orb, loss line, objective and first merge without a tutorial modal",
+          "input loop: aim, drop, merge, cascade, failure and restart all respond in runtime",
+          "physics gate: circle stacking remains stable at 60, 30 and 20 FPS simulation steps",
+          "merge gate: only equal tiers merge and every cascade is deterministic",
+          "progression gate: a run earns score, ability charge, currency and persistent roster progress",
+          "character gate: each hero ability produces a distinct, testable board-state change",
+          "narrative gate: run start, first merge, first power and Nexus completion advance the Astra premise",
+          "mobile gate: aim, drop, hero selection, ability and summon are touch-operable",
+          "collection gate: rates, pity, duplicate compensation and earned currency source are disclosed",
+          "asset gate: orb radii, portraits, FX and collision truth remain readable at final portrait scale",
+          "QA gate: deterministic tests cover merge, ability, pity, overflow and Nexus completion"
+        ],
+        "production_gaps": [
+          "generated orb art must be bound to exact runtime radii before shipping",
+          "hero portraits need identity-lock variants for roster, summon and ability states",
+          "merge, bounce and overflow sound layers need a mobile loudness pass",
+          "long-session balance needs telemetry for board height, tier frequency and ability value",
+          "source board needs approval for palette, UI density and gameplay-scale readability"
+        ]
+      }
+    },
+    "merge_drop": {
+      "board": {
+        "x": 72,
+        "y": 184,
+        "width": 576,
+        "height": 824,
+        "loss_line_y": 326
+      },
+      "gravity": 1180,
+      "drop_cooldown_ms": 280,
+      "overflow_grace_ms": 1600,
+      "initial_currency": 1800,
+      "summon_cost": 100,
+      "summon10_cost": 900,
+      "relic_summon_cost": 80,
+      "relic_summon10_cost": 720,
+      "pity_after": 30,
+      "summon_rates": {
+        "R": 0.7,
+        "SR": 0.25,
+        "SSR": 0.05
+      },
+      "duplicate_essence": {
+        "R": 15,
+        "SR": 35,
+        "SSR": 80
+      },
+      "awaken_base_cost": 40,
+      "awaken_cost_step": 30,
+      "awaken_max_level": 5,
+      "evolution_max_stars": 5,
+      "item_max_level": 5,
+      "initial_unlocked_heroes": [
+        "mira",
+        "brann",
+        "lys"
+      ],
+      "tiers": [
+        {
+          "id": "spark",
+          "label": "Étincelle",
+          "persona": "Pio",
+          "radius": 24,
+          "color": "#5eead4",
+          "score": 12
+        },
+        {
+          "id": "dew",
+          "label": "Rosée",
+          "persona": "Lumi",
+          "radius": 31,
+          "color": "#38bdf8",
+          "score": 30
+        },
+        {
+          "id": "moon",
+          "label": "Lune",
+          "persona": "Séla",
+          "radius": 40,
+          "color": "#818cf8",
+          "score": 72
+        },
+        {
+          "id": "comet",
+          "label": "Comète",
+          "persona": "Kori",
+          "radius": 50,
+          "color": "#c084fc",
+          "score": 160
+        },
+        {
+          "id": "sun",
+          "label": "Soleil",
+          "persona": "Hélio",
+          "radius": 62,
+          "color": "#fb7185",
+          "score": 360
+        },
+        {
+          "id": "crown",
+          "label": "Couronne",
+          "persona": "Auriel",
+          "radius": 76,
+          "color": "#f59e0b",
+          "score": 800
+        },
+        {
+          "id": "world",
+          "label": "Monde",
+          "persona": "Gaïa",
+          "radius": 92,
+          "color": "#84cc16",
+          "score": 1800
+        },
+        {
+          "id": "nexus",
+          "label": "Nexus",
+          "persona": "Astra",
+          "radius": 112,
+          "color": "#f8fafc",
+          "score": 4200
+        }
+      ],
+      "heroes": [
+        {
+          "id": "mira",
+          "name": "Mira",
+          "title": "Tisseuse de gravité",
+          "rarity": "R",
+          "ability": "gravity_well",
+          "ability_label": "Puits astral",
+          "color": "#2dd4bf",
+          "faction": "Cercle des Marées",
+          "role": "Contrôle",
+          "element": "Lune",
+          "quote": "Tout astre connaît le chemin du retour.",
+          "biography": "Cartographe des courants célestes, Mira plie la gravité pour protéger les voyageurs du Nexus.",
+          "portrait": "/workspaces/orbes-d-astra/03_assets/generated/keepers-roster-v3.png",
+          "portrait_frame": 0,
+          "portrait_columns": 6,
+          "portrait_rows": 4,
+          "skills": [
+            {
+              "id": "mira_a",
+              "name": "Fil d'argent",
+              "description": "Éclats de fusion +10 %",
+              "stars": 1,
+              "effect": "eclat_bonus_pct",
+              "value": 10
+            },
+            {
+              "id": "mira_b",
+              "name": "Cœur du puits",
+              "description": "+2 charge par fusion",
+              "stars": 3,
+              "effect": "charge_merge_bonus",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": "brann",
+          "name": "Brann",
+          "title": "Forgeron des astres",
+          "rarity": "R",
+          "ability": "forge_next",
+          "ability_label": "Frappe runique",
+          "color": "#f97316",
+          "faction": "Forge Solaire",
+          "role": "Amplificateur",
+          "element": "Feu",
+          "quote": "Le ciel se répare à coups de marteau.",
+          "biography": "Brann frappe les météores encore chauds pour façonner des orbes capables de défier la Nuit.",
+          "portrait": "/workspaces/orbes-d-astra/03_assets/generated/keepers-roster-v3.png",
+          "portrait_frame": 1,
+          "portrait_columns": 6,
+          "portrait_rows": 4,
+          "skills": [
+            {
+              "id": "brann_a",
+              "name": "Braises",
+              "description": "Score +8 %",
+              "stars": 1,
+              "effect": "score_bonus_pct",
+              "value": 8
+            },
+            {
+              "id": "brann_b",
+              "name": "Souffle de forge",
+              "description": "+2 charge par orbe",
+              "stars": 3,
+              "effect": "charge_per_drop",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": "kael",
+          "name": "Kael",
+          "title": "Chasseur d'étoiles",
+          "rarity": "R",
+          "ability": "starfall",
+          "ability_label": "Pluie d'étoiles",
+          "color": "#a3e635",
+          "faction": "Veilleurs Boréaux",
+          "role": "Dégâts",
+          "element": "Vent",
+          "quote": "Je ne manque jamais une étoile filante.",
+          "biography": "Éclaireur des frontières boréales, Kael abat les fragments corrompus avant leur chute.",
+          "portrait": "/workspaces/orbes-d-astra/03_assets/generated/keepers-roster-v3.png",
+          "portrait_frame": 2,
+          "portrait_columns": 6,
+          "portrait_rows": 4,
+          "skills": [
+            {
+              "id": "kael_a",
+              "name": "Instinct de chasse",
+              "description": "Éclats de fusion +12 %",
+              "stars": 1,
+              "effect": "eclat_bonus_pct",
+              "value": 12
+            },
+            {
+              "id": "kael_b",
+              "name": "Ciel dégagé",
+              "description": "Grâce de débordement +250 ms",
+              "stars": 3,
+              "effect": "overflow_grace_ms",
+              "value": 250
+            }
+          ]
+        },
+        {
+          "id": "orin",
+          "name": "Orin",
+          "title": "Chasseur des marées",
+          "rarity": "R",
+          "ability": "echo_merge",
+          "ability_label": "Écho jumeau",
+          "color": "#22d3ee",
+          "faction": "Cercle des Marées",
+          "role": "Combo",
+          "element": "Eau",
+          "quote": "Une vague revient toujours deux fois.",
+          "biography": "Orin entend les échos des fusions futures et reproduit leurs ondes dans le présent.",
+          "portrait": "/workspaces/orbes-d-astra/03_assets/generated/keepers-roster-v3.png",
+          "portrait_frame": 3,
+          "portrait_columns": 6,
+          "portrait_rows": 4,
+          "skills": [
+            {
+              "id": "orin_a",
+              "name": "Ressac",
+              "description": "Fenêtre de cascade +200 ms",
+              "stars": 1,
+              "effect": "cascade_window_ms",
+              "value": 200
+            },
+            {
+              "id": "orin_b",
+              "name": "Marée montante",
+              "description": "Score +10 %",
+              "stars": 3,
+              "effect": "score_bonus_pct",
+              "value": 10
+            }
+          ]
+        },
+        {
+          "id": "talia",
+          "name": "Talia",
+          "title": "Messagère des zéphyrs",
+          "rarity": "R",
+          "ability": "time_bloom",
+          "ability_label": "Danse suspendue",
+          "color": "#67e8f9",
+          "faction": "Veilleurs Boréaux",
+          "role": "Vitesse",
+          "element": "Vent",
+          "quote": "Respire. Le ciel te laisse une seconde.",
+          "biography": "Talia traverse les tempêtes pour transmettre les ordres de l’Observatoire dans un silence absolu.",
+          "portrait": "/workspaces/orbes-d-astra/03_assets/generated/keepers-roster-v3.png",
+          "portrait_frame": 4,
+          "portrait_columns": 6,
+          "portrait_rows": 4,
+          "skills": [
+            {
+              "id": "talia_a",
+              "name": "Pas de brise",
+              "description": "Recharge des orbes −45 ms",
+              "stars": 1,
+              "effect": "cooldown_reduction_ms",
+              "value": 45
+            },
+            {
+              "id": "talia_b",
+              "name": "Courant calme",
+              "description": "Ralenti 0,9 s sur cascade ×3",
+              "stars": 3,
+              "effect": "slow_on_cascade_ms",
+              "value": 900
+            }
+          ]
+        },
+        {
+          "id": "joren",
+          "name": "Joren",
+          "title": "Porte-bouclier lunaire",
+          "rarity": "R",
+          "ability": "aegis",
+          "ability_label": "Rempart lunaire",
+          "color": "#94a3b8",
+          "faction": "Ordre du Croissant",
+          "role": "Protection",
+          "element": "Lune",
+          "quote": "Derrière moi, aucune étoile ne tombe.",
+          "biography": "Dernier gardien d’un temple effondré, Joren porte un éclat de lune en guise de bouclier.",
+          "portrait": "/workspaces/orbes-d-astra/03_assets/generated/keepers-roster-v3.png",
+          "portrait_frame": 5,
+          "portrait_columns": 6,
+          "portrait_rows": 4,
+          "skills": [
+            {
+              "id": "joren_a",
+              "name": "Garde blanche",
+              "description": "Grâce de débordement +300 ms",
+              "stars": 1,
+              "effect": "overflow_grace_ms",
+              "value": 300
+            },
+            {
+              "id": "joren_b",
+              "name": "Serment",
+              "description": "Score +7 %",
+              "stars": 3,
+              "effect": "score_bonus_pct",
+              "value": 7
+            }
+          ]
+        },
+        {
+          "id": "phae",
+          "name": "Phaé",
+          "title": "Herboriste de comète",
+          "rarity": "R",
+          "ability": "ascension",
+          "ability_label": "Pollen ascendant",
+          "color": "#bef264",
+          "faction": "Jardins Sidéraux",
+          "role": "Soutien",
+          "element": "Nature",
+          "quote": "Même le vide peut refleurir.",
+          "biography": "Phaé cultive des graines nées dans les queues de comètes et soigne les constellations blessées.",
+          "portrait": "/workspaces/orbes-d-astra/03_assets/generated/keepers-roster-v3.png",
+          "portrait_frame": 6,
+          "portrait_columns": 6,
+          "portrait_rows": 4,
+          "skills": [
+            {
+              "id": "phae_a",
+              "name": "Graine vive",
+              "description": "Commence avec 12 % de charge",
+              "stars": 1,
+              "effect": "start_charge",
+              "value": 12
+            },
+            {
+              "id": "phae_b",
+              "name": "Floraison",
+              "description": "+1 charge par orbe",
+              "stars": 3,
+              "effect": "charge_per_drop",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": "ciro",
+          "name": "Ciro",
+          "title": "Archiviste errant",
+          "rarity": "R",
+          "ability": "shatter_top",
+          "ability_label": "Page tranchante",
+          "color": "#fca5a5",
+          "faction": "Bibliothèque du Nexus",
+          "role": "Précision",
+          "element": "Solaire",
+          "quote": "Une erreur bien lue devient une victoire.",
+          "biography": "Ciro collectionne les cartes des ciels disparus et sait exactement quel orbe retirer du chaos.",
+          "portrait": "/workspaces/orbes-d-astra/03_assets/generated/keepers-roster-v3.png",
+          "portrait_frame": 7,
+          "portrait_columns": 6,
+          "portrait_rows": 4,
+          "skills": [
+            {
+              "id": "ciro_a",
+              "name": "Annotation",
+              "description": "Score +9 %",
+              "stars": 1,
+              "effect": "score_bonus_pct",
+              "value": 9
+            },
+            {
+              "id": "ciro_b",
+              "name": "Index secret",
+              "description": "Éclats de fusion +8 %",
+              "stars": 3,
+              "effect": "eclat_bonus_pct",
+              "value": 8
+            }
+          ]
+        },
+        {
+          "id": "lys",
+          "name": "Lys",
+          "title": "Gardienne des secondes",
+          "rarity": "SR",
+          "ability": "time_bloom",
+          "ability_label": "Temps suspendu",
+          "color": "#60a5fa",
+          "faction": "Horloge Astrale",
+          "role": "Contrôle",
+          "element": "Temps",
+          "quote": "Une seconde suffit à changer un destin.",
+          "biography": "Lys surveille les secondes perdues depuis la fracture et les restitue aux invocateurs audacieux.",
+          "portrait": "/workspaces/orbes-d-astra/03_assets/generated/keepers-roster-v3.png",
+          "portrait_frame": 8,
+          "portrait_columns": 6,
+          "portrait_rows": 4,
+          "skills": [
+            {
+              "id": "lys_a",
+              "name": "Rosée persistante",
+              "description": "Ralenti 1,5 s sur cascade ×3",
+              "stars": 1,
+              "effect": "slow_on_cascade_ms",
+              "value": 1500
+            },
+            {
+              "id": "lys_b",
+              "name": "Sablier fêlé",
+              "description": "Fenêtre de cascade +300 ms",
+              "stars": 3,
+              "effect": "cascade_window_ms",
+              "value": 300
+            }
+          ]
+        },
+        {
+          "id": "noor",
+          "name": "Noor",
+          "title": "Porteuse d'aurore",
+          "rarity": "SR",
+          "ability": "ascension",
+          "ability_label": "Ascension",
+          "color": "#f472b6",
+          "faction": "Forge Solaire",
+          "role": "Soutien",
+          "element": "Solaire",
+          "quote": "L’aube est une promesse, pas un souvenir.",
+          "biography": "Noor porte dans sa lanterne la première lumière du monde, assez vive pour élever les astres.",
+          "portrait": "/workspaces/orbes-d-astra/03_assets/generated/keepers-roster-v3.png",
+          "portrait_frame": 9,
+          "portrait_columns": 6,
+          "portrait_rows": 4,
+          "skills": [
+            {
+              "id": "noor_a",
+              "name": "Aube claire",
+              "description": "Commence avec 20 % de charge",
+              "stars": 1,
+              "effect": "start_charge",
+              "value": 20
+            },
+            {
+              "id": "noor_b",
+              "name": "Élan céleste",
+              "description": "+3 charge par fusion",
+              "stars": 3,
+              "effect": "charge_merge_bonus",
+              "value": 3
+            }
+          ]
+        },
+        {
+          "id": "vesper",
+          "name": "Vesper",
+          "title": "Sentinelle du soir",
+          "rarity": "SR",
+          "ability": "aegis",
+          "ability_label": "Voile stellaire",
+          "color": "#94a3b8",
+          "faction": "Ordre du Croissant",
+          "role": "Protection",
+          "element": "Ombre",
+          "quote": "Le crépuscule n’est pas une fin.",
+          "biography": "Vesper veille là où la lumière hésite et repousse le débordement par un voile impénétrable.",
+          "portrait": "/workspaces/orbes-d-astra/03_assets/generated/keepers-roster-v3.png",
+          "portrait_frame": 10,
+          "portrait_columns": 6,
+          "portrait_rows": 4,
+          "skills": [
+            {
+              "id": "vesper_a",
+              "name": "Garde du soir",
+              "description": "Grâce de débordement +400 ms",
+              "stars": 1,
+              "effect": "overflow_grace_ms",
+              "value": 400
+            },
+            {
+              "id": "vesper_b",
+              "name": "Pas feutré",
+              "description": "Recharge des orbes −60 ms",
+              "stars": 3,
+              "effect": "cooldown_reduction_ms",
+              "value": 60
+            }
+          ]
+        },
+        {
+          "id": "saphira",
+          "name": "Saphira",
+          "title": "Lame de cristal",
+          "rarity": "SR",
+          "ability": "shatter_top",
+          "ability_label": "Éclat pur",
+          "color": "#7dd3fc",
+          "faction": "Prisme Royal",
+          "role": "Dégâts",
+          "element": "Cristal",
+          "quote": "La perfection possède un tranchant.",
+          "biography": "Duelliste du Prisme Royal, Saphira fend les formations impossibles d’un seul geste lumineux.",
+          "portrait": "/workspaces/orbes-d-astra/03_assets/generated/keepers-roster-v3.png",
+          "portrait_frame": 11,
+          "portrait_columns": 6,
+          "portrait_rows": 4,
+          "skills": [
+            {
+              "id": "saphira_a",
+              "name": "Tranchant",
+              "description": "Score +12 %",
+              "stars": 1,
+              "effect": "score_bonus_pct",
+              "value": 12
+            },
+            {
+              "id": "saphira_b",
+              "name": "Facettes",
+              "description": "Éclats de fusion +8 %",
+              "stars": 3,
+              "effect": "eclat_bonus_pct",
+              "value": 8
+            }
+          ]
+        },
+        {
+          "id": "nyx",
+          "name": "Nyx",
+          "title": "Murmure du vide",
+          "rarity": "SR",
+          "ability": "void_swap",
+          "ability_label": "Bascule du vide",
+          "color": "#6366f1",
+          "faction": "Exilés du Vide",
+          "role": "Manipulation",
+          "element": "Vide",
+          "quote": "Le vide ne ment jamais.",
+          "biography": "Nyx a traversé la Nuit sans constellation et en a rapporté l’art d’inverser les lois du Puits.",
+          "portrait": "/workspaces/orbes-d-astra/03_assets/generated/keepers-roster-v3.png",
+          "portrait_frame": 12,
+          "portrait_columns": 6,
+          "portrait_rows": 4,
+          "skills": [
+            {
+              "id": "nyx_a",
+              "name": "Ombre utile",
+              "description": "Recharge des orbes −50 ms",
+              "stars": 1,
+              "effect": "cooldown_reduction_ms",
+              "value": 50
+            },
+            {
+              "id": "nyx_b",
+              "name": "Regard du vide",
+              "description": "+3 charge par orbe",
+              "stars": 3,
+              "effect": "charge_per_drop",
+              "value": 3
+            }
+          ]
+        },
+        {
+          "id": "ilyra",
+          "name": "Ilyra",
+          "title": "Cantatrice des anneaux",
+          "rarity": "SR",
+          "ability": "constellation",
+          "ability_label": "Accord orbital",
+          "color": "#d8b4fe",
+          "faction": "Chœur Céleste",
+          "role": "Combo",
+          "element": "Son",
+          "quote": "Chaque orbite attend sa note.",
+          "biography": "La voix d’Ilyra relie les orbes distants et prolonge les cascades au-delà du possible.",
+          "portrait": "/workspaces/orbes-d-astra/03_assets/generated/keepers-roster-v3.png",
+          "portrait_frame": 13,
+          "portrait_columns": 6,
+          "portrait_rows": 4,
+          "skills": [
+            {
+              "id": "ilyra_a",
+              "name": "Legato",
+              "description": "Fenêtre de cascade +280 ms",
+              "stars": 1,
+              "effect": "cascade_window_ms",
+              "value": 280
+            },
+            {
+              "id": "ilyra_b",
+              "name": "Harmonique",
+              "description": "+3 charge par fusion",
+              "stars": 3,
+              "effect": "charge_merge_bonus",
+              "value": 3
+            }
+          ]
+        },
+        {
+          "id": "caelum",
+          "name": "Caelum",
+          "title": "Lancetoile impérial",
+          "rarity": "SR",
+          "ability": "starfall",
+          "ability_label": "Javelot céleste",
+          "color": "#38bdf8",
+          "faction": "Légion d’Astra",
+          "role": "Dégâts",
+          "element": "Foudre",
+          "quote": "Je trace la ligne que suivra l’éclair.",
+          "biography": "Champion de la Légion, Caelum concentre les pluies stellaires en impacts d’une précision brutale.",
+          "portrait": "/workspaces/orbes-d-astra/03_assets/generated/keepers-roster-v3.png",
+          "portrait_frame": 14,
+          "portrait_columns": 6,
+          "portrait_rows": 4,
+          "skills": [
+            {
+              "id": "caelum_a",
+              "name": "Pointe d’azur",
+              "description": "Score +13 %",
+              "stars": 1,
+              "effect": "score_bonus_pct",
+              "value": 13
+            },
+            {
+              "id": "caelum_b",
+              "name": "Arc ionique",
+              "description": "Éclats de fusion +10 %",
+              "stars": 3,
+              "effect": "eclat_bonus_pct",
+              "value": 10
+            }
+          ]
+        },
+        {
+          "id": "rhea",
+          "name": "Rhéa",
+          "title": "Oracle des marées",
+          "rarity": "SR",
+          "ability": "echo_merge",
+          "ability_label": "Double présage",
+          "color": "#06b6d4",
+          "faction": "Cercle des Marées",
+          "role": "Combo",
+          "element": "Eau",
+          "quote": "J’ai déjà vu la prochaine vague.",
+          "biography": "Rhéa lit les futurs possibles dans l’eau stellaire et choisit celui qui produit la cascade parfaite.",
+          "portrait": "/workspaces/orbes-d-astra/03_assets/generated/keepers-roster-v3.png",
+          "portrait_frame": 15,
+          "portrait_columns": 6,
+          "portrait_rows": 4,
+          "skills": [
+            {
+              "id": "rhea_a",
+              "name": "Présage fluide",
+              "description": "Fenêtre de cascade +320 ms",
+              "stars": 1,
+              "effect": "cascade_window_ms",
+              "value": 320
+            },
+            {
+              "id": "rhea_b",
+              "name": "Seconde vague",
+              "description": "Score +11 %",
+              "stars": 3,
+              "effect": "score_bonus_pct",
+              "value": 11
+            }
+          ]
+        },
+        {
+          "id": "talos",
+          "name": "Talos",
+          "title": "Colosse magnétique",
+          "rarity": "SR",
+          "ability": "gravity_well",
+          "ability_label": "Cœur magnétique",
+          "color": "#a78bfa",
+          "faction": "Forge Solaire",
+          "role": "Contrôle",
+          "element": "Métal",
+          "quote": "Tout finit par graviter autour d’une volonté.",
+          "biography": "Armure antique animée par un noyau conscient, Talos attire les orbes comme des satellites.",
+          "portrait": "/workspaces/orbes-d-astra/03_assets/generated/keepers-roster-v3.png",
+          "portrait_frame": 16,
+          "portrait_columns": 6,
+          "portrait_rows": 4,
+          "skills": [
+            {
+              "id": "talos_a",
+              "name": "Blindage orbital",
+              "description": "Grâce de débordement +450 ms",
+              "stars": 1,
+              "effect": "overflow_grace_ms",
+              "value": 450
+            },
+            {
+              "id": "talos_b",
+              "name": "Induction",
+              "description": "+3 charge par fusion",
+              "stars": 3,
+              "effect": "charge_merge_bonus",
+              "value": 3
+            }
+          ]
+        },
+        {
+          "id": "maelys",
+          "name": "Maëlys",
+          "title": "Dompteuse de nébuleuses",
+          "rarity": "SR",
+          "ability": "forge_next",
+          "ability_label": "Nébuleuse captive",
+          "color": "#fb7185",
+          "faction": "Jardins Sidéraux",
+          "role": "Amplificateur",
+          "element": "Cosmos",
+          "quote": "Les nuages du ciel ont aussi un cœur.",
+          "biography": "Maëlys apprivoise les nébuleuses vivantes et condense leur poussière en orbes de rang supérieur.",
+          "portrait": "/workspaces/orbes-d-astra/03_assets/generated/keepers-roster-v3.png",
+          "portrait_frame": 17,
+          "portrait_columns": 6,
+          "portrait_rows": 4,
+          "skills": [
+            {
+              "id": "maelys_a",
+              "name": "Poussière vive",
+              "description": "+3 charge par orbe",
+              "stars": 1,
+              "effect": "charge_per_drop",
+              "value": 3
+            },
+            {
+              "id": "maelys_b",
+              "name": "Nuage royal",
+              "description": "Score +12 %",
+              "stars": 3,
+              "effect": "score_bonus_pct",
+              "value": 12
+            }
+          ]
+        },
+        {
+          "id": "aster",
+          "name": "Aster",
+          "title": "Héritière du Nexus",
+          "rarity": "SSR",
+          "ability": "supernova",
+          "ability_label": "Supernova",
+          "color": "#facc15",
+          "faction": "Trône du Nexus",
+          "role": "Dégâts",
+          "element": "Nexus",
+          "quote": "Je rallumerai chaque royaume, un astre après l’autre.",
+          "biography": "Héritière de la couronne brisée, Aster transforme les fusions en une supernova capable de repousser la Nuit.",
+          "portrait": "/workspaces/orbes-d-astra/03_assets/generated/keepers-roster-v3.png",
+          "portrait_frame": 18,
+          "portrait_columns": 6,
+          "portrait_rows": 4,
+          "skills": [
+            {
+              "id": "aster_a",
+              "name": "Héritage",
+              "description": "+4 charge par fusion",
+              "stars": 1,
+              "effect": "charge_merge_bonus",
+              "value": 4
+            },
+            {
+              "id": "aster_b",
+              "name": "Noblesse",
+              "description": "Score +15 %",
+              "stars": 3,
+              "effect": "score_bonus_pct",
+              "value": 15
+            }
+          ]
+        },
+        {
+          "id": "elya",
+          "name": "Élya",
+          "title": "Voix des constellations",
+          "rarity": "SSR",
+          "ability": "constellation",
+          "ability_label": "Constellation",
+          "color": "#e879f9",
+          "faction": "Chœur Céleste",
+          "role": "Combo",
+          "element": "Son",
+          "quote": "Le ciel se souvient de notre refrain.",
+          "biography": "Élya chante les noms véritables des constellations et force leurs fragments à se reconnaître.",
+          "portrait": "/workspaces/orbes-d-astra/03_assets/generated/keepers-roster-v3.png",
+          "portrait_frame": 19,
+          "portrait_columns": 6,
+          "portrait_rows": 4,
+          "skills": [
+            {
+              "id": "elya_a",
+              "name": "Chœur mineur",
+              "description": "Éclats de fusion +15 %",
+              "stars": 1,
+              "effect": "eclat_bonus_pct",
+              "value": 15
+            },
+            {
+              "id": "elya_b",
+              "name": "Harmonie",
+              "description": "Fenêtre de cascade +350 ms",
+              "stars": 3,
+              "effect": "cascade_window_ms",
+              "value": 350
+            }
+          ]
+        },
+        {
+          "id": "solveig",
+          "name": "Solveig",
+          "title": "Aube éternelle",
+          "rarity": "SSR",
+          "ability": "aurora",
+          "ability_label": "Aurore boréale",
+          "color": "#fb923c",
+          "faction": "Veilleurs Boréaux",
+          "role": "Amplificateur",
+          "element": "Aurore",
+          "quote": "La nuit reculera tant que je respire.",
+          "biography": "Vedette de l’Aurore Boréale, Solveig double les fusions pendant une danse de lumière polaire.",
+          "portrait": "/workspaces/orbes-d-astra/03_assets/generated/keepers-roster-v3.png",
+          "portrait_frame": 20,
+          "portrait_columns": 6,
+          "portrait_rows": 4,
+          "skills": [
+            {
+              "id": "solveig_a",
+              "name": "Premier rayon",
+              "description": "Commence avec 30 % de charge",
+              "stars": 1,
+              "effect": "start_charge",
+              "value": 30
+            },
+            {
+              "id": "solveig_b",
+              "name": "Chaleur douce",
+              "description": "Ralenti 2 s sur cascade ×3",
+              "stars": 3,
+              "effect": "slow_on_cascade_ms",
+              "value": 2000
+            }
+          ]
+        },
+        {
+          "id": "seraphiel",
+          "name": "Séraphiel",
+          "title": "Juge des sept soleils",
+          "rarity": "SSR",
+          "ability": "starfall",
+          "ability_label": "Sentence solaire",
+          "color": "#fde68a",
+          "faction": "Trône du Nexus",
+          "role": "Dégâts",
+          "element": "Solaire",
+          "quote": "Sept soleils, un seul verdict.",
+          "biography": "Séraphiel descend lorsque les cieux sont condamnés et fait pleuvoir une sentence de feu pur.",
+          "portrait": "/workspaces/orbes-d-astra/03_assets/generated/keepers-roster-v3.png",
+          "portrait_frame": 21,
+          "portrait_columns": 6,
+          "portrait_rows": 4,
+          "skills": [
+            {
+              "id": "seraphiel_a",
+              "name": "Septième sceau",
+              "description": "Score +18 %",
+              "stars": 1,
+              "effect": "score_bonus_pct",
+              "value": 18
+            },
+            {
+              "id": "seraphiel_b",
+              "name": "Justice ardente",
+              "description": "+5 charge par fusion",
+              "stars": 3,
+              "effect": "charge_merge_bonus",
+              "value": 5
+            }
+          ]
+        },
+        {
+          "id": "vaelora",
+          "name": "Vaelora",
+          "title": "Impératrice du vide",
+          "rarity": "SSR",
+          "ability": "void_swap",
+          "ability_label": "Renversement absolu",
+          "color": "#8b5cf6",
+          "faction": "Exilés du Vide",
+          "role": "Manipulation",
+          "element": "Vide",
+          "quote": "Je ne crains pas la Nuit. Elle me craint.",
+          "biography": "Ancienne souveraine exilée, Vaelora retourne la corruption contre elle-même et réordonne le Puits.",
+          "portrait": "/workspaces/orbes-d-astra/03_assets/generated/keepers-roster-v3.png",
+          "portrait_frame": 22,
+          "portrait_columns": 6,
+          "portrait_rows": 4,
+          "skills": [
+            {
+              "id": "vaelora_a",
+              "name": "Autorité noire",
+              "description": "Recharge des orbes −90 ms",
+              "stars": 1,
+              "effect": "cooldown_reduction_ms",
+              "value": 90
+            },
+            {
+              "id": "vaelora_b",
+              "name": "Tribut du vide",
+              "description": "Éclats de fusion +18 %",
+              "stars": 3,
+              "effect": "eclat_bonus_pct",
+              "value": 18
+            }
+          ]
+        },
+        {
+          "id": "orion",
+          "name": "Orion",
+          "title": "Architecte primordial",
+          "rarity": "SSR",
+          "ability": "gravity_well",
+          "ability_label": "Architecture céleste",
+          "color": "#5eead4",
+          "faction": "Bâtisseurs Premiers",
+          "role": "Contrôle",
+          "element": "Nexus",
+          "quote": "Une constellation est une cité qui sait danser.",
+          "biography": "Orion dessina les premières orbites. Son retour annonce la reconstruction du ciel originel.",
+          "portrait": "/workspaces/orbes-d-astra/03_assets/generated/keepers-roster-v3.png",
+          "portrait_frame": 23,
+          "portrait_columns": 6,
+          "portrait_rows": 4,
+          "skills": [
+            {
+              "id": "orion_a",
+              "name": "Fondation",
+              "description": "Grâce de débordement +650 ms",
+              "stars": 1,
+              "effect": "overflow_grace_ms",
+              "value": 650
+            },
+            {
+              "id": "orion_b",
+              "name": "Plan primordial",
+              "description": "Commence avec 35 % de charge",
+              "stars": 3,
+              "effect": "start_charge",
+              "value": 35
+            }
+          ]
+        }
+      ]
+    },
+    "economy_disclosure": {
+      "paid_currency": false,
+      "currency_source": "earned by merges, cascades and Nexus completion",
+      "duplicate_resource": "essence",
+      "duplicate_compensation": {
+        "R": 15,
+        "SR": 35,
+        "SSR": 80
+      },
+      "duplicate_sink": "essence awakens Guardian ultimates (5 levels, published costs)",
+      "duplicate_evolution": "each Guardian duplicate grants an evolution star (max 5) unlocking skills at 1 and 3 stars",
+      "rates": {
+        "R": "70%",
+        "SR": "25%",
+        "SSR": "5%"
+      },
+      "pity": "SSR guaranteed no later than pull 30; a non-featured SSR guarantees the featured SSR on the next SSR pull",
+      "ten_pull": "900 shards for 10 pulls with at least one SR or better guaranteed",
+      "relic_banner": "80 shards per pull (720 for 10, SR+ guaranteed); duplicates level items up to 5 then convert to essence"
+    },
+    "board_to_playable": {
+      "quality_target": "vertical_slice",
+      "source_refs": [
+        {
+          "id": "prompt_north_star",
+          "kind": "prompt",
+          "role": "intent_and_story_seed"
+        },
+        {
+          "id": "source_image_1",
+          "kind": "board_image",
+          "uri": "/workspaces/orbes-d-astra/03_assets/generated/astral-observatory-v3.png",
+          "role": "visual_board_or_key_art"
+        },
+        {
+          "id": "source_image_2",
+          "kind": "reference_image",
+          "uri": "/workspaces/orbes-d-astra/03_assets/generated/keepers-roster-v3.png",
+          "role": "character_prop_or_style_reference"
+        },
+        {
+          "id": "source_image_3",
+          "kind": "reference_image",
+          "uri": "/workspaces/orbes-d-astra/03_assets/generated/astral-sanctuary-v3.png",
+          "role": "character_prop_or_style_reference"
+        },
+        {
+          "id": "source_image_4",
+          "kind": "reference_image",
+          "uri": "/workspaces/orbes-d-astra/03_assets/generated/astral-prologue-v3.png",
+          "role": "character_prop_or_style_reference"
+        },
+        {
+          "id": "source_image_5",
+          "kind": "reference_image",
+          "uri": "/workspaces/orbes-d-astra/03_assets/generated/void-leviathan-v3.png",
+          "role": "character_prop_or_style_reference"
+        }
+      ],
+      "spatial_model": {
+        "dimension": "2d",
+        "perspective": "side",
+        "depth_mode": "flat",
+        "camera": "fixed_portrait_board",
+        "navigation": "merge_drop_board",
+        "collision_truth": "GDL circle radii, well bounds, gravity, restitution and loss line are the source of truth; painted pixels are visual skin only"
+      },
+      "volume_layers": [
+        {
+          "id": "constellation_backdrop",
+          "role": "far_background",
+          "depth": 0.05,
+          "parallax": 0.06,
+          "collision": false,
+          "asset_family": "board_bg",
+          "extraction_rule": "keep the backdrop calm so every orb remains readable"
+        },
+        {
+          "id": "merge_well_housing",
+          "role": "midground",
+          "depth": 0.3,
+          "parallax": 0.1,
+          "collision": false,
+          "asset_family": "merge_well_frame",
+          "extraction_rule": "frame the physical well without painting fake collision boundaries"
+        },
+        {
+          "id": "circle_physics_well",
+          "role": "playfield",
+          "depth": 0.7,
+          "parallax": 1,
+          "collision": true,
+          "asset_family": "circle_collision_world",
+          "extraction_rule": "author walls, floor, loss line, radii and restitution as deterministic data"
+        },
+        {
+          "id": "orb_and_power_plane",
+          "role": "actor_plane",
+          "depth": 0.82,
+          "parallax": 1,
+          "collision": true,
+          "asset_family": "orb_tiers_and_hero_abilities",
+          "extraction_rule": "render tier, rarity and ability effects above the collision truth"
+        },
+        {
+          "id": "roster_dock",
+          "role": "foreground_occluder",
+          "depth": 0.95,
+          "parallax": 1,
+          "collision": false,
+          "asset_family": "hero_roster_ui",
+          "extraction_rule": "reserve a stable touch-safe dock outside the physical well"
+        },
+        {
+          "id": "merge_and_summon_fx",
+          "role": "fx_lighting",
+          "depth": 1,
+          "parallax": 1,
+          "collision": false,
+          "asset_family": "merge_rarity_fx",
+          "extraction_rule": "feedback may flash or burst but must never hide the next drop or loss line"
+        }
+      ],
+      "critical_path": [
+        {
+          "id": "beat_1_drop_preview",
+          "zone_id": "drop_preview",
+          "screen_goal": "understand drop, next orb and loss line in one screen",
+          "player_action": "aim the first orb and read the next-orb preview",
+          "story_function": "teach one-touch control",
+          "runtime_gate": "first_drop_registered"
+        },
+        {
+          "id": "beat_2_merge_well",
+          "zone_id": "merge_well",
+          "screen_goal": "complete Merge Well",
+          "player_action": "stack two identical orbs and trigger a visible merge",
+          "story_function": "prove the core physical rule",
+          "runtime_gate": "first_merge_registered"
+        },
+        {
+          "id": "beat_3_roster_and_power",
+          "zone_id": "roster_and_power",
+          "screen_goal": "complete Roster and Power",
+          "player_action": "build a cascade and cast the selected hero ability",
+          "story_function": "connect puzzle mastery to character identity",
+          "runtime_gate": "hero_ability_cast"
+        },
+        {
+          "id": "beat_4_earned_summon",
+          "zone_id": "earned_summon",
+          "screen_goal": "see how the run feeds collection progress",
+          "player_action": "earn an invocation, unlock or duplicate a hero, then pursue the Nexus tier",
+          "story_function": "close the run-to-roster loop",
+          "runtime_gate": "summon_and_target_progress_saved"
+        }
+      ],
+      "encounters": [
+        {
+          "id": "pressure_1_merge_well",
+          "zone_id": "merge_well",
+          "enemy_budget": 0,
+          "purpose": "teach pair fusion",
+          "fail_state": "settled orb crosses the telegraphed loss line",
+          "reward": "score, charge and merge feedback"
+        },
+        {
+          "id": "pressure_2_roster_and_power",
+          "zone_id": "roster_and_power",
+          "enemy_budget": 0,
+          "purpose": "force a meaningful hero-power decision",
+          "fail_state": "settled orb crosses the telegraphed loss line",
+          "reward": "cascade multiplier and ability recovery"
+        },
+        {
+          "id": "pressure_3_earned_summon",
+          "zone_id": "earned_summon",
+          "enemy_budget": 0,
+          "purpose": "convert run mastery into collection progress",
+          "fail_state": "insufficient earned currency leaves summon available later without monetization pressure",
+          "reward": "hero unlock, duplicate essence or Nexus progress"
+        }
+      ],
+      "story_beats": [
+        {
+          "id": "story_astral_opening",
+          "trigger": "run_start",
+          "text": "The observatory is collapsing. Rebuild the Astra constellation one resonance at a time.",
+          "objective": "Give the first drop an immediate fictional purpose."
+        },
+        {
+          "id": "story_first_resonance",
+          "trigger": "first_merge_registered",
+          "text": "Two matching fragments recover a lost star-memory and awaken the selected Keeper.",
+          "objective": "Connect the merge rule to world restoration and character identity."
+        },
+        {
+          "id": "story_keeper_oath",
+          "trigger": "hero_ability_cast",
+          "text": "The Keeper bends the well, revealing that every hero changes how the same board is mastered.",
+          "objective": "Turn roster collection into gameplay expression instead of a detached menu."
+        },
+        {
+          "id": "story_nexus_hook",
+          "trigger": "target_reached:nexus",
+          "text": "The Nexus opens a new celestial region, its orb family and the next missing Keeper.",
+          "objective": "Promise the next chapter, board rules and collection goal."
+        }
+      ],
+      "asset_extraction_manifest": [
+        {
+          "id": "orb_tier_pack",
+          "family": "orb_tiers",
+          "source_role": "prompt_and_style_board",
+          "output": "eight_scale_locked_orb_skins",
+          "needed_for": [
+            "merge readability",
+            "tier progression",
+            "collision radius binding"
+          ],
+          "acceptance": [
+            "each tier reads at gameplay size",
+            "visual radius matches collision radius",
+            "adjacent tiers differ by silhouette, color and size"
+          ]
+        },
+        {
+          "id": "merge_well_pack",
+          "family": "board_bg",
+          "source_role": "visual_board",
+          "output": "backdrop_frame_and_collision_manifest",
+          "needed_for": [
+            "world identity",
+            "stable portrait composition",
+            "loss line clarity"
+          ],
+          "acceptance": [
+            "walls and floor come from data",
+            "background never fakes physics",
+            "loss line remains visible under FX"
+          ]
+        },
+        {
+          "id": "hero_roster_pack",
+          "family": "hero_portraits",
+          "source_role": "character_board_or_prompt",
+          "output": "four_portraits_rarity_cards_and_ability_icons",
+          "needed_for": [
+            "hero selection",
+            "summon reveal",
+            "ability identity"
+          ],
+          "acceptance": [
+            "portrait consistency locked",
+            "rarity is not color-only",
+            "ability icon matches runtime effect"
+          ]
+        },
+        {
+          "id": "merge_fx_pack",
+          "family": "merge_rarity_fx",
+          "source_role": "orb_palette_and_rarity_rules",
+          "output": "drop_bounce_merge_cascade_ability_and_summon_fx",
+          "needed_for": [
+            "game feel",
+            "cascade feedback",
+            "reward reveal"
+          ],
+          "acceptance": [
+            "FX duration under 600ms during play",
+            "next drop remains visible",
+            "no photosensitive full-screen strobe"
+          ]
+        },
+        {
+          "id": "mobile_ui_pack",
+          "family": "ui_kit",
+          "source_role": "portrait_gameplay_board",
+          "output": "score_next_orb_roster_ability_summon_and_rates_ui",
+          "needed_for": [
+            "one-thumb play",
+            "progress clarity",
+            "gacha compliance"
+          ],
+          "acceptance": [
+            "touch targets at least 44 CSS px",
+            "rates and pity visible",
+            "no paid currency CTA in the vertical slice"
+          ]
+        }
+      ],
+      "commercial_gates": [
+        "first 30 seconds: player reads next orb, loss line, objective and first merge without a tutorial modal",
+        "input loop: aim, drop, merge, cascade, failure and restart all respond in runtime",
+        "physics gate: circle stacking remains stable at 60, 30 and 20 FPS simulation steps",
+        "merge gate: only equal tiers merge and every cascade is deterministic",
+        "progression gate: a run earns score, ability charge, currency and persistent roster progress",
+        "character gate: each hero ability produces a distinct, testable board-state change",
+        "narrative gate: run start, first merge, first power and Nexus completion advance the Astra premise",
+        "mobile gate: aim, drop, hero selection, ability and summon are touch-operable",
+        "collection gate: rates, pity, duplicate compensation and earned currency source are disclosed",
+        "asset gate: orb radii, portraits, FX and collision truth remain readable at final portrait scale",
+        "QA gate: deterministic tests cover merge, ability, pity, overflow and Nexus completion"
+      ],
+      "production_gaps": [
+        "generated orb art must be bound to exact runtime radii before shipping",
+        "hero portraits need identity-lock variants for roster, summon and ability states",
+        "merge, bounce and overflow sound layers need a mobile loudness pass",
+        "long-session balance needs telemetry for board height, tier frequency and ability value",
+        "source board needs approval for palette, UI density and gameplay-scale readability"
+      ]
+    },
+    "first_playable_slice": {
+      "quality_target": "vertical_slice",
+      "commercial_promise": "stack matching orbs, trigger cascades, charge a hero power and earn an astral summon",
+      "runtime_requirements": [
+        "first 30 seconds: player reads next orb, loss line, objective and first merge without a tutorial modal",
+        "input loop: aim, drop, merge, cascade, failure and restart all respond in runtime",
+        "physics gate: circle stacking remains stable at 60, 30 and 20 FPS simulation steps",
+        "merge gate: only equal tiers merge and every cascade is deterministic",
+        "progression gate: a run earns score, ability charge, currency and persistent roster progress",
+        "character gate: each hero ability produces a distinct, testable board-state change",
+        "narrative gate: run start, first merge, first power and Nexus completion advance the Astra premise",
+        "mobile gate: aim, drop, hero selection, ability and summon are touch-operable",
+        "collection gate: rates, pity, duplicate compensation and earned currency source are disclosed",
+        "asset gate: orb radii, portraits, FX and collision truth remain readable at final portrait scale",
+        "QA gate: deterministic tests cover merge, ability, pity, overflow and Nexus completion"
+      ],
+      "production_gaps": [
+        "generated orb art must be bound to exact runtime radii before shipping",
+        "hero portraits need identity-lock variants for roster, summon and ability states",
+        "merge, bounce and overflow sound layers need a mobile loudness pass",
+        "long-session balance needs telemetry for board height, tier frequency and ability value",
+        "source board needs approval for palette, UI density and gameplay-scale readability"
+      ]
+    }
+  },
+  "style": {
+    "palette": [
+      "#07131d",
+      "#2dd4bf",
+      "#38bdf8",
+      "#fb7185",
+      "#f59e0b",
+      "#f8fafc"
+    ],
+    "dimension": "2d",
+    "mood": "astral_arcade_collection"
+  },
+  "entities": [
+    {
+      "id": "player",
+      "type": "game_controller",
+      "assets": {},
+      "components": [
+        {
+          "transform": {
+            "x": 360,
+            "y": 224
+          }
+        }
+      ]
+    }
+  ],
+  "scenes": [
+    {
+      "id": "astral_merge_well",
+      "entities": [
+        "player"
+      ],
+      "background": {
+        "color": "#07131d",
+        "image": "/workspaces/orbes-d-astra/03_assets/generated/astral-observatory-v3.png",
+        "alpha": 0.72
+      },
+      "depth": {
+        "mode": "flat",
+        "sort_key": "feet_y"
+      },
+      "camera": {
+        "mode": "fixed",
+        "bounds": true
+      },
+      "layout": {
+        "width": 720,
+        "height": 1280,
+        "ground_y": 1008,
+        "spawn": {
+          "x": 360,
+          "y": 224
+        },
+        "platforms": [],
+        "collectibles": [],
+        "goal": {
+          "x": 360,
+          "y": 184
+        },
+        "zones": [
+          {
+            "id": "drop_preview",
+            "label": "Drop Preview",
+            "x": 0,
+            "y": 0,
+            "w": 720,
+            "h": 184,
+            "theme": "setup"
+          },
+          {
+            "id": "merge_well",
+            "label": "Merge Well",
+            "x": 72,
+            "y": 184,
+            "w": 576,
+            "h": 824,
+            "theme": "physics_puzzle"
+          },
+          {
+            "id": "roster_and_power",
+            "label": "Roster and Power",
+            "x": 0,
+            "y": 1008,
+            "w": 720,
+            "h": 144,
+            "theme": "hero_ability"
+          },
+          {
+            "id": "earned_summon",
+            "label": "Earned Summon",
+            "x": 0,
+            "y": 1152,
+            "w": 720,
+            "h": 128,
+            "theme": "reward"
+          }
+        ]
+      },
+      "spawn": {
+        "x": 360,
+        "y": 224
+      },
+      "title": "Le Puits des Constellations",
+      "board": {
+        "source_prompt": "Gacha RPG HD jouable sur PC et mobile : campagne de fusion astrale en 18 missions, boss à phases, défis, mini-jeux et 24 Gardiens animés à collectionner.",
+        "game_type": "merge_drop_gacha",
+        "dimension": "2d",
+        "perspective": "side",
+        "art_style": "anime",
+        "difficulty": "casual",
+        "mechanic_modules": [
+          "merge_drop"
+        ],
+        "playable_loop": [
+          "aim",
+          "drop_orb",
+          "stack",
+          "merge_equal_tiers",
+          "cascade",
+          "cast_hero_power",
+          "earn_summon",
+          "unlock_roster",
+          "reach_nexus"
+        ],
+        "first_slice_scope": "one_scene_with_win_condition",
+        "quality_gates": [
+          "player_understands_goal_under_30s",
+          "scene_has_no_dead_end",
+          "runtime_uses_only_executable_systems",
+          "declared_systems_preserved_for_agents"
+        ]
+      },
+      "story_beats": [
+        {
+          "id": "story_astral_opening",
+          "trigger": "run_start",
+          "text": "The observatory is collapsing. Rebuild the Astra constellation one resonance at a time.",
+          "objective": "Give the first drop an immediate fictional purpose."
+        },
+        {
+          "id": "story_first_resonance",
+          "trigger": "first_merge_registered",
+          "text": "Two matching fragments recover a lost star-memory and awaken the selected Keeper.",
+          "objective": "Connect the merge rule to world restoration and character identity."
+        },
+        {
+          "id": "story_keeper_oath",
+          "trigger": "hero_ability_cast",
+          "text": "The Keeper bends the well, revealing that every hero changes how the same board is mastered.",
+          "objective": "Turn roster collection into gameplay expression instead of a detached menu."
+        },
+        {
+          "id": "story_nexus_hook",
+          "trigger": "target_reached:nexus",
+          "text": "The Nexus opens a new celestial region, its orb family and the next missing Keeper.",
+          "objective": "Promise the next chapter, board rules and collection goal."
+        }
+      ],
+      "playable_volume": {
+        "spatial_model": {
+          "dimension": "2d",
+          "perspective": "side",
+          "depth_mode": "flat",
+          "camera": "fixed_portrait_board",
+          "navigation": "merge_drop_board",
+          "collision_truth": "GDL circle radii, well bounds, gravity, restitution and loss line are the source of truth; painted pixels are visual skin only"
+        },
+        "layers": [
+          {
+            "id": "constellation_backdrop",
+            "role": "far_background",
+            "depth": 0.05,
+            "parallax": 0.06,
+            "collision": false,
+            "asset_family": "board_bg",
+            "extraction_rule": "keep the backdrop calm so every orb remains readable"
+          },
+          {
+            "id": "merge_well_housing",
+            "role": "midground",
+            "depth": 0.3,
+            "parallax": 0.1,
+            "collision": false,
+            "asset_family": "merge_well_frame",
+            "extraction_rule": "frame the physical well without painting fake collision boundaries"
+          },
+          {
+            "id": "circle_physics_well",
+            "role": "playfield",
+            "depth": 0.7,
+            "parallax": 1,
+            "collision": true,
+            "asset_family": "circle_collision_world",
+            "extraction_rule": "author walls, floor, loss line, radii and restitution as deterministic data"
+          },
+          {
+            "id": "orb_and_power_plane",
+            "role": "actor_plane",
+            "depth": 0.82,
+            "parallax": 1,
+            "collision": true,
+            "asset_family": "orb_tiers_and_hero_abilities",
+            "extraction_rule": "render tier, rarity and ability effects above the collision truth"
+          },
+          {
+            "id": "roster_dock",
+            "role": "foreground_occluder",
+            "depth": 0.95,
+            "parallax": 1,
+            "collision": false,
+            "asset_family": "hero_roster_ui",
+            "extraction_rule": "reserve a stable touch-safe dock outside the physical well"
+          },
+          {
+            "id": "merge_and_summon_fx",
+            "role": "fx_lighting",
+            "depth": 1,
+            "parallax": 1,
+            "collision": false,
+            "asset_family": "merge_rarity_fx",
+            "extraction_rule": "feedback may flash or burst but must never hide the next drop or loss line"
+          }
+        ],
+        "critical_path": [
+          {
+            "id": "beat_1_drop_preview",
+            "zone_id": "drop_preview",
+            "screen_goal": "understand drop, next orb and loss line in one screen",
+            "player_action": "aim the first orb and read the next-orb preview",
+            "story_function": "teach one-touch control",
+            "runtime_gate": "first_drop_registered"
+          },
+          {
+            "id": "beat_2_merge_well",
+            "zone_id": "merge_well",
+            "screen_goal": "complete Merge Well",
+            "player_action": "stack two identical orbs and trigger a visible merge",
+            "story_function": "prove the core physical rule",
+            "runtime_gate": "first_merge_registered"
+          },
+          {
+            "id": "beat_3_roster_and_power",
+            "zone_id": "roster_and_power",
+            "screen_goal": "complete Roster and Power",
+            "player_action": "build a cascade and cast the selected hero ability",
+            "story_function": "connect puzzle mastery to character identity",
+            "runtime_gate": "hero_ability_cast"
+          },
+          {
+            "id": "beat_4_earned_summon",
+            "zone_id": "earned_summon",
+            "screen_goal": "see how the run feeds collection progress",
+            "player_action": "earn an invocation, unlock or duplicate a hero, then pursue the Nexus tier",
+            "story_function": "close the run-to-roster loop",
+            "runtime_gate": "summon_and_target_progress_saved"
+          }
+        ],
+        "encounters": [
+          {
+            "id": "pressure_1_merge_well",
+            "zone_id": "merge_well",
+            "enemy_budget": 0,
+            "purpose": "teach pair fusion",
+            "fail_state": "settled orb crosses the telegraphed loss line",
+            "reward": "score, charge and merge feedback"
+          },
+          {
+            "id": "pressure_2_roster_and_power",
+            "zone_id": "roster_and_power",
+            "enemy_budget": 0,
+            "purpose": "force a meaningful hero-power decision",
+            "fail_state": "settled orb crosses the telegraphed loss line",
+            "reward": "cascade multiplier and ability recovery"
+          },
+          {
+            "id": "pressure_3_earned_summon",
+            "zone_id": "earned_summon",
+            "enemy_budget": 0,
+            "purpose": "convert run mastery into collection progress",
+            "fail_state": "insufficient earned currency leaves summon available later without monetization pressure",
+            "reward": "hero unlock, duplicate essence or Nexus progress"
+          }
+        ]
+      },
+      "asset_extraction_manifest": [
+        {
+          "id": "orb_tier_pack",
+          "family": "orb_tiers",
+          "source_role": "prompt_and_style_board",
+          "output": "eight_scale_locked_orb_skins",
+          "needed_for": [
+            "merge readability",
+            "tier progression",
+            "collision radius binding"
+          ],
+          "acceptance": [
+            "each tier reads at gameplay size",
+            "visual radius matches collision radius",
+            "adjacent tiers differ by silhouette, color and size"
+          ]
+        },
+        {
+          "id": "merge_well_pack",
+          "family": "board_bg",
+          "source_role": "visual_board",
+          "output": "backdrop_frame_and_collision_manifest",
+          "needed_for": [
+            "world identity",
+            "stable portrait composition",
+            "loss line clarity"
+          ],
+          "acceptance": [
+            "walls and floor come from data",
+            "background never fakes physics",
+            "loss line remains visible under FX"
+          ]
+        },
+        {
+          "id": "hero_roster_pack",
+          "family": "hero_portraits",
+          "source_role": "character_board_or_prompt",
+          "output": "four_portraits_rarity_cards_and_ability_icons",
+          "needed_for": [
+            "hero selection",
+            "summon reveal",
+            "ability identity"
+          ],
+          "acceptance": [
+            "portrait consistency locked",
+            "rarity is not color-only",
+            "ability icon matches runtime effect"
+          ]
+        },
+        {
+          "id": "merge_fx_pack",
+          "family": "merge_rarity_fx",
+          "source_role": "orb_palette_and_rarity_rules",
+          "output": "drop_bounce_merge_cascade_ability_and_summon_fx",
+          "needed_for": [
+            "game feel",
+            "cascade feedback",
+            "reward reveal"
+          ],
+          "acceptance": [
+            "FX duration under 600ms during play",
+            "next drop remains visible",
+            "no photosensitive full-screen strobe"
+          ]
+        },
+        {
+          "id": "mobile_ui_pack",
+          "family": "ui_kit",
+          "source_role": "portrait_gameplay_board",
+          "output": "score_next_orb_roster_ability_summon_and_rates_ui",
+          "needed_for": [
+            "one-thumb play",
+            "progress clarity",
+            "gacha compliance"
+          ],
+          "acceptance": [
+            "touch targets at least 44 CSS px",
+            "rates and pity visible",
+            "no paid currency CTA in the vertical slice"
+          ]
+        }
+      ]
+    }
+  ],
+  "systems": [
+    "input",
+    "merge_drop_physics",
+    "merge_cascade",
+    "drop_aim",
+    "hero_abilities",
+    "merge_drop_gacha_summon",
+    "merge_drop_roster",
+    "merge_drop_pity",
+    "run_rewards",
+    "local_save",
+    "ui"
+  ],
+  "ui": {
+    "orientation": "portrait",
+    "surfaces": [
+      "score",
+      "next_orb",
+      "loss_line",
+      "hero_roster",
+      "ability_button",
+      "earned_summon",
+      "rates_disclosure"
+    ],
+    "touch_targets_min_css_px": 44,
+    "objective_tracker": {
+      "primary": "Give the first drop an immediate fictional purpose.",
+      "beats": [
+        {
+          "id": "beat_1_drop_preview",
+          "zone_id": "drop_preview",
+          "objective": "understand drop, next orb and loss line in one screen"
+        },
+        {
+          "id": "beat_2_merge_well",
+          "zone_id": "merge_well",
+          "objective": "complete Merge Well"
+        },
+        {
+          "id": "beat_3_roster_and_power",
+          "zone_id": "roster_and_power",
+          "objective": "complete Roster and Power"
+        },
+        {
+          "id": "beat_4_earned_summon",
+          "zone_id": "earned_summon",
+          "objective": "see how the run feeds collection progress"
+        }
+      ]
+    }
+  },
+  "narrative": {
+    "hook": "stack matching orbs, trigger cascades, charge a hero power and earn an astral summon",
+    "first_run_objective": "Complete the first constellation mission, recruit a squad and restore the road to the Nexus.",
+    "quests": [
+      {
+        "id": "main_vertical_slice",
+        "title": "First playable objective",
+        "status": "active",
+        "objective": "Give the first drop an immediate fictional purpose.",
+        "completion": "target_reached:nexus"
+      },
+      {
+        "id": "board_mastery",
+        "title": "Read the board",
+        "status": "available",
+        "objective": "Find the reward, survive the encounter and prove the world rule.",
+        "completion": "collectible_or_encounter_clear"
+      }
+    ],
+    "dialogues": [
+      {
+        "id": "story_astral_opening",
+        "speaker": "world",
+        "text": "The observatory is collapsing. Rebuild the Astra constellation one resonance at a time.",
+        "trigger": "run_start",
+        "objective": "Give the first drop an immediate fictional purpose."
+      },
+      {
+        "id": "story_first_resonance",
+        "speaker": "world",
+        "text": "Two matching fragments recover a lost star-memory and awaken the selected Keeper.",
+        "trigger": "first_merge_registered",
+        "objective": "Connect the merge rule to world restoration and character identity."
+      },
+      {
+        "id": "story_keeper_oath",
+        "speaker": "world",
+        "text": "The Keeper bends the well, revealing that every hero changes how the same board is mastered.",
+        "trigger": "hero_ability_cast",
+        "objective": "Turn roster collection into gameplay expression instead of a detached menu."
+      },
+      {
+        "id": "story_nexus_hook",
+        "speaker": "world",
+        "text": "The Nexus opens a new celestial region, its orb family and the next missing Keeper.",
+        "trigger": "target_reached:nexus",
+        "objective": "Promise the next chapter, board rules and collection goal."
+      }
+    ]
+  }
+}

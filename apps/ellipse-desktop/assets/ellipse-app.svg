@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#242038"/><stop offset="1" stop-color="#080812"/></linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff1b9"/><stop offset=".48" stop-color="#e4b751"/><stop offset="1" stop-color="#947030"/></linearGradient>
+    <linearGradient id="violet" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d2b2ff"/><stop offset=".5" stop-color="#9b6bea"/><stop offset="1" stop-color="#513090"/></linearGradient>
+    <radialGradient id="core"><stop stop-color="#ffd8c6"/><stop offset=".42" stop-color="#ff657a"/><stop offset="1" stop-color="#cf304e"/></radialGradient>
+  </defs>
+  <rect x="4" y="4" width="248" height="248" rx="54" fill="url(#bg)" stroke="#494057" stroke-width="2"/>
+  <g transform="rotate(-35 128 128)">
+    <ellipse cx="128" cy="128" rx="102" ry="66" fill="none" stroke="#000" stroke-opacity=".35" stroke-width="19"/>
+    <ellipse cx="128" cy="128" rx="99" ry="63" fill="none" stroke="url(#gold)" stroke-width="12"/>
+    <ellipse cx="128" cy="128" rx="62" ry="38" fill="none" stroke="url(#violet)" stroke-width="11"/>
+  </g>
+  <circle cx="128" cy="128" r="15" fill="url(#core)"/>
+  <circle cx="209" cy="70" r="7" fill="#fff1bd"/>
+</svg>

@@ -274,6 +274,11 @@ export async function loadAssetAtlas(gdl) {
 
 export function normalizeAsset(path) {
   if (!path) return null;
-  if (path.startsWith('/workspaces/')) return '../../' + path.split('/').slice(4).join('/');
-  return path;
+  if (/^(?:https?:|data:|blob:)/.test(path)) return path;
+  if (path.startsWith('/workspaces/')) {
+    // /workspaces/<slug>/03_assets/... depuis 07_exports/web
+    return '../../' + path.split('/').slice(3).join('/');
+  }
+  if (path.startsWith('./') || path.startsWith('../')) return path;
+  return '../../' + path.replace(/^\//, '');
 }

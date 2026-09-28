@@ -1,0 +1,56 @@
+; Orbes d'Astra V2 — composited interactive vertical slice
+; 31 linked screens, one 24-character registry and four playable loops on PC/mobile.
+
+config_version=5
+
+[application]
+
+config/name="Orbes d'Astra V2 — Convergence"
+run/main_scene="res://scenes/main.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+
+[display]
+
+window/size/viewport_width=1600
+window/size/viewport_height=900
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/handheld/orientation=0
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/default_filters/use_nearest_mipmap_filter=false
+environment/defaults/default_clear_color=Color(0.008, 0.012, 0.035, 1)
+
+[physics]
+
+common/enable_pause_aware_picking=true
+3d/default_gravity=14.0
+
+[input]
+
+drop_orb={
+"deadzone": 0.5,
+"events": [Object(InputEventMouseButton,"button_index":1,"pressed":true)]
+}
+skill={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"physical_keycode":81)]
+}
+ultimate={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"physical_keycode":69)]
+}
+overdrive={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"physical_keycode":82)]
+}
+
+[layer_names]
+
+3d_physics/layer_1="Arena"
+3d_physics/layer_2="Orbs"

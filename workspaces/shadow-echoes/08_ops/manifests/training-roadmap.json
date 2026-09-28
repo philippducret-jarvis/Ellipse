@@ -1,0 +1,23 @@
+{
+  "generated_at": "2026-09-28T11:42:59.669Z",
+  "report_type": "training_curriculum",
+  "release_gate": false,
+  "commercial_ready": false,
+  "current_phase_id": "P0_foundation",
+  "phase_scores": {
+    "P0_foundation": 60,
+    "P1_perception": 2,
+    "P2_gameplay_code": 5,
+    "P3_narrative_npc": 8,
+    "P4_enemy_ai": 13,
+    "P5_shipping": 50
+  },
+  "drills_completed": [],
+  "agent_training_hours_estimate": 7,
+  "next_drills": [
+    "assess_only",
+    "retry_loop"
+  ],
+  "workflow_run_id": "assessment",
+  "workflow_status": "running"
+}

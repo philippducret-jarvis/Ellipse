@@ -1,0 +1,446 @@
+{
+  "status": "design-simulation-not-live-economy",
+  "version": "bible-v1-review-1",
+  "rules": {
+    "version": "bible-v1-review-1",
+    "status": "simulation-only",
+    "heroes": [
+      "seraphine",
+      "nyxara",
+      "lysael",
+      "voren"
+    ],
+    "maxHeroLevel": 100,
+    "ascensionCaps": [
+      20,
+      40,
+      60,
+      80,
+      100
+    ],
+    "finalAscension": "mastery-at-100",
+    "team": {
+      "controlled": 1,
+      "companions": 3,
+      "supportsInFirstLot": 0,
+      "supportsLater": 2
+    },
+    "animationStatesPerHero": 42,
+    "combat": {
+      "simulationHz": 60,
+      "basicCombo": 3,
+      "activeSlots": 3,
+      "ultimateGauge": 100,
+      "classEnergy": 100,
+      "dodgeCharges": 2,
+      "dodgeRechargeSeconds": 5,
+      "dodgeInvulnerabilitySeconds": 0.22
+    },
+    "energy": {
+      "cap": 120,
+      "regenerationMinutes": 8
+    },
+    "summoning": {
+      "cost": 160,
+      "softStart": 66,
+      "softIncrement": 0.04,
+      "hardPity": 80,
+      "epicPity": 10,
+      "featuredChance": 0.5,
+      "carryPolicy": "same-banner-family",
+      "realPayments": false
+    }
+  },
+  "heroCosts": [
+    {
+      "cap": 20,
+      "gold": 20000,
+      "xp": 8000,
+      "essences": 10,
+      "stones": 0
+    },
+    {
+      "cap": 40,
+      "gold": 80000,
+      "xp": 30000,
+      "essences": 25,
+      "stones": 5
+    },
+    {
+      "cap": 60,
+      "gold": 250000,
+      "xp": 90000,
+      "essences": 60,
+      "stones": 15
+    },
+    {
+      "cap": 80,
+      "gold": 700000,
+      "xp": 250000,
+      "essences": 120,
+      "stones": 35
+    },
+    {
+      "cap": 100,
+      "gold": 1800000,
+      "xp": 700000,
+      "essences": 250,
+      "stones": 75
+    }
+  ],
+  "totals": {
+    "one": {
+      "gold": 2850000,
+      "xp": 1078000,
+      "essences": 465,
+      "stones": 130
+    },
+    "four": {
+      "gold": 11400000,
+      "xp": 4312000,
+      "essences": 1860,
+      "stones": 520
+    }
+  },
+  "gacha": {
+    "assumptions": "Compteur Épique+ glissant commun aux tirages simples et multiples ; renormalisation des trois rangs éligibles ; +4 points dès le tirage 66 ; hard pity au 80. Aucune monnaie dépensée.",
+    "meanPullsToFirstMythic": 47.12576310558815,
+    "totalProbability": 0.9999999999999992,
+    "distribution": [
+      {
+        "pull": 1,
+        "probability": 0.012
+      },
+      {
+        "pull": 2,
+        "probability": 0.011855999999999998
+      },
+      {
+        "pull": 3,
+        "probability": 0.011713728
+      },
+      {
+        "pull": 4,
+        "probability": 0.011573163264
+      },
+      {
+        "pull": 5,
+        "probability": 0.011434285304832
+      },
+      {
+        "pull": 6,
+        "probability": 0.011297073881174015
+      },
+      {
+        "pull": 7,
+        "probability": 0.011161508994599929
+      },
+      {
+        "pull": 8,
+        "probability": 0.01102757088666473
+      },
+      {
+        "pull": 9,
+        "probability": 0.010895240036024751
+      },
+      {
+        "pull": 10,
+        "probability": 0.01295954288815911
+      },
+      {
+        "pull": 11,
+        "probability": 0.011157744074076208
+      },
+      {
+        "pull": 12,
+        "probability": 0.011017266007989593
+      },
+      {
+        "pull": 13,
+        "probability": 0.01087855270034239
+      },
+      {
+        "pull": 14,
+        "probability": 0.010741582025773574
+      },
+      {
+        "pull": 15,
+        "probability": 0.010606332135805554
+      },
+      {
+        "pull": 16,
+        "probability": 0.010472781455385053
+      },
+      {
+        "pull": 17,
+        "probability": 0.010340908679467091
+      },
+      {
+        "pull": 18,
+        "probability": 0.010210692769641587
+      },
+      {
+        "pull": 19,
+        "probability": 0.010082112950802052
+      },
+      {
+        "pull": 20,
+        "probability": 0.010055528411357064
+      },
+      {
+        "pull": 21,
+        "probability": 0.009852465595466691
+      },
+      {
+        "pull": 22,
+        "probability": 0.00972781192958187
+      },
+      {
+        "pull": 23,
+        "probability": 0.00960473481030186
+      },
+      {
+        "pull": 24,
+        "probability": 0.00948321430727201
+      },
+      {
+        "pull": 25,
+        "probability": 0.009363230741963819
+      },
+      {
+        "pull": 26,
+        "probability": 0.009244764684494873
+      },
+      {
+        "pull": 27,
+        "probability": 0.00912779695048884
+      },
+      {
+        "pull": 28,
+        "probability": 0.009012308597975166
+      },
+      {
+        "pull": 29,
+        "probability": 0.008898280924327843
+      },
+      {
+        "pull": 30,
+        "probability": 0.008790285839072137
+      },
+      {
+        "pull": 31,
+        "probability": 0.008675516322181123
+      },
+      {
+        "pull": 32,
+        "probability": 0.00856570969928684
+      },
+      {
+        "pull": 33,
+        "probability": 0.008457292851531809
+      },
+      {
+        "pull": 34,
+        "probability": 0.008350248190196865
+      },
+      {
+        "pull": 35,
+        "probability": 0.008244558349143505
+      },
+      {
+        "pull": 36,
+        "probability": 0.008140206181997508
+      },
+      {
+        "pull": 37,
+        "probability": 0.008037174759368163
+      },
+      {
+        "pull": 38,
+        "probability": 0.007935447366102697
+      },
+      {
+        "pull": 39,
+        "probability": 0.007835007498575422
+      },
+      {
+        "pull": 40,
+        "probability": 0.007736048780446085
+      },
+      {
+        "pull": 41,
+        "probability": 0.007637967771366557
+      },
+      {
+        "pull": 42,
+        "probability": 0.007541290688131167
+      },
+      {
+        "pull": 43,
+        "probability": 0.007445837284477695
+      },
+      {
+        "pull": 44,
+        "probability": 0.007351592071916938
+      },
+      {
+        "pull": 45,
+        "probability": 0.007258539758000188
+      },
+      {
+        "pull": 46,
+        "probability": 0.00716666524383798
+      },
+      {
+        "pull": 47,
+        "probability": 0.0070759536216501995
+      },
+      {
+        "pull": 48,
+        "probability": 0.00698639017234722
+      },
+      {
+        "pull": 49,
+        "probability": 0.00689796036314165
+      },
+      {
+        "pull": 50,
+        "probability": 0.0068106594447854074
+      },
+      {
+        "pull": 51,
+        "probability": 0.006724446275189111
+      },
+      {
+        "pull": 52,
+        "probability": 0.006639331865324491
+      },
+      {
+        "pull": 53,
+        "probability": 0.006555294787391669
+      },
+      {
+        "pull": 54,
+        "probability": 0.006472321405117002
+      },
+      {
+        "pull": 55,
+        "probability": 0.006390398254827089
+      },
+      {
+        "pull": 56,
+        "probability": 0.006309512043264094
+      },
+      {
+        "pull": 57,
+        "probability": 0.006229649645428728
+      },
+      {
+        "pull": 58,
+        "probability": 0.006150798102450531
+      },
+      {
+        "pull": 59,
+        "probability": 0.006072944619485118
+      },
+      {
+        "pull": 60,
+        "probability": 0.005996077002628651
+      },
+      {
+        "pull": 61,
+        "probability": 0.005920181540055161
+      },
+      {
+        "pull": 62,
+        "probability": 0.005845247069446306
+      },
+      {
+        "pull": 63,
+        "probability": 0.005771261079002662
+      },
+      {
+        "pull": 64,
+        "probability": 0.0056982115633738275
+      },
+      {
+        "pull": 65,
+        "probability": 0.0056260866691666255
+      },
+      {
+        "pull": 66,
+        "probability": 0.023897694923468507
+      },
+      {
+        "pull": 67,
+        "probability": 0.03974497372980874
+      },
+      {
+        "pull": 68,
+        "probability": 0.05131489298108908
+      },
+      {
+        "pull": 69,
+        "probability": 0.05748633206775636
+      },
+      {
+        "pull": 70,
+        "probability": 0.05807811753617987
+      },
+      {
+        "pull": 71,
+        "probability": 0.05382496651923585
+      },
+      {
+        "pull": 72,
+        "probability": 0.046134433317935854
+      },
+      {
+        "pull": 73,
+        "probability": 0.03670750590609709
+      },
+      {
+        "pull": 74,
+        "probability": 0.02714355989645969
+      },
+      {
+        "pull": 75,
+        "probability": 0.018642561410322965
+      },
+      {
+        "pull": 76,
+        "probability": 0.011868683853928839
+      },
+      {
+        "pull": 77,
+        "probability": 0.006984470342360855
+      },
+      {
+        "pull": 78,
+        "probability": 0.0037837413899562337
+      },
+      {
+        "pull": 79,
+        "probability": 0.001877119554914134
+      },
+      {
+        "pull": 80,
+        "probability": 0.001372609382809573
+      }
+    ]
+  },
+  "energy": {
+    "perDay": 180,
+    "hoursToCap": 16,
+    "tier3AttemptsPerDayWithoutOverflow": 15
+  },
+  "pending": [
+    "Revenu gratuit hebdomadaire et saisonnier",
+    "Distribution des héros par rareté",
+    "Coûts individuels des éveils",
+    "Partage de l’EXP entre participants",
+    "Taux des échanges Médailles",
+    "Migration commerciale distincte des carnets locaux"
+  ],
+  "existingSavesModified": false
+}

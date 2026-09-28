@@ -1,0 +1,78 @@
+{
+  "passed": true,
+  "checks": [
+    "caravan : premier niveau gagné, récompense enregistrée",
+    "race : premier niveau gagné, récompense enregistrée",
+    "survival : premier niveau gagné, récompense enregistrée",
+    "campaign : trois phases gagnées, message du bon iframe, récompense et relique uniques"
+  ],
+  "errors": [],
+  "profile": {
+    "version": 1,
+    "gold": 900,
+    "sigils": 8,
+    "xp": 400,
+    "selected": "seraphine",
+    "heroes": {
+      "seraphine": {
+        "level": 1,
+        "copies": 1,
+        "fragments": 0,
+        "relic": null
+      },
+      "nyxara": {
+        "level": 1,
+        "copies": 1,
+        "fragments": 0,
+        "relic": null
+      },
+      "lysael": {
+        "level": 1,
+        "copies": 1,
+        "fragments": 0,
+        "relic": null
+      },
+      "voren": {
+        "level": 1,
+        "copies": 1,
+        "fragments": 0,
+        "relic": null
+      }
+    },
+    "relics": [
+      "crown",
+      "rose"
+    ],
+    "modes": {
+      "caravan": {
+        "wins": 1,
+        "best": 4600,
+        "attempts": 1
+      },
+      "race": {
+        "wins": 1,
+        "best": 520,
+        "attempts": 1
+      },
+      "survival": {
+        "wins": 1,
+        "best": 4440,
+        "attempts": 1
+      },
+      "campaign": {
+        "wins": 1,
+        "best": 10649,
+        "attempts": 1
+      }
+    },
+    "summons": 0,
+    "history": [],
+    "claimed": [],
+    "active": null,
+    "settings": {
+      "sound": false,
+      "motion": true
+    },
+    "revision": 9
+  }
+}

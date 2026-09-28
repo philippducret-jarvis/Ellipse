@@ -4,7 +4,6 @@ export function PreviewStage({ containerRef }: { containerRef: RefObject<HTMLDiv
   return (
     <div className="preview-wrap">
       <div ref={containerRef} className="preview-canvas" tabIndex={0} />
-      <div className="preview-hint">← → · A D · Espace</div>
     </div>
   );
 }

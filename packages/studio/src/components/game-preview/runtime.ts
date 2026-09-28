@@ -9,6 +9,10 @@ function isVeloriaGdl(gdl: GameDefinition): boolean {
   );
 }
 
+function isMergeDropGdl(gdl: GameDefinition): boolean {
+  return gdl.systems?.includes('merge_drop_physics') || gdl.meta?.genre === 'merge_drop_gacha';
+}
+
 export async function createEllipsePreviewRuntime(
   container: HTMLDivElement,
   gdl: GameDefinition,
@@ -16,6 +20,14 @@ export async function createEllipsePreviewRuntime(
   const res = gdl.meta?.resolution as number[] | undefined;
   const width = res?.[0] ?? DEFAULT_PREVIEW_WIDTH;
   const height = res?.[1] ?? DEFAULT_PREVIEW_HEIGHT;
+
+  if (isMergeDropGdl(gdl)) {
+    const { MergeDropEngine } = await import('@ellipse/engine');
+    const engine = new MergeDropEngine();
+    await engine.init({ container, width, height });
+    await engine.loadGDL(gdl);
+    return () => engine.destroy();
+  }
 
   if (isVeloriaGdl(gdl)) {
     const { VeloriaEngine } = await import('@ellipse/engine');

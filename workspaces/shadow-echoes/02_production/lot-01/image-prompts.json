@@ -1,0 +1,38 @@
+{
+  "tool": "image_gen (built-in)",
+  "purpose": "Premières bases de présentation HD ; fidélité à vérifier",
+  "prompts": [
+    {
+      "id": "seraphine",
+      "prompt": "Use case: identity-preserve. Asset type: first high-detail full-body character production plate for Shadow Echoes. Use the provided images as STRICT character identity and costume references, not as layout to reproduce. Create ONE isolated full-body character, from crown to soles fully visible, maximum usable detail, portrait canvas, generous 6% transparent margins. True transparent RGBA background, no colored backdrop, no floor, no platform, no cast ground shadow, no UI, no labels, no typography, no panels, no collage, no watermark. Faithfully retain the reference's refined high-end dark-fantasy semi-realistic anime illustration rendering, anatomy, face, hairstyle, intricate layered garments, jewelry and filigree; no simplified cartoon, no low-poly substitute. Calm standing 3/4 front pose, limbs readable and hands anatomically correct. Keep weapon or magic accessory to the side with clear silhouette. Reference is authoritative; do not redesign. Single adult character. This is an unanimated illustration master for review, not a sprite sheet.\nSéraphine, Fleur de l'Abîme: same silver-white waist-length flowing hair, ruby eyes, pale face, black thorn/rose gold crown with crimson roses, black sculpted gothic armor with delicate antique-gold tracery, red thorn-crystal sword held down in right hand, black/red split layered gown and cape, dark armored boots. Preserve reference costume, adult proportions, face and richness. Face and torso turned gently toward viewer. All costume details and both feet visible.",
+      "references": [
+        "partie-3/fiche_héroïne_gothique_de_séraphine.png",
+        "partie-1/invocation_de_seraphine_fleur_de_l_abîme.png"
+      ]
+    },
+    {
+      "id": "nyxara",
+      "prompt": "Use case: identity-preserve. Asset type: first high-detail full-body character production plate for Shadow Echoes. Use the provided images as STRICT character identity and costume references, not as layout to reproduce. Create ONE isolated full-body character, from crown to soles fully visible, maximum usable detail, portrait canvas, generous 6% transparent margins. True transparent RGBA background, no colored backdrop, no floor, no platform, no cast ground shadow, no UI, no labels, no typography, no panels, no collage, no watermark. Faithfully retain the reference's refined high-end dark-fantasy semi-realistic anime illustration rendering, anatomy, face, hairstyle, intricate layered garments, jewelry and filigree; no simplified cartoon, no low-poly substitute. Calm standing 3/4 front pose, limbs readable and hands anatomically correct. Keep weapon or magic accessory to the side with clear silhouette. Reference is authoritative; do not redesign. Single adult character. This is an unanimated illustration master for review, not a sprite sheet.\nNyxara, Souveraine du Néant: same mature adult queen's face and long black-violet flowing hair, slender tall thorned gold crown with violet gems, black ornate bodice, fine elaborate gold chains and purple gemstones, layered long shredded violet-black cape and gown, gold-trimmed dark boots. Preserve the exact reference outfit and adult proportions. One small black raven perched on shoulder, controlled purple-black orb over raised right palm, other hand lowered, restrained contained magic. No large smoke or aura occluding clothing.",
+      "references": [
+        "partie-2/fiche_héros_de_nyxara_souveraine_du_néant.png",
+        "partie-3/nyxara_souveraine_du_néant.png"
+      ]
+    },
+    {
+      "id": "lysael",
+      "prompt": "Use case: identity-preserve. Asset type: first high-detail full-body character production plate for Shadow Echoes. Use the provided images as STRICT character identity and costume references, not as layout to reproduce. Create ONE isolated full-body character, from crown to soles fully visible, maximum usable detail, portrait canvas, generous 6% transparent margins. True transparent RGBA background, no colored backdrop, no floor, no platform, no cast ground shadow, no UI, no labels, no typography, no panels, no collage, no watermark. Faithfully retain the reference's refined high-end dark-fantasy semi-realistic anime illustration rendering, anatomy, face, hairstyle, intricate layered garments, jewelry and filigree; no simplified cartoon, no low-poly substitute. Calm standing 3/4 front pose, limbs readable and hands anatomically correct. Keep weapon or magic accessory to the side with clear silhouette. Reference is authoritative; do not redesign. Single adult character. This is an unanimated illustration master for review, not a sprite sheet.\nLysael, Chant des Mondes: same gentle adult face, extremely long wavy ivory-blonde hair, delicate branching gold crown entwined with white flowers and green leaves, ivory flowing split dress with ornate golden vine filigree and green jewels, long draped ivory sleeves, golden vine sandals. Preserve exact design and adult proportions. Hold her tall floral gold staff to one side, intricate luminous circular floral cage at the tip, small contained warm white light, other palm relaxed open. All staff and sandals visible. White fabric remains white and distinct from alpha background.",
+      "references": [
+        "partie-1/fiche_héroïne_mythique_lysael.png",
+        "partie-1/lysael_chant_des_mondes.png"
+      ]
+    },
+    {
+      "id": "voren",
+      "prompt": "Use case: identity-preserve. Asset type: first high-detail full-body character production plate for Shadow Echoes. Use the provided images as STRICT character identity and costume references, not as layout to reproduce. Create ONE isolated full-body character, from crown to soles fully visible, maximum usable detail, portrait canvas, generous 6% transparent margins. True transparent RGBA background, no colored backdrop, no floor, no platform, no cast ground shadow, no UI, no labels, no typography, no panels, no collage, no watermark. Faithfully retain the reference's refined high-end dark-fantasy semi-realistic anime illustration rendering, anatomy, face, hairstyle, intricate layered garments, jewelry and filigree; no simplified cartoon, no low-poly substitute. Calm standing 3/4 front pose, limbs readable and hands anatomically correct. Keep weapon or magic accessory to the side with clear silhouette. Reference is authoritative; do not redesign. Single adult character. This is an unanimated illustration master for review, not a sprite sheet.\nVoren, Empereur des Cendres: same powerful tall adult male face, long silver-white hair, black jagged imperial crown with glowing ember tips, exposed muscular chest exactly as reference, black volcanic plate armor with antique-gold edges and cracks of restrained orange ember light, enormous spiked shoulder plates, armored gauntlets and greaves, shredded red-black long cape, broad double crescent volcanic battleaxe with glowing orange blade held down to side. Preserve exact heroic anatomy, face and armor design. Axe, crown, cape, boots all visible. No flames covering body or silhouette.",
+      "references": [
+        "partie-2/fiche_héros_gothique_de_voren.png",
+        "partie-1/voren_empereur_des_cendres.png"
+      ]
+    }
+  ]
+}

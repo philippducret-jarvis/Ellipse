@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="fr">
+<head>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+ <title>Séraphine · fidélité visuelle 2,5D · Shadow Echoes</title>
+ <link rel="stylesheet" href="./seraphine-lookdev.css">
+</head>
+<body>
+ <header><a href="./asset-lab.html">← Atelier des modèles</a><strong>SHADOW <em>ECHOES</em></strong><a href="./tactics.html?seraphine=lookdev-v1">Essayer en combat →</a></header>
+ <main>
+  <div class="intro"><span>ÉTUDE DE FIDÉLITÉ · SÉRAPHINE</span><h1>Partir de l’image, pas d’un volume générique.</h1><p>Le personnage de droite est une découpe transparente dérivée de la planche fournie. Il sert à juger l’identité, la silhouette et le costume avant de créer les parties animables. Ce n’est pas encore un modèle 3D multi-angles.</p></div>
+  <div class="controls" aria-label="Options de comparaison">
+   <button id="full" type="button" aria-pressed="true">Vue entière</button>
+   <button id="combat" type="button" aria-pressed="false">Taille de combat</button>
+   <button id="backdrop" type="button" aria-pressed="false">Fond du jeu</button>
+   <button id="windup" type="button" aria-pressed="false">Préparation</button>
+   <button id="attack" type="button" aria-pressed="false">Pose d’attaque</button>
+   <button id="play" type="button">Lire l’attaque</button>
+   <span id="mode-note">Revue de silhouette à taille atelier</span>
+  </div>
+  <div class="compare" id="compare">
+   <section class="panel"><div class="panel-head"><span>01 · CIBLE FOURNIE</span><a href="../../03_assets/characters/seraphine/turnaround-v1.png" target="_blank" rel="noopener">Planche quatre vues ↗</a></div><div class="stage reference-stage"><div class="front-crop" role="img" aria-label="Vue de face de Séraphine extraite visuellement de la planche cible"></div></div><p>Vue de face originale ; les vues profil, dos et trois quarts restent la référence pour la profondeur.</p></section>
+   <section class="panel"><div class="panel-head"><span>02 · CANDIDAT 2,5D</span><span>Trois images clés</span></div><div class="stage candidate-stage"><img id="candidate" src="../../03_assets/characters/seraphine/lookdev/seraphine-front-cutout-v1.png" alt="Séraphine découpée sur fond transparent, version de revue" loading="eager"></div><p>Attente, préparation et frappe sont comparables à l’échelle du combat. Les raccords et la fluidité restent à travailler avant les compétences.</p></section>
+  </div>
+  <div class="status"><strong>Décision de production</strong><p>On conserve les anciens rigs comme prototypes. Cette étude établit le rendu que le personnage doit garder dans la caméra du jeu. Les trois poses sont des images clés distinctes, avec une transition de revue ; elles ne remplacent pas encore une animation articulée. Les cheveux, bras, arme et couches de costume devront être séparés et animés sans changer son identité.</p></div>
+ </main>
+ <script type="module" src="./seraphine-lookdev.mjs"></script>
+</body>
+</html>

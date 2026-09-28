@@ -1,0 +1,277 @@
+{
+  "id": "mythiques-volume-07",
+  "heroes": [
+    "seraphine",
+    "nyxara",
+    "lysael",
+    "voren"
+  ],
+  "clipsPerHero": 42,
+  "totalHeroClips": 168,
+  "clips": {
+    "idle": {
+      "label": "Respiration",
+      "duration": 4,
+      "loop": true,
+      "group": "Présence"
+    },
+    "idleLook": {
+      "label": "Regard et appui",
+      "duration": 6,
+      "loop": true,
+      "group": "Présence"
+    },
+    "walk": {
+      "label": "Marche",
+      "duration": 1.1,
+      "loop": true,
+      "group": "Déplacement"
+    },
+    "run": {
+      "label": "Course",
+      "duration": 0.68,
+      "loop": true,
+      "group": "Déplacement"
+    },
+    "stop": {
+      "label": "Arrêt",
+      "duration": 0.5,
+      "loop": false,
+      "group": "Déplacement"
+    },
+    "turn": {
+      "label": "Demi-tour",
+      "duration": 1.1,
+      "loop": false,
+      "group": "Déplacement"
+    },
+    "strafeLeft": {
+      "label": "Pas latéral gauche",
+      "duration": 1,
+      "loop": true,
+      "group": "Déplacement"
+    },
+    "strafeRight": {
+      "label": "Pas latéral droit",
+      "duration": 1,
+      "loop": true,
+      "group": "Déplacement"
+    },
+    "dodgeForward": {
+      "label": "Esquive avant",
+      "duration": 0.7,
+      "loop": false,
+      "group": "Déplacement"
+    },
+    "dodgeBack": {
+      "label": "Esquive arrière",
+      "duration": 0.7,
+      "loop": false,
+      "group": "Déplacement"
+    },
+    "dodgeLeft": {
+      "label": "Esquive gauche",
+      "duration": 0.7,
+      "loop": false,
+      "group": "Déplacement"
+    },
+    "dodgeRight": {
+      "label": "Esquive droite",
+      "duration": 0.7,
+      "loop": false,
+      "group": "Déplacement"
+    },
+    "attack1": {
+      "label": "Combo · ouverture",
+      "duration": 0.65,
+      "loop": false,
+      "group": "Combat"
+    },
+    "attack2": {
+      "label": "Combo · revers",
+      "duration": 0.8,
+      "loop": false,
+      "group": "Combat"
+    },
+    "attack3": {
+      "label": "Combo · conclusion",
+      "duration": 1.05,
+      "loop": false,
+      "group": "Combat"
+    },
+    "windup": {
+      "label": "Préparation",
+      "duration": 0.6,
+      "loop": false,
+      "group": "Combat"
+    },
+    "guard": {
+      "label": "Garde",
+      "duration": 1.4,
+      "loop": true,
+      "group": "Combat"
+    },
+    "hitLight": {
+      "label": "Impact léger",
+      "duration": 0.55,
+      "loop": false,
+      "group": "Combat"
+    },
+    "hitHeavy": {
+      "label": "Impact lourd",
+      "duration": 1,
+      "loop": false,
+      "group": "Combat"
+    },
+    "skill1Start": {
+      "label": "Compétence I · préparation",
+      "duration": 0.65,
+      "loop": false,
+      "group": "Compétences"
+    },
+    "skill1Cast": {
+      "label": "Compétence I · lancement",
+      "duration": 1,
+      "loop": false,
+      "group": "Compétences"
+    },
+    "skill1End": {
+      "label": "Compétence I · retour",
+      "duration": 0.6,
+      "loop": false,
+      "group": "Compétences"
+    },
+    "skill2Start": {
+      "label": "Compétence II · préparation",
+      "duration": 0.65,
+      "loop": false,
+      "group": "Compétences"
+    },
+    "skill2Cast": {
+      "label": "Compétence II · lancement",
+      "duration": 1.2,
+      "loop": false,
+      "group": "Compétences"
+    },
+    "skill2End": {
+      "label": "Compétence II · retour",
+      "duration": 0.6,
+      "loop": false,
+      "group": "Compétences"
+    },
+    "skill3Start": {
+      "label": "Compétence III · préparation",
+      "duration": 0.8,
+      "loop": false,
+      "group": "Compétences"
+    },
+    "skill3Cast": {
+      "label": "Compétence III · lancement",
+      "duration": 1.3,
+      "loop": false,
+      "group": "Compétences"
+    },
+    "skill3End": {
+      "label": "Compétence III · retour",
+      "duration": 0.7,
+      "loop": false,
+      "group": "Compétences"
+    },
+    "ultimateStart": {
+      "label": "Ultime · rassemblement",
+      "duration": 1,
+      "loop": false,
+      "group": "Ultime"
+    },
+    "ultimateCast": {
+      "label": "Ultime · libération",
+      "duration": 1.7,
+      "loop": false,
+      "group": "Ultime"
+    },
+    "ultimateHold": {
+      "label": "Ultime · maintien",
+      "duration": 1.4,
+      "loop": true,
+      "group": "Ultime"
+    },
+    "ultimateEnd": {
+      "label": "Ultime · réception",
+      "duration": 0.9,
+      "loop": false,
+      "group": "Ultime"
+    },
+    "knockdown": {
+      "label": "Chute",
+      "duration": 1.2,
+      "loop": false,
+      "group": "Réactions"
+    },
+    "death": {
+      "label": "À terre",
+      "duration": 1.8,
+      "loop": false,
+      "group": "Réactions"
+    },
+    "revive": {
+      "label": "Résurrection",
+      "duration": 2,
+      "loop": false,
+      "group": "Réactions"
+    },
+    "heal": {
+      "label": "Soin reçu",
+      "duration": 1.8,
+      "loop": false,
+      "group": "Réactions"
+    },
+    "buff": {
+      "label": "Bénédiction",
+      "duration": 1.6,
+      "loop": false,
+      "group": "Réactions"
+    },
+    "interact": {
+      "label": "Interaction",
+      "duration": 1.5,
+      "loop": false,
+      "group": "Réactions"
+    },
+    "victory": {
+      "label": "Victoire",
+      "duration": 3,
+      "loop": false,
+      "group": "Présentation"
+    },
+    "defeat": {
+      "label": "Défaite",
+      "duration": 2.2,
+      "loop": false,
+      "group": "Présentation"
+    },
+    "select": {
+      "label": "Salut de sélection",
+      "duration": 2,
+      "loop": false,
+      "group": "Présentation"
+    },
+    "summon": {
+      "label": "Dévoilement",
+      "duration": 3.4,
+      "loop": false,
+      "group": "Présentation"
+    }
+  },
+  "representation": "Native 3D geometry with named skeleton, hinged hair and cloth; no portrait projection",
+  "artStatus": "First procedural volume study. Final character likeness and production-quality materials remain to be produced.",
+  "integration": [
+    "hero sheets",
+    "hub",
+    "summoning",
+    "campaign",
+    "survival",
+    "caravan",
+    "motion library"
+  ],
+  "updatedAt": "2026-09-28T19:17:38.248Z"
+}

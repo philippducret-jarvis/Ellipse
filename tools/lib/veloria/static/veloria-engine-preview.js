@@ -1,67 +1,67 @@
 /**
- * Preview Veloria — VeloriaEngine Pixi (hub + combat GACHA HD).
- * Build : pnpm veloria:hd
+ * Entrée web unique de Veloria. Le rendu, les écrans et la simulation viennent
+ * tous de @ellipse/engine afin que Studio, export et workspace restent identiques.
  */
 const statusNode = document.getElementById('status');
 
-function setStatus(msg) {
-  if (statusNode) statusNode.textContent = msg;
+function setStatus(message) {
+  if (statusNode) statusNode.textContent = message;
 }
 
 async function fetchJson(url) {
-  const r = await fetch(url);
-  if (!r.ok) throw new Error('fetch ' + url);
-  return r.json();
+  const response = await fetch(url, { cache: 'no-store' });
+  if (!response.ok) throw new Error(`${response.status} — ${url}`);
+  return response.json();
 }
 
-function normalizeAsset(u) {
-  if (!u) return u;
-  if (u.startsWith('http') || u.startsWith('/workspaces/')) return u;
-  return '../../' + u.replace(/^\.?\//, '');
+function normalizeAsset(url) {
+  if (!url) return url;
+  if (/^(?:https?:|data:|blob:)/.test(url) || url.startsWith('/workspaces/')) return url;
+  if (url.startsWith('./') || url.startsWith('../')) return url;
+  return `../../${url.replace(/^\//, '')}`;
 }
 
-const manifest = await fetchJson('./preview-manifest.json').catch(() => ({}));
-const gdlUrl = manifest.gdl || '../../05_runtime/gdl/veloria.preview.gdl.json';
-const gdl = await fetchJson(gdlUrl);
-
-const res = gdl.meta?.resolution ?? [720, 1280];
-const width = res[0] ?? 720;
-const height = res[1] ?? 1280;
-
-const canvas = document.getElementById('preview');
-let container = document.getElementById('engine-host');
-if (!container) {
-  container = document.createElement('div');
-  container.id = 'engine-host';
-  container.style.width = '100%';
-  container.style.height = '100%';
-  container.style.minHeight = `${height}px`;
-  if (canvas?.parentElement) canvas.replaceWith(container);
-  else document.body.appendChild(container);
+function firstSceneImage(scene) {
+  return scene?.background?.layers?.[0]?.image ?? scene?.background?.image;
 }
 
-const playerEntity = gdl.entities?.find((e) => e.id === 'player');
-const atlas = gdl.meta?.asset_atlas ?? {};
-const heroUrl = normalizeAsset(playerEntity?.assets?.sprite ?? atlas.aureline);
-const hubUrl = normalizeAsset(atlas.pavillon_veilles ?? gdl.scenes?.[0]?.background?.image);
-const hudUrl = normalizeAsset('03_assets/ui/ui__combat-hud-shell/06_exports/hud_overlay.png');
+async function boot() {
+  const manifest = await fetchJson('./preview-manifest.json');
+  const gdlUrl = manifest.gdl || '../../05_runtime/gdl/veloria.preview.gdl.json';
+  const gdl = await fetchJson(gdlUrl);
+  const [width = 720, height = 1280] = gdl.meta?.resolution ?? [];
 
-const { VeloriaEngine } = await import('./engine/ellipse-engine.js');
-const engine = new VeloriaEngine();
-await engine.init({
-  container,
-  width,
-  height,
-  heroSpriteUrl: heroUrl,
-  hubBgUrl: hubUrl,
-  hudOverlayUrl: hudUrl,
+  const container = document.getElementById('engine-host');
+  if (!container) throw new Error('Conteneur #engine-host absent.');
+
+  const player = gdl.entities?.find((entity) => entity.id === 'player');
+  const atlas = gdl.meta?.asset_atlas ?? {};
+  const heroUrl = normalizeAsset(player?.assets?.sprite ?? atlas.aureline);
+  const hubUrl = normalizeAsset(atlas.pavillon_veilles ?? firstSceneImage(gdl.scenes?.[0]));
+
+  const { VeloriaEngine } = await import('./engine/ellipse-engine.js');
+  const engine = new VeloriaEngine();
+  await engine.init({ container, width, height, heroSpriteUrl: heroUrl, hubBgUrl: hubUrl });
+  await engine.loadGDL(gdl);
+
+  if (new URLSearchParams(location.search).get('start') === 'combat') {
+    await engine.switchLevel(0);
+  }
+
+  setStatus('Veloria prête. Glissez pour changer de voie, touchez les compétences pour combattre.');
+  window.__veloriaEngine = engine;
+  window.__VELORIA_BUILD__ = {
+    mode: manifest.mode,
+    generatedAt: manifest.generated_at,
+    gdlVersion: gdl.meta?.version,
+  };
+}
+
+boot().catch((error) => {
+  console.error('[Veloria] Échec du démarrage', error);
+  setStatus(`Échec du démarrage : ${error.message}`);
+  const host = document.getElementById('engine-host');
+  if (host) {
+    host.innerHTML = `<div style="display:grid;place-items:center;height:100%;padding:2rem;color:#f0d9a6;background:#07060a;text-align:center">Veloria n’a pas pu charger.<br>${String(error.message)}</div>`;
+  }
 });
-await engine.loadGDL(gdl);
-
-const params = new URLSearchParams(location.search);
-if (params.get('start') === 'combat') {
-  await engine.switchLevel(0);
-}
-
-setStatus('VeloriaEngine Pixi — hub · invocation · combat 2.5D · bénédictions.');
-window.__veloriaEngine = engine;

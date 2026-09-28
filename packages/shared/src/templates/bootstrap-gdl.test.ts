@@ -50,6 +50,17 @@ describe('createBootstrapGdl', () => {
     expect((gdl.meta as Record<string, unknown>).summon_banner).toBeTruthy();
   });
 
+  it('route une idee de billes empilees et fusionnees vers le moteur merge drop', () => {
+    const gdl = createBootstrapGdl({
+      title: 'Orbes Test',
+      slug: 'orbes-test',
+      prompt: 'Des billes tombent, deux billes identiques fusionnent et les personnages ont des pouvoirs.',
+    });
+    expect(gdl.meta.genre).toBe('merge_drop_gacha');
+    expect(gdl.systems).toContain('merge_drop_physics');
+    expect(gdl.systems).toContain('hero_abilities');
+  });
+
   it('route dark fantasy / Elden Ring vers un board souls-like 2D', () => {
     const gdl = createBootstrapGdl({
       title: 'Ash Test',

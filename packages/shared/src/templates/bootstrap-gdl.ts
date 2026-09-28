@@ -41,14 +41,21 @@ const GENRE_ALIASES: Record<string, string> = {
   'souls-like': 'souls_like_2d',
   gacha: 'gacha_rpg',
   gatcha: 'gacha_rpg',
+  merge_drop: 'merge_drop_gacha',
+  'merge-drop': 'merge_drop_gacha',
+  suika: 'merge_drop_gacha',
   survivors: 'survivors_like',
   survivor: 'survivors_like',
   roguelite: 'survivors_like',
   bullet_heaven: 'survivors_like',
 };
 
-function normalizeGameType(genre?: string | null, mechanics: string[] = []): string {
+function normalizeGameType(genre?: string | null, mechanics: string[] = [], prompt = ''): string {
   const g = (genre ?? '').toLowerCase().trim();
+  const concept = `${g} ${mechanics.join(' ')} ${prompt}`.toLowerCase();
+  const hasMerge = ['fusion', 'merge', 'empil', 'stack', 'suika'].some((word) => concept.includes(word));
+  const hasOrb = ['bille', 'boule', 'ball', 'orb', 'sphere'].some((word) => concept.includes(word));
+  if (hasMerge && hasOrb) return 'merge_drop_gacha';
   if (g && getGameType(g)) return g;
   if (g && GENRE_ALIASES[g]) return GENRE_ALIASES[g]!;
   if (isSurvivorsProfile(g, mechanics)) return 'survivors_like';
@@ -62,6 +69,7 @@ function mechanicModules(mechanics: string[]): string[] {
   for (const raw of mechanics) {
     const m = raw.toLowerCase();
     if (m.includes('gacha')) out.add('gacha_summon');
+    if ((m.includes('fusion') || m.includes('merge') || m.includes('empil')) && (m.includes('bille') || m.includes('boule') || m.includes('ball') || m.includes('orb'))) out.add('merge_drop');
     if (m.includes('summon') || m.includes('escouade') || m.includes('squad')) out.add('summon_squad');
     if (m.includes('parry') || m.includes('dodge') || m.includes('esquive')) out.add('parry_dodge');
     if (m.includes('loot') || m.includes('rarity') || m.includes('rarete')) out.add('loot_rarity');
@@ -74,7 +82,7 @@ function mechanicModules(mechanics: string[]): string[] {
 function artStyleFor(input: BootstrapGdlInput, gameType: string): ArtStyle | undefined {
   const haystack = `${input.prompt ?? ''} ${(input.mechanics ?? []).join(' ')} ${input.genre ?? ''}`.toLowerCase();
   if (haystack.includes('dark') || haystack.includes('souls') || haystack.includes('elden')) return 'dark_fantasy';
-  if (haystack.includes('anime') || gameType === 'gacha_rpg') return 'anime';
+  if (haystack.includes('anime') || gameType === 'gacha_rpg' || gameType === 'merge_drop_gacha') return 'anime';
   if (haystack.includes('pixel') || haystack.includes('secret of mana')) return 'pixel';
   if (haystack.includes('paint') || haystack.includes('painterly')) return 'painterly';
   return undefined;
@@ -188,7 +196,7 @@ export function createSurvivorsBootstrapGdl(input: BootstrapGdlInput): GameDefin
 /** Crée un GDL de départ HD 2D depuis l'intent du projet (sans LLM). */
 export function createBootstrapGdl(input: BootstrapGdlInput): GameDefinition {
   const mechanics = input.mechanics ?? [];
-  const gameType = normalizeGameType(input.genre, mechanics);
+  const gameType = normalizeGameType(input.genre, mechanics, input.prompt);
   const dimension: GameDimension = input.dimension === '3d' ? '2d' : input.dimension ?? '2d';
   const preset = derivePreset({
     game_type: gameType,

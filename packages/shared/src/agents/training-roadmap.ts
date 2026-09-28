@@ -117,6 +117,9 @@ export const TRAINING_ROADMAP_PHASES: readonly TrainingPhase[] = [
 
 export interface TrainingProgressSnapshot {
   generated_at: string;
+  report_type: 'training_curriculum';
+  release_gate: false;
+  commercial_ready: false;
   current_phase_id: string;
   phase_scores: Record<string, number>;
   drills_completed: string[];
@@ -195,6 +198,9 @@ export function buildTrainingProgressSnapshot(
 
   return {
     generated_at: new Date().toISOString(),
+    report_type: 'training_curriculum',
+    release_gate: false,
+    commercial_ready: false,
     current_phase_id: currentPhaseId,
     phase_scores: phaseScores,
     drills_completed: drillsCompleted,

@@ -1,0 +1,31 @@
+{
+  "id": "tide_otter",
+  "displayName": "Loutre des marées",
+  "affinity": "Eau",
+  "kind": "rigged_familiar",
+  "status": "integration_ready_animated_source",
+  "sourceLicense": "CC0",
+  "sourcePack": "Quaternius Cute Animated Monsters Pack",
+  "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/tide_otter/tide_otter_source.blend",
+  "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/tide_otter/tide_otter_lod0.glb",
+  "runtime": "res://assets/3d/summons_v2/tide_otter/tide_otter_lod0.glb",
+  "animations": [
+    "Bite_Front",
+    "Bite_InPlace",
+    "Dance",
+    "Death",
+    "HitRecieve",
+    "Idle",
+    "Jump",
+    "No",
+    "Walk",
+    "Yes"
+  ],
+  "detachedMissingImages": [
+    "Texture.png"
+  ],
+  "deformBones": 6,
+  "triangles": 1040,
+  "bytes": 344076,
+  "commercialFinal": false
+}

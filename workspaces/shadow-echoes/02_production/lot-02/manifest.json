@@ -1,0 +1,59 @@
+{
+  "id": "mythiques-02",
+  "title": "L’Épreuve des Échos",
+  "updated_at": "2026-09-27T22:38:50.907Z",
+  "status": "playable_prototype",
+  "heroes": [
+    "seraphine",
+    "nyxara",
+    "lysael",
+    "voren"
+  ],
+  "phases": [
+    {
+      "name": "Le seuil des Échos",
+      "title": "Veilleur du seuil",
+      "hp": 4400,
+      "power": 410,
+      "interval": 5.5,
+      "windup": 2.2,
+      "hint": "Une marque désigne le héros visé. Protégez-le avant l’impact."
+    },
+    {
+      "name": "Le chœur brisé",
+      "title": "Cantatrice du Néant",
+      "hp": 7200,
+      "power": 460,
+      "interval": 5.2,
+      "windup": 2,
+      "hint": "L’onde frappe toute l’équipe. Lysael peut soigner plusieurs héros à la fois."
+    },
+    {
+      "name": "Le cœur de la faille",
+      "title": "Gardien Cendrelame",
+      "hp": 15000,
+      "power": 680,
+      "interval": 4.7,
+      "windup": 2,
+      "hint": "Sous 50 % de vie, le cœur entre en fureur. Gardez une interruption de Nyxara en réserve."
+    }
+  ],
+  "backdrop": "03_assets/environments/ruins-trial-v1.png",
+  "delivered": [
+    "Combat de quatre Mythiques en trois phases",
+    "Attaques annoncées, interruption, garde, soins et boucliers",
+    "Victoire, défaite, reprise et bilan",
+    "Record local versionné",
+    "Décor HD adapté aux références",
+    "Entrée preview Ellipse"
+  ],
+  "art_status": "Illustrations HD en revue, déplacements de sprites et effets procéduraux provisoires, aucun rig final",
+  "missing": [
+    "Correction fine et approbation de la fidélité des héros",
+    "Découpe et rigs des quatre personnages",
+    "Animations articulées et déplacements libres",
+    "Boss illustré et animé",
+    "Campagne, butin, équipement et progression persistante complète",
+    "Musiques et audio définitif"
+  ]
+}

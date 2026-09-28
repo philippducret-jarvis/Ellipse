@@ -1,0 +1,23 @@
+{
+  "id": "nexus_whale",
+  "displayName": "Baleine du Nexus",
+  "affinity": "Nexus",
+  "kind": "rigged_familiar",
+  "status": "integration_ready_animated_source",
+  "sourceLicense": "CC0",
+  "sourcePack": "Quaternius Cute Animated Monsters Pack",
+  "sourceBlend": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/nexus_whale/nexus_whale_source.blend",
+  "sourceGlb": "workspaces/orbes-d-astra/03_assets/3d/catalog_v2/summons/nexus_whale/nexus_whale_lod0.glb",
+  "runtime": "res://assets/3d/summons_v2/nexus_whale/nexus_whale_lod0.glb",
+  "animations": [
+    "Bite_Front",
+    "Death",
+    "Flying",
+    "HitRecieve"
+  ],
+  "detachedMissingImages": [],
+  "deformBones": 16,
+  "triangles": 1576,
+  "bytes": 420888,
+  "commercialFinal": false
+}

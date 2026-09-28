@@ -2,39 +2,15 @@
 title Ellipse - Lanceur
 cd /d "%~dp0"
 
-echo ============================================
-echo   Ellipse - demarrage de la plateforme
-echo ============================================
-echo.
-
-REM Si le studio repond deja, on ouvre juste le navigateur.
-powershell -NoProfile -Command "try{ if((Test-NetConnection -ComputerName localhost -Port 4273 -WarningAction SilentlyContinue).TcpTestSucceeded){exit 0}else{exit 1} }catch{exit 1}"
-if not errorlevel 1 (
-  echo Studio deja en cours. Ouverture du navigateur...
-  start "" http://localhost:4273/
-  exit /b 0
+REM Lanceur unique : les services demarrent en processus caches (aucune autre fenetre).
+REM Logs : generated\logs\*.log - Arret : Ellipse-Stop.cmd
+node tools\launch-ellipse.mjs
+if errorlevel 1 (
+  echo.
+  echo Un service n'a pas demarre - details ci-dessus et dans generated\logs\.
+  pause
+  exit /b 1
 )
-
-echo Lancement de l'orchestrateur (API, port 4400)...
-start "Ellipse Orchestrator" cmd /k "cd /d "%~dp0" && corepack pnpm --filter @ellipse/orchestrator dev"
-
-echo Lancement de Jarvis (assistant, port 4310)...
-start "Ellipse Jarvis" cmd /k "cd /d "%~dp0" && corepack pnpm forge:assistant"
-
-echo Lancement du studio (frontend, port 4273)...
-start "Ellipse Studio" cmd /k "cd /d "%~dp0" && corepack pnpm --filter @ellipse/studio dev"
-
-echo.
-echo Attente du frontend sur http://localhost:4273 ...
-:wait
-timeout /t 2 >nul
-powershell -NoProfile -Command "try{ if((Test-NetConnection -ComputerName localhost -Port 4273 -WarningAction SilentlyContinue).TcpTestSucceeded){exit 0}else{exit 1} }catch{exit 1}"
-if errorlevel 1 goto wait
-
-echo Frontend pret. Ouverture du navigateur...
-start "" http://localhost:4273/
-echo.
-echo Ellipse est lance. Les deux fenetres (Orchestrator / Studio) doivent rester ouvertes.
-echo Vous pouvez fermer CETTE fenetre.
-timeout /t 4 >nul
+REM Pause courte compatible stdin redirige (timeout /t exige une console interactive).
+ping -n 4 127.0.0.1 >nul
 exit /b 0

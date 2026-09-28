@@ -45,4 +45,28 @@ describe('visual board compiler', () => {
     expect((gdl.scenes[0] as Record<string, unknown>).story_beats).toBeTruthy();
     expect((gdl.narrative as { quests?: unknown[] }).quests?.length).toBeGreaterThanOrEqual(2);
   });
+
+  it('uses merge-specific story and commercial gates without platformer requirements', () => {
+    const preset = derivePreset({
+      game_type: 'merge_drop_gacha',
+      art_style: 'anime',
+      mechanic_modules: ['merge_drop'],
+    });
+
+    const slice = compileVisualBoardToPlayableSlice({
+      preset,
+      prompt: 'Empiler et fusionner des billes astrales avec des heros collectionnables',
+      sourceImages: ['astral-board.png', 'keepers.png'],
+    });
+
+    expect(slice.story_beats.map((beat) => beat.trigger)).toEqual([
+      'run_start',
+      'first_merge_registered',
+      'hero_ability_cast',
+      'target_reached:nexus',
+    ]);
+    expect(slice.commercial_gates.join(' ')).toContain('physics gate');
+    expect(slice.commercial_gates.join(' ')).not.toContain('exit direction');
+    expect(slice.commercial_gates.join(' ')).not.toContain('one enemy');
+  });
 });

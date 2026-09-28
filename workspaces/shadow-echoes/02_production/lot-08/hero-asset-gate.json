@@ -1,0 +1,98 @@
+{
+  "stage": "release",
+  "passed": false,
+  "results": [
+    {
+      "path": "C:\\Users\\phili\\Desktop\\Projet Ellipse\\workspaces\\shadow-echoes\\03_assets\\characters\\seraphine\\volume-v1\\hero.glb",
+      "hero": "seraphine",
+      "stage": "release",
+      "pass": false,
+      "errors": [
+        "Aucune peau pondérée (skin) : les pièces articulées ne sont pas un personnage déformable.",
+        "Aucun maillage associé à une peau."
+      ],
+      "warnings": [],
+      "metrics": {
+        "bytes": 11728096,
+        "meshes": 114,
+        "skins": 0,
+        "skinnedMeshes": 0,
+        "joints": 0,
+        "animations": 42,
+        "missingClips": [],
+        "skinnedVertices": 0,
+        "multiInfluenceRatio": 0,
+        "materials": 10
+      }
+    },
+    {
+      "path": "C:\\Users\\phili\\Desktop\\Projet Ellipse\\workspaces\\shadow-echoes\\03_assets\\characters\\nyxara\\volume-v1\\hero.glb",
+      "hero": "nyxara",
+      "stage": "release",
+      "pass": false,
+      "errors": [
+        "Aucune peau pondérée (skin) : les pièces articulées ne sont pas un personnage déformable.",
+        "Aucun maillage associé à une peau."
+      ],
+      "warnings": [],
+      "metrics": {
+        "bytes": 11293056,
+        "meshes": 118,
+        "skins": 0,
+        "skinnedMeshes": 0,
+        "joints": 0,
+        "animations": 42,
+        "missingClips": [],
+        "skinnedVertices": 0,
+        "multiInfluenceRatio": 0,
+        "materials": 10
+      }
+    },
+    {
+      "path": "C:\\Users\\phili\\Desktop\\Projet Ellipse\\workspaces\\shadow-echoes\\03_assets\\characters\\lysael\\volume-v1\\hero.glb",
+      "hero": "lysael",
+      "stage": "release",
+      "pass": false,
+      "errors": [
+        "Aucune peau pondérée (skin) : les pièces articulées ne sont pas un personnage déformable.",
+        "Aucun maillage associé à une peau."
+      ],
+      "warnings": [],
+      "metrics": {
+        "bytes": 12678088,
+        "meshes": 124,
+        "skins": 0,
+        "skinnedMeshes": 0,
+        "joints": 0,
+        "animations": 42,
+        "missingClips": [],
+        "skinnedVertices": 0,
+        "multiInfluenceRatio": 0,
+        "materials": 11
+      }
+    },
+    {
+      "path": "C:\\Users\\phili\\Desktop\\Projet Ellipse\\workspaces\\shadow-echoes\\03_assets\\characters\\voren\\volume-v1\\hero.glb",
+      "hero": "voren",
+      "stage": "release",
+      "pass": false,
+      "errors": [
+        "Aucune peau pondérée (skin) : les pièces articulées ne sont pas un personnage déformable.",
+        "Aucun maillage associé à une peau."
+      ],
+      "warnings": [],
+      "metrics": {
+        "bytes": 10386380,
+        "meshes": 105,
+        "skins": 0,
+        "skinnedMeshes": 0,
+        "joints": 0,
+        "animations": 42,
+        "missingClips": [],
+        "skinnedVertices": 0,
+        "multiInfluenceRatio": 0,
+        "materials": 10
+      }
+    }
+  ]
+}

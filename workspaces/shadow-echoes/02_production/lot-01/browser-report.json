@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "checks": [
+    "4 héros, 8 références et images HD chargés",
+    "dégâts, verrouillage ultime, pause et réinitialisation",
+    "riposte et soins réels",
+    "affichage 1440 px / 390 px, comparateur et transparence capturés",
+    "héros sélectionné conservé après rechargement"
+  ],
+  "errors": []
+}

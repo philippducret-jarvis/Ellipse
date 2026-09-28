@@ -46,6 +46,11 @@ export function fxFromEvents(fx, events, state, accent) {
     if (e.type === 'hurt') spawn(fx, 14, { x: state.hero.x, y: state.hero.y - 60, speed: 180, drag: 0.86, life: 0.4, size: 4, color: '#ff6b6b', add: true });
     if (e.type === 'pickup') spawn(fx, 12, { x: state.hero.x, y: state.hero.y - 70, angle: -Math.PI / 2, spread: 1.6, speed: 130, life: 0.5, size: 4, color: e.kind === 'heart' ? '#ff8595' : accent, add: true });
     if (e.type === 'checkpoint') fx.toast = { text: 'Point de passage', t: 0 };
+    if (e.type === 'dodge') spawn(fx, 18, { x: e.x, y: e.y - 50, angle: Math.PI, spread: 0.7, speed: 240, drag: 0.86, life: 0.35, size: 5, color: accent, add: true });
+    if (e.type === 'ability') {
+      spawn(fx, 64, { x: e.x, y: e.y - 70, speed: 420, drag: 0.9, life: 0.8, size: 7, color: accent, add: true });
+      fx.toast = { text: state.gdl.gameplay?.abilityName ?? 'Pouvoir ultime', t: 0 };
+    }
   }
 }
 
@@ -470,6 +475,14 @@ function drawHud(ctx, state, accent, fx, dt) {
     ctx.fillStyle = 'rgba(255,255,255,0.92)'; ctx.textAlign = 'center';
     ctx.fillText(`Vague ${spawned}/${total}`, vp.w / 2, 66);
   }
+  const abilityY = state.genre === 'vertical-arena' ? 98 : vp.h - 58;
+  const abilityW = Math.min(250, vp.w * 0.26);
+  ctx.textAlign = 'left'; ctx.font = '700 12px system-ui, sans-serif';
+  ctx.fillStyle = 'rgba(5,4,12,0.72)'; ctx.fillRect(26, abilityY, abilityW, 15);
+  ctx.fillStyle = accent; ctx.fillRect(28, abilityY + 2, (abilityW - 4) * Math.min(1, h.abilityCharge / h.abilityMax), 11);
+  ctx.strokeStyle = 'rgba(255,255,255,0.38)'; ctx.strokeRect(26, abilityY, abilityW, 15);
+  ctx.fillStyle = 'rgba(255,255,255,0.9)';
+  ctx.fillText(`${state.gdl.gameplay?.abilityName ?? 'Pouvoir'} [C]`, 30, abilityY - 11);
   // toast (nom de niveau, checkpoint…)
   if (fx.toast) {
     fx.toast.t += dt;
@@ -495,17 +508,18 @@ function panel(ctx, vp) {
 export function renderTitle(ctx, gdl, vp, t, bgLayers) {
   drawScreenBackdrop(ctx, vp, t, bgLayers);
   const accent = gdl.ui?.accent ?? '#e8c05a';
+  const portrait = vp.h > vp.w * 1.2;
   ctx.save();
   ctx.textAlign = 'center';
   ctx.fillStyle = accent;
   ctx.shadowColor = accent; ctx.shadowBlur = 24;
-  ctx.font = `700 ${Math.round(vp.w * 0.06)}px Georgia, serif`;
-  ctx.fillText(gdl.title, vp.w / 2, vp.h * 0.36);
+  ctx.font = `700 ${Math.round(vp.w * (portrait ? 0.075 : 0.06))}px Georgia, serif`;
+  wrapText(ctx, gdl.title, vp.w / 2, vp.h * (portrait ? 0.31 : 0.36), vp.w * 0.84, portrait ? 58 : 64);
   ctx.shadowBlur = 0;
   ctx.fillStyle = 'rgba(255,255,255,0.85)';
-  ctx.font = '400 19px system-ui, sans-serif';
-  wrapText(ctx, gdl.subtitle ?? '', vp.w / 2, vp.h * 0.46, vp.w * 0.7, 26);
-  if (Math.floor(t * 1.6) % 2 === 0) ctx.fillText('— Appuie sur une touche —', vp.w / 2, vp.h * 0.66);
+  ctx.font = `400 ${portrait ? 25 : 19}px system-ui, sans-serif`;
+  wrapText(ctx, gdl.subtitle ?? '', vp.w / 2, vp.h * (portrait ? 0.48 : 0.46), vp.w * 0.76, portrait ? 34 : 26);
+  if (Math.floor(t * 1.6) % 2 === 0) ctx.fillText('— Appuie sur une touche —', vp.w / 2, vp.h * 0.68);
   ctx.restore();
 }
 
@@ -522,15 +536,124 @@ function drawScreenBackdrop(ctx, vp, t, bgLayers) {
 }
 
 /** Carte-monde : nœuds de niveaux, états verrouillé/fini, sélection. */
+export function renderStoryBackdrop(ctx, vp, t, bgLayers) {
+  drawScreenBackdrop(ctx, vp, t, bgLayers);
+}
+
+export function renderHub(ctx, gdl, campaign, vp, t, bgLayers, selected, portraitImg) {
+  drawScreenBackdrop(ctx, vp, t, bgLayers);
+  const accent = gdl.ui?.accent ?? '#e8c05a';
+  const hub = gdl.hub ?? {};
+  const portrait = vp.h > vp.w * 1.2;
+  ctx.save();
+  ctx.textAlign = 'left';
+  ctx.fillStyle = accent;
+  ctx.font = `700 ${Math.round(vp.w * (portrait ? 0.057 : 0.035))}px Georgia, serif`;
+  ctx.fillText(hub.name ?? 'Le Refuge', vp.w * 0.07, vp.h * 0.12);
+  ctx.fillStyle = 'rgba(255,255,255,0.72)';
+  ctx.font = `400 ${Math.max(portrait ? 20 : 14, Math.round(vp.w * 0.014))}px system-ui, sans-serif`;
+  wrapTextTop(ctx, hub.tagline ?? 'Preparez la prochaine mission et reconstituez votre histoire.', vp.w * 0.07, vp.h * 0.16, vp.w * (portrait ? 0.56 : 0.7), portrait ? 27 : 22);
+  if (portraitImg) {
+    const scale = Math.min((vp.w * 0.28) / portraitImg.width, (vp.h * 0.31) / portraitImg.height);
+    const w = portraitImg.width * scale, h = portraitImg.height * scale;
+    ctx.globalAlpha = 0.92;
+    ctx.drawImage(portraitImg, vp.w * 0.69 - w / 2, vp.h * 0.18, w, h);
+    ctx.globalAlpha = 1;
+  }
+  const cards = [
+    { title: 'MISSIONS', detail: `${campaign.unlocked}/${gdl.levels.length} zones accessibles` },
+    { title: 'ARSENAL', detail: `${campaign.relics.length}/${(gdl.relics ?? []).length} reliques liees` },
+    { title: 'CHRONIQUES', detail: `${campaign.completed.length}/${gdl.levels.length} chapitres accomplis` },
+  ];
+  const gap = vp.w * 0.018, margin = vp.w * 0.06;
+  const cardW = (vp.w - margin * 2 - gap * 2) / 3;
+  const cardH = Math.min(210, vp.h * 0.23), y = vp.h * 0.58;
+  cards.forEach((card, index) => {
+    const x = margin + index * (cardW + gap), active = index === selected;
+    ctx.fillStyle = active ? 'rgba(255,255,255,0.14)' : 'rgba(7,6,14,0.72)';
+    ctx.strokeStyle = active ? accent : 'rgba(255,255,255,0.16)'; ctx.lineWidth = active ? 3 : 1;
+    roundRect(ctx, x, y, cardW, cardH, 8); ctx.fill(); ctx.stroke();
+    ctx.textAlign = 'center'; ctx.fillStyle = active ? accent : 'rgba(255,255,255,0.78)';
+    ctx.font = `700 ${Math.max(portrait ? 23 : 15, Math.round(vp.w * 0.017))}px system-ui, sans-serif`;
+    ctx.fillText(card.title, x + cardW / 2, y + cardH * 0.35);
+    ctx.fillStyle = 'rgba(255,255,255,0.58)'; ctx.font = `400 ${Math.max(portrait ? 16 : 11, Math.round(vp.w * 0.011))}px system-ui, sans-serif`;
+    wrapText(ctx, card.detail, x + cardW / 2, y + cardH * 0.58, cardW * 0.82, portrait ? 23 : 19);
+  });
+  ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(255,255,255,0.56)'; ctx.font = `400 ${portrait ? 18 : 14}px system-ui, sans-serif`;
+  ctx.fillText('Gauche / droite : choisir   Entree : ouvrir', vp.w / 2, vp.h * 0.9);
+  ctx.restore();
+}
+
+export function renderCollection(ctx, gdl, campaign, vp, t, bgLayers) {
+  drawScreenBackdrop(ctx, vp, t, bgLayers);
+  const accent = gdl.ui?.accent ?? '#e8c05a';
+  const portrait = vp.h > vp.w * 1.2;
+  ctx.save(); ctx.textAlign = 'center'; ctx.fillStyle = accent;
+  ctx.font = `700 ${Math.round(vp.w * (portrait ? 0.052 : 0.032))}px Georgia, serif`; ctx.fillText('ARSENAL ET RELIQUES', vp.w / 2, vp.h * 0.13);
+  const relics = gdl.relics ?? [], gap = 18, margin = vp.w * 0.12;
+  const w = (vp.w - margin * 2 - gap) / 2, h = Math.min(150, vp.h * 0.18);
+  relics.slice(0, 6).forEach((relic, i) => {
+    const x = margin + (i % 2) * (w + gap), y = vp.h * 0.23 + Math.floor(i / 2) * (h + 14);
+    const owned = campaign.relics.includes(relic.id);
+    ctx.fillStyle = owned ? 'rgba(255,255,255,0.13)' : 'rgba(5,4,12,0.58)';
+    ctx.strokeStyle = owned ? accent : 'rgba(255,255,255,0.13)'; ctx.lineWidth = owned ? 2 : 1;
+    roundRect(ctx, x, y, w, h, 8); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = owned ? accent : 'rgba(255,255,255,0.38)'; ctx.font = `700 ${portrait ? 21 : 16}px system-ui, sans-serif`;
+    ctx.fillText(owned ? relic.name : 'Relique inconnue', x + w / 2, y + 38);
+    ctx.fillStyle = owned ? 'rgba(255,255,255,0.72)' : 'rgba(255,255,255,0.28)'; ctx.font = `400 ${portrait ? 17 : 13}px system-ui, sans-serif`;
+    wrapText(ctx, owned ? relic.desc : 'Terminez une mission pour la reveler.', x + w / 2, y + 70, w * 0.82, portrait ? 23 : 18);
+  });
+  ctx.fillStyle = 'rgba(255,255,255,0.55)'; ctx.font = `400 ${portrait ? 18 : 14}px system-ui, sans-serif`;
+  ctx.fillText('Echap / Entree : retour au hub', vp.w / 2, vp.h * 0.92); ctx.restore();
+}
+
+export function renderCodex(ctx, gdl, campaign, vp, t, bgLayers) {
+  drawScreenBackdrop(ctx, vp, t, bgLayers);
+  const accent = gdl.ui?.accent ?? '#e8c05a';
+  const portrait = vp.h > vp.w * 1.2;
+  ctx.save(); ctx.textAlign = 'left'; ctx.fillStyle = accent;
+  ctx.font = `700 ${Math.round(vp.w * (portrait ? 0.052 : 0.032))}px Georgia, serif`; ctx.fillText('CHRONIQUES', vp.w * 0.09, vp.h * 0.13);
+  ctx.fillStyle = 'rgba(255,255,255,0.72)'; ctx.font = `400 ${portrait ? 19 : 15}px system-ui, sans-serif`;
+  wrapTextTop(ctx, gdl.subtitle ?? '', vp.w * 0.09, vp.h * 0.19, vp.w * 0.82, portrait ? 27 : 22);
+  gdl.levels.forEach((level, i) => {
+    const done = campaign.completed.includes(level.id), y = vp.h * 0.34 + i * Math.min(105, vp.h * 0.13);
+    ctx.fillStyle = done ? accent : 'rgba(255,255,255,0.35)'; ctx.font = `700 ${portrait ? 21 : 17}px system-ui, sans-serif`;
+    ctx.fillText(`${String(i + 1).padStart(2, '0')}  ${level.name}`, vp.w * 0.11, y);
+    ctx.fillStyle = 'rgba(255,255,255,0.52)'; ctx.font = `400 ${portrait ? 17 : 13}px system-ui, sans-serif`;
+    ctx.fillText(done ? 'Chapitre accompli et archive.' : i < campaign.unlocked ? 'Mission disponible.' : 'Chapitre verrouille.', vp.w * 0.17, y + 28);
+  });
+  ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(255,255,255,0.55)'; ctx.font = `400 ${portrait ? 18 : 14}px system-ui, sans-serif`;
+  ctx.fillText('Echap / Entree : retour au hub', vp.w / 2, vp.h * 0.92); ctx.restore();
+}
+
+export function renderPause(ctx, gdl, vp) {
+  const portrait = vp.h > vp.w * 1.2;
+  ctx.save(); panel(ctx, vp); ctx.textAlign = 'center';
+  ctx.fillStyle = gdl.ui?.accent ?? '#e8c05a'; ctx.font = `700 ${Math.round(vp.w * (portrait ? 0.075 : 0.05))}px Georgia, serif`;
+  ctx.fillText('PAUSE', vp.w / 2, vp.h * 0.4);
+  ctx.fillStyle = 'rgba(255,255,255,0.75)'; ctx.font = `400 ${portrait ? 20 : 16}px system-ui, sans-serif`;
+  ctx.fillText('Echap : reprendre   H : retourner au hub', vp.w / 2, vp.h * 0.52); ctx.restore();
+}
+
+export function renderDefeat(ctx, gdl, vp, score, bgLayers, t) {
+  drawScreenBackdrop(ctx, vp, t, bgLayers);
+  const portrait = vp.h > vp.w * 1.2;
+  ctx.save(); ctx.textAlign = 'center'; ctx.fillStyle = '#ff7a7a';
+  ctx.font = `700 ${Math.round(vp.w * (portrait ? 0.07 : 0.045))}px Georgia, serif`; ctx.fillText('MISSION ECHOUEE', vp.w / 2, vp.h * 0.39);
+  ctx.fillStyle = 'rgba(255,255,255,0.78)'; ctx.font = `400 ${portrait ? 21 : 17}px system-ui, sans-serif`;
+  ctx.fillText(`Score ${score}`, vp.w / 2, vp.h * 0.49); ctx.fillText('Entree : reessayer   Echap : hub', vp.w / 2, vp.h * 0.58); ctx.restore();
+}
+
 export function renderMap(ctx, gdl, campaign, vp, t, bgLayers, selectedIndex) {
   drawScreenBackdrop(ctx, vp, t, bgLayers);
   const accent = gdl.ui?.accent ?? '#e8c05a';
+  const portrait = vp.h > vp.w * 1.2;
   ctx.save();
   ctx.textAlign = 'center';
   ctx.fillStyle = 'rgba(255,255,255,0.9)';
-  ctx.font = `700 ${Math.round(vp.w * 0.032)}px Georgia, serif`;
+  ctx.font = `700 ${Math.round(vp.w * (portrait ? 0.052 : 0.032))}px Georgia, serif`;
   ctx.fillText(gdl.map?.title ?? 'Carte du monde', vp.w / 2, vp.h * 0.12);
-  ctx.font = '400 15px system-ui, sans-serif';
+  ctx.font = `400 ${portrait ? 19 : 15}px system-ui, sans-serif`;
   ctx.fillStyle = 'rgba(255,255,255,0.6)';
   ctx.fillText(`Score total ${campaign.totalScore} · ${campaign.relics.length} relique${campaign.relics.length > 1 ? 's' : ''}`, vp.w / 2, vp.h * 0.17);
 
@@ -552,16 +675,16 @@ export function renderMap(ctx, gdl, campaign, vp, t, bgLayers, selectedIndex) {
     ctx.fill();
     ctx.lineWidth = 3; ctx.strokeStyle = isSel ? accent : 'rgba(0,0,0,0.5)'; ctx.stroke();
     ctx.fillStyle = done ? '#1a1426' : unlocked ? '#1a1426' : 'rgba(255,255,255,0.4)';
-    ctx.font = '700 16px system-ui, sans-serif';
+    ctx.font = `700 ${portrait ? 20 : 16}px system-ui, sans-serif`;
     ctx.fillText(done ? '✓' : unlocked ? String(i + 1) : '🔒', x, y + 1);
     ctx.fillStyle = isSel ? accent : 'rgba(255,255,255,0.75)';
-    ctx.font = `${isSel ? 700 : 400} 14px system-ui, sans-serif`;
+    ctx.font = `${isSel ? 700 : 400} ${portrait ? 18 : 14}px system-ui, sans-serif`;
     ctx.fillText(n.name, x, y + r + 20);
     const lvl = gdl.levels[i];
     if (isSel && lvl?.boss) { ctx.fillStyle = '#ff8585'; ctx.fillText('⚔ BOSS', x, y + r + 40); }
   });
   ctx.fillStyle = 'rgba(255,255,255,0.55)';
-  ctx.font = '400 15px system-ui, sans-serif';
+  ctx.font = `400 ${portrait ? 19 : 15}px system-ui, sans-serif`;
   ctx.fillText('◀ ▶ choisir · Entrée/X jouer', vp.w / 2, vp.h * 0.9);
   ctx.restore();
 }
@@ -569,6 +692,7 @@ export function renderMap(ctx, gdl, campaign, vp, t, bgLayers, selectedIndex) {
 /** Dialogue : portrait + nom + texte machine à écrire. */
 export function renderDialogue(ctx, vp, beat, charT, portraitImg, accent) {
   const boxH = Math.min(200, vp.h * 0.3);
+  const portrait = vp.h > vp.w * 1.2;
   const y = vp.h - boxH - 18;
   ctx.save();
   ctx.fillStyle = 'rgba(8,6,16,0.92)';
@@ -583,14 +707,14 @@ export function renderDialogue(ctx, vp, beat, charT, portraitImg, accent) {
     textX = 32 + pw + 22;
   }
   ctx.fillStyle = accent;
-  ctx.font = '700 17px system-ui, sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  ctx.font = `700 ${portrait ? 21 : 17}px system-ui, sans-serif`; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
   ctx.fillText(beat.speaker ?? '', textX, y + 18);
   ctx.fillStyle = 'rgba(255,255,255,0.94)';
-  ctx.font = '400 17px system-ui, sans-serif';
+  ctx.font = `400 ${portrait ? 20 : 17}px system-ui, sans-serif`;
   const shown = beat.text.slice(0, Math.floor(charT * 45));
-  wrapTextTop(ctx, shown, textX, y + 48, vp.w - textX - 50, 24);
+  wrapTextTop(ctx, shown, textX, y + 48, vp.w - textX - 50, portrait ? 27 : 24);
   ctx.fillStyle = 'rgba(255,255,255,0.5)';
-  ctx.font = '400 13px system-ui, sans-serif';
+  ctx.font = `400 ${portrait ? 16 : 13}px system-ui, sans-serif`;
   if (shown.length >= beat.text.length) ctx.fillText('▼ continuer', vp.w - 130, y + boxH - 24);
   ctx.restore();
 }
@@ -598,10 +722,11 @@ export function renderDialogue(ctx, vp, beat, charT, portraitImg, accent) {
 /** Choix de relique : deux cartes. */
 export function renderRelicChoice(ctx, vp, relics, selected, accent, t) {
   panel(ctx, vp);
+  const portrait = vp.h > vp.w * 1.2;
   ctx.save();
   ctx.textAlign = 'center';
   ctx.fillStyle = 'rgba(255,255,255,0.92)';
-  ctx.font = `700 ${Math.round(vp.w * 0.028)}px Georgia, serif`;
+  ctx.font = `700 ${Math.round(vp.w * (portrait ? 0.05 : 0.028))}px Georgia, serif`;
   ctx.fillText('Choisis une relique', vp.w / 2, vp.h * 0.2);
   const cw = Math.min(300, vp.w * 0.36), ch = vp.h * 0.4;
   relics.forEach((r, i) => {
@@ -615,14 +740,14 @@ export function renderRelicChoice(ctx, vp, relics, selected, accent, t) {
     ctx.save(); ctx.translate(x + cw / 2, cy + ch * 0.28); ctx.rotate(Math.PI / 4);
     ctx.fillStyle = accent; ctx.fillRect(-24, -24, 48, 48); ctx.restore();
     ctx.fillStyle = 'rgba(255,255,255,0.95)';
-    ctx.font = '700 19px system-ui, sans-serif';
-    ctx.fillText(r.name, x + cw / 2, cy + ch * 0.55);
+    ctx.font = `700 ${portrait ? 23 : 19}px system-ui, sans-serif`;
+    wrapText(ctx, r.name, x + cw / 2, cy + ch * 0.53, cw - 32, portrait ? 28 : 23);
     ctx.fillStyle = 'rgba(255,255,255,0.7)';
-    ctx.font = '400 15px system-ui, sans-serif';
-    wrapText(ctx, r.desc ?? '', x + cw / 2, cy + ch * 0.68, cw - 40, 20);
+    ctx.font = `400 ${portrait ? 18 : 15}px system-ui, sans-serif`;
+    wrapText(ctx, r.desc ?? '', x + cw / 2, cy + ch * 0.7, cw - 40, portrait ? 24 : 20);
   });
   ctx.fillStyle = 'rgba(255,255,255,0.55)';
-  ctx.font = '400 15px system-ui, sans-serif';
+  ctx.font = `400 ${portrait ? 19 : 15}px system-ui, sans-serif`;
   ctx.fillText('◀ ▶ choisir · Entrée/X prendre', vp.w / 2, vp.h * 0.85);
   ctx.restore();
 }
@@ -630,19 +755,20 @@ export function renderRelicChoice(ctx, vp, relics, selected, accent, t) {
 export function renderCredits(ctx, gdl, campaign, vp, t) {
   panel(ctx, vp);
   const accent = gdl.ui?.accent ?? '#e8c05a';
+  const portrait = vp.h > vp.w * 1.2;
   ctx.save();
   ctx.textAlign = 'center';
   ctx.fillStyle = accent;
   ctx.shadowColor = accent; ctx.shadowBlur = 20;
-  ctx.font = `700 ${Math.round(vp.w * 0.05)}px Georgia, serif`;
+  ctx.font = `700 ${Math.round(vp.w * (portrait ? 0.075 : 0.05))}px Georgia, serif`;
   ctx.fillText('Victoire !', vp.w / 2, vp.h * 0.32);
   ctx.shadowBlur = 0;
   ctx.fillStyle = 'rgba(255,255,255,0.92)';
-  ctx.font = '400 20px system-ui, sans-serif';
+  ctx.font = `400 ${portrait ? 23 : 20}px system-ui, sans-serif`;
   ctx.fillText(`${gdl.title} — campagne terminée`, vp.w / 2, vp.h * 0.42);
   ctx.fillText(`Score total ${campaign.totalScore} · ${campaign.relics.length} reliques`, vp.w / 2, vp.h * 0.49);
   ctx.fillStyle = 'rgba(255,255,255,0.6)';
-  ctx.font = '400 16px system-ui, sans-serif';
+  ctx.font = `400 ${portrait ? 19 : 16}px system-ui, sans-serif`;
   ctx.fillText('Forgé par Ellipse — assets générés, jeu défini en GDL', vp.w / 2, vp.h * 0.6);
   if (Math.floor(t * 1.6) % 2 === 0) ctx.fillText('R : recommencer l’aventure', vp.w / 2, vp.h * 0.7);
   ctx.restore();

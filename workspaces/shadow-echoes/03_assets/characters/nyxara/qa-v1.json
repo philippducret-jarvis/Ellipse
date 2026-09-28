@@ -1,0 +1,28 @@
+{
+  "hero_id": "nyxara",
+  "checked_at": "2026-09-24T06:59:24.617Z",
+  "technical_passed": true,
+  "width": 1024,
+  "height": 1536,
+  "sha256": "72525b00fe645c5dee4e4195197e769608fc04f0bcf725604c2a6a4cfa58f200",
+  "alpha": {
+    "present": true,
+    "fully_transparent_fraction": 0.34196726481119794,
+    "solid_fraction": 0.5777053833007812
+  },
+  "visual_status": "review",
+  "fidelity_approved": false,
+  "runtime_ready": false,
+  "observations": [
+    "Longue chevelure noire aux reflets violets",
+    "Couronne d’or effilée et pierres améthyste",
+    "Corsage noir, chaînes d’or fines et cape violette",
+    "Corbeau et orbe du néant ; visage et proportions de la fiche"
+  ],
+  "remaining": [
+    "Comparer les détails du visage et des ornements à la référence",
+    "Nettoyer les éventuels halos et pixels de fond",
+    "Séparer les éléments pour le rig",
+    "Produire et vérifier les animations en mouvement"
+  ]
+}
