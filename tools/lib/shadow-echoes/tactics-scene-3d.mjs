@@ -18,7 +18,9 @@ const seraphineLookdevSets={
  'lookdev-v3':{idle:'seraphine-front-cutout-v2.png',windup:'seraphine-basic-windup-key-v2.png',attack:'seraphine-basic-attack-key-v3.png',mattes:['seraphine-idle-matte-v3.png','seraphine-windup-matte-v3.png','seraphine-attack-matte-v3.png']},
  'lookdev-v4':{idle:'../turnaround-v1.png',windup:'seraphine-basic-windup-key-v2.png',attack:'seraphine-basic-attack-key-v3.png',mattes:['seraphine-reference-front-matte-v4.png','seraphine-windup-matte-v3.png','seraphine-attack-matte-v3.png'],idleWidth:1.02,frontCrop:422/1536},
  'lookdev-v5':{idle:'../turnaround-v1.png',windup:'../turnaround-v1.png',attack:'seraphine-basic-attack-key-v3.png',mattes:['seraphine-reference-front-matte-v4.png','seraphine-reference-quarter-matte-v5.png','seraphine-attack-matte-v3.png'],idleWidth:1.02,frontCrop:422/1536,keyCrops:[{offset:1147/1536,repeat:389/1536},null],keyWidths:[1.02,1.63]},
- 'lookdev-v6':{idle:'../turnaround-v1.png',windup:'../turnaround-v1.png',attack:'seraphine-reference-attack-key-v6.png',mattes:['seraphine-reference-front-matte-v4.png','seraphine-reference-quarter-matte-v5.png','seraphine-reference-attack-matte-v6.png'],idleWidth:1.02,frontCrop:422/1536,keyCrops:[{offset:1147/1536,repeat:389/1536},null],keyWidths:[1.02,1.63]}
+ 'lookdev-v6':{idle:'../turnaround-v1.png',windup:'../turnaround-v1.png',attack:'seraphine-reference-attack-key-v6.png',mattes:['seraphine-reference-front-matte-v4.png','seraphine-reference-quarter-matte-v5.png','seraphine-reference-attack-matte-v6.png'],idleWidth:1.02,frontCrop:422/1536,keyCrops:[{offset:1147/1536,repeat:389/1536},null],keyWidths:[1.02,1.63]},
+ 'lookdev-v7':{idle:'../turnaround-v1.png',windup:'../turnaround-v1.png',attack:'seraphine-reference-attack-key-v6.png',mattes:['seraphine-reference-front-matte-v4.png','seraphine-reference-quarter-matte-v5.png','seraphine-reference-attack-matte-v6.png'],idleWidth:1.02,frontCrop:422/1536,keyCrops:[{offset:1147/1536,repeat:389/1536},null],keyWidths:[1.02,1.63],hairRegion:'seraphine-reference-hair-region-v7.png'},
+ 'lookdev-v8':{idle:'../turnaround-v1.png',windup:'../turnaround-v1.png',attack:'seraphine-reference-attack-key-v6.png',mattes:['seraphine-reference-front-matte-v4.png','seraphine-reference-quarter-matte-v5.png','seraphine-reference-attack-matte-v6.png'],idleWidth:1.02,frontCrop:422/1536,keyCrops:[{offset:1147/1536,repeat:389/1536},null],keyWidths:[1.02,1.63],hairRegion:'seraphine-reference-hair-region-v7.png',clothRegion:'seraphine-reference-cloth-region-v8.png'}
 };
 const tilePosition=(x,lane)=>new T.Vector3(x-(WIDTH-1)/2,0,(lane-(LANES-1)/2)*.75);
 const actorPosition=(x,lane)=>tilePosition(x,lane);
@@ -26,7 +28,7 @@ const alive=unit=>unit.hp>0;
 
 /** One renderer for the entire encounter. The HTML grid remains the accessible input layer. */
 export function createTacticsScene3D(host,{reduced=false}={}){
- const params=new URLSearchParams(location.search),useReferenceEnemies=['lookdev-v2','lookdev-v3','lookdev-v4','lookdev-v5','lookdev-v6'].includes(params.get('seraphine')??'lookdev-v6'),heroReview=params.get('camera')==='seraphine';
+ const params=new URLSearchParams(location.search),useReferenceEnemies=['lookdev-v2','lookdev-v3','lookdev-v4','lookdev-v5','lookdev-v6','lookdev-v7','lookdev-v8'].includes(params.get('seraphine')??'lookdev-v6'),heroReview=params.get('camera')==='seraphine';
  const renderer=new T.WebGLRenderer({alpha:false,antialias:true,powerPreference:'high-performance'});
  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.35));renderer.outputColorSpace=T.SRGBColorSpace;
  renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.28;
@@ -96,9 +98,30 @@ export function createTacticsScene3D(host,{reduced=false}={}){
   }
   positions.needsUpdate=true;
  }
+ function setRegionMask(material,region,overlay){
+  material.userData.regionMap=region;
+  material.onBeforeCompile=shader=>{
+   shader.uniforms.regionMap={value:region};
+   shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nuniform sampler2D regionMap;');
+   shader.fragmentShader=shader.fragmentShader.replace('#include <alphamap_fragment>',`#include <alphamap_fragment>\nfloat cutRegion=step(0.967,texture2D(regionMap,vAlphaMapUv).g);\ndiffuseColor.a*=${overlay?'cutRegion':'1.0-cutRegion'};`);
+  };
+  material.customProgramCacheKey=()=>`seraphine-region-${overlay?'overlay':'base'}`;
+  material.needsUpdate=true;
+ }
+ function setTwoRegionMask(material,hair,cloth,layer){
+  material.userData.regionMap=hair;material.userData.clothMap=cloth;
+  material.onBeforeCompile=shader=>{
+   shader.uniforms.hairMap={value:hair};shader.uniforms.clothMap={value:cloth};
+   shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nuniform sampler2D hairMap;\nuniform sampler2D clothMap;');
+   const weight=layer==='hair'?'hairCut':layer==='cloth'?'clothCut':'(1.0-hairCut)*(1.0-clothCut)';
+   shader.fragmentShader=shader.fragmentShader.replace('#include <alphamap_fragment>',`#include <alphamap_fragment>\nfloat hairCut=step(0.967,texture2D(hairMap,vAlphaMapUv).g);\nfloat clothCut=step(0.967,texture2D(clothMap,vAlphaMapUv).g)*(1.0-hairCut);\ndiffuseColor.a*=${weight};`);
+  };
+  material.customProgramCacheKey=()=>`seraphine-regions-${layer}`;
+  material.needsUpdate=true;
+ }
  const neutralColor=new T.Color('#95939a'),reachColor=new T.Color('#cbb06e'),intentColor=new T.Color('#d75568'),selectedColor=new T.Color('#f1d68f');
  function disposeScene(root){const geometries=new Set(),materials=new Set();root.traverse(object=>{if(object.geometry)geometries.add(object.geometry);for(const material of Array.isArray(object.material)?object.material:[object.material])if(material)materials.add(material);});geometries.forEach(geometry=>geometry.dispose());materials.forEach(material=>{for(const value of Object.values(material))if(value?.isTexture)value.dispose();material.dispose();});}
- function disposeActor(entry){entry.contact.geometry.dispose();entry.contact.material.dispose();if(entry.referenceSprite){for(const sprite of [entry.referenceSprite,entry.windupSprite,entry.attackSprite].filter(Boolean)){sprite.geometry.dispose();sprite.material.map?.dispose();sprite.material.alphaMap?.dispose();sprite.material.dispose();}return;}if(entry.enemySprite){entry.enemySprite.geometry.dispose();entry.enemySprite.material.map?.dispose();entry.enemySprite.material.dispose();return;}if(entry.gltf){entry.gltf.mixer.stopAllAction();disposeScene(entry.gltf.scene);return;}if(entry.model){entry.model.dispose();return;}disposeScene(entry.pivot);}
+ function disposeActor(entry){entry.contact.geometry.dispose();entry.contact.material.dispose();if(entry.referenceSprite){const regions=new Set();for(const sprite of [entry.referenceSprite,entry.hairSprite,entry.clothSprite,entry.windupSprite,entry.attackSprite].filter(Boolean)){sprite.geometry.dispose();sprite.material.map?.dispose();sprite.material.alphaMap?.dispose();if(sprite.material.userData.regionMap)regions.add(sprite.material.userData.regionMap);if(sprite.material.userData.clothMap)regions.add(sprite.material.userData.clothMap);sprite.material.dispose();}regions.forEach(texture=>texture.dispose());return;}if(entry.enemySprite){entry.enemySprite.geometry.dispose();entry.enemySprite.material.map?.dispose();entry.enemySprite.material.dispose();return;}if(entry.gltf){entry.gltf.mixer.stopAllAction();disposeScene(entry.gltf.scene);return;}if(entry.model){entry.model.dispose();return;}disposeScene(entry.pivot);}
  async function loadEnemySkin(entry){try{const kind=entry.unit?.boss?'boss':entry.id==='sentry-b'?'void':'armored',source=await enemyTexture(kind);if(!source||disposed||actors.get(entry.id)!==entry)return;
   const texture=source.clone();if(kind==='boss'){texture.repeat.set(1/3,1);texture.offset.set(2/3,0);}texture.needsUpdate=true;
   const sprite=new T.Mesh(new T.PlaneGeometry(kind==='boss'?1.87:1.63,kind==='boss'?1.87:2.45,10,16),new T.MeshBasicMaterial({map:texture,transparent:true,alphaTest:.045,side:T.DoubleSide,depthWrite:false,toneMapped:false}));
@@ -125,6 +148,32 @@ export function createTacticsScene3D(host,{reduced=false}={}){
    sprite.material.alphaMap=matte;sprite.material.alphaTest=.965;sprite.material.needsUpdate=true;
    host.dataset.seraphineMaterials='reference-with-silhouette-matte';
   }
+  if(lookdev.hairRegion){
+   const region=await new T.TextureLoader().loadAsync(lookdevBase+lookdev.hairRegion);
+   if(disposed||actors.get(entry.id)!==entry){region.dispose();return;}
+   region.repeat.set(lookdev.frontCrop,1);region.needsUpdate=true;
+   setRegionMask(sprite.material,region,false);
+   const hairMap=texture.clone(),hairMatte=sprite.material.alphaMap.clone();hairMap.needsUpdate=true;hairMatte.needsUpdate=true;
+   const hairGeometry=new T.PlaneGeometry(lookdev.idleWidth,2.45,12,24);
+   const hair=new T.Mesh(hairGeometry,new T.MeshBasicMaterial({map:hairMap,alphaMap:hairMatte,transparent:true,alphaTest:.965,side:T.DoubleSide,depthWrite:false,toneMapped:false}));
+   setRegionMask(hair.material,region,true);hair.userData.rest=Float32Array.from(hairGeometry.attributes.position.array);
+   hair.position.y=1.22;hair.renderOrder=3;hair.name='Seraphine independently animated reference hair';entry.hairSprite=hair;entry.pivot.add(hair);
+   host.dataset.seraphineMotion='reference-hair-region-and-keyposes';
+  }
+  if(lookdev.clothRegion&&entry.hairSprite){
+   const clothRegion=await new T.TextureLoader().loadAsync(lookdevBase+lookdev.clothRegion);
+   if(disposed||actors.get(entry.id)!==entry){clothRegion.dispose();return;}
+   clothRegion.repeat.set(lookdev.frontCrop,1);clothRegion.needsUpdate=true;
+   const hairRegion=entry.referenceSprite.material.userData.regionMap;
+   setTwoRegionMask(sprite.material,hairRegion,clothRegion,'base');
+   setTwoRegionMask(entry.hairSprite.material,hairRegion,clothRegion,'hair');
+   const clothMap=texture.clone(),clothMatte=sprite.material.alphaMap.clone();clothMap.needsUpdate=true;clothMatte.needsUpdate=true;
+   const clothGeometry=new T.PlaneGeometry(lookdev.idleWidth,2.45,12,24);
+   const cloth=new T.Mesh(clothGeometry,new T.MeshBasicMaterial({map:clothMap,alphaMap:clothMatte,transparent:true,alphaTest:.965,side:T.DoubleSide,depthWrite:false,toneMapped:false}));
+   setTwoRegionMask(cloth.material,hairRegion,clothRegion,'cloth');cloth.userData.rest=Float32Array.from(clothGeometry.attributes.position.array);
+   cloth.position.y=1.22;cloth.renderOrder=3;cloth.name='Seraphine independently animated reference cloth';entry.clothSprite=cloth;entry.pivot.add(cloth);
+   host.dataset.seraphineMotion='reference-hair-cloth-and-keyposes';
+  }
   const results=await Promise.allSettled([lookdev.windup,lookdev.attack].map(path=>new T.TextureLoader().loadAsync(lookdevBase+path)));
   if(disposed||actors.get(entry.id)!==entry){for(const result of results)if(result.status==='fulfilled')result.value.dispose();return;}
   for(let i=0;i<results.length;i++){const result=results[i];if(result.status!=='fulfilled'){console.warn('Pose clé de Séraphine indisponible.',result.reason);continue;}
@@ -137,7 +186,7 @@ export function createTacticsScene3D(host,{reduced=false}={}){
    if(i===0)entry.windupSprite=key;else entry.attackSprite=key;
    entry.pivot.add(key);
   }
-  host.dataset.seraphineKeyposes=String(1+Number(!!entry.windupSprite)+Number(!!entry.attackSprite));host.dataset.seraphineMattes=String([entry.referenceSprite,entry.windupSprite,entry.attackSprite].filter(pose=>!!pose?.material.alphaMap).length);host.dataset.seraphineMotion='regional-mesh-and-clean-keyposes';
+  host.dataset.seraphineKeyposes=String(1+Number(!!entry.windupSprite)+Number(!!entry.attackSprite));host.dataset.seraphineMattes=String([entry.referenceSprite,entry.windupSprite,entry.attackSprite].filter(pose=>!!pose?.material.alphaMap).length);host.dataset.seraphineMotion=entry.clothSprite?'reference-hair-cloth-and-keyposes':entry.hairSprite?'reference-hair-region-and-keyposes':'regional-mesh-and-clean-keyposes';
   return;
  }
  const groomReview=requested==='groom-v4-1',silhouetteReview=requested==='silhouette-v4',surfaceReview=requested==='surface-v3';const modelName=groomReview?'seraphine-silhouette-v4-1-runtime.glb':silhouetteReview?'seraphine-silhouette-v4-runtime.glb':surfaceReview?'seraphine-surface-v3-runtime.glb':'seraphine-atelier-v2-runtime.glb';const gltf=await new GLTFLoader().loadAsync(`../../03_assets/characters/seraphine/modeling/${modelName}`);if(disposed||actors.get(entry.id)!==entry){disposeScene(gltf.scene);return;}entry.pivot.remove(entry.model.root);entry.model.dispose();entry.model=null;gltf.scene.traverse(object=>{if(object.isMesh){object.castShadow=true;object.receiveShadow=true;}});entry.pivot.add(gltf.scene);host.dataset.seraphineMaterials=String(tuneHeroMaterials(gltf.scene,{roughness:.9,metalness:1.1}));entry.gltf={scene:gltf.scene,mixer:new T.AnimationMixer(gltf.scene),clips:new Map(gltf.animations.map(clip=>[clip.name,clip])),playing:null};host.dataset.seraphineModel=groomReview?'groom-v4-1':silhouetteReview?'silhouette-v4':surfaceReview?'surface-v3':'atelier-v2';}catch(error){host.dataset.seraphineModel='fallback';console.warn('Rig skinné de Séraphine indisponible, volume de secours conservé.',error);}}
@@ -173,11 +222,14 @@ export function createTacticsScene3D(host,{reduced=false}={}){
    if(entry.referenceSprite){const sprite=entry.referenceSprite,active=entry.clip!=='idle',basic=entry.clip==='attack1'&&!!entry.attackSprite,phase=Math.max(0,Math.min(1,t/1.25));
     const stage=basic?(phase<.16?'idle':phase<.52?(entry.windupSprite?'windup':'idle'):phase<.84?'attack':'idle'):'idle';
     sprite.visible=stage==='idle';sprite.position.y=1.22+(reduced?0:Math.sin(now*1.45)*.012);sprite.position.x=active?-.035*Math.sin(Math.min(1,t/.56)*Math.PI):0;sprite.rotation.z=active?-.012*Math.sin(Math.min(1,t/.58)*Math.PI):Math.sin(now*.85)*.004;p.rotation.y=0;
+    if(entry.hairSprite){const hair=entry.hairSprite;hair.visible=stage==='idle';hair.position.y=sprite.position.y;hair.position.x=sprite.position.x;hair.rotation.z=sprite.rotation.z;if(!reduced&&hair.visible)deformReference(hair,now,1.35);}
+    if(entry.clothSprite){const cloth=entry.clothSprite;cloth.visible=stage==='idle';cloth.position.y=sprite.position.y;cloth.position.x=sprite.position.x;cloth.rotation.z=sprite.rotation.z;if(!reduced&&cloth.visible)deformReference(cloth,now,1.25);}
     if(entry.windupSprite){entry.windupSprite.visible=stage==='windup';entry.windupSprite.position.x=-.055;entry.windupSprite.rotation.z=-.023;if(stage==='windup')host.dataset.seraphineWindupSeen='true';}
     if(entry.attackSprite){entry.attackSprite.visible=stage==='attack';entry.attackSprite.position.x=.10+Math.max(0,Math.min(1,(phase-.52)/.32))*.075;entry.attackSprite.rotation.z=.018;if(stage==='attack')host.dataset.seraphineAttackSeen='true';}
     host.dataset.seraphinePose=stage;
     const visiblePoses=Number(sprite.visible)+Number(!!entry.windupSprite?.visible)+Number(!!entry.attackSprite?.visible);host.dataset.seraphineVisiblePoses=String(visiblePoses);if(visiblePoses!==1)host.dataset.seraphinePoseOverlap='true';
-    if(!reduced)deformReference(stage==='windup'?entry.windupSprite:stage==='attack'?entry.attackSprite:sprite,now,stage==='idle'?1:.45);
+    if(!reduced&&stage!=='idle')deformReference(stage==='windup'?entry.windupSprite:entry.attackSprite,now,.45);
+    else if(!reduced&&!entry.hairSprite)deformReference(sprite,now,1);
    }
    else if(entry.gltf){const rig=entry.gltf;if(rig.playing!==entry.clip){rig.mixer.stopAllAction();const motion=rig.clips.get(entry.clip)??rig.clips.get('idle');if(motion){const action=rig.mixer.clipAction(motion);action.reset();action.setLoop(MOTIONS[entry.clip]?.loop?T.LoopRepeat:T.LoopOnce);action.clampWhenFinished=true;action.play();}rig.playing=entry.clip;}rig.mixer.update(dt);p.rotation.y=.14;}
    else if(entry.model){entry.model.apply(sampleHeroPose(entry.id,entry.clip,entry.clip==='idle'?now:now-entry.started),reduced?0:now);p.rotation.y=entry.id==='nyxara'?-.16:.14;}

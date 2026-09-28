@@ -4,7 +4,7 @@ import {mkdir} from 'node:fs/promises';
 const {chromium}=await import('playwright').catch(()=>import(new URL('../generated/browser-runtime/node_modules/playwright/index.mjs',import.meta.url).href));
 const version=process.argv[2]??'lookdev-v3';
 const camera=process.argv[3]==='focus'?'&camera=seraphine':'';
-assert.ok(['lookdev-v3','lookdev-v4','lookdev-v5','lookdev-v6'].includes(version));
+assert.ok(['lookdev-v3','lookdev-v4','lookdev-v5','lookdev-v6','lookdev-v7','lookdev-v8'].includes(version));
 const out='workspaces/shadow-echoes/02_production/lot-15/qa';
 await mkdir(out,{recursive:true});
 const browser=await chromium.launch({headless:true});
@@ -16,8 +16,11 @@ try{
  await page.locator('[data-node=entry]').click();
  await page.locator('#toggle-render').click();
  await page.locator(`#arena-volume[data-seraphine-model="${version}"][data-seraphine-materials="reference-with-silhouette-matte"][data-seraphine-keyposes="3"][data-seraphine-mattes="3"][data-enemy-sprites="3"]`).waitFor({timeout:30000});
+ if(version==='lookdev-v7')await page.locator('#arena-volume[data-seraphine-motion="reference-hair-region-and-keyposes"]').waitFor();
+ if(version==='lookdev-v8')await page.locator('#arena-volume[data-seraphine-motion="reference-hair-cloth-and-keyposes"]').waitFor();
  await page.waitForTimeout(500);
  await page.screenshot({path:`${out}/seraphine-${version}${camera?'-focus':''}-battle.png`});
+ if(version==='lookdev-v8'){await page.waitForTimeout(900);await page.screenshot({path:`${out}/seraphine-${version}${camera?'-focus':''}-idle-late.png`});}
  await page.locator('[data-action=basic]').click();
  await page.locator('#arena [data-unit=sentry-a]').click();
  await page.locator('#arena-volume[data-seraphine-pose="windup"]').waitFor({timeout:15000});
