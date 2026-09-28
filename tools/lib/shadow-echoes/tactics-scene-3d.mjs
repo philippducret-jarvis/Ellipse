@@ -9,15 +9,20 @@ import {createTacticsEnvironment} from './tactics-environment-3d.mjs';
 const stonePath='../../03_assets/environments/campaign-tactical/bridge-stone-albedo-v1.webp';
 const stoneNormalPath='../../03_assets/environments/campaign-tactical/bridge-stone-normal-v2.webp';
 const stoneRoughnessPath='../../03_assets/environments/campaign-tactical/bridge-stone-roughness-v2.webp';
-const seraphineLookdevPath='../../03_assets/characters/seraphine/lookdev/seraphine-front-cutout-v1.png';
-const seraphineWindupKeyPath='../../03_assets/characters/seraphine/lookdev/seraphine-basic-windup-key-v1.png';
-const seraphineAttackKeyPath='../../03_assets/characters/seraphine/lookdev/seraphine-basic-attack-key-v2.png';
+const guardianSheetPath='../../03_assets/enemies/guardians-v2.png';
+const sentinelPortraitPaths={armored:'../../03_assets/enemies/sentinels-lookdev/armored-sentinel-idle-v1.png',void:'../../03_assets/enemies/sentinels-lookdev/void-sentinel-idle-v1.png',boss:guardianSheetPath};
+const lookdevBase='../../03_assets/characters/seraphine/lookdev/';
+const seraphineLookdevSets={
+ 'lookdev-v1':{idle:'seraphine-front-cutout-v1.png',windup:'seraphine-basic-windup-key-v1.png',attack:'seraphine-basic-attack-key-v2.png'},
+ 'lookdev-v2':{idle:'seraphine-front-cutout-v2.png',windup:'seraphine-basic-windup-key-v2.png',attack:'seraphine-basic-attack-key-v3.png'}
+};
 const tilePosition=(x,lane)=>new T.Vector3(x-(WIDTH-1)/2,0,(lane-(LANES-1)/2)*.75);
 const actorPosition=(x,lane)=>tilePosition(x,lane);
 const alive=unit=>unit.hp>0;
 
 /** One renderer for the entire encounter. The HTML grid remains the accessible input layer. */
 export function createTacticsScene3D(host,{reduced=false}={}){
+ const useReferenceEnemies=new URLSearchParams(location.search).get('seraphine')==='lookdev-v2';
  const renderer=new T.WebGLRenderer({alpha:false,antialias:true,powerPreference:'high-performance'});
  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.35));renderer.outputColorSpace=T.SRGBColorSpace;
  renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.28;
@@ -61,6 +66,8 @@ export function createTacticsScene3D(host,{reduced=false}={}){
   return {root,body,arms,legs,materials:[armor,iron,crimson,bone]};
  }
  let state=null,raf=0,last=0,visible=false,disposed=false;
+ const enemyTexturePromises=new Map(),enemySourceTextures=[];
+ function enemyTexture(kind){if(!enemyTexturePromises.has(kind))enemyTexturePromises.set(kind,new T.TextureLoader().loadAsync(sentinelPortraitPaths[kind]).then(texture=>{if(disposed){texture.dispose();return null;}texture.colorSpace=T.SRGBColorSpace;texture.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());enemySourceTextures.push(texture);return texture;}));return enemyTexturePromises.get(kind);}
  const slashEffects=[];
  function discardSlash(effect){scene.remove(effect.group);effect.group.traverse(object=>{object.geometry?.dispose();object.material?.dispose();});}
  function slashRibbon(radius,width,start,sweep,material){const vertices=[],segments=32;
@@ -87,9 +94,17 @@ export function createTacticsScene3D(host,{reduced=false}={}){
  }
  const neutralColor=new T.Color('#95939a'),reachColor=new T.Color('#cbb06e'),intentColor=new T.Color('#d75568'),selectedColor=new T.Color('#f1d68f');
  function disposeScene(root){const geometries=new Set(),materials=new Set();root.traverse(object=>{if(object.geometry)geometries.add(object.geometry);for(const material of Array.isArray(object.material)?object.material:[object.material])if(material)materials.add(material);});geometries.forEach(geometry=>geometry.dispose());materials.forEach(material=>{for(const value of Object.values(material))if(value?.isTexture)value.dispose();material.dispose();});}
- function disposeActor(entry){entry.contact.geometry.dispose();entry.contact.material.dispose();if(entry.referenceSprite){for(const sprite of [entry.referenceSprite,entry.windupSprite,entry.attackSprite].filter(Boolean)){sprite.geometry.dispose();sprite.material.map?.dispose();sprite.material.dispose();}return;}if(entry.gltf){entry.gltf.mixer.stopAllAction();disposeScene(entry.gltf.scene);return;}if(entry.model){entry.model.dispose();return;}disposeScene(entry.pivot);}
- async function loadSeraphineSkin(entry){try{const requested=new URLSearchParams(location.search).get('seraphine');if(requested==='lookdev-v1'){
-  const texture=await new T.TextureLoader().loadAsync(seraphineLookdevPath);
+ function disposeActor(entry){entry.contact.geometry.dispose();entry.contact.material.dispose();if(entry.referenceSprite){for(const sprite of [entry.referenceSprite,entry.windupSprite,entry.attackSprite].filter(Boolean)){sprite.geometry.dispose();sprite.material.map?.dispose();sprite.material.dispose();}return;}if(entry.enemySprite){entry.enemySprite.geometry.dispose();entry.enemySprite.material.map?.dispose();entry.enemySprite.material.dispose();return;}if(entry.gltf){entry.gltf.mixer.stopAllAction();disposeScene(entry.gltf.scene);return;}if(entry.model){entry.model.dispose();return;}disposeScene(entry.pivot);}
+ async function loadEnemySkin(entry){try{const kind=entry.unit?.boss?'boss':entry.id==='sentry-b'?'void':'armored',source=await enemyTexture(kind);if(!source||disposed||actors.get(entry.id)!==entry)return;
+  const texture=source.clone();if(kind==='boss'){texture.repeat.set(1/3,1);texture.offset.set(2/3,0);}texture.needsUpdate=true;
+  const sprite=new T.Mesh(new T.PlaneGeometry(kind==='boss'?1.87:1.63,kind==='boss'?1.87:2.45,10,16),new T.MeshBasicMaterial({map:texture,transparent:true,alphaTest:.045,side:T.DoubleSide,depthWrite:false,toneMapped:false}));
+  sprite.userData.baseY=kind==='boss'?.97:1.0;sprite.position.y=sprite.userData.baseY;sprite.renderOrder=2;sprite.name=`Guardian reference-derived 2.5D ${kind}`;
+  const geometries=new Set();entry.enemy.root.traverse(object=>{if(object.geometry&&object.geometry!==boxGeo)geometries.add(object.geometry);});
+  entry.pivot.remove(entry.enemy.root);geometries.forEach(geometry=>geometry.dispose());entry.enemy.materials.forEach(material=>material.dispose());entry.enemy=null;entry.enemySprite=sprite;entry.pivot.add(sprite);
+  host.dataset.enemyVisuals='guardian-portraits-v1';host.dataset.enemySprites=String([...actors.values()].filter(actor=>actor.enemySprite).length);
+ }catch(error){console.warn('Planche des gardiens indisponible ; sentinelles en volume conservées.',error);}}
+ async function loadSeraphineSkin(entry){try{const requested=new URLSearchParams(location.search).get('seraphine'),lookdev=seraphineLookdevSets[requested];if(lookdev){
+  const texture=await new T.TextureLoader().loadAsync(lookdevBase+lookdev.idle);
   if(disposed||actors.get(entry.id)!==entry){texture.dispose();return;}
   texture.colorSpace=T.SRGBColorSpace;texture.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());
   const geometry=new T.PlaneGeometry(1.63,2.45,12,24);
@@ -97,8 +112,8 @@ export function createTacticsScene3D(host,{reduced=false}={}){
   sprite.userData.rest=Float32Array.from(geometry.attributes.position.array);
   sprite.position.y=1.22;sprite.renderOrder=2;sprite.name='Seraphine reference-derived 2.5D lookdev';
   entry.pivot.remove(entry.model.root);entry.model.dispose();entry.model=null;entry.referenceSprite=sprite;entry.pivot.add(sprite);
-  host.dataset.seraphineModel='lookdev-v1';host.dataset.seraphineMaterials='reference-cutout';host.dataset.seraphineKeyposes='1';
-  const results=await Promise.allSettled([seraphineWindupKeyPath,seraphineAttackKeyPath].map(path=>new T.TextureLoader().loadAsync(path)));
+  host.dataset.seraphineModel=requested;host.dataset.seraphineMaterials='reference-cutout';host.dataset.seraphineKeyposes='1';
+  const results=await Promise.allSettled([lookdev.windup,lookdev.attack].map(path=>new T.TextureLoader().loadAsync(lookdevBase+path)));
   if(disposed||actors.get(entry.id)!==entry){for(const result of results)if(result.status==='fulfilled')result.value.dispose();return;}
   for(let i=0;i<results.length;i++){const result=results[i];if(result.status!=='fulfilled'){console.warn('Pose clé de Séraphine indisponible.',result.reason);continue;}
    const keyTexture=result.value;keyTexture.colorSpace=T.SRGBColorSpace;keyTexture.anisotropy=texture.anisotropy;
@@ -119,7 +134,7 @@ export function createTacticsScene3D(host,{reduced=false}={}){
     const hero=!!HEROES[unit.id],pivot=new T.Group();scene.add(pivot);const contact=new T.Mesh(new T.CircleGeometry(.39,24),new T.MeshBasicMaterial({color:'#080509',transparent:true,opacity:.43,depthWrite:false}));contact.rotation.x=-Math.PI/2;contact.position.y=-.07;pivot.add(contact);
     const model=hero?createHeroModel(unit.id):null,enemy=hero?null:sentinel(unit);
     pivot.add(hero?model.root:enemy.root);pivot.scale.setScalar(hero?.67:.75);pivot.traverse(object=>{if(object.isMesh){object.castShadow=true;object.receiveShadow=true;}});
-    entry={pivot,model,enemy,contact,id:unit.id,x:unit.x,lane:unit.lane,clip:'idle',started:performance.now()/1000};pivot.position.copy(actorPosition(unit.x,unit.lane));actors.set(unit.id,entry);if(unit.id==='seraphine'){host.dataset.seraphineModel='loading';void loadSeraphineSkin(entry);}
+    entry={pivot,model,enemy,contact,id:unit.id,x:unit.x,lane:unit.lane,clip:'idle',started:performance.now()/1000};pivot.position.copy(actorPosition(unit.x,unit.lane));actors.set(unit.id,entry);if(unit.id==='seraphine'){host.dataset.seraphineModel='loading';void loadSeraphineSkin(entry);}else if(!hero&&useReferenceEnemies)void loadEnemySkin(entry);
    }
    entry.unit=unit;entry.goal=actorPosition(unit.x,unit.lane);
    entry.x=unit.x;entry.lane=unit.lane;
@@ -127,7 +142,7 @@ export function createTacticsScene3D(host,{reduced=false}={}){
   const reachable=new Set(reachableTiles(run,battle.selected).map(t=>`${t.x},${t.lane}`));
   const intents=new Set(battle.enemies.filter(alive).filter(e=>e.intent?.kind==='strike').map(e=>`${e.intent.x},${e.intent.lane}`));
   for(const cell of cells){const key=`${cell.x},${cell.lane}`,unit=units.find(u=>u.x===cell.x&&u.lane===cell.lane);cell.material.color.copy(unit?.id===battle.selected?selectedColor:intents.has(key)?intentColor:reachable.has(key)?reachColor:neutralColor);}
-  host.dataset.actors=String(actors.size);host.dataset.floorTiles=String(cells.length);
+  host.dataset.actors=String(actors.size);host.dataset.floorTiles=String(cells.length);if(useReferenceEnemies)host.dataset.enemySprites=String([...actors.values()].filter(actor=>actor.enemySprite).length);
  }
  function action(actorId,kind,targetId){const entry=actors.get(actorId);if(!entry)return;entry.clip=kind==='move'?'run':kind==='basic'?'attack1':kind==='super'?'ultimateCast':kind.startsWith('skill')?`${kind}Cast`:'hitLight';entry.started=performance.now()/1000;if(entry.referenceSprite&&entry.clip==='attack1'){entry.referenceAttackElapsed=0;entry.slashEffect=makeSlash(entry,targetId);host.dataset.seraphineAttackTriggered='true';}}
  function enemyTurn(){const now=performance.now()/1000;for(const entry of actors.values())if(entry.enemy){entry.clip='attack1';entry.started=now;}}
@@ -152,6 +167,7 @@ export function createTacticsScene3D(host,{reduced=false}={}){
    }
    else if(entry.gltf){const rig=entry.gltf;if(rig.playing!==entry.clip){rig.mixer.stopAllAction();const motion=rig.clips.get(entry.clip)??rig.clips.get('idle');if(motion){const action=rig.mixer.clipAction(motion);action.reset();action.setLoop(MOTIONS[entry.clip]?.loop?T.LoopRepeat:T.LoopOnce);action.clampWhenFinished=true;action.play();}rig.playing=entry.clip;}rig.mixer.update(dt);p.rotation.y=.14;}
    else if(entry.model){entry.model.apply(sampleHeroPose(entry.id,entry.clip,entry.clip==='idle'?now:now-entry.started),reduced?0:now);p.rotation.y=entry.id==='nyxara'?-.16:.14;}
+   else if(entry.enemySprite){const sprite=entry.enemySprite,attack=entry.clip==='attack1'?Math.sin(Math.min(1,t/.7)*Math.PI):0;const bob=reduced?0:Math.sin(now*1.65+entry.x)*.017;sprite.position.y=sprite.userData.baseY+bob;sprite.position.x=-attack*.12;sprite.rotation.z=-attack*.035+(reduced?0:Math.sin(now*1.1+entry.x)*.008);p.rotation.y=0;}
    else{const enemy=entry.enemy,bob=reduced?0:Math.sin(now*2+entry.x)*.025;enemy.body.position.y=bob;enemy.arms[0].rotation.x=entry.clip==='attack1'?-.9*Math.sin(Math.min(1,t/.7)*Math.PI):Math.sin(now*1.6)*.06;enemy.arms[1].rotation.x=Math.sin(now*1.6+1)*.06;enemy.legs[0].rotation.x=Math.sin(now*3)*.025;enemy.legs[1].rotation.x=-enemy.legs[0].rotation.x;p.rotation.y=-.25;}
    p.position.y=.08;
   }
@@ -160,5 +176,5 @@ export function createTacticsScene3D(host,{reduced=false}={}){
   renderer.render(scene,camera);
  }
  raf=requestAnimationFrame(frame);
- return {sync,action,enemyTurn,dispose(){disposed=true;cancelAnimationFrame(raf);observer.disconnect();for(const effect of slashEffects)discardSlash(effect);slashEffects.length=0;for(const entry of actors.values()){scene.remove(entry.pivot);disposeActor(entry);}const geometries=new Set(),materials=new Set();scene.traverse(o=>{if(o.geometry)geometries.add(o.geometry);if(o.material)materials.add(o.material);});geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());loadedTextures.forEach(texture=>texture.dispose());environment.dispose();renderer.dispose();renderer.forceContextLoss();renderer.domElement.remove();}};
+ return {sync,action,enemyTurn,dispose(){disposed=true;cancelAnimationFrame(raf);observer.disconnect();for(const effect of slashEffects)discardSlash(effect);slashEffects.length=0;for(const entry of actors.values()){scene.remove(entry.pivot);disposeActor(entry);}const geometries=new Set(),materials=new Set();scene.traverse(o=>{if(o.geometry)geometries.add(o.geometry);if(o.material)materials.add(o.material);});geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());loadedTextures.forEach(texture=>texture.dispose());enemySourceTextures.forEach(texture=>texture.dispose());environment.dispose();renderer.dispose();renderer.forceContextLoss();renderer.domElement.remove();}};
 }

@@ -15,6 +15,13 @@ try{
  const alpha=await page.evaluate(()=>{const im=document.querySelector('#candidate'),c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;c.getContext('2d').drawImage(im,0,0);const ctx=c.getContext('2d');return [ctx.getImageData(0,0,1,1).data[3],ctx.getImageData(500,700,1,1).data[3]];});
  assert.equal(alpha[0],0,'le fond du personnage doit être transparent');assert.ok(alpha[1]>220,'le personnage doit rester opaque');
  await page.screenshot({path:`${out}/lookdev-reference-and-cutout.png`,fullPage:true});
+ await page.locator('#candidate-v1').click();
+ await page.waitForFunction(()=>document.querySelector('#candidate')?.complete&&document.querySelector('#candidate')?.dataset.version==='v1'&&document.querySelector('#candidate')?.naturalWidth===1024);
+ assert.match(await page.locator('#combat-link').getAttribute('href'),/lookdev-v1$/);
+ await page.screenshot({path:`${out}/lookdev-original-candidate.png`,fullPage:true});
+ await page.locator('#candidate-v2').click();
+ await page.waitForFunction(()=>document.querySelector('#candidate')?.complete&&document.querySelector('#candidate')?.dataset.version==='v2'&&document.querySelector('#candidate')?.naturalWidth===1024);
+ assert.match(await page.locator('#combat-link').getAttribute('href'),/lookdev-v2$/);
  await page.locator('#combat').click();await page.locator('#backdrop').click();
  assert.equal(await page.locator('#combat').getAttribute('aria-pressed'),'true');
  await page.screenshot({path:`${out}/lookdev-combat-scale.png`,fullPage:true});
@@ -33,9 +40,9 @@ try{
  await page.locator('#candidate[data-pose="windup"]').waitFor();
  await page.locator('#candidate[data-pose="attack"]').waitFor();
  await page.locator('#candidate[data-pose="idle"]').waitFor();
- await page.goto(base+'tactics.html?seraphine=lookdev-v1',{waitUntil:'domcontentloaded'});
+ await page.goto(base+'tactics.html?seraphine=lookdev-v2',{waitUntil:'domcontentloaded'});
  await page.locator('[data-node=entry]').click();await page.locator('#toggle-render').click();
- await page.locator('#arena-volume[data-seraphine-model="lookdev-v1"][data-seraphine-keyposes="3"][data-environment="modeled-v2"]').waitFor();
+ await page.locator('#arena-volume[data-seraphine-model="lookdev-v2"][data-seraphine-keyposes="3"][data-enemy-visuals="guardian-portraits-v1"][data-enemy-sprites="3"][data-environment="modeled-v2"]').waitFor();
  await page.waitForTimeout(350);
  await page.screenshot({path:`${out}/lookdev-battle.png`});
  await page.evaluate(()=>{const host=document.querySelector('#arena-volume');window.__seraphinePoses=[];new MutationObserver(()=>{const value=host.dataset.seraphinePose;if(window.__seraphinePoses.at(-1)!==value)window.__seraphinePoses.push(value);}).observe(host,{attributes:true,attributeFilter:['data-seraphine-pose']});});

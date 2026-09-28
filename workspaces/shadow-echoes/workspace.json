@@ -8,10 +8,10 @@
   "runtime": "ellipse_web_2d",
   "camera_mode": "side_view",
   "created_at": "2026-09-23T16:18:52.140Z",
-  "updated_at": "2026-09-28T19:17:38.259Z",
+  "updated_at": "2026-09-28T20:19:49.197Z",
   "scope_status": "mythic_heroes_only",
   "playable": true,
-  "active_lot": "reference-lookdev-14",
+  "active_lot": "reference-lookdev-15",
   "quality_target": "Fidélité aux designs fournis : identité, proportions, costume, matériaux et finesse.",
   "hero_lab_url": "/workspaces/shadow-echoes/07_exports/web/heroes.html",
   "playable_status": "tactical_four_rank_review",
@@ -22,9 +22,10 @@
   "animation_url": "/workspaces/shadow-echoes/07_exports/web/motion-3d.html",
   "level_url": "/workspaces/shadow-echoes/07_exports/web/ruins.html",
   "camera_description": "Combat latéral surélevé, quatre rangs opposés par camp ; vue d’action trois quarts conservée séparément",
-  "artistic_status": "seraphine_reference_25d_lookdev_animation_pending",
+  "artistic_status": "seraphine_lookdev_v2_guardian_portraits_animation_pending",
   "asset_lab_url": "/workspaces/shadow-echoes/07_exports/web/asset-lab.html",
   "tactical_preview_url": "/workspaces/shadow-echoes/07_exports/web/tactics.html",
   "environment_status": "modeled_bridge_and_columns_with_distant_panorama",
-  "seraphine_lookdev_url": "/workspaces/shadow-echoes/07_exports/web/seraphine-lookdev.html"
+  "seraphine_lookdev_url": "/workspaces/shadow-echoes/07_exports/web/seraphine-lookdev.html",
+  "seraphine_combat_preview_url": "/workspaces/shadow-echoes/07_exports/web/tactics.html?seraphine=lookdev-v2"
 }
