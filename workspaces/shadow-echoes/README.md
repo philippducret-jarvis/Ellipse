@@ -14,6 +14,8 @@ Une [étude des calques animés](00_brief/documents/26_calques_animes_seraphine_
 
 La [revue de profondeur V9](00_brief/documents/27_profondeur_reference_seraphine_2026_09_29.md) projette la planche frontale sur un maillage déformé. La [vue de face](http://localhost:4273/workspaces/shadow-echoes/07_exports/web/tactics.html?seraphine=lookdev-v9&camera=portrait) et la [vue oblique de contrôle](http://localhost:4273/workspaces/shadow-echoes/07_exports/web/tactics.html?seraphine=lookdev-v9&camera=portrait&reviewYaw=0.18) montrent ce que la carte de profondeur apporte et où elle déforme le visage. Cette étude n'est pas promue : V6 reste la version par défaut.
 
+La [variante de frappe V10](00_brief/documents/28_frappe_alpha_seraphine_2026_09_29.md) teste une nouvelle pose issue de la planche et découpée avec un alpha PNG. La [capture en portrait](02_production/lot-15/seraphine-v10-portrait-attack-review.png) et la [capture à taille de combat](02_production/lot-15/seraphine-v10-combat-attack-review.png) permettent de comparer le visage et les fins cheveux à la V6. V10 reste un candidat non approuvé ; la V6 reste chargée par défaut.
+
 Deuxième lot jouable d’un RPG gothique : hub central, quatre Mythiques, dix activités, trois gardiens, trois rituels d’invocation, neuf équipements, six reliques, arbres de talents, XP et ascensions. Section créée le 23 septembre 2026 à partir des trois archives fournies par l’utilisateur.
 
 ## Accès dans Ellipse
