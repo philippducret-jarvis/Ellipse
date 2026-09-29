@@ -1,0 +1,1817 @@
+[
+ {
+  "name": "Root",
+  "parent": null,
+  "connect": false,
+  "head": [
+   0.0,
+   -0.00072,
+   0.00045
+  ],
+  "tail": [
+   0.0,
+   0.02586,
+   0.00045
+  ],
+  "head_joint": "ground",
+  "head_off": [
+   0.0,
+   0.0,
+   -0.0
+  ],
+  "tail_joint": "ground",
+  "tail_off": [
+   0.0,
+   0.02658,
+   -0.0
+  ],
+  "roll_axis": [
+   0.0,
+   0.0,
+   1.0
+  ],
+  "deform": true
+ },
+ {
+  "name": "pelvis",
+  "parent": "Root",
+  "connect": false,
+  "head": [
+   0.0,
+   -0.00562,
+   0.92652
+  ],
+  "tail": [
+   0.0,
+   0.02571,
+   1.0122
+  ],
+  "head_joint": "pelvis",
+  "head_off": [
+   -0.0,
+   -0.0,
+   -0.0
+  ],
+  "tail_joint": "spine-4",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   0.0,
+   -0.93919,
+   0.34341
+  ],
+  "deform": true
+ },
+ {
+  "name": "spine_01",
+  "parent": "pelvis",
+  "connect": false,
+  "head": [
+   0.0,
+   0.02571,
+   1.0122
+  ],
+  "tail": [
+   0.0,
+   0.01643,
+   1.08007
+  ],
+  "head_joint": "spine-4",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "spine-3",
+  "tail_off": [
+   -0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   0.0,
+   -0.99078,
+   -0.13545
+  ],
+  "deform": true
+ },
+ {
+  "name": "spine_02",
+  "parent": "spine_01",
+  "connect": false,
+  "head": [
+   0.0,
+   0.01643,
+   1.08007
+  ],
+  "tail": [
+   0.0,
+   0.02322,
+   1.14116
+  ],
+  "head_joint": "spine-3",
+  "head_off": [
+   -0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "spine-2",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   0.0,
+   -0.99387,
+   0.11051
+  ],
+  "deform": true
+ },
+ {
+  "name": "breast_l",
+  "parent": "spine_02",
+  "connect": false,
+  "head": [
+   0.0,
+   0.04919,
+   1.28022
+  ],
+  "tail": [
+   0.10043,
+   -0.15193,
+   1.2622
+  ],
+  "head_joint": "spine-1",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "l-shoulder",
+  "tail_off": [
+   -0.08812,
+   -0.13308,
+   -0.11295
+  ],
+  "roll_axis": [
+   -0.12751,
+   -0.15148,
+   0.9802
+  ],
+  "deform": true
+ },
+ {
+  "name": "breast_r",
+  "parent": "spine_02",
+  "connect": false,
+  "head": [
+   0.0,
+   0.04919,
+   1.28022
+  ],
+  "tail": [
+   -0.10043,
+   -0.15193,
+   1.2622
+  ],
+  "head_joint": "spine-1",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "r-shoulder",
+  "tail_off": [
+   0.08812,
+   -0.13308,
+   -0.11295
+  ],
+  "roll_axis": [
+   0.12751,
+   -0.15148,
+   0.9802
+  ],
+  "deform": true
+ },
+ {
+  "name": "spine_03",
+  "parent": "spine_02",
+  "connect": false,
+  "head": [
+   0.0,
+   0.02322,
+   1.14116
+  ],
+  "tail": [
+   0.0,
+   0.04919,
+   1.28022
+  ],
+  "head_joint": "spine-2",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "spine-1",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   0.0,
+   -0.983,
+   0.1836
+  ],
+  "deform": true
+ },
+ {
+  "name": "clavicle_l",
+  "parent": "spine_03",
+  "connect": false,
+  "head": [
+   0.02269,
+   -0.03031,
+   1.40656
+  ],
+  "tail": [
+   0.18855,
+   -0.01884,
+   1.37515
+  ],
+  "head_joint": "l-clavicle",
+  "head_off": [
+   0.0,
+   -0.0,
+   -0.0
+  ],
+  "tail_joint": "l-shoulder",
+  "tail_off": [
+   -0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   0.08506,
+   -0.99258,
+   0.08694
+  ],
+  "deform": true
+ },
+ {
+  "name": "upperarm_l",
+  "parent": "clavicle_l",
+  "connect": false,
+  "head": [
+   0.18855,
+   -0.01884,
+   1.37515
+  ],
+  "tail": [
+   0.35288,
+   -0.0184,
+   1.18681
+  ],
+  "head_joint": "l-shoulder",
+  "head_off": [
+   -0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "l-elbow",
+  "tail_off": [
+   0.0,
+   0.0,
+   -0.0
+  ],
+  "roll_axis": [
+   0.04344,
+   -0.99842,
+   0.03555
+  ],
+  "deform": true
+ },
+ {
+  "name": "lowerarm_l",
+  "parent": "upperarm_l",
+  "connect": false,
+  "head": [
+   0.35288,
+   -0.0184,
+   1.18681
+  ],
+  "tail": [
+   0.48559,
+   -0.20864,
+   1.05914
+  ],
+  "head_joint": "l-elbow",
+  "head_off": [
+   0.0,
+   0.0,
+   -0.0
+  ],
+  "tail_joint": "l-hand",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   -0.49529,
+   -0.69516,
+   0.52099
+  ],
+  "deform": true
+ },
+ {
+  "name": "hand_l",
+  "parent": "lowerarm_l",
+  "connect": false,
+  "head": [
+   0.48559,
+   -0.20864,
+   1.05914
+  ],
+  "tail": [
+   0.49732,
+   -0.23765,
+   1.0434
+  ],
+  "head_joint": "l-hand",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "l-hand-3",
+  "tail_off": [
+   0.0,
+   -0.0,
+   0.0
+  ],
+  "roll_axis": [
+   -0.94167,
+   -0.31192,
+   -0.12633
+  ],
+  "deform": true
+ },
+ {
+  "name": "index_01_l",
+  "parent": "hand_l",
+  "connect": false,
+  "head": [
+   0.51481,
+   -0.31114,
+   1.0194
+  ],
+  "tail": [
+   0.51842,
+   -0.33394,
+   1.00419
+  ],
+  "head_joint": "l-finger-2-1",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "l-finger-2-2",
+  "tail_off": [
+   0.0,
+   0.0,
+   -0.0
+  ],
+  "roll_axis": [
+   -0.63449,
+   0.35688,
+   -0.68561
+  ],
+  "deform": true
+ },
+ {
+  "name": "index_02_l",
+  "parent": "index_01_l",
+  "connect": false,
+  "head": [
+   0.51842,
+   -0.33394,
+   1.00419
+  ],
+  "tail": [
+   0.51794,
+   -0.35218,
+   0.98748
+  ],
+  "head_joint": "l-finger-2-2",
+  "head_off": [
+   0.0,
+   0.0,
+   -0.0
+  ],
+  "tail_joint": "l-finger-2-3",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   -0.65889,
+   0.51749,
+   -0.54596
+  ],
+  "deform": true
+ },
+ {
+  "name": "index_03_l",
+  "parent": "index_02_l",
+  "connect": false,
+  "head": [
+   0.51794,
+   -0.35218,
+   0.98748
+  ],
+  "tail": [
+   0.51435,
+   -0.37154,
+   0.96709
+  ],
+  "head_joint": "l-finger-2-3",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "l-finger-2-4",
+  "tail_off": [
+   -0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   -0.65267,
+   0.60345,
+   -0.45812
+  ],
+  "deform": true
+ },
+ {
+  "name": "middle_01_l",
+  "parent": "hand_l",
+  "connect": false,
+  "head": [
+   0.53213,
+   -0.2929,
+   1.00677
+  ],
+  "tail": [
+   0.54003,
+   -0.31567,
+   0.98023
+  ],
+  "head_joint": "l-finger-3-1",
+  "head_off": [
+   -0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "l-finger-3-2",
+  "tail_off": [
+   -0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   -0.7682,
+   0.35466,
+   -0.53299
+  ],
+  "deform": true
+ },
+ {
+  "name": "middle_02_l",
+  "parent": "middle_01_l",
+  "connect": false,
+  "head": [
+   0.54003,
+   -0.31567,
+   0.98023
+  ],
+  "tail": [
+   0.54293,
+   -0.33467,
+   0.95817
+  ],
+  "head_joint": "l-finger-3-2",
+  "head_off": [
+   -0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "l-finger-3-3",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   -0.79532,
+   0.40376,
+   -0.45215
+  ],
+  "deform": true
+ },
+ {
+  "name": "middle_03_l",
+  "parent": "middle_02_l",
+  "connect": false,
+  "head": [
+   0.54293,
+   -0.33467,
+   0.95817
+  ],
+  "tail": [
+   0.54293,
+   -0.35136,
+   0.93494
+  ],
+  "head_joint": "l-finger-3-3",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "l-finger-3-4",
+  "tail_off": [
+   -0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   -0.8029,
+   0.48391,
+   -0.34812
+  ],
+  "deform": true
+ },
+ {
+  "name": "pinky_01_l",
+  "parent": "hand_l",
+  "connect": false,
+  "head": [
+   0.54201,
+   -0.25421,
+   0.98828
+  ],
+  "tail": [
+   0.54848,
+   -0.26317,
+   0.96834
+  ],
+  "head_joint": "l-finger-5-1",
+  "head_off": [
+   0.0,
+   -0.0,
+   0.0
+  ],
+  "tail_joint": "l-finger-5-2",
+  "tail_off": [
+   0.0,
+   0.0,
+   -0.0
+  ],
+  "roll_axis": [
+   -0.91299,
+   0.16818,
+   -0.37171
+  ],
+  "deform": true
+ },
+ {
+  "name": "pinky_02_l",
+  "parent": "pinky_01_l",
+  "connect": false,
+  "head": [
+   0.54848,
+   -0.26317,
+   0.96834
+  ],
+  "tail": [
+   0.55037,
+   -0.26981,
+   0.95328
+  ],
+  "head_joint": "l-finger-5-2",
+  "head_off": [
+   0.0,
+   0.0,
+   -0.0
+  ],
+  "tail_joint": "l-finger-5-3",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   -0.95103,
+   0.22041,
+   -0.21672
+  ],
+  "deform": true
+ },
+ {
+  "name": "pinky_03_l",
+  "parent": "pinky_02_l",
+  "connect": false,
+  "head": [
+   0.55037,
+   -0.26981,
+   0.95328
+  ],
+  "tail": [
+   0.55298,
+   -0.27787,
+   0.93391
+  ],
+  "head_joint": "l-finger-5-3",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "l-finger-5-4",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   -0.95622,
+   0.20111,
+   -0.21262
+  ],
+  "deform": true
+ },
+ {
+  "name": "ring_01_l",
+  "parent": "hand_l",
+  "connect": false,
+  "head": [
+   0.54038,
+   -0.27475,
+   0.9982
+  ],
+  "tail": [
+   0.55046,
+   -0.29073,
+   0.97282
+  ],
+  "head_joint": "l-finger-4-1",
+  "head_off": [
+   0.0,
+   0.0,
+   -0.0
+  ],
+  "tail_joint": "l-finger-4-2",
+  "tail_off": [
+   0.0,
+   -0.0,
+   0.0
+  ],
+  "roll_axis": [
+   -0.80667,
+   0.2999,
+   -0.50926
+  ],
+  "deform": true
+ },
+ {
+  "name": "ring_02_l",
+  "parent": "ring_01_l",
+  "connect": false,
+  "head": [
+   0.55046,
+   -0.29073,
+   0.97282
+  ],
+  "tail": [
+   0.55508,
+   -0.30508,
+   0.95106
+  ],
+  "head_joint": "l-finger-4-2",
+  "head_off": [
+   0.0,
+   -0.0,
+   0.0
+  ],
+  "tail_joint": "l-finger-4-3",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   -0.84202,
+   0.3508,
+   -0.40979
+  ],
+  "deform": true
+ },
+ {
+  "name": "ring_03_l",
+  "parent": "ring_02_l",
+  "connect": false,
+  "head": [
+   0.55508,
+   -0.30508,
+   0.95106
+  ],
+  "tail": [
+   0.55768,
+   -0.31788,
+   0.92597
+  ],
+  "head_joint": "l-finger-4-3",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "l-finger-4-4",
+  "tail_off": [
+   0.0,
+   -0.0,
+   0.0
+  ],
+  "roll_axis": [
+   -0.86586,
+   0.40349,
+   -0.29578
+  ],
+  "deform": true
+ },
+ {
+  "name": "thumb_01_l",
+  "parent": "hand_l",
+  "connect": false,
+  "head": [
+   0.48708,
+   -0.25626,
+   1.05281
+  ],
+  "tail": [
+   0.46469,
+   -0.27889,
+   1.04426
+  ],
+  "head_joint": "l-finger-1-1",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "l-finger-1-2",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   0.16776,
+   0.19897,
+   -0.96554
+  ],
+  "deform": true
+ },
+ {
+  "name": "thumb_02_l",
+  "parent": "thumb_01_l",
+  "connect": false,
+  "head": [
+   0.46469,
+   -0.27889,
+   1.04426
+  ],
+  "tail": [
+   0.4515,
+   -0.31278,
+   1.03049
+  ],
+  "head_joint": "l-finger-1-2",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "l-finger-1-3",
+  "tail_off": [
+   0.0,
+   0.0,
+   -0.0
+  ],
+  "roll_axis": [
+   0.1835,
+   0.30776,
+   -0.9336
+  ],
+  "deform": true
+ },
+ {
+  "name": "thumb_03_l",
+  "parent": "thumb_02_l",
+  "connect": false,
+  "head": [
+   0.4515,
+   -0.31278,
+   1.03049
+  ],
+  "tail": [
+   0.44553,
+   -0.33578,
+   1.01327
+  ],
+  "head_joint": "l-finger-1-3",
+  "head_off": [
+   0.0,
+   0.0,
+   -0.0
+  ],
+  "tail_joint": "l-finger-1-4",
+  "tail_off": [
+   -0.0,
+   -0.0,
+   -0.0
+  ],
+  "roll_axis": [
+   0.27475,
+   0.52963,
+   -0.8025
+  ],
+  "deform": true
+ },
+ {
+  "name": "clavicle_r",
+  "parent": "spine_03",
+  "connect": false,
+  "head": [
+   -0.02269,
+   -0.03031,
+   1.40656
+  ],
+  "tail": [
+   -0.18855,
+   -0.01884,
+   1.37515
+  ],
+  "head_joint": "r-clavicle",
+  "head_off": [
+   0.0,
+   -0.0,
+   -0.0
+  ],
+  "tail_joint": "r-shoulder",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   -0.08506,
+   -0.99258,
+   0.08694
+  ],
+  "deform": true
+ },
+ {
+  "name": "upperarm_r",
+  "parent": "clavicle_r",
+  "connect": false,
+  "head": [
+   -0.18855,
+   -0.01884,
+   1.37515
+  ],
+  "tail": [
+   -0.35288,
+   -0.0184,
+   1.18681
+  ],
+  "head_joint": "r-shoulder",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "r-elbow",
+  "tail_off": [
+   0.0,
+   0.0,
+   -0.0
+  ],
+  "roll_axis": [
+   -0.04344,
+   -0.99842,
+   0.03555
+  ],
+  "deform": true
+ },
+ {
+  "name": "lowerarm_r",
+  "parent": "upperarm_r",
+  "connect": false,
+  "head": [
+   -0.35288,
+   -0.0184,
+   1.18681
+  ],
+  "tail": [
+   -0.48559,
+   -0.20864,
+   1.05914
+  ],
+  "head_joint": "r-elbow",
+  "head_off": [
+   0.0,
+   0.0,
+   -0.0
+  ],
+  "tail_joint": "r-hand",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   0.49529,
+   -0.69516,
+   0.52099
+  ],
+  "deform": true
+ },
+ {
+  "name": "hand_r",
+  "parent": "lowerarm_r",
+  "connect": false,
+  "head": [
+   -0.48559,
+   -0.20864,
+   1.05914
+  ],
+  "tail": [
+   -0.49732,
+   -0.23765,
+   1.0434
+  ],
+  "head_joint": "r-hand",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "r-hand-3",
+  "tail_off": [
+   0.0,
+   -0.0,
+   0.0
+  ],
+  "roll_axis": [
+   0.94167,
+   -0.31192,
+   -0.12633
+  ],
+  "deform": true
+ },
+ {
+  "name": "index_01_r",
+  "parent": "hand_r",
+  "connect": false,
+  "head": [
+   -0.51481,
+   -0.31114,
+   1.0194
+  ],
+  "tail": [
+   -0.51842,
+   -0.33394,
+   1.00419
+  ],
+  "head_joint": "r-finger-2-1",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "r-finger-2-2",
+  "tail_off": [
+   0.0,
+   0.0,
+   -0.0
+  ],
+  "roll_axis": [
+   0.63449,
+   0.35688,
+   -0.68561
+  ],
+  "deform": true
+ },
+ {
+  "name": "index_02_r",
+  "parent": "index_01_r",
+  "connect": false,
+  "head": [
+   -0.51842,
+   -0.33394,
+   1.00419
+  ],
+  "tail": [
+   -0.51794,
+   -0.35218,
+   0.98748
+  ],
+  "head_joint": "r-finger-2-2",
+  "head_off": [
+   0.0,
+   0.0,
+   -0.0
+  ],
+  "tail_joint": "r-finger-2-3",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   0.65889,
+   0.51749,
+   -0.54596
+  ],
+  "deform": true
+ },
+ {
+  "name": "index_03_r",
+  "parent": "index_02_r",
+  "connect": false,
+  "head": [
+   -0.51794,
+   -0.35218,
+   0.98748
+  ],
+  "tail": [
+   -0.51435,
+   -0.37154,
+   0.96709
+  ],
+  "head_joint": "r-finger-2-3",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "r-finger-2-4",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   0.65267,
+   0.60345,
+   -0.45812
+  ],
+  "deform": true
+ },
+ {
+  "name": "middle_01_r",
+  "parent": "hand_r",
+  "connect": false,
+  "head": [
+   -0.53213,
+   -0.2929,
+   1.00677
+  ],
+  "tail": [
+   -0.54003,
+   -0.31567,
+   0.98023
+  ],
+  "head_joint": "r-finger-3-1",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "r-finger-3-2",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   0.7682,
+   0.35466,
+   -0.53299
+  ],
+  "deform": true
+ },
+ {
+  "name": "middle_02_r",
+  "parent": "middle_01_r",
+  "connect": false,
+  "head": [
+   -0.54003,
+   -0.31567,
+   0.98023
+  ],
+  "tail": [
+   -0.54293,
+   -0.33467,
+   0.95817
+  ],
+  "head_joint": "r-finger-3-2",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "r-finger-3-3",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   0.79532,
+   0.40376,
+   -0.45215
+  ],
+  "deform": true
+ },
+ {
+  "name": "middle_03_r",
+  "parent": "middle_02_r",
+  "connect": false,
+  "head": [
+   -0.54293,
+   -0.33467,
+   0.95817
+  ],
+  "tail": [
+   -0.54293,
+   -0.35136,
+   0.93494
+  ],
+  "head_joint": "r-finger-3-3",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "r-finger-3-4",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   0.8029,
+   0.48391,
+   -0.34812
+  ],
+  "deform": true
+ },
+ {
+  "name": "pinky_01_r",
+  "parent": "hand_r",
+  "connect": false,
+  "head": [
+   -0.54201,
+   -0.25421,
+   0.98828
+  ],
+  "tail": [
+   -0.54848,
+   -0.26317,
+   0.96834
+  ],
+  "head_joint": "r-finger-5-1",
+  "head_off": [
+   -0.0,
+   -0.0,
+   0.0
+  ],
+  "tail_joint": "r-finger-5-2",
+  "tail_off": [
+   0.0,
+   0.0,
+   -0.0
+  ],
+  "roll_axis": [
+   0.91299,
+   0.16818,
+   -0.37171
+  ],
+  "deform": true
+ },
+ {
+  "name": "pinky_02_r",
+  "parent": "pinky_01_r",
+  "connect": false,
+  "head": [
+   -0.54848,
+   -0.26317,
+   0.96834
+  ],
+  "tail": [
+   -0.55037,
+   -0.26981,
+   0.95328
+  ],
+  "head_joint": "r-finger-5-2",
+  "head_off": [
+   0.0,
+   0.0,
+   -0.0
+  ],
+  "tail_joint": "r-finger-5-3",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   0.95103,
+   0.22041,
+   -0.21672
+  ],
+  "deform": true
+ },
+ {
+  "name": "pinky_03_r",
+  "parent": "pinky_02_r",
+  "connect": false,
+  "head": [
+   -0.55037,
+   -0.26981,
+   0.95328
+  ],
+  "tail": [
+   -0.55298,
+   -0.27787,
+   0.93391
+  ],
+  "head_joint": "r-finger-5-3",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "r-finger-5-4",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   0.95622,
+   0.20111,
+   -0.21262
+  ],
+  "deform": true
+ },
+ {
+  "name": "ring_01_r",
+  "parent": "hand_r",
+  "connect": false,
+  "head": [
+   -0.54038,
+   -0.27475,
+   0.9982
+  ],
+  "tail": [
+   -0.55046,
+   -0.29073,
+   0.97282
+  ],
+  "head_joint": "r-finger-4-1",
+  "head_off": [
+   0.0,
+   0.0,
+   -0.0
+  ],
+  "tail_joint": "r-finger-4-2",
+  "tail_off": [
+   0.0,
+   -0.0,
+   0.0
+  ],
+  "roll_axis": [
+   0.80667,
+   0.2999,
+   -0.50926
+  ],
+  "deform": true
+ },
+ {
+  "name": "ring_02_r",
+  "parent": "ring_01_r",
+  "connect": false,
+  "head": [
+   -0.55046,
+   -0.29073,
+   0.97282
+  ],
+  "tail": [
+   -0.55508,
+   -0.30508,
+   0.95106
+  ],
+  "head_joint": "r-finger-4-2",
+  "head_off": [
+   0.0,
+   -0.0,
+   0.0
+  ],
+  "tail_joint": "r-finger-4-3",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   0.84202,
+   0.3508,
+   -0.40979
+  ],
+  "deform": true
+ },
+ {
+  "name": "ring_03_r",
+  "parent": "ring_02_r",
+  "connect": false,
+  "head": [
+   -0.55508,
+   -0.30508,
+   0.95106
+  ],
+  "tail": [
+   -0.55768,
+   -0.31788,
+   0.92597
+  ],
+  "head_joint": "r-finger-4-3",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "r-finger-4-4",
+  "tail_off": [
+   0.0,
+   -0.0,
+   0.0
+  ],
+  "roll_axis": [
+   0.86586,
+   0.40349,
+   -0.29578
+  ],
+  "deform": true
+ },
+ {
+  "name": "thumb_01_r",
+  "parent": "hand_r",
+  "connect": false,
+  "head": [
+   -0.48708,
+   -0.25626,
+   1.05281
+  ],
+  "tail": [
+   -0.46469,
+   -0.27889,
+   1.04426
+  ],
+  "head_joint": "r-finger-1-1",
+  "head_off": [
+   -0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "r-finger-1-2",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   -0.16776,
+   0.19897,
+   -0.96554
+  ],
+  "deform": true
+ },
+ {
+  "name": "thumb_02_r",
+  "parent": "thumb_01_r",
+  "connect": false,
+  "head": [
+   -0.46469,
+   -0.27889,
+   1.04426
+  ],
+  "tail": [
+   -0.4515,
+   -0.31278,
+   1.03049
+  ],
+  "head_joint": "r-finger-1-2",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "r-finger-1-3",
+  "tail_off": [
+   0.0,
+   0.0,
+   -0.0
+  ],
+  "roll_axis": [
+   -0.1835,
+   0.30776,
+   -0.9336
+  ],
+  "deform": true
+ },
+ {
+  "name": "thumb_03_r",
+  "parent": "thumb_02_r",
+  "connect": false,
+  "head": [
+   -0.4515,
+   -0.31278,
+   1.03049
+  ],
+  "tail": [
+   -0.44553,
+   -0.33578,
+   1.01327
+  ],
+  "head_joint": "r-finger-1-3",
+  "head_off": [
+   0.0,
+   0.0,
+   -0.0
+  ],
+  "tail_joint": "r-finger-1-4",
+  "tail_off": [
+   0.0,
+   -0.0,
+   -0.0
+  ],
+  "roll_axis": [
+   -0.27475,
+   0.52963,
+   -0.8025
+  ],
+  "deform": true
+ },
+ {
+  "name": "neck_01",
+  "parent": "spine_03",
+  "connect": false,
+  "head": [
+   0.0,
+   -0.01303,
+   1.47868
+  ],
+  "tail": [
+   0.0,
+   -0.04839,
+   1.57459
+  ],
+  "head_joint": "neck",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "head",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   0.0,
+   -0.93824,
+   -0.34598
+  ],
+  "deform": true
+ },
+ {
+  "name": "head",
+  "parent": "neck_01",
+  "connect": false,
+  "head": [
+   0.0,
+   -0.04839,
+   1.57459
+  ],
+  "tail": [
+   0.0,
+   -0.04543,
+   1.72676
+  ],
+  "head_joint": "head",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "head-2",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   0.0,
+   -0.99981,
+   0.01946
+  ],
+  "deform": true
+ },
+ {
+  "name": "thigh_l",
+  "parent": "pelvis",
+  "connect": false,
+  "head": [
+   0.10706,
+   0.00442,
+   0.92301
+  ],
+  "tail": [
+   0.14624,
+   -0.03366,
+   0.50787
+  ],
+  "head_joint": "l-upper-leg",
+  "head_off": [
+   0.0,
+   0.0,
+   -0.0
+  ],
+  "tail_joint": "l-knee",
+  "tail_off": [
+   -0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   -0.4506,
+   0.88412,
+   -0.12363
+  ],
+  "deform": true
+ },
+ {
+  "name": "calf_l",
+  "parent": "thigh_l",
+  "connect": false,
+  "head": [
+   0.14624,
+   -0.03366,
+   0.50787
+  ],
+  "tail": [
+   0.19838,
+   -0.01401,
+   0.07148
+  ],
+  "head_joint": "l-knee",
+  "head_off": [
+   -0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "l-ankle",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   0.02133,
+   0.99864,
+   0.04752
+  ],
+  "deform": true
+ },
+ {
+  "name": "foot_l",
+  "parent": "calf_l",
+  "connect": false,
+  "head": [
+   0.19838,
+   -0.01401,
+   0.07148
+  ],
+  "tail": [
+   0.20296,
+   -0.13928,
+   0.00816
+  ],
+  "head_joint": "l-ankle",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "l-foot-1",
+  "tail_off": [
+   0.0,
+   -0.0,
+   0.0
+  ],
+  "roll_axis": [
+   0.04942,
+   0.45204,
+   -0.89063
+  ],
+  "deform": true
+ },
+ {
+  "name": "ball_l",
+  "parent": "foot_l",
+  "connect": false,
+  "head": [
+   0.20296,
+   -0.13928,
+   0.00816
+  ],
+  "tail": [
+   0.1987,
+   -0.21035,
+   0.01548
+  ],
+  "head_joint": "l-foot-1",
+  "head_off": [
+   0.0,
+   -0.0,
+   0.0
+  ],
+  "tail_joint": "l-toe-2-4",
+  "tail_off": [
+   -0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   -0.68176,
+   -0.03442,
+   -0.73077
+  ],
+  "deform": true
+ },
+ {
+  "name": "thigh_r",
+  "parent": "pelvis",
+  "connect": false,
+  "head": [
+   -0.10706,
+   0.00442,
+   0.92301
+  ],
+  "tail": [
+   -0.14624,
+   -0.03366,
+   0.50787
+  ],
+  "head_joint": "r-upper-leg",
+  "head_off": [
+   0.0,
+   0.0,
+   -0.0
+  ],
+  "tail_joint": "r-knee",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   0.4506,
+   0.88412,
+   -0.12363
+  ],
+  "deform": true
+ },
+ {
+  "name": "calf_r",
+  "parent": "thigh_r",
+  "connect": false,
+  "head": [
+   -0.14624,
+   -0.03366,
+   0.50787
+  ],
+  "tail": [
+   -0.19838,
+   -0.01401,
+   0.07148
+  ],
+  "head_joint": "r-knee",
+  "head_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "r-ankle",
+  "tail_off": [
+   -0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   -0.02133,
+   0.99864,
+   0.04752
+  ],
+  "deform": true
+ },
+ {
+  "name": "foot_r",
+  "parent": "calf_r",
+  "connect": false,
+  "head": [
+   -0.19838,
+   -0.01401,
+   0.07148
+  ],
+  "tail": [
+   -0.20296,
+   -0.13928,
+   0.00816
+  ],
+  "head_joint": "r-ankle",
+  "head_off": [
+   -0.0,
+   0.0,
+   0.0
+  ],
+  "tail_joint": "r-foot-1",
+  "tail_off": [
+   0.0,
+   -0.0,
+   0.0
+  ],
+  "roll_axis": [
+   -0.04942,
+   0.45204,
+   -0.89063
+  ],
+  "deform": true
+ },
+ {
+  "name": "ball_r",
+  "parent": "foot_r",
+  "connect": false,
+  "head": [
+   -0.20296,
+   -0.13928,
+   0.00816
+  ],
+  "tail": [
+   -0.1987,
+   -0.21035,
+   0.01548
+  ],
+  "head_joint": "r-foot-1",
+  "head_off": [
+   0.0,
+   -0.0,
+   0.0
+  ],
+  "tail_joint": "r-toe-2-4",
+  "tail_off": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "roll_axis": [
+   0.68176,
+   -0.03442,
+   -0.73077
+  ],
+  "deform": true
+ }
+]

@@ -50,8 +50,12 @@ for side in ("l", "r"):
     for j in ("shoulder", "elbow", "hand", "upper-leg", "knee", "ankle"):
         JOINTS[(side, j)] = joint_pos("joint-%s-%s" % (side, j))
 LANDMARKS = {}
-for j in ("head", "head-2", "neck", "jaw", "mouth", "l-eye", "r-eye", "l-eye-target", "r-eye-target", "l-upperlid", "l-lowerlid", "r-upperlid", "r-lowerlid", "spine-4"):
-    LANDMARKS[j] = joint_pos("joint-" + j)
+for _g in o.vertex_groups:
+    if _g.name.startswith("joint-"):
+        try:
+            LANDMARKS[_g.name[6:]] = joint_pos(_g.name)
+        except AssertionError:
+            pass
 print("JOINTS", {("%s-%s" % k): tuple(round(c, 3) for c in v) for k, v in JOINTS.items()})
 keep_v = set()
 for v in me.vertices:

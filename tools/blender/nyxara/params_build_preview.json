@@ -1,0 +1,13 @@
+{
+ "strands": 900,
+ "ribbon_w": 0.015,
+ "ribbon_pts": 16,
+ "spread": 0.28,
+ "engine": "BLENDER_WORKBENCH",
+ "samples": 110,
+ "shots": [
+  "full_front",
+  "full_34",
+  "full_back"
+ ]
+}

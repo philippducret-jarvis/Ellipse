@@ -1,0 +1,1043 @@
+"""Nyxara — constructeur complet (phase 1 : tête).
+
+usage: blender -b -P nyx_build.py -- <body.blend> <out_prefix> [params.json]
+"""
+import bpy, sys, math, json, random, mathutils, bmesh
+from mathutils import Vector
+from mathutils.bvhtree import BVHTree
+
+args = sys.argv[sys.argv.index("--") + 1:]
+blend, outprefix = args[0], args[1]
+P = json.load(open(args[2])) if len(args) > 2 else {}
+def prm(k, d):
+    return P.get(k, d)
+
+bpy.ops.wm.open_mainfile(filepath=blend)
+sc = bpy.context.scene
+body = bpy.data.objects["Mira_MPFB_Basemesh"]
+me = body.data
+rng = random.Random(prm("seed", 7))
+LM_ = json.load(open(blend.replace('_body.blend', '_landmarks.json')))
+
+def smooth(u):
+    u = max(0.0, min(1.0, u))
+    return u * u * (3 - 2 * u)
+
+# ---------------------------------------------------------------- matériaux
+def mk_mat(name, rgb, metallic=0.0, rough=0.5, emit=None):
+    m = bpy.data.materials.new(name)
+    m.use_nodes = True
+    b = m.node_tree.nodes["Principled BSDF"]
+    b.inputs["Base Color"].default_value = (*rgb, 1)
+    b.inputs["Metallic"].default_value = metallic
+    b.inputs["Roughness"].default_value = rough
+    if emit:
+        b.inputs["Emission Color"].default_value = (*emit, 1)
+        b.inputs["Emission Strength"].default_value = 1.5
+    m.diffuse_color = (*rgb, 1)
+    m.metallic = metallic
+    m.roughness = rough
+    return m
+
+M = {
+    "skin": mk_mat("nyx_skin", prm("skin", (0.90, 0.74, 0.68)), 0.0, 0.55),
+    "lips": mk_mat("nyx_lips", (0.55, 0.04, 0.09), 0.0, 0.3),
+    "shadow": mk_mat("nyx_eyeshadow", (0.30, 0.12, 0.46), 0.0, 0.5),
+    "sclera": mk_mat("nyx_sclera", (0.92, 0.90, 0.90), 0.0, 0.2),
+    "iris": mk_mat("nyx_iris", (0.42, 0.14, 0.62), 0.0, 0.2, emit=(0.25, 0.08, 0.4)),
+    "pupil": mk_mat("nyx_pupil", (0.01, 0.0, 0.02), 0.0, 0.1),
+    "brow": mk_mat("nyx_brow", (0.03, 0.015, 0.05), 0.0, 0.6),
+    "gold": mk_mat("nyx_gold", (0.95, 0.68, 0.16), 1.0, 0.25),
+    "gem": mk_mat("nyx_amethyst", (0.50, 0.15, 0.80), 0.0, 0.1, emit=(0.3, 0.08, 0.5)),
+}
+HAIR_COLORS = [
+    ((0.006, 0.003, 0.012), 0.40),
+    ((0.024, 0.010, 0.048), 0.34),
+    ((0.062, 0.022, 0.125), 0.20),
+    ((0.150, 0.055, 0.290), 0.06),
+]
+HM = [mk_mat("nyx_hair_%d" % i, c, 0.0, 0.62) for i, (c, _) in enumerate(HAIR_COLORS)]
+for _m in HM:
+    _b = _m.node_tree.nodes["Principled BSDF"]
+    for _k in ("Specular IOR Level", "Specular"):
+        if _k in _b.inputs:
+            _b.inputs[_k].default_value = 0.12
+    if "Sheen Weight" in _b.inputs:
+        _b.inputs["Sheen Weight"].default_value = 0.35
+        _b.inputs["Sheen Tint"].default_value = (0.5, 0.25, 0.9, 1)
+_sb = M["skin"].node_tree.nodes["Principled BSDF"]
+_sb.inputs["Base Color"].default_value = (0.86, 0.63, 0.57, 1)
+M["skin"].diffuse_color = (0.86, 0.63, 0.57, 1)
+if "Subsurface Weight" in _sb.inputs:
+    _sb.inputs["Subsurface Weight"].default_value = 0.30
+    _sb.inputs["Subsurface Radius"].default_value = (1.0, 0.35, 0.25)
+    _sb.inputs["Subsurface Scale"].default_value = 0.02
+
+# ---------------------------------------------------------------- corps : matériaux visage
+for v in me.vertices:
+    c = v.co
+    if c.y < -0.02 and 1.57 < c.z < 1.78:
+        jaw = smooth((c.z - 1.585) / 0.03) * (1 - smooth((c.z - 1.665) / 0.05))
+        c.x *= 1 - prm("jaw_slim", 0.13) * jaw
+        if abs(c.x) < 0.024 and 1.665 < c.z < 1.765 and c.y < -0.125:
+            c.x *= 1 - prm("nose_slim", 0.14) * smooth((0.024 - abs(c.x)) / 0.024)
+# ouverture des paupières : agrandissement doux autour de chaque oeil
+def _rim_verts(cx, cz):
+    """Bord des paupières : sommets de peau adjacents à la poche oculaire (fond à y > -0.138)."""
+    bm_ = bmesh.new(); bm_.from_mesh(me); bm_.verts.ensure_lookup_table()
+    cav = {v.index for v in bm_.verts if math.hypot(v.co.x - cx, v.co.z - cz) < 0.0165 and -0.138 < v.co.y < -0.10}
+    rim = set()
+    for i in cav:
+        for e_ in bm_.verts[i].link_edges:
+            w_ = e_.other_vert(bm_.verts[i])
+            if w_.index not in cav and math.hypot(w_.co.x - cx, w_.co.z - cz) < 0.026:
+                rim.add(w_.index)
+    bm_.free()
+    return rim
+_eye0 = {"L": Vector(LM_["l-eye"]), "R": Vector(LM_["r-eye"])}
+_k_x, _k_z = prm("eye_open_x", 1.15), prm("eye_open_z", 1.55)
+for k, e in _eye0.items():
+    rc = Vector((e.x, e.y, e.z + prm("eye_dz", 0.002)))
+    for v in me.vertices:
+        if v.co.y > -0.10:
+            continue
+        dx, dz = v.co.x - rc.x, v.co.z - rc.z
+        d = math.hypot(dx, dz)
+        w = 1.0 - smooth((d - 0.013) / 0.019)
+        if w <= 0:
+            continue
+        v.co.x = rc.x + dx * (1 + (_k_x - 1) * w)
+        v.co.z = rc.z + dz * (1 + (_k_z - 1) * w)
+me.update()
+me.materials.clear()
+for k in ("skin", "lips", "shadow"):
+    me.materials.append(M[k])
+mesh_bvh = BVHTree.FromObject(body, bpy.context.evaluated_depsgraph_get())
+LM = json.load(open(blend.replace("_body.blend", "_landmarks.json")))
+EYE_L = Vector(LM["l-eye"]); EYE_R = Vector(LM["r-eye"])
+
+RIM = {}
+
+def surface_y(x, z):
+    h = mesh_bvh.ray_cast(Vector((x, -1.0, z)), Vector((0, 1, 0)))
+    return h[0].y if h[0] else None
+
+MOUTH_Z, MOUTH_HALF_W = prm("mouth_z", 1.648), 0.026
+for p in me.polygons:
+    c = p.center
+    m = 0
+    if False:
+        if abs(c.x) < MOUTH_HALF_W * (1 - 0.4 * abs((c.z - MOUTH_Z) / 0.02)) and abs(c.z - MOUTH_Z) < 0.0115:
+            m = 1
+        else:
+            for ex in (EYE_L.x, EYE_R.x):
+                dx = (c.x - ex) / 0.024
+                dz = (c.z - (EYE_L.z + 0.004)) / 0.0115
+                if dx * dx + dz * dz < 1.0:
+                    m = 2
+    p.material_index = m
+
+# ---------------------------------------------------------------- yeux
+def add_sphere(name, loc, radius, scale=(1, 1, 1), mat=None, seg=24):
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=seg, ring_count=seg // 2, radius=radius, location=loc)
+    o = bpy.context.active_object
+    o.name = name
+    o.scale = scale
+    if mat:
+        o.data.materials.append(mat)
+    bpy.ops.object.shade_smooth()
+    return o
+
+eyes = []
+EYE_OBJ = {}
+for side, e in (("L", EYE_L), ("R", EYE_R)):
+    rad = prm('eye_r', 0.0135)
+    cy = e.y + prm("eye_shift", -0.002)
+    ez = e.z + prm("eye_dz", 0.001)
+    ball = add_sphere("nyx_eye_%s" % side, (e.x, cy, ez), rad, mat=M["sclera"])
+    EYE_OBJ[side] = (ball, Vector((e.x, cy, ez)), rad)
+    eyes.append(ball)
+    iris = add_sphere("nyx_iris_%s" % side, (e.x, cy - rad * 0.965, ez), rad * 0.60, (1, 0.16, 1), M["iris"], 20)
+    pup = add_sphere("nyx_pupil_%s" % side, (e.x, cy - rad * 0.985, ez), rad * 0.27, (1, 0.12, 1), M["pupil"], 16)
+    eyes += [iris, pup]
+
+bpy.context.view_layer.update()
+_dg = bpy.context.evaluated_depsgraph_get()
+def measure_aperture(side):
+    ball, ctr, rad = EYE_OBJ[side]
+    sbvh = BVHTree.FromObject(ball, _dg)
+    ups, los = [], []
+    for i in range(49):
+        x = ctr.x + (i - 24) * 0.0011
+        col = []
+        z = ctr.z + 0.02
+        while z > ctr.z - 0.02:
+            hb = mesh_bvh.ray_cast(Vector((x, -1.0, z)), Vector((0, 1, 0)))
+            hs = sbvh.ray_cast(Vector((x, -1.0, z)), Vector((0, 1, 0)))
+            if hs[0] is not None and (hb[0] is None or hs[0].y < hb[0].y - 0.0003):
+                col.append(z)
+            z -= 0.0004
+        if len(col) < 3:
+            continue
+        runs, cur = [], [col[0]]
+        for z_ in col[1:]:
+            if cur[-1] - z_ > 0.0011:
+                runs.append(cur); cur = [z_]
+            else:
+                cur.append(z_)
+        runs.append(cur)
+        run = min(runs, key=lambda r: abs((max(r) + min(r)) / 2 - ctr.z))
+        ups.append(Vector((x, 0, max(run)))); los.append(Vector((x, 0, min(run))))
+    if not ups:
+        return dict(c=ctr, up=[Vector((ctr.x + dx, 0, ctr.z + 0.006)) for dx in (-0.012, 0, 0.012)], lo=[], xmin=ctr.x - 0.012, xmax=ctr.x + 0.012, zmax=ctr.z + 0.006, zmin=ctr.z - 0.005)
+    xs = [q.x for q in ups]
+    zc = (sum(q.z for q in ups) / len(ups) + sum(q.z for q in los) / len(los)) / 2
+    return dict(c=Vector(((min(xs) + max(xs)) / 2, ctr.y, zc)), up=ups, lo=los, xmin=min(xs), xmax=max(xs), zmax=max(q.z for q in ups), zmin=min(q.z for q in los))
+
+for _side in ("L", "R"):
+    RIM[_side] = measure_aperture(_side)
+    r_ = RIM[_side]
+    print("APERTURE", _side, "x", round(r_["xmin"], 4), round(r_["xmax"], 4), "w", round(r_["xmax"] - r_["xmin"], 4), "h", round(r_["zmax"] - r_["zmin"], 4), "zc", round(r_["c"].z, 4))
+
+# ---------------------------------------------------------------- sourcils
+def add_curve(name, pts, radii, mat, bevel=0.002, cyclic=False, res=1):
+    cu = bpy.data.curves.new(name, "CURVE")
+    cu.dimensions = "3D"
+    cu.bevel_depth = bevel
+    cu.bevel_resolution = res
+    sp = cu.splines.new("POLY")
+    sp.points.add(len(pts) - 1)
+    for i, (pt, r) in enumerate(zip(pts, radii)):
+        sp.points[i].co = (pt[0], pt[1], pt[2], 1)
+        sp.points[i].radius = r
+    sp.use_cyclic_u = cyclic
+    cu.materials.append(mat)
+    o = bpy.data.objects.new(name, cu)
+    sc.collection.objects.link(o)
+    return o
+
+for sgn, side in ((1, "L"), (-1, "R")):
+    pts, rad = [], []
+    n = 9
+    for i in range(n):
+        t = i / (n - 1)
+        x = sgn * (0.012 + 0.052 * t)
+        z = RIM['L']['zmax'] + 0.026 + 0.012 * math.sin(math.pi * (t * 0.85 + 0.05)) - 0.004 * t
+        y = surface_y(x, z)
+        pts.append((x, (y if y is not None else -0.15) - 0.0025, z))
+        rad.append(1.0 - 0.75 * t ** 1.5 if t > 0.5 else 0.6 + 0.8 * t)
+    add_curve("nyx_brow_%s" % side, pts, rad, M["brow"], 0.0028)
+
+# ---------------------------------------------------------------- couronne
+CC = Vector((0.0, -0.025, prm("crown_z", 1.80)))
+ring = []
+N_RING = 72
+for i in range(N_RING):
+    a = 2 * math.pi * i / N_RING
+    d = Vector((math.sin(a), -math.cos(a), 0.0))         # a=0 -> avant (-y)
+    h = mesh_bvh.ray_cast(CC + d * 0.5, -d)
+    p = h[0] + d * 0.004 if h[0] else CC + d * 0.10
+    p.z = CC.z + 0.006 * math.cos(a) * -1 + 0.004      # léger tilt : plus haut derrière
+    ring.append(p)
+add_curve("nyx_crown_band", [(p.x, p.y, p.z) for p in ring], [1.0] * N_RING, M["gold"], 0.0058, cyclic=True, res=2)
+
+def add_cone(name, base, height, r0, tilt_dir, tilt=0.0, mat=None):
+    bpy.ops.mesh.primitive_cone_add(vertices=6, radius1=r0, radius2=0.0003, depth=height, location=(0, 0, 0))
+    o = bpy.context.active_object
+    o.name = name
+    o.data.materials.append(mat)
+    # pivot à la base
+    for v in o.data.vertices:
+        v.co.z += height / 2
+    axis = tilt_dir.cross(Vector((0, 0, 1)))
+    o.rotation_mode = "QUATERNION"
+    o.rotation_quaternion = mathutils.Quaternion(axis if axis.length > 1e-6 else Vector((1, 0, 0)), -tilt)
+    o.location = base
+    bpy.ops.object.shade_flat()
+    return o
+
+def add_gem(name, loc, size, tilt_dir=None):
+    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=1.0, location=loc)
+    o = bpy.context.active_object
+    o.name = name
+    o.scale = (size * 0.55, size * 0.55, size * 1.2)
+    o.data.materials.append(M["gem"])
+    bpy.ops.object.shade_flat()
+    return o
+
+SPIKES = prm("spikes", 15)
+for k in range(SPIKES):
+    a = math.radians(-100 + 200 * k / (SPIKES - 1))       # arc frontal ±100°
+    prof = math.cos(a * 0.9) ** 2
+    h = 0.028 + 0.058 * prof
+    if k % 2:
+        h *= 0.62
+    d = Vector((math.sin(a), -math.cos(a), 0.0))
+    idx = int(((a / (2 * math.pi)) % 1.0) * N_RING)
+    base = ring[idx].copy()
+    add_cone("nyx_spike_%d" % k, base, h, 0.0085, d, math.radians(10 + 6 * (1 - prof)), M["gold"])
+    add_gem("nyx_gem_%d" % k, base + Vector((0, 0, 0.011)) + d * 0.004, 0.0085)
+# arcs filigranes entre pointes frontales
+tips = []
+for k in range(SPIKES):
+    a = math.radians(-100 + 200 * k / (SPIKES - 1))
+    prof = math.cos(a * 0.9) ** 2
+    h = (0.028 + 0.058 * prof) * (0.62 if k % 2 else 1.0)
+    idx = int(((a / (2 * math.pi)) % 1.0) * N_RING)
+    tips.append((ring[idx].copy(), h))
+for k in range(SPIKES - 1):
+    (b0, h0), (b1, h1) = tips[k], tips[k + 1]
+    A = b0 + Vector((0, 0, h0 * 0.55)); B = b1 + Vector((0, 0, h1 * 0.55))
+    pts = []
+    for i in range(7):
+        t = i / 6
+        q = A.lerp(B, t)
+        q.z -= 0.016 * math.sin(math.pi * t)
+        pts.append((q.x, q.y, q.z))
+    add_curve("nyx_crown_arc_%d" % k, pts, [1.0] * 7, M["gold"], 0.0026)
+# quelques petites pointes arrière
+for k in range(6):
+    a = math.radians(115 + 130 * k / 5)
+    d = Vector((math.sin(a), -math.cos(a), 0.0))
+    idx = int(((a / (2 * math.pi)) % 1.0) * N_RING)
+    add_cone("nyx_spike_b%d" % k, ring[idx].copy(), 0.028 + 0.016 * (k % 2), 0.0055, d, math.radians(12), M["gold"])
+
+
+# ---------------------------------------------------------------- maquillage : surfaces projetées sur la peau
+def project_grid(name, fn, nu, nv, mat, lift=0.0012):
+    bm_ = bmesh.new()
+    verts = []
+    for j in range(nv):
+        row = []
+        for i in range(nu):
+            x, z = fn(i / (nu - 1), j / (nv - 1))
+            y = surface_y(x, z)
+            row.append(bm_.verts.new((x, (y if y is not None else -0.15) - lift, z)))
+        verts.append(row)
+    for j in range(nv - 1):
+        for i in range(nu - 1):
+            bm_.faces.new((verts[j][i], verts[j][i + 1], verts[j + 1][i + 1], verts[j + 1][i]))
+    m_ = bpy.data.meshes.new(name)
+    bm_.to_mesh(m_); bm_.free()
+    o_ = bpy.data.objects.new(name, m_)
+    sc.collection.objects.link(o_)
+    o_.data.materials.append(mat)
+    for pl in m_.polygons:
+        pl.use_smooth = True
+    return o_
+
+W = prm("lip_w", 0.026)
+Z0 = MOUTH_Z
+def lip_top(x):
+    a = min(1.0, abs(x) / W)
+    return Z0 + 0.0072 * math.cos(math.pi / 2 * a) ** 0.85 - 0.0020 * math.exp(-(x / 0.0045) ** 2) + 0.0011 * math.exp(-((abs(x) - 0.0085) / 0.004) ** 2)
+def lip_bot(x):
+    a = min(1.0, abs(x) / W)
+    return Z0 - 0.0105 * math.cos(math.pi / 2 * a) ** 0.9
+def lip_line(x):
+    a = min(1.0, abs(x) / W)
+    return Z0 - 0.0004 - 0.0016 * a ** 3
+project_grid("nyx_lips", lambda u, v: ((u * 2 - 1) * W, lip_bot((u * 2 - 1) * W) + (lip_top((u * 2 - 1) * W) - lip_bot((u * 2 - 1) * W)) * v), 34, 7, M["lips"], 0.0011)
+lp = []
+for i in range(30):
+    x = (i / 29 * 2 - 1) * W
+    y = surface_y(x, lip_line(x))
+    lp.append((x, (y if y is not None else -0.15) - 0.0024, lip_line(x)))
+add_curve("nyx_lipline", lp, [0.5 + 0.7 * math.sin(math.pi * i / 29) for i in range(30)], M["brow"], 0.0011)
+
+def make_eye_makeup(key):
+    rim = RIM[key]
+    up = rim["up"]
+    xin = rim["xmin"] if key == "L" else rim["xmax"]
+    xout = rim["xmax"] if key == "L" else rim["xmin"]
+    dirx = 1.0 if xout > xin else -1.0
+    def z_up(x):
+        xs = [q.x for q in up]
+        if not xs:
+            return rim["c"].z + 0.006
+        lo, hi = min(xs), max(xs)
+        if x < lo or x > hi:
+            edge = min(up, key=lambda q: abs(q.x - x))
+            return edge.z + 0.6 * abs(x - edge.x)
+        best = sorted(up, key=lambda q: abs(q.x - x))[:2]
+        if abs(best[0].x - best[1].x) < 1e-6:
+            return best[0].z
+        t = (x - best[0].x) / (best[1].x - best[0].x)
+        return best[0].z + (best[1].z - best[0].z) * t
+    def lid_edge(u):
+        x = xin + (xout - xin) * u + dirx * 0.010 * smooth((u - 0.82) / 0.18)
+        return x, z_up(x) + prm("liner_dz", -0.0032)
+    def shade(u, v):
+        x, z0 = lid_edge(u)
+        top = 0.0050 + 0.0085 * math.sin(math.pi * min(1.0, u * 0.95 + 0.03)) ** 0.8
+        return x, z0 + top * v
+    project_grid("nyx_shadow_" + key, shade, 24, 5, M["shadow"], 0.0008)
+    pts, rad = [], []
+    for i in range(18):
+        u = i / 17
+        x, z = lid_edge(u)
+        y = surface_y(x, z + 0.002)
+        pts.append((x, (y if y is not None else -0.15) - 0.0022, z + 0.0004))
+        rad.append(0.55 + 0.95 * math.sin(math.pi * (u * 0.85 + 0.08)) + 0.55 * smooth((u - 0.8) / 0.2))
+    add_curve("nyx_liner_" + key, pts, rad, M["brow"], 0.0015)
+    for k in range(9):
+        u = 0.10 + 0.82 * k / 8
+        x, z = lid_edge(u)
+        y = surface_y(x, z + 0.002)
+        yy = (y if y is not None else -0.15) - 0.0026
+        dx = dirx * (0.0010 + 0.0055 * u)
+        add_curve("nyx_lash_%s_%d" % (key, k), [(x, yy, z), (x + dx * 0.6, yy - 0.0012, z + 0.0038), (x + dx * 1.5, yy - 0.0018, z + 0.0068 + 0.002 * u)], [1.0, 0.7, 0.2], M["brow"], 0.0007)
+
+make_eye_makeup("L")
+make_eye_makeup("R")
+
+# boucles d'oreilles : chaîne dorée + gouttes d'améthyste
+for sgn in (1, -1):
+    h = mesh_bvh.ray_cast(Vector((sgn * 1.0, -0.02, 1.675)), Vector((-sgn, 0, 0)))
+    if not h[0]:
+        continue
+    st = h[0] + h[1] * 0.002
+    add_sphere("nyx_ear_stud_%d" % sgn, st, 0.0045, mat=M["gold"], seg=12)
+    xs = st.x + sgn * 0.004
+    pts = [(xs, st.y, st.z), (xs + sgn * 0.004, st.y + 0.004, st.z - 0.030), (xs + sgn * 0.002, st.y + 0.002, st.z - 0.062), (xs + sgn * 0.004, st.y + 0.004, st.z - 0.095)]
+    add_curve("nyx_ear_chain_%d" % sgn, pts, [1.0, 0.9, 0.9, 0.9], M["gold"], 0.0013)
+    for zz, sz in ((0.035, 0.0038), (0.068, 0.0045)):
+        add_gem("nyx_ear_gem_%d_%d" % (sgn, int(zz * 1000)), (xs + sgn * 0.003, st.y + 0.003, st.z - zz), sz)
+    g = add_gem("nyx_ear_drop_%d" % sgn, (xs + sgn * 0.004, st.y + 0.004, st.z - 0.112), 0.0075)
+    g.scale = (0.0060, 0.0060, 0.017)
+
+# ---------------------------------------------------------------- chevelure
+HEAD_C = Vector((0.0, -0.02, 1.72))
+
+def hairline_zmin(x, y):
+    ax = abs(x)
+    if y < -0.06:
+        return 1.795 - 0.06 * smooth((ax - 0.055) / 0.04)
+    if y < 0.0:
+        t = smooth((y + 0.06) / 0.06)
+        return 1.735 + (1.68 - 1.735) * t
+    return 1.68 + (1.60 - 1.68) * smooth(y / 0.07)
+
+roots = []
+tries = 0
+while len(roots) < prm("strands", 760) and tries < 60000:
+    tries += 1
+    d = Vector((rng.gauss(0, 1), rng.gauss(0, 1), rng.gauss(0, 1) + 0.25))
+    if d.length < 1e-3:
+        continue
+    d.normalize()
+    if d.z < 0.0 and d.y > -0.4:
+        pass
+    h = mesh_bvh.ray_cast(HEAD_C + d * 0.5, -d)
+    if not h[0]:
+        continue
+    p, n = h[0], h[1]
+    if p.z < 1.60 or p.z > 1.86:
+        continue
+    if p.z < hairline_zmin(p.x, p.y):
+        continue
+    if p.y < -0.05 and p.z < 1.75:
+        continue
+    roots.append((p, n))
+print("HAIR roots", len(roots), "tries", tries)
+
+_locks = {}
+def wave_params(p0):
+    key = (round(p0.x / 0.032), round(p0.y / 0.032), round(p0.z / 0.05))
+    if key not in _locks:
+        _locks[key] = (rng.uniform(0.75, 1.35), rng.uniform(0, 2 * math.pi), rng.uniform(0.8, 1.35), rng.uniform(0.7, 1.15))
+    fr, ph, am, sp = _locks[key]
+    return fr * rng.uniform(0.95, 1.05), ph + rng.uniform(-0.25, 0.25), am * rng.uniform(0.9, 1.1), sp
+
+STRANDS = []
+hair_curves = bpy.data.curves.new("nyx_hair_unused", "CURVE")
+hair_curves.dimensions = "3D"
+hair_curves.bevel_depth = prm("strand_r", 0.0026)
+hair_curves.bevel_resolution = 1
+for m in HM:
+    hair_curves.materials.append(m)
+
+pool = [i for i, (_, w) in enumerate(HAIR_COLORS) for _ in range(int(w * 100))]
+NPTS = prm("strand_pts", 36)
+SPREAD = prm("spread", 0.36)
+LEN_MIN, LEN_MAX = prm("len_min", 0.80), prm("len_max", 1.30)
+
+def push_out(pos, margin=0.006):
+    for _ in range(3):
+        loc, nor, idx, dist = mesh_bvh.find_nearest(pos)
+        if loc is None:
+            return pos
+        if (pos - loc).dot(nor) < margin:
+            pos = loc + nor * margin
+        else:
+            break
+    return pos
+
+for (p0, n0) in roots:
+    L = rng.uniform(LEN_MIN, LEN_MAX)
+    sx = 1.0 if p0.x > 0 else -1.0
+    if abs(p0.x) < 0.012:
+        sx = rng.choice((-1.0, 1.0))
+    front = p0.y < -0.03
+    pos = p0 + n0 * 0.005
+    fr, ph, am, lock_spread = wave_params(p0)
+    spread = SPREAD * lock_spread * rng.uniform(0.85, 1.15) * (0.45 if front else 1.0)
+    ds = L / (NPTS - 1)
+    base_pts = [pos.copy()]
+    for i in range(1, NPTS):
+        s = i * ds
+        loc, nor, idx, dist = mesh_bvh.find_nearest(pos)
+        down = Vector((0, 0, -1.0))
+        tang = down - nor * down.dot(nor)
+        tang = tang.normalized() if tang.length > 1e-4 else down
+        w = smooth(s / (0.22 if front else 0.11))
+        dr = (tang * (1 - w) + down * w)
+        if front:
+            dr = Vector((sx * 0.6 * (1 - w), 0.30 * (1 - w), -0.25 * (1 - w))) + down * w
+        pos = pos + dr.normalized() * ds
+        pos = push_out(pos, 0.006)
+        base_pts.append(pos.copy())
+    pts = []
+    for i, bp in enumerate(base_pts):
+        u = i / (NPTS - 1)
+        s = u * L
+        lat = sx * spread * (u ** 1.25)
+        wx = am * (0.020 + 0.085 * u) * math.sin(2 * math.pi * fr * s * 2.2 + ph)
+        wy = am * (0.012 + 0.045 * u) * math.sin(2 * math.pi * fr * s * 1.6 + ph * 1.7)
+        q = Vector((bp.x + lat + wx, bp.y + wy + (0.02 * u if not front else 0), bp.z))
+        q = push_out(q, 0.006) if u < 0.98 else q
+        pts.append(q)
+    for _ in range(4):
+        pts = [pts[0]] + [(pts[i - 1] + 2 * pts[i] + pts[i + 1]) * 0.25 for i in range(1, len(pts) - 1)] + [pts[-1]]
+    STRANDS.append((pts, rng.choice(pool), p0))
+
+def catmull(pts, n):
+    out = []
+    m = len(pts)
+    for k in range(n):
+        f = k / (n - 1) * (m - 1)
+        i = min(int(f), m - 2); t = f - i
+        p0_ = pts[max(i - 1, 0)]; p1_ = pts[i]; p2_ = pts[i + 1]; p3_ = pts[min(i + 2, m - 1)]
+        out.append(0.5 * ((2 * p1_) + (-p0_ + p2_) * t + (2 * p0_ - 5 * p1_ + 4 * p2_ - p3_) * t * t + (-p0_ + 3 * p1_ - 3 * p2_ + p3_) * t ** 3))
+    return out
+
+HB = bmesh.new()
+uvl = HB.loops.layers.uv.new("UVMap")
+NS = prm("ribbon_pts", 22)
+W0 = prm("ribbon_w", 0.0068)
+for pts, midx, p0 in STRANDS:
+    cp = catmull(pts, NS)
+    w0 = W0 * rng.uniform(0.8, 1.3)
+    L, R = [], []
+    for i, q in enumerate(cp):
+        u = i / (NS - 1)
+        t = (cp[min(i + 1, NS - 1)] - cp[max(i - 1, 0)]).normalized()
+        out = Vector((q.x, q.y + 0.02, 0.0))
+        out = out.normalized() if out.length > 1e-4 else Vector((0, -1, 0))
+        side = t.cross(out)
+        side = side.normalized() if side.length > 1e-4 else Vector((1, 0, 0))
+        w = w0 * (0.28 + 0.72 * smooth(u / 0.22)) * (1.0 - 0.50 * u ** 1.3)
+        L.append(HB.verts.new(q - side * w)); R.append(HB.verts.new(q + side * w))
+    for i in range(NS - 1):
+        f = HB.faces.new((L[i], R[i], R[i + 1], L[i + 1]))
+        f.smooth = True
+        f.material_index = midx
+        for lp, (uu, vv) in zip(f.loops, ((0, i / (NS - 1)), (1, i / (NS - 1)), (1, (i + 1) / (NS - 1)), (0, (i + 1) / (NS - 1)))):
+            lp[uvl].uv = (uu, vv)
+hair_me = bpy.data.meshes.new("nyx_hair")
+HB.to_mesh(hair_me); HB.free()
+for m in HM:
+    hair_me.materials.append(m)
+hair = bpy.data.objects.new("nyx_hair", hair_me)
+sc.collection.objects.link(hair)
+print("HAIR ribbons", len(STRANDS), "tris", len(hair_me.polygons) * 2)
+
+
+
+# =====================================================================================
+# PHASE 2 : costume, tissus, accessoires, rig, pose
+# =====================================================================================
+import os
+LIB = prm("libdir", os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, LIB)
+import importlib, nyx_rig, nyx_costume as C
+importlib.reload(nyx_rig); importlib.reload(C)
+
+J = {k: Vector(v) for k, v in LM_.items()}
+HEEL = prm("heel", 38.0)
+ZMIN = nyx_rig.apply_heels(body, J, HEEL)
+json.dump({k: list(v) for k, v in J.items()}, open(outprefix + "_joints.json", "w"))
+print("ZMIN toes", round(ZMIN, 4))
+
+_bt = bmesh.new(); _bt.from_mesh(body.data); _bt.verts.ensure_lookup_table()
+for _side in ("l", "r"):
+    _ball = J[_side + "-foot-1"]; _sg = 1 if _side == "l" else -1
+    _sel = [v for v in _bt.verts if v.co.x * _sg > 0.0 and v.co.y < _ball.y + 0.025 and v.co.z < _ball.z + 0.13]
+    for _ in range(30):
+        _new = {}
+        for v in _sel:
+            nb = [e.other_vert(v) for e in v.link_edges]
+            if nb:
+                _new[v.index] = v.co.lerp(sum((n.co for n in nb), Vector((0, 0, 0))) / len(nb), 0.7)
+        for i, p in _new.items():
+            _bt.verts[i].co = p
+_bt.to_mesh(body.data); _bt.free()
+bm0 = bmesh.new(); bm0.from_mesh(body.data)
+bvh = BVHTree.FromBMesh(bm0)
+
+def front_y(x, z, off=0.0):
+    h = bvh.ray_cast(Vector((x, -1.0, z)), Vector((0, 1, 0)))
+    return (h[0].y if h[0] else -0.12) - off
+
+# ---------------------------------------------------------------- matériaux costume
+CM = dict(
+    lace=C.mk_mat("nyx_lace_black", (0.012, 0.010, 0.018), 0.0, 0.35),
+    net=C.mk_mat("nyx_net_black", (0.010, 0.008, 0.016), 0.0, 0.4, alpha=0.62),
+    glove=C.mk_mat("nyx_glove", (0.010, 0.008, 0.016), 0.0, 0.22),
+    shoe=C.mk_mat("nyx_shoe", (0.008, 0.006, 0.012), 0.0, 0.18),
+    cloth=C.mk_mat("nyx_cloth_black", (0.014, 0.009, 0.028), 0.0, 0.55),
+    hem=C.mk_mat("nyx_cloth_violet", (0.26, 0.08, 0.46), 0.0, 0.45, emit=(0.16, 0.04, 0.30), emit_strength=0.7),
+    raven=C.mk_mat("nyx_raven", (0.012, 0.008, 0.022), 0.15, 0.22),
+    beak=C.mk_mat("nyx_beak", (0.07, 0.06, 0.09), 0.0, 0.25),
+    orb=C.mk_mat("nyx_orb_core", (0.006, 0.002, 0.014), 0.0, 0.08),
+    orbglow=C.mk_mat("nyx_orb_glow", (0.55, 0.20, 0.95), 0.0, 0.2, emit=(0.6, 0.2, 1.0), emit_strength=6.0),
+    orbhalo=C.mk_mat("nyx_orb_halo", (0.40, 0.14, 0.75), 0.0, 0.2, emit=(0.4, 0.12, 0.8), emit_strength=1.5, alpha=0.18),
+)
+GOLD, GEM = M["gold"], M["gem"]
+body.data.materials.clear(); body.data.materials.append(M["skin"])
+
+gi = lambda names: C.gindex(body, names)
+SIDES = ("l", "r")
+G_TORSO = gi(["spine_01", "spine_02", "spine_03", "pelvis", "breast_l", "breast_r", "neck_01"])
+G_ARM = gi(["clavicle_l", "clavicle_r", "upperarm_l", "upperarm_r"])
+G_FORE = gi([n for s in SIDES for n in ["lowerarm_" + s, "hand_" + s] + [f"{f}_0{i}_{s}" for f in ("index", "middle", "ring", "pinky", "thumb") for i in (1, 2, 3)]])
+G_FOOT = gi(["foot_l", "foot_r", "ball_l", "ball_r"])
+G_LEG = gi(["thigh_l", "thigh_r", "calf_l", "calf_r"])
+G_NECK = gi(["neck_01"])
+G_SCALP = gi(["scalp"])
+cen = lambda f: f.calc_center_median()
+wsum = lambda f, dl, g: sum(C.group_weight(v, dl, g) for v in f.verts) / len(f.verts)
+z_low = lambda x: 0.88 + 0.15 * smooth(abs(x) / 0.19)
+
+def pred_bra(f, dl):
+    c = cen(f)
+    return c.y < -0.05 and abs(c.x) > 0.004 and math.hypot((abs(c.x) - 0.105) / 0.100, (c.z - 1.31) / 0.090) < 1.0
+def pred_brief(f, dl):
+    c = cen(f)
+    return z_low(c.x) < c.z < 1.035 and abs(c.x) < 0.25 and wsum(f, dl, G_ARM + G_FORE) < 0.2
+def pred_stock(f, dl):
+    c = cen(f)
+    return c.z < 0.86 + 0.14 * smooth(abs(c.x) / 0.19) and wsum(f, dl, G_LEG) > 0.55 and wsum(f, dl, G_FOOT) < 0.5
+def pred_torso(f, dl):
+    c = cen(f)
+    return 1.03 < c.z < 1.535 and wsum(f, dl, G_TORSO) > 0.5 and wsum(f, dl, G_ARM + G_FORE) < 0.25
+def pred_glove(f, dl):
+    return wsum(f, dl, G_FORE) > 0.55
+def pred_shoe(f, dl):
+    return wsum(f, dl, G_FOOT) > 0.5
+def pred_collar(f, dl):
+    c = cen(f)
+    return 1.54 < c.z < 1.615 and wsum(f, dl, G_NECK) > 0.6
+
+parts = {}
+parts["bra"] = C.shell(body, "nyx_bra", pred_bra, 0.0065, CM["lace"], sc)
+parts["brief"] = C.shell(body, "nyx_brief", pred_brief, 0.0045, CM["lace"], sc)
+parts["stock"] = C.shell(body, "nyx_stockings", pred_stock, 0.0028, CM["net"], sc)
+parts["torso"] = C.shell(body, "nyx_torso_net", pred_torso, 0.0024, CM["net"], sc)
+parts["glove"] = C.shell(body, "nyx_gloves", pred_glove, 0.0034, CM["glove"], sc)
+parts["shoe"] = C.shell(body, "nyx_shoes", pred_shoe, 0.0090, CM["shoe"], sc)
+parts["collar"] = C.shell(body, "nyx_collar", pred_collar, 0.0042, CM["lace"], sc)
+parts["scalp"] = C.shell(body, "nyx_scalp", lambda f, dl: wsum(f, dl, G_SCALP) > 0.4 and cen(f).z > 1.70, 0.0060, HM[0], sc)
+for k in ("bra", "brief", "stock", "torso", "collar"):
+    C.relax_boundary(parts[k], 10, 0.5)
+
+# bouts de chaussure : enveloppe convexe lisse de la zone des orteils
+bmt = bmesh.new()
+for side in SIDES:
+    ball = J[side + "-foot-1"]; sg = 1 if side == "l" else -1
+    pts = [v.co.copy() for v in parts["shoe"].data.vertices if v.co.x * sg > 0.0 and v.co.y < ball.y + 0.022]
+    tmp = bmesh.new()
+    vv = [tmp.verts.new(p + Vector((0, 0, 0))) for p in pts]
+    hull = bmesh.ops.convex_hull(tmp, input=vv)
+    keep_f = set(hull["geom"]) if "geom" in hull else set()
+    dead = [g for g in hull.get("geom_interior", [])] + [g for g in hull.get("geom_unused", [])]
+    dead_v = list({g for g in dead if isinstance(g, bmesh.types.BMVert)})
+    if dead_v:
+        bmesh.ops.delete(tmp, geom=dead_v, context="VERTS")
+    tmp.verts.ensure_lookup_table()
+    for _ in range(2):
+        newp = {}
+        for v in tmp.verts:
+            nb = [e.other_vert(v) for e in v.link_edges]
+            if nb:
+                newp[v.index] = v.co.lerp(sum((n.co for n in nb), Vector((0, 0, 0))) / len(nb), 0.35)
+        for i, p in newp.items():
+            tmp.verts[i].co = p
+    mp = {}
+    for v in tmp.verts:
+        mp[v.index] = bmt.verts.new(v.co)
+    for f in tmp.faces:
+        bmt.faces.new([mp[v.index] for v in f.verts]).smooth = True
+    tmp.free()
+me_t = bpy.data.meshes.new("nyx_toecaps"); bmt.to_mesh(me_t); bmt.free()
+toecap = bpy.data.objects.new("nyx_toecaps", me_t); sc.collection.objects.link(toecap); me_t.materials.append(CM["shoe"])
+bmesh_recalc = bmesh.new(); bmesh_recalc.from_mesh(me_t); bmesh.ops.recalc_face_normals(bmesh_recalc, faces=bmesh_recalc.faces); bmesh_recalc.to_mesh(me_t); bmesh_recalc.free()
+
+# filets d'or sur les bords
+trim_lines = []
+for k in ("bra", "brief", "stock", "glove", "shoe", "collar"):
+    for loop in C.boundary_loops(parts[k]):
+        trim_lines.append(C.smooth_polyline(loop, 3))
+trim = C.add_curve_obj(sc, "nyx_trim", trim_lines, GOLD, 0.0021, cyclic=False)
+
+# treillis d'or
+def hw(z): return 0.215 if z < 1.08 else (0.16 if z < 1.25 else 0.235)
+def acc_torso(p, n): return 1.06 < p.z < 1.52 and abs(p.x) <= hw(p.z) and abs(n.x) < 0.95
+tor = C.lattice_lines(bvh, lambda z: Vector((0, -0.02, z)), 1.06, 1.52, 20, 1.5, 32, acc_torso, 0.0040)
+leg = []
+for side in SIDES:
+    a = J[side + "-upper-leg"]; b = J[side + "-ankle"]
+    def axis(z, a=a, b=b):
+        t = (z - a.z) / (b.z - a.z)
+        return Vector((a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, z))
+    def acc_leg(p, n, axis=axis):
+        c = axis(p.z)
+        return 0.13 < p.z < 0.99 and math.hypot(p.x - c.x, p.y - c.y) < 0.14
+    leg += C.lattice_lines(bvh, axis, 0.14, 0.98, 12, 4.2, 52, acc_leg, 0.0040)
+lat = C.add_curve_obj(sc, "nyx_lattice", tor + leg, GOLD, 0.0014, cyclic=False)
+
+# griffes dorées
+bmc = bmesh.new()
+for side in SIDES:
+    for fi in (1, 2, 3, 4, 5):
+        p3 = J["%s-finger-%d-3" % (side, fi)]; p4 = J["%s-finger-%d-4" % (side, fi)]
+        d = (p4 - p3).normalized()
+        b = p4; t = p4 + d * 0.042 + Vector((0, 0, -0.004))
+        ax = (t - b).normalized()
+        u = ax.cross(Vector((0, 0, 1))); u = u.normalized() if u.length > 1e-3 else Vector((1, 0, 0))
+        w = ax.cross(u).normalized()
+        ring = [bmc.verts.new(b + u * 0.0042 * math.cos(a) + w * 0.0042 * math.sin(a)) for a in [i * math.pi / 3 for i in range(6)]]
+        tv = bmc.verts.new(t)
+        for i in range(6):
+            bmc.faces.new((ring[i], ring[(i + 1) % 6], tv))
+me_c = bpy.data.meshes.new("nyx_claws"); bmc.to_mesh(me_c); bmc.free()
+claw = bpy.data.objects.new("nyx_claws", me_c); sc.collection.objects.link(claw); me_c.materials.append(GOLD)
+
+# talons aiguilles verticaux
+bmh = bmesh.new()
+for side in SIDES:
+    ank = J[side + "-ankle"]
+    rear = [v.co for v in parts["shoe"].data.vertices if v.co.y > ank.y - 0.01 and abs(v.co.x - ank.x) < 0.05 and v.co.z < ank.z]
+    hb = min(rear, key=lambda c: c.z)
+    top = Vector((ank.x, hb.y + 0.008, hb.z + 0.003)); L = hb.z + 0.003 - ZMIN
+    a = [bmh.verts.new(top + Vector((0.0125 * math.cos(t), 0.0125 * math.sin(t), 0.0))) for t in [i * math.pi / 4 for i in range(8)]]
+    b = [bmh.verts.new(top + Vector((0.0042 * math.cos(t), 0.0042 * math.sin(t), -L))) for t in [i * math.pi / 4 for i in range(8)]]
+    for i in range(8):
+        f = bmh.faces.new((a[i], a[(i + 1) % 8], b[(i + 1) % 8], b[i])); f.smooth = True
+me_h = bpy.data.meshes.new("nyx_heels"); bmh.to_mesh(me_h); bmh.free()
+heel = bpy.data.objects.new("nyx_heels", me_h); sc.collection.objects.link(heel); me_h.materials.append(CM["shoe"])
+
+# ---------------------------------------------------------------- choker, chaînes, gemmes
+def polyline_proj(pts, off):
+    return [Vector((p.x, front_y(p.x, p.z, off), p.z)) for p in pts]
+
+chains = []
+# choker
+ring = []
+for i in range(40):
+    a = 2 * math.pi * i / 40
+    d = Vector((math.sin(a), -math.cos(a), 0.0))
+    h = bvh.ray_cast(Vector((0, -0.006, 1.578)) + d * 0.3, -d)
+    ring.append((h[0] + h[1] * 0.006) if h[0] else Vector((0, 0, 1.578)) + d * 0.05)
+chains.append(ring + [ring[0]])
+# sangle centrale
+strap = [Vector((0, front_y(0, z, 0.011), z)) for z in [1.565 - 0.0044 * i for i in range(0, 121)]]
+chains.append(strap[:110])
+# arcs de poitrine et de taille
+def arc(a, b, sag, off, n=18):
+    pts = []
+    for i in range(n + 1):
+        t = i / n
+        p = a.lerp(b, t)
+        p.z -= sag * math.sin(math.pi * t)
+        pts.append(Vector((p.x, front_y(p.x, p.z, off), p.z)))
+    return pts
+for s in (1, -1):
+    chains.append(arc(Vector((0, 0, 1.36)), Vector((s * 0.20, 0, 1.40)), 0.05, 0.010))
+    chains.append(arc(Vector((0, 0, 1.36)), Vector((s * 0.17, 0, 1.22)), 0.02, 0.012))
+    chains.append(arc(Vector((s * 0.04, 0, 1.06)), Vector((s * 0.21, 0, 0.99)), 0.04, 0.014))
+    chains.append(arc(Vector((s * 0.02, 0, 1.03)), Vector((s * 0.15, 0, 0.90)), 0.06, 0.014))
+    chains.append(arc(Vector((s * 0.18, 0, 1.47)), Vector((s * 0.06, 0, 1.53)), 0.02, 0.010))
+# ceinture
+belt = []
+for i in range(48):
+    a = 2 * math.pi * i / 48
+    d = Vector((math.sin(a), -math.cos(a), 0.0))
+    h = bvh.ray_cast(Vector((0, -0.02, 1.075)) + d * 0.5, -d)
+    belt.append((h[0] + h[1] * 0.010) if h[0] else Vector((0, 0, 1.075)))
+chains.append(belt + [belt[0]])
+chain_obj = C.add_curve_obj(sc, "nyx_chains", chains, GOLD, 0.0018, cyclic=False)
+
+gems = []
+for i, (z, sz) in enumerate([(1.500, 0.0105), (1.400, 0.0085), (1.310, 0.0125), (1.230, 0.0095), (1.140, 0.0110), (1.060, 0.0100)]):
+    gems.append(C.add_gem_mesh(sc, "nyx_bgem_%d" % i, Vector((0, front_y(0, z, 0.016), z)), sz, GEM))
+for s in (1, -1):
+    for i, (x, z, sz) in enumerate([(0.105, 1.36, 0.008), (0.22, 0.99, 0.009), (0.16, 0.93, 0.008), (0.20, 1.40, 0.007)]):
+        gems.append(C.add_gem_mesh(sc, "nyx_sgem_%d_%d" % (s, i), Vector((s * x, front_y(s * x, z, 0.014), z)), sz, GEM))
+gems.append(C.add_gem_mesh(sc, "nyx_choker_gem", Vector((0, front_y(0, 1.545, 0.014), 1.545)), 0.0115, GEM, 0.6, 1.5))
+for k in range(5):
+    a = math.radians(-70 + 35 * k)
+    d = Vector((math.sin(a), -math.cos(a), 0.0))
+    pos = Vector((0, -0.006, 1.578)) + d * 0.058
+    gems.append(C.add_gem_mesh(sc, "nyx_drop_%d" % k, pos + Vector((0, -0.004, -0.02)), 0.006, GEM))
+
+# ---------------------------------------------------------------- cape, jupe
+def cape_pos(layer):
+    def f(u, v, t):
+        vv = v * (1 - t * smooth((v - 0.72) / 0.28))
+        xt = (u * 2 - 1) * 0.205
+        flare = 0.08 + (2.2 + 0.55 * layer) * vv ** 1.35
+        x = xt * (1 + flare)
+        z = 1.535 - vv * (1.52 - 0.02 * layer)
+        y = 0.088 + 0.09 * vv + (0.30 + 0.07 * layer) * vv ** 2.2 + 0.05 * layer * (0.4 + vv)
+        fold = 0.055 * math.sin((u * 2 - 1) * 11.0 + 1.3 + layer) * vv + 0.022 * math.sin((u * 2 - 1) * 23.0 + layer * 2) * vv + 0.012 * math.sin(vv * 11 + u * 5)
+        return Vector((x, y + fold, z))
+    return f
+
+def skirt_pos(seed, spread):
+    def f(u, v, t):
+        vv = v * (1 - t * smooth((v - 0.70) / 0.30))
+        a_s = math.radians(74 - 22 * vv)
+        a = a_s + (2 * math.pi - 2 * a_s) * u
+        rx = 0.250 + (0.66 + spread) * vv ** 1.25
+        ry = 0.158 + (0.48 + spread * 0.7) * vv ** 1.25
+        w = 0.022 * math.sin(a * 7 + seed) * vv + 0.012 * math.sin(a * 13 + vv * 6)
+        x = (rx + w) * math.sin(a)
+        y = -(ry + w) * math.cos(a) - 0.01
+        z = 1.045 - vv * 1.02 - 0.05 * (1 - abs(math.sin(a)))
+        return Vector((x, y, z))
+    return f
+
+cloth_objs = []
+cloth_objs.append(C.cloth(sc, "nyx_cape_a", cape_pos(0), 72, 40, CM["cloth"], CM["hem"], 0.07, 0.16, 3))
+cloth_objs.append(C.cloth(sc, "nyx_cape_b", cape_pos(1), 64, 38, CM["cloth"], CM["hem"], 0.08, 0.20, 8))
+cloth_objs.append(C.cloth(sc, "nyx_skirt_a", skirt_pos(1.0, 0.0), 96, 40, CM["cloth"], CM["hem"], 0.07, 0.16, 5))
+cloth_objs.append(C.cloth(sc, "nyx_skirt_b", skirt_pos(4.0, 0.10), 84, 38, CM["cloth"], CM["hem"], 0.08, 0.22, 11))
+
+# ---------------------------------------------------------------- weights cloth & hair
+def w_cloth(ob, kind):
+    for g in ("spine_03", "spine_02", "pelvis", "thigh_l", "thigh_r"):
+        if ob.vertex_groups.get(g) is None:
+            ob.vertex_groups.new(name=g)
+    for v in ob.data.vertices:
+        z = v.co.z
+        sp3 = smooth((z - 1.05) / 0.40)
+        if kind == "skirt":
+            th = smooth((0.95 - z) / 0.55) * 0.55
+            side = "thigh_l" if v.co.x > 0 else "thigh_r"
+            ob.vertex_groups[side].add([v.index], th * (1 - sp3), "REPLACE")
+            ob.vertex_groups["pelvis"].add([v.index], (1 - th) * (1 - sp3), "REPLACE")
+            if sp3 > 0:
+                ob.vertex_groups["spine_02"].add([v.index], sp3, "REPLACE")
+        else:
+            ob.vertex_groups["spine_03"].add([v.index], sp3, "REPLACE")
+            ob.vertex_groups["pelvis"].add([v.index], 1 - sp3, "REPLACE")
+
+def w_hair(ob):
+    for g in ("head", "spine_03", "spine_02", "pelvis"):
+        if ob.vertex_groups.get(g) is None:
+            ob.vertex_groups.new(name=g)
+    for v in ob.data.vertices:
+        z = v.co.z
+        h = smooth((z - 1.50) / 0.16)
+        rest = 1 - h
+        sp3 = rest * smooth((z - 1.10) / 0.28)
+        sp2 = rest * (1 - smooth((z - 1.10) / 0.28)) * smooth((z - 0.95) / 0.22)
+        pel = rest - sp3 - sp2
+        for name, w in (("head", h), ("spine_03", sp3), ("spine_02", sp2), ("pelvis", pel)):
+            if w > 0.002:
+                ob.vertex_groups[name].add([v.index], w, "REPLACE")
+
+# ---------------------------------------------------------------- conversion des courbes -> meshes
+for ob in list(sc.objects):
+    if ob.type == "CURVE" and ob.name.startswith("nyx_"):
+        C.curve_to_mesh(ob, sc)
+
+# ---------------------------------------------------------------- rig
+rig = nyx_rig.build_armature(outprefix + "_joints.json", os.path.join(LIB, "rig_map.json"))
+rig.location.z = -ZMIN
+
+skinned_by_transfer = list(parts.values()) + [claw, heel, toecap]
+skinned_by_transfer += [o for o in sc.objects if o.type == "MESH" and o.name in ("nyx_trim_m", "nyx_lattice_m", "nyx_chains_m")]
+skinned_by_transfer += gems
+for o in skinned_by_transfer:
+    C.transfer_weights(body, o)
+for o in cloth_objs:
+    w_cloth(o, "skirt" if "skirt" in o.name else "cape")
+w_hair(hair)
+HEAD_RIGID = ("nyx_eye_", "nyx_iris_", "nyx_pupil_", "nyx_brow_", "nyx_liner_", "nyx_lash_", "nyx_shadow_", "nyx_lips", "nyx_lipline",
+              "nyx_crown", "nyx_spike", "nyx_gem_", "nyx_ear_")
+for ob in list(sc.objects):
+    if ob.type == "MESH" and ob.name.startswith(HEAD_RIGID):
+        C.weight_all(ob, "head")
+
+# ---------------------------------------------------------------- liaison au rig
+def is_deformed(o):
+    return o.type == "MESH" and o.name.startswith(("nyx_", "Mira_"))
+DEF = [o for o in sc.objects if is_deformed(o)]
+for o in DEF:
+    nyx_rig.bind(o, rig)
+bpy.context.view_layer.update()
+
+# ---------------------------------------------------------------- pose héroïque
+nyx_rig.hero_pose(rig, J, DEF, keep_root=True)
+bpy.context.view_layer.update()
+
+def rest_from_posed(bone, pw):
+    pb = rig.pose.bones[bone]
+    delta = pb.matrix @ pb.bone.matrix_local.inverted()
+    return delta.inverted() @ (rig.matrix_world.inverted() @ pw)
+
+def posed_head(bone):
+    return rig.matrix_world @ rig.pose.bones[bone].head
+
+def build_posed(name, fn_build, bone, mats):
+    """fn_build(bm) construit la géométrie en coordonnées monde POSÉES ; conversion en repos + poids 100 % os."""
+    bm = bmesh.new()
+    fn_build(bm)
+    for v in bm.verts:
+        v.co = rest_from_posed(bone, v.co)
+    me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
+    ob = bpy.data.objects.new(name, me); sc.collection.objects.link(ob)
+    for m in mats:
+        me.materials.append(m)
+    for p in me.polygons:
+        p.use_smooth = True
+    g = ob.vertex_groups.new(name=bone)
+    g.add([v.index for v in me.vertices], 1.0, "REPLACE")
+    nyx_rig.bind(ob, rig)
+    return ob
+
+def sphere_bm(bm, loc, r, scale=(1, 1, 1), rot=None, seg=20, mat_idx=0):
+    from mathutils import Matrix
+    m = Matrix.Translation(loc)
+    if rot is not None:
+        m = m @ rot.to_matrix().to_4x4()
+    m = m @ Matrix.Diagonal((*scale, 1.0))
+    ret = bmesh.ops.create_uvsphere(bm, u_segments=seg, v_segments=seg // 2, radius=r, matrix=m)
+    for v in ret["verts"]:
+        for f in v.link_faces:
+            f.material_index = mat_idx
+    return ret["verts"]
+
+# --- corbeau sur l'épaule (côté +x, tourné vers l'orbe)
+from mathutils import Euler, Matrix
+sh = posed_head("upperarm_l")
+raven_c = sh + Vector((-0.005, -0.012, 0.062))
+yaw = math.radians(-24)
+Rz = Euler((0, 0, yaw)).to_quaternion()
+def rv(local):
+    return raven_c + Rz @ Vector(local)
+def raven_build(bm):
+    S_ = 0.86
+    sphere_bm(bm, rv((0, 0, 0)), 1.0, (0.052 * S_, 0.110 * S_, 0.058 * S_), Rz @ Euler((math.radians(-22), 0, 0)).to_quaternion(), 24, 0)
+    sphere_bm(bm, rv((0, -0.100 * S_, 0.058 * S_)), 1.0, (0.036 * S_, 0.040 * S_, 0.036 * S_), None, 20, 0)
+    for sx in (1, -1):
+        sphere_bm(bm, rv((sx * 0.050 * S_, 0.010 * S_, 0.004 * S_)), 1.0, (0.017 * S_, 0.105 * S_, 0.050 * S_), Rz @ Euler((math.radians(-18), 0, math.radians(sx * 6))).to_quaternion(), 16, 0)
+        sphere_bm(bm, rv((sx * 0.052 * S_, 0.075 * S_, -0.020 * S_)), 1.0, (0.014 * S_, 0.075 * S_, 0.030 * S_), Rz @ Euler((math.radians(-26), 0, math.radians(sx * 10))).to_quaternion(), 14, 0)
+    sphere_bm(bm, rv((0, 0.170 * S_, -0.052 * S_)), 1.0, (0.036 * S_, 0.115 * S_, 0.010 * S_), Rz @ Euler((math.radians(-16), 0, 0)).to_quaternion(), 16, 0)
+    # bec
+    ret = bmesh.ops.create_cone(bm, cap_ends=True, cap_tris=False, segments=8, radius1=0.020 * S_, radius2=0.0018, depth=0.075 * S_,
+                                matrix=Matrix.Translation(rv((0, -0.128 * S_, 0.056 * S_))) @ (Rz @ Euler((math.radians(90 - 8), 0, 0)).to_quaternion()).to_matrix().to_4x4())
+    for v in ret["verts"]:
+        for f in v.link_faces:
+            f.material_index = 1
+    for sx in (1, -1):
+        for v in sphere_bm(bm, rv((sx * 0.022 * S_, -0.128 * S_, 0.066 * S_)), 0.0065, (1, 1, 1), None, 10, 2):
+            pass
+raven = build_posed("nyx_raven", raven_build, "spine_03", [CM["raven"], CM["beak"], M["iris"]])
+
+# --- orbe du néant au creux de la main levée
+_cl = bpy.data.objects["nyx_claws"]
+_ev = _cl.evaluated_get(bpy.context.evaluated_depsgraph_get())
+_tm = _ev.to_mesh()
+tips = [(_cl.matrix_world @ v.co) for v in _tm.vertices if (_cl.matrix_world @ v.co).x < 0]
+_ev.to_mesh_clear()
+Fc = sum(tips, Vector((0, 0, 0))) / max(1, len(tips))
+Hh = posed_head("hand_r")
+orb_c = Hh + (Fc - Hh) * 0.95 + Vector((-0.01, -0.02, 0.055))
+print("ORB center", tuple(round(c, 3) for c in orb_c))
+def orb_build(bm):
+    sphere_bm(bm, orb_c, 0.072, (1, 1, 1), None, 28, 0)
+    # croissant lumineux : anneau partiel
+    for k in range(72):
+        a = math.radians(-40 + 250 * k / 71)
+        p = orb_c + Vector((0.0, -0.078 * math.cos(a) * 0.35 - 0.02, 0.078 * math.sin(a))) + Vector((0.078 * math.cos(a) * 0.94, 0, 0))
+        sphere_bm(bm, p, 0.0105 * math.sin(math.pi * (k + 2) / 76) ** 0.5 + 0.003, (1, 1, 1), None, 8, 1)
+    for k in range(9):
+        a = 2 * math.pi * k / 9 + 0.4
+        p = orb_c + Vector((0.115 * math.cos(a), -0.02 + 0.03 * math.sin(a * 2), 0.115 * math.sin(a)))
+        sphere_bm(bm, p, 0.0075 + 0.003 * (k % 3), (0.45, 0.45, 1.9), Euler((0, math.radians(k * 40), math.radians(30 * k))).to_quaternion(), 8, 0)
+    sphere_bm(bm, orb_c, 0.108, (1, 1, 1), None, 20, 2)
+orb = build_posed("nyx_orb", orb_build, "hand_r", [CM["orb"], CM["orbglow"], CM["orbhalo"]])
+
+# --- manche drapée de l'avant-bras levé
+E = posed_head("lowerarm_r"); Wp = posed_head("hand_r")
+def sleeve_pos(u, v, t):
+    base = E.lerp(Wp, u * 0.92)
+    L = max(0.25, base.z - (0.98 - 0.10 * u))
+    vv = v * (1 - t * smooth((v - 0.70) / 0.30))
+    sway = 0.02 * math.sin(u * 9 + v * 6)
+    x = base.x - (0.26 * vv ** 0.85) * (1 - 0.35 * u) + sway
+    y = base.y + 0.06 * vv + 0.03 * math.sin(u * 7 + vv * 4)
+    z = base.z - vv * L
+    return Vector((x, y, z))
+def sleeve_build(bm):
+    cl = C.cloth(sc, "tmp_sleeve", sleeve_pos, 24, 20, CM["cloth"], CM["hem"], 0.10, 0.16, 21)
+    bm.from_mesh(cl.data)
+    bpy.data.objects.remove(cl, do_unlink=True)
+sleeve = build_posed("nyx_sleeve_r", sleeve_build, "lowerarm_r", [CM["cloth"], CM["hem"]])
+bpy.context.view_layer.update()
+
+# ---------------------------------------------------------------- rendu
+ENGINE = prm("engine", "BLENDER_WORKBENCH")
+sc.render.engine = ENGINE
+if ENGINE == "CYCLES":
+    sc.cycles.device = "CPU"; sc.cycles.samples = prm("samples", 64); sc.cycles.use_denoising = False; sc.cycles.max_bounces = 6
+sc.display.shading.light = "STUDIO"; sc.display.shading.color_type = "MATERIAL"
+sc.display.shading.show_cavity = True
+sc.world = bpy.data.worlds.new("w"); sc.world.color = (0.16, 0.16, 0.17)
+if ENGINE == "CYCLES":
+    sc.world.use_nodes = True
+    bg = sc.world.node_tree.nodes["Background"]; bg.inputs["Color"].default_value = (0.035, 0.026, 0.05, 1); bg.inputs["Strength"].default_value = 1.0
+    def area(name, loc, energy, color, size):
+        ld = bpy.data.lights.new(name, "AREA"); ld.energy = energy; ld.color = color; ld.size = size
+        lo = bpy.data.objects.new(name, ld); sc.collection.objects.link(lo); lo.location = loc
+        lo.rotation_euler = (Vector((0, -0.02, 1.0)) - Vector(loc)).normalized().to_track_quat("-Z", "Y").to_euler()
+    area("key", (-2.0, -3.2, 3.0), 420, (1.0, 0.93, 0.86), 2.0)
+    area("fill", (3.0, -2.6, 1.6), 90, (0.80, 0.82, 1.0), 2.5)
+    area("rim", (1.6, 3.0, 2.6), 200, (0.62, 0.36, 0.95), 1.8)
+    area("rim2", (-2.2, 2.6, 2.4), 110, (0.55, 0.45, 1.0), 1.8)
+cam = bpy.data.cameras.new("cam"); cam.type = "ORTHO"
+co_ = bpy.data.objects.new("cam", cam); sc.collection.objects.link(co_); sc.camera = co_
+
+def shot(name, center, scale, yaw_deg, res=(700, 1100)):
+    sc.render.resolution_x, sc.render.resolution_y = res
+    cam.ortho_scale = scale
+    y = math.radians(yaw_deg)
+    d = Vector((math.sin(y), -math.cos(y), 0))
+    co_.location = center + d * 8
+    co_.rotation_euler = (center - co_.location).normalized().to_track_quat("-Z", "Y").to_euler()
+    sc.render.filepath = "%s_%s.png" % (outprefix, name)
+    bpy.ops.render.render(write_still=True)
+
+SHOTS = prm("shots", ["full_front", "full_back", "full_34", "head_front"])
+FC = Vector((0, -0.05, 1.02 + 0.0))
+if "full_front" in SHOTS: shot("full_front", FC, 2.25, 0)
+if "full_back" in SHOTS: shot("full_back", FC, 2.25, 180)
+if "full_34" in SHOTS: shot("full_34", FC, 2.25, 35)
+if "full_side" in SHOTS: shot("full_side", FC, 2.25, 90)
+HC = Vector((0, -0.05, 1.86 + 0.0))
+if "head_front" in SHOTS: shot("head_front", HC, 0.55, 0, (700, 800))
+if "head_34" in SHOTS: shot("head_34", HC, 0.55, 35, (700, 800))
+bpy.ops.wm.save_as_mainfile(filepath=outprefix + "_full.blend")
