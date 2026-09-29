@@ -2,7 +2,7 @@
 
 usage: blender -b -P nyx_build.py -- <body.blend> <out_prefix> [params.json]
 """
-import bpy, sys, math, json, random, mathutils, bmesh
+import bpy, sys, os, math, json, random, mathutils, bmesh
 from mathutils import Vector
 from mathutils.bvhtree import BVHTree
 
@@ -12,6 +12,12 @@ P = json.load(open(args[2])) if len(args) > 2 else {}
 def prm(k, d):
     return P.get(k, d)
 
+LIB = prm("libdir", os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, LIB)
+import nyx_textures as T
+TEX = outprefix + "_tex"
+os.makedirs(TEX, exist_ok=True)
+GEO_MAKEUP = prm("geo_makeup", False)
 bpy.ops.wm.open_mainfile(filepath=blend)
 sc = bpy.context.scene
 body = bpy.data.objects["Mira_MPFB_Basemesh"]
@@ -56,7 +62,12 @@ HAIR_COLORS = [
     ((0.036, 0.013, 0.078), 0.17),
     ((0.095, 0.036, 0.190), 0.03),
 ]
-HM = [mk_mat("nyx_hair_%d" % i, c, 0.0, 0.62) for i, (c, _) in enumerate(HAIR_COLORS)]
+HM = [mk_mat("nyx_hair_%d" % i, c, 0.0, 0.5) for i, (c, _) in enumerate(HAIR_COLORS)]
+for _i, _m in enumerate(HM):
+    _p = os.path.join(TEX, "hair_%d.png" % _i)
+    T.save_png(T.hair_texture((512, 1024), 10 + _i, _i), _p, flip=True)
+    T.apply_pbr(_m, base=_p, alpha_clip=0.5, base_alpha=True)
+    _m.node_tree.nodes["Principled BSDF"].inputs["Roughness"].default_value = 0.42
 for _m in HM:
     _b = _m.node_tree.nodes["Principled BSDF"]
     for _k in ("Specular IOR Level", "Specular"):
@@ -148,6 +159,48 @@ def add_sphere(name, loc, radius, scale=(1, 1, 1), mat=None, seg=24):
     bpy.ops.object.shade_smooth()
     return o
 
+def add_iris_disc(name, center, R, ir, mat):
+    """Disque d'iris posé sur la sphère oculaire (avant = -y), UV planaires 0..1."""
+    bm_ = bmesh.new()
+    uvl_ = bm_.loops.layers.uv.new("UVMap")
+    nseg, nring = 40, 8
+    ang_max = math.asin(min(0.99, ir / R))
+    rings = []
+    cv = bm_.verts.new(center + Vector((0, -R * 1.002, 0)))
+    for k in range(1, nring + 1):
+        rho = k / nring
+        phi = rho * ang_max
+        row = []
+        for s in range(nseg):
+            th = 2 * math.pi * s / nseg
+            p = Vector((math.sin(phi) * math.cos(th), -math.cos(phi), math.sin(phi) * math.sin(th))) * (R * 1.002)
+            row.append(bm_.verts.new(center + p))
+        rings.append(row)
+    def uv_of(v):
+        d = v.co - center
+        if v is cv:
+            return (0.5, 0.5)
+        phi = math.acos(max(-1, min(1, -d.y / (R * 1.002))))
+        rho = phi / ang_max
+        th = math.atan2(d.z, d.x)
+        return (0.5 + 0.5 * rho * math.cos(th), 0.5 + 0.5 * rho * math.sin(th))
+    for s in range(nseg):
+        f = bm_.faces.new((cv, rings[0][s], rings[0][(s + 1) % nseg]))
+        for l in f.loops: l[uvl_].uv = uv_of(l.vert)
+    for k in range(nring - 1):
+        for s in range(nseg):
+            f = bm_.faces.new((rings[k][s], rings[k + 1][s], rings[k + 1][(s + 1) % nseg], rings[k][(s + 1) % nseg]))
+            for l in f.loops: l[uvl_].uv = uv_of(l.vert)
+    for f in bm_.faces: f.smooth = True
+    me_ = bpy.data.meshes.new(name); bm_.to_mesh(me_); bm_.free()
+    ob_ = bpy.data.objects.new(name, me_); sc.collection.objects.link(ob_); me_.materials.append(mat)
+    return ob_
+
+# texture d'iris
+T.save_png(T.iris_texture(512, 5), os.path.join(TEX, "iris.png"), flip=True)
+T.apply_pbr(M["iris"], base=os.path.join(TEX, "iris.png"), emit=os.path.join(TEX, "iris.png"), emit_strength=0.30, alpha_clip=0.5, base_alpha=True)
+M["iris"].node_tree.nodes["Principled BSDF"].inputs["Roughness"].default_value = 0.16
+
 eyes = []
 EYE_OBJ = {}
 for side, e in (("L", EYE_L), ("R", EYE_R)):
@@ -157,9 +210,8 @@ for side, e in (("L", EYE_L), ("R", EYE_R)):
     ball = add_sphere("nyx_eye_%s" % side, (e.x, cy, ez), rad, mat=M["sclera"])
     EYE_OBJ[side] = (ball, Vector((e.x, cy, ez)), rad)
     eyes.append(ball)
-    iris = add_sphere("nyx_iris_%s" % side, (e.x, cy - rad * 0.965, ez), rad * 0.60, (1, 0.16, 1), M["iris"], 20)
-    pup = add_sphere("nyx_pupil_%s" % side, (e.x, cy - rad * 0.985, ez), rad * 0.27, (1, 0.12, 1), M["pupil"], 16)
-    eyes += [iris, pup]
+    iris = add_iris_disc("nyx_iris_%s" % side, Vector((e.x, cy, ez)), rad, prm("iris_r", 0.0072), M["iris"])
+    eyes += [iris]
 
 bpy.context.view_layer.update()
 _dg = bpy.context.evaluated_depsgraph_get()
@@ -337,13 +389,14 @@ def lip_bot(x):
 def lip_line(x):
     a = min(1.0, abs(x) / W)
     return Z0 - 0.0004 - 0.0016 * a ** 3
-project_grid("nyx_lips", lambda u, v: ((u * 2 - 1) * W, lip_bot((u * 2 - 1) * W) + (lip_top((u * 2 - 1) * W) - lip_bot((u * 2 - 1) * W)) * v), 34, 7, M["lips"], 0.0011)
-lp = []
-for i in range(30):
-    x = (i / 29 * 2 - 1) * W
-    y = surface_y(x, lip_line(x))
-    lp.append((x, (y if y is not None else -0.15) - 0.0024, lip_line(x)))
-add_curve("nyx_lipline", lp, [0.5 + 0.7 * math.sin(math.pi * i / 29) for i in range(30)], M["brow"], 0.0011)
+if GEO_MAKEUP:
+    project_grid("nyx_lips", lambda u, v: ((u * 2 - 1) * W, lip_bot((u * 2 - 1) * W) + (lip_top((u * 2 - 1) * W) - lip_bot((u * 2 - 1) * W)) * v), 34, 7, M["lips"], 0.0011)
+    lp = []
+    for i in range(30):
+        x = (i / 29 * 2 - 1) * W
+        y = surface_y(x, lip_line(x))
+        lp.append((x, (y if y is not None else -0.15) - 0.0024, lip_line(x)))
+    add_curve("nyx_lipline", lp, [0.5 + 0.7 * math.sin(math.pi * i / 29) for i in range(30)], M["brow"], 0.0011)
 
 def make_eye_makeup(key):
     rim = RIM[key]
@@ -371,15 +424,17 @@ def make_eye_makeup(key):
         x, z0 = lid_edge(u)
         top = 0.0050 + 0.0085 * math.sin(math.pi * min(1.0, u * 0.95 + 0.03)) ** 0.8
         return x, z0 + top * v
-    project_grid("nyx_shadow_" + key, shade, 24, 5, M["shadow"], 0.0008)
-    pts, rad = [], []
-    for i in range(18):
-        u = i / 17
-        x, z = lid_edge(u)
-        y = surface_y(x, z + 0.002)
-        pts.append((x, (y if y is not None else -0.15) - 0.0022, z + 0.0004))
-        rad.append(0.55 + 0.95 * math.sin(math.pi * (u * 0.85 + 0.08)) + 0.55 * smooth((u - 0.8) / 0.2))
-    add_curve("nyx_liner_" + key, pts, rad, M["brow"], 0.0015)
+    if GEO_MAKEUP:
+        project_grid("nyx_shadow_" + key, shade, 24, 5, M["shadow"], 0.0008)
+    if GEO_MAKEUP:
+        pts, rad = [], []
+        for i in range(18):
+            u = i / 17
+            x, z = lid_edge(u)
+            y = surface_y(x, z + 0.002)
+            pts.append((x, (y if y is not None else -0.15) - 0.0022, z + 0.0004))
+            rad.append(0.55 + 0.95 * math.sin(math.pi * (u * 0.85 + 0.08)) + 0.55 * smooth((u - 0.8) / 0.2))
+        add_curve("nyx_liner_" + key, pts, rad, M["brow"], 0.0015)
     for k in range(9):
         u = 0.10 + 0.82 * k / 8
         x, z = lid_edge(u)
@@ -507,7 +562,7 @@ for (p0, n0) in roots:
         q = Vector((bp.x + lat + wx, bp.y + wy + (0.02 * u if not front else 0), bp.z))
         q = push_out(q, 0.006) if u < 0.98 else q
         pts.append(q)
-    for _ in range(4):
+    for _ in range(7):
         pts = [pts[0]] + [(pts[i - 1] + 2 * pts[i] + pts[i + 1]) * 0.25 for i in range(1, len(pts) - 1)] + [pts[-1]]
     STRANDS.append((pts, rng.choice(pool), p0))
 
@@ -524,9 +579,10 @@ def catmull(pts, n):
 HB = bmesh.new()
 uvl = HB.loops.layers.uv.new("UVMap")
 NS = prm("ribbon_pts", 22)
-W0 = prm("ribbon_w", 0.0068)
+W0 = prm("ribbon_w", 0.017)
 for pts, midx, p0 in STRANDS:
     cp = catmull(pts, NS)
+    uc = rng.uniform(0, 0.5); flip_ = rng.random() < 0.5
     w0 = W0 * rng.uniform(0.8, 1.3)
     L, R = [], []
     for i, q in enumerate(cp):
@@ -543,7 +599,7 @@ for pts, midx, p0 in STRANDS:
         f.smooth = True
         f.material_index = midx
         for lp, (uu, vv) in zip(f.loops, ((0, i / (NS - 1)), (1, i / (NS - 1)), (1, (i + 1) / (NS - 1)), (0, (i + 1) / (NS - 1)))):
-            lp[uvl].uv = (uu, vv)
+            lp[uvl].uv = (uc + (1 - uu if flip_ else uu) * 0.5, vv)
 hair_me = bpy.data.meshes.new("nyx_hair")
 HB.to_mesh(hair_me); HB.free()
 for m in HM:
@@ -564,6 +620,40 @@ import importlib, nyx_rig, nyx_costume as C
 importlib.reload(nyx_rig); importlib.reload(C)
 
 J = {k: Vector(v) for k, v in LM_.items()}
+
+# ---------------------------------------------------------------- textures peau (cuisson de la position -> UV)
+TEXRES = prm("tex_res", 2048)
+_Pm, _Mm = T.bake_position_map(body, TEXRES)
+print("TEX position map", TEXRES, "texels", int(_Mm.sum()))
+_ap = [(q.x, q.z) for q in RIM["L"]["up"]] if RIM.get("L") and RIM["L"].get("up") else [(0.021, 1.72), (0.033, 1.728), (0.045, 1.72)]
+_ctx = dict(J=J, aperture=_ap, lip_z0=MOUTH_Z, lip_w=W, lip_top=lip_top, lip_bot=lip_bot, lip_line=lip_line)
+_col, _mr, _h = T.paint_skin(_Pm, _Mm, _ctx, 3)
+_col = T.dilate(_col, _Mm, 10); _mr = T.dilate(_mr, _Mm, 10); _h = T.dilate(_h, _Mm, 10)
+T.save_png(_col, os.path.join(TEX, "skin_base.png"))
+T.save_png(_mr, os.path.join(TEX, "skin_mr.png"))
+T.save_png(T.to_height_normal(_h, prm("skin_bump", 1.2)), os.path.join(TEX, "skin_normal.png"))
+T.apply_pbr(M["skin"], base=os.path.join(TEX, "skin_base.png"), mr=os.path.join(TEX, "skin_mr.png"), nrm=os.path.join(TEX, "skin_normal.png"), normal_strength=0.5)
+_sb2 = M["skin"].node_tree.nodes["Principled BSDF"]
+if "Subsurface Weight" in _sb2.inputs:
+    _sb2.inputs["Subsurface Weight"].default_value = 0.22
+    _sb2.inputs["Subsurface Radius"].default_value = (1.0, 0.30, 0.20)
+    _sb2.inputs["Subsurface Scale"].default_value = 0.018
+    _sb2.inputs["Subsurface Weight"].default_value = 0.22
+del _col, _mr, _h
+# dentelle : motif calculé en 3D (cylindrique) puis cuit en UV, résolution plus fine
+_LR = prm("lace_res", 4096)
+_P4, _M4 = T.bake_position_map(body, _LR)
+_lace = T.lace_alpha(_P4, _M4, _LR, J)
+_lace[..., :3] = T.dilate(_lace[..., :3], _M4, 6); _lace[..., 3] = T.dilate(_lace[..., 3:4], _M4, 6)[..., 0]
+_lp = os.path.join(TEX, "lace.png")
+_lace4 = _lace.copy(); _lace4[..., :3] = _lace4[..., :3] ** (1 / 2.2)
+T.save_png(_lace4, _lp)
+del _P4, _M4, _lace, _lace4
+# tissu
+for _hem, _nm in ((False, "cloth"), (True, "hem")):
+    _c, _m, _n = T.cloth_texture(1024, 2 if not _hem else 5, _hem)
+    T.save_png(_c, os.path.join(TEX, _nm + "_base.png")); T.save_png(_m, os.path.join(TEX, _nm + "_mr.png")); T.save_png(_n, os.path.join(TEX, _nm + "_normal.png"))
+T.save_png(T.swirl_texture(1024, 512, 4), os.path.join(TEX, "orb_swirl.png"))
 HEEL = prm("heel", 38.0)
 ZMIN = nyx_rig.apply_heels(body, J, HEEL)
 json.dump({k: list(v) for k, v in J.items()}, open(outprefix + "_joints.json", "w"))
@@ -601,9 +691,15 @@ CM = dict(
     beak=C.mk_mat("nyx_beak", (0.07, 0.06, 0.09), 0.0, 0.25),
     orb=C.mk_mat("nyx_orb_core", (0.006, 0.002, 0.014), 0.0, 0.08),
     orbglow=C.mk_mat("nyx_orb_glow", (0.55, 0.20, 0.95), 0.0, 0.2, emit=(0.6, 0.2, 1.0), emit_strength=6.0),
-    orbhalo=C.mk_mat("nyx_orb_halo", (0.40, 0.14, 0.75), 0.0, 0.2, emit=(0.4, 0.12, 0.8), emit_strength=1.5, alpha=0.18),
+    orbhalo=C.mk_mat("nyx_orb_halo", (0.40, 0.14, 0.75), 0.0, 0.2, emit=(0.4, 0.12, 0.8), emit_strength=1.0, alpha=0.08),
 )
 GOLD, GEM = M["gold"], M["gem"]
+T.apply_pbr(CM["net"], base=_lp, base_alpha=True, alpha_clip=0.3)
+CM["net"].node_tree.nodes["Principled BSDF"].inputs["Roughness"].default_value = 0.5
+T.apply_pbr(CM["cloth"], base=os.path.join(TEX, "cloth_base.png"), mr=os.path.join(TEX, "cloth_mr.png"), nrm=os.path.join(TEX, "cloth_normal.png"), normal_strength=0.9)
+T.apply_pbr(CM["hem"], base=os.path.join(TEX, "hem_base.png"), mr=os.path.join(TEX, "hem_mr.png"), nrm=os.path.join(TEX, "hem_normal.png"), normal_strength=0.9, emit=os.path.join(TEX, "hem_base.png"), emit_strength=0.25)
+T.apply_pbr(CM["orb"], emit=os.path.join(TEX, "orb_swirl.png"), emit_strength=4.5)
+CM["scalp"] = C.mk_mat("nyx_scalp", (0.004, 0.002, 0.008), 0.0, 0.6)
 body.data.materials.clear(); body.data.materials.append(M["skin"])
 
 gi = lambda names: C.gindex(body, names)
@@ -647,7 +743,7 @@ parts["torso"] = C.shell(body, "nyx_torso_net", pred_torso, 0.0024, CM["net"], s
 parts["glove"] = C.shell(body, "nyx_gloves", pred_glove, 0.0034, CM["glove"], sc)
 parts["shoe"] = C.shell(body, "nyx_shoes", pred_shoe, 0.0090, CM["shoe"], sc)
 parts["collar"] = C.shell(body, "nyx_collar", pred_collar, 0.0042, CM["lace"], sc)
-parts["scalp"] = C.shell(body, "nyx_scalp", lambda f, dl: wsum(f, dl, G_SCALP) > 0.4 and cen(f).z > 1.70, 0.0060, HM[0], sc)
+parts["scalp"] = C.shell(body, "nyx_scalp", lambda f, dl: wsum(f, dl, G_SCALP) > 0.4 and cen(f).z > 1.72 and cen(f).y > -0.040, 0.0060, CM["scalp"], sc)
 for k in ("bra", "brief", "stock", "torso", "collar"):
     C.relax_boundary(parts[k], 10, 0.5)
 
@@ -924,7 +1020,7 @@ def sphere_bm(bm, loc, r, scale=(1, 1, 1), rot=None, seg=20, mat_idx=0):
     if rot is not None:
         m = m @ rot.to_matrix().to_4x4()
     m = m @ Matrix.Diagonal((*scale, 1.0))
-    ret = bmesh.ops.create_uvsphere(bm, u_segments=seg, v_segments=seg // 2, radius=r, matrix=m)
+    ret = bmesh.ops.create_uvsphere(bm, u_segments=seg, v_segments=seg // 2, radius=r, matrix=m, calc_uvs=True)
     for v in ret["verts"]:
         for f in v.link_faces:
             f.material_index = mat_idx
@@ -1003,6 +1099,10 @@ bpy.context.view_layer.update()
 ENGINE = prm("engine", "BLENDER_WORKBENCH")
 sc.render.engine = ENGINE
 if ENGINE == "CYCLES":
+    try:
+        sc.view_settings.view_transform = "Filmic"; sc.view_settings.look = "Medium High Contrast"
+    except Exception as _e:
+        print("VIEW", _e)
     sc.cycles.device = "CPU"; sc.cycles.samples = prm("samples", 64); sc.cycles.use_denoising = False; sc.cycles.max_bounces = 6
 sc.display.shading.light = "STUDIO"; sc.display.shading.color_type = "MATERIAL"
 sc.display.shading.show_cavity = True
@@ -1016,8 +1116,8 @@ if ENGINE == "CYCLES":
         lo.rotation_euler = (Vector((0, -0.02, 1.0)) - Vector(loc)).normalized().to_track_quat("-Z", "Y").to_euler()
     area("key", (-2.0, -3.2, 3.0), 420, (1.0, 0.93, 0.86), 2.0)
     area("fill", (3.0, -2.6, 1.6), 90, (0.80, 0.82, 1.0), 2.5)
-    area("rim", (1.6, 3.0, 2.6), 150, (0.62, 0.36, 0.95), 1.8)
-    area("rim2", (-2.2, 2.6, 2.4), 110, (0.55, 0.45, 1.0), 1.8)
+    area("rim", (1.6, 3.0, 2.6), 105, (0.78, 0.62, 1.0), 1.8)
+    area("rim2", (-2.2, 2.6, 2.4), 75, (0.72, 0.62, 1.0), 1.8)
 cam = bpy.data.cameras.new("cam"); cam.type = "ORTHO"
 co_ = bpy.data.objects.new("cam", cam); sc.collection.objects.link(co_); sc.camera = co_
 

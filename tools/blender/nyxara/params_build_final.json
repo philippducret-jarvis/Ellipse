@@ -1,10 +1,10 @@
 {
- "strands": 900,
- "ribbon_w": 0.015,
- "ribbon_pts": 16,
+ "strands": 520,
+ "ribbon_w": 0.017,
+ "ribbon_pts": 26,
  "spread": 0.28,
  "engine": "CYCLES",
- "samples": 110,
+ "samples": 128,
  "shots": [
   "full_front",
   "full_34",

@@ -271,6 +271,24 @@ def export(path):
                               export_materials="EXPORT", export_extras=False, export_cameras=False, export_lights=False)
     return os.path.getsize(path)
 
+def retex(tag, max_side):
+    from PIL import Image
+    d = os.path.join(OUT, "tex_" + tag); os.makedirs(d, exist_ok=True)
+    for img in list(bpy.data.images):
+        fp = bpy.path.abspath(img.filepath)
+        if not fp or not os.path.exists(fp):
+            continue
+        im = Image.open(fp)
+        w, h = im.size
+        k = min(1.0, max_side / max(w, h))
+        if k >= 0.999:
+            continue
+        im = im.resize((max(64, int(w * k)), max(64, int(h * k))), Image.LANCZOS)
+        newp = os.path.join(d, os.path.basename(fp))
+        im.save(newp)
+        img.filepath = newp
+        img.reload()
+
 def lod_stage(tag, ratio_map, drop=()):
     for o in list(sc.objects):
         if o.type == "MESH" and o.name in drop:
@@ -291,9 +309,11 @@ def lod_stage(tag, ratio_map, drop=()):
 
 t, v, m = stats(); s = export(os.path.join(OUT, "nyxara_lod0.glb"))
 report["lods"]["lod0"] = dict(triangles=t, vertices=v, materials=m, bytes=s); print("LOD0", t, v, m, s)
+retex("lod1", 1024)
 lod_stage("lod1", {"nyx_body": 0.34, "nyx_costume": 0.30, "nyx_jewelry": 0.28, "nyx_lattice": 0.22, "nyx_hair": 0.33, "nyx_cloth": 0.26, "nyx_props": 0.40, "nyx_face": 0.45})
 t, v, m = stats(); s = export(os.path.join(OUT, "nyxara_lod1.glb"))
 report["lods"]["lod1"] = dict(triangles=t, vertices=v, materials=m, bytes=s); print("LOD1", t, v, m, s)
+retex("lod2", 512)
 lod_stage("lod2", {"nyx_body": 0.30, "nyx_costume": 0.30, "nyx_jewelry": 0.30, "nyx_hair": 0.30, "nyx_cloth": 0.30, "nyx_props": 0.45, "nyx_face": 0.40}, drop=("nyx_lattice",))
 t, v, m = stats(); s = export(os.path.join(OUT, "nyxara_lod2.glb"))
 report["lods"]["lod2"] = dict(triangles=t, vertices=v, materials=m, bytes=s); print("LOD2", t, v, m, s)

@@ -227,11 +227,15 @@ def panel(scene, name, top_fn, nu, nv, length_fn, offset_fn, mat_body, mat_hem, 
             p = top + dn * (Lu * v) + offset_fn(u, v) + Vector((wave * math.sin(u * 17 + v * 5 + seed), wave * 0.6 * math.sin(u * 11 + v * 7 + seed * 2), 0)) * v
             row.append(bm.verts.new(p))
         rows.append(row)
+    uvl = bm.loops.layers.uv.new("UVMap")
     for j in range(nv):
         for i in range(nu):
-            f = bm.faces.new((rows[j][i], rows[j][i + 1], rows[j + 1][i + 1], rows[j + 1][i]))
+            vs = (rows[j][i], rows[j][i + 1], rows[j + 1][i + 1], rows[j + 1][i])
+            f = bm.faces.new(vs)
             f.smooth = True
             f.material_index = 1 if (j / nv) > (1 - hem_frac) else 0
+            for l, (ii, jj) in zip(f.loops, ((i, j), (i + 1, j), (i + 1, j + 1), (i, j + 1))):
+                l[uvl].uv = (ii / nu * 3.0, jj / nv * 8.0)
     me = bpy.data.meshes.new(name)
     bm.to_mesh(me); bm.free()
     ob = bpy.data.objects.new(name, me)
