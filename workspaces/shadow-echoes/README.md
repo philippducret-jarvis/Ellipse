@@ -16,6 +16,8 @@ La [revue de profondeur V9](00_brief/documents/27_profondeur_reference_seraphine
 
 La [variante de frappe V10](00_brief/documents/28_frappe_alpha_seraphine_2026_09_29.md) teste une nouvelle pose issue de la planche et découpée avec un alpha PNG. La [capture en portrait](02_production/lot-15/seraphine-v10-portrait-attack-review.png) et la [capture à taille de combat](02_production/lot-15/seraphine-v10-combat-attack-review.png) permettent de comparer le visage et les fins cheveux à la V6. V10 reste un candidat non approuvé ; la V6 reste chargée par défaut.
 
+La [campagne 2,5D avec arcade V3](00_brief/documents/29_arcade_et_cadrage_campagne_2026_09_29.md) est maintenant le cadrage 3D par défaut sur écran large : arcs gothiques en pierre, piliers à plusieurs profondeurs et pont visible sous les huit rangs. La [capture desktop](02_production/lot-15/campaign-arcade-v3-desktop.png) se compare à [l'ancienne vue conservée](02_production/lot-15/campaign-legacy-v2-desktop.png). Cette dernière reste accessible avec `?camera=legacy&environment=legacy-v2`; les petits écrans gardent l'ancien cadrage.
+
 Deuxième lot jouable d’un RPG gothique : hub central, quatre Mythiques, dix activités, trois gardiens, trois rituels d’invocation, neuf équipements, six reliques, arbres de talents, XP et ascensions. Section créée le 23 septembre 2026 à partir des trois archives fournies par l’utilisateur.
 
 ## Accès dans Ellipse

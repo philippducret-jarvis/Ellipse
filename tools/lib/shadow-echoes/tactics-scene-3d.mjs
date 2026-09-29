@@ -30,22 +30,23 @@ const alive=unit=>unit.hp>0;
 
 /** One renderer for the entire encounter. The HTML grid remains the accessible input layer. */
 export function createTacticsScene3D(host,{reduced=false}={}){
- const params=new URLSearchParams(location.search),useReferenceEnemies=['lookdev-v2','lookdev-v3','lookdev-v4','lookdev-v5','lookdev-v6','lookdev-v7','lookdev-v8','lookdev-v9','lookdev-v10'].includes(params.get('seraphine')??'lookdev-v6'),portraitReview=params.get('camera')==='portrait',heroReview=portraitReview||params.get('camera')==='seraphine',yawParam=Number(params.get('reviewYaw')),reviewYaw=Number.isFinite(yawParam)?Math.max(-.25,Math.min(.25,yawParam)):0;
+ const params=new URLSearchParams(location.search),cameraMode=params.get('camera'),useReferenceEnemies=['lookdev-v2','lookdev-v3','lookdev-v4','lookdev-v5','lookdev-v6','lookdev-v7','lookdev-v8','lookdev-v9','lookdev-v10'].includes(params.get('seraphine')??'lookdev-v6'),portraitReview=cameraMode==='portrait',heroReview=portraitReview||cameraMode==='seraphine',cinematicReview=cameraMode==='cinematic'||(!cameraMode&&window.innerWidth>=900),yawParam=Number(params.get('reviewYaw')),reviewYaw=Number.isFinite(yawParam)?Math.max(-.25,Math.min(.25,yawParam)):0;
+ host.closest('.scene')?.classList.toggle('camera-cinematic',cinematicReview);
  const renderer=new T.WebGLRenderer({alpha:false,antialias:true,powerPreference:'high-performance'});
  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.35));renderer.outputColorSpace=T.SRGBColorSpace;
  renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.28;
  renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
  renderer.domElement.dataset.renderer='tactics-volume-3d';renderer.domElement.setAttribute('aria-hidden','true');host.append(renderer.domElement);
  const scene=new T.Scene(),camera=new T.OrthographicCamera(-4.68,4.68,2.1,-2.1,.1,80);
- camera.position.set(heroReview?-1.5:0,5.3,14);camera.lookAt(heroReview?-1.5:0,portraitReview?1.43:1.45,0);host.dataset.camera=portraitReview?'seraphine-portrait':heroReview?'seraphine-review':'formation';
+ camera.position.set(heroReview?-1.5:0,cinematicReview?4.65:5.3,14);camera.lookAt(heroReview?-1.5:0,portraitReview?1.43:cinematicReview?.8:1.45,0);host.dataset.camera=portraitReview?'seraphine-portrait':heroReview?'seraphine-review':cinematicReview?'formation-cinematic':'formation';
  scene.add(new T.HemisphereLight('#c7d4ec','#3b2633',2.2));
  const key=new T.DirectionalLight('#ffe3c1',3.2);key.position.set(-3,7,5);key.castShadow=true;key.shadow.mapSize.set(1024,1024);key.shadow.camera.left=-6;key.shadow.camera.right=6;key.shadow.camera.top=5;key.shadow.camera.bottom=-5;scene.add(key);
  const rim=new T.DirectionalLight('#ec485d',1.9);rim.position.set(4,4,-5);scene.add(rim);
  const stone=new T.MeshStandardMaterial({color:'#95939a',roughness:.98}),mortar=new T.MeshStandardMaterial({color:'#2c2933',roughness:1}),edge=new T.MeshStandardMaterial({color:'#5a555d',roughness:.94}),gold=new T.MeshStandardMaterial({color:'#aa8460',metalness:.5,roughness:.5}),red=new T.MeshStandardMaterial({color:'#8f283e',roughness:.85,side:T.DoubleSide});
  const cellGeo=new T.BoxGeometry(.96,.17,.7),boxGeo=new T.BoxGeometry(1,1,1),actors=new Map(),cells=[];
  const mesh=(geo,material,x,y,z,sx=1,sy=1,sz=1,parent=scene)=>{const object=new T.Mesh(geo,material);object.position.set(x,y,z);object.scale.set(sx,sy,sz);object.castShadow=true;object.receiveShadow=true;parent.add(object);return object;};
- const environment=createTacticsEnvironment(scene,{reduced});
- host.dataset.environment='modeled-v2';host.dataset.environmentDepth='3';host.dataset.environmentParts=String(Object.values(environment.parts).reduce((a,b)=>a+b,0));
+ const arcadeReview=params.get('environment')==='arcade-v3'||(!params.has('environment')&&cinematicReview),environment=createTacticsEnvironment(scene,{reduced,arcade:arcadeReview});
+ host.dataset.environment=arcadeReview?'modeled-arcade-v3':'modeled-v2';host.dataset.environmentDepth=arcadeReview?'4':'3';host.dataset.environmentParts=String(Object.values(environment.parts).reduce((a,b)=>a+b,0));host.dataset.environmentArcadeParts=String(environment.parts.arcade);
  for(let lane=0;lane<LANES;lane++)for(let x=0;x<WIDTH;x++){
   const at=tilePosition(x,lane),material=stone.clone();material.color.offsetHSL(0,0,((x*7+lane*11)%9-4)*.012);
   const block=mesh(cellGeo,material,at.x,-.025,at.z);block.rotation.y=((x+lane)%3-1)*.011;cells.push({x,lane,block,material});

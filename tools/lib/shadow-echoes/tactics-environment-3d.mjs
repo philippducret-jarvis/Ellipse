@@ -3,7 +3,7 @@ import * as T from './vendor/three.module.js';
 /** Physical depth layers for the tactical arena. The sky is procedural, never
  * the illustration displayed by the 2D mode. All architecture is actual mesh.
  */
-export function createTacticsEnvironment(scene,{reduced=false}={}){
+export function createTacticsEnvironment(scene,{reduced=false,arcade=false}={}){
  const sin=Math.sin;
  const sky=document.createElement('canvas');sky.width=1024;sky.height=512;
  const ctx=sky.getContext('2d');const gradient=ctx.createLinearGradient(0,0,0,512);
@@ -31,7 +31,7 @@ export function createTacticsEnvironment(scene,{reduced=false}={}){
  const flameCore=new T.MeshBasicMaterial({color:'#ffd08a',transparent:true,opacity:.78,depthWrite:false});
  const windowMat=new T.MeshBasicMaterial({color:'#c46368',transparent:true,opacity:.72,side:T.DoubleSide});
  const fogMat=new T.MeshBasicMaterial({color:'#85606e',transparent:true,opacity:.08,depthWrite:false,side:T.DoubleSide});
- const parts={towers:0,arches:0,blocks:0,torches:0,chains:0};
+ const parts={towers:0,arches:0,blocks:0,torches:0,chains:0,arcade:0};
  function mesh(geo,mat,x,y,z,sx=1,sy=1,sz=1,group=root){const item=new T.Mesh(geo,mat);item.position.set(x,y,z);item.scale.set(sx,sy,sz);item.castShadow=mat!==farStone&&mat!==fogMat;item.receiveShadow=mat!==fogMat;group.add(item);return item;}
  function block(x,y,z,w,h,d,mat=stone){parts.blocks++;return mesh(box,mat,x,y,z,w,h,d);}
  function arch(x,y,z,r,material=stone){const arc=mesh(new T.TorusGeometry(r,.085,7,24,Math.PI),material,x,y,z);parts.arches++;return arc;}
@@ -60,6 +60,43 @@ export function createTacticsEnvironment(scene,{reduced=false}={}){
   block(x,.76,-3.01,.18,.98,.08,darkStone);
  }
  for(const x of [-3.35,3.38])arch(x,1.95,-3.34,.56,stone);
+ if(arcade){
+  // A row of pointed bays sits in front of the vista. Its open spans retain
+  // the distant city, while real stone jambs and two rib depths move in parallax.
+  const rib=(center,side,z,material,width)=>{
+   const curve=new T.QuadraticBezierCurve3(
+    new T.Vector3(center+side*1.08,1.55,z),
+    new T.Vector3(center+side*.89,2.86,z),
+    new T.Vector3(center,3.03,z)
+   );
+   for(let i=0;i<9;i++){
+    const start=curve.getPoint(i/9),end=curve.getPoint((i+1)/9);
+    const dx=end.x-start.x,dy=end.y-start.y;
+    const stonePiece=mesh(box,material,(start.x+end.x)/2,(start.y+end.y)/2,z,width,Math.hypot(dx,dy)*.965,.42);
+    stonePiece.rotation.z=Math.atan2(-dx,dy);
+    parts.arcade++;
+   }
+  };
+  for(const x of [-5.55,-2.85,-.15,2.55,5.25]){
+   block(x,.61,-2.49,.31,2.02,.64,darkStone);
+   block(x,1.61,-2.37,.43,.18,.70,stone);
+   block(x,-.33,-2.37,.43,.19,.75,stone);
+   block(x,.77,-2.29,.075,1.42,.11,stone);
+   for(let row=0;row<5;row++)block(x+(row%2?.045:-.045),-.12+row*.32,-2.15,.26,.035,.12,stone);
+   parts.arcade++;
+  }
+  for(const center of [-4.2,-1.5,1.2,3.9]){
+   for(const side of [-1,1]){
+    rib(center,side,-2.22,stone,.18);
+    rib(center,side,-2.53,darkStone,.13);
+   }
+   block(center,3.27,-2.43,2.7,.39,.62,darkStone);
+   block(center,3.51,-2.29,2.67,.09,.70,stone);
+   block(center,3.13,-2.14,2.52,.055,.11,stone);
+   const rose=mesh(new T.TorusGeometry(.12,.025,6,12),gold,center,3.29,-2.08);rose.castShadow=false;
+   parts.arcade++;
+  }
+ }
  const banners=[];
  const bannerCanvas=document.createElement('canvas');bannerCanvas.width=256;bannerCanvas.height=512;
  const bannerCtx=bannerCanvas.getContext('2d'),bannerGradient=bannerCtx.createLinearGradient(0,0,256,0);

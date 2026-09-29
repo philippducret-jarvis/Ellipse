@@ -23,3 +23,16 @@
 .scene.volume-ready .arena{z-index:3}
 .scene.volume-ready .scene-vignette{z-index:2;pointer-events:none;background:linear-gradient(180deg,#0b101955 0%,transparent 30%,transparent 72%,#0b111b55 100%)}
 .scene.volume-ready .chapter,.scene.volume-ready .battle-top,.scene.volume-ready .scene-note{z-index:4}
+
+/* The lowered campaign camera reveals the bridge. Keep the hit targets full
+   height while moving their visible labels to the actors' feet. */
+.scene.volume-ready.camera-cinematic .tile{border-color:transparent}
+.scene.volume-ready.camera-cinematic .tile.reachable{background:linear-gradient(#ddc07b26,transparent 35%)}
+.scene.volume-ready.camera-cinematic .tile.intent{background:linear-gradient(#e65b6833,transparent 38%)}
+.scene.volume-ready.camera-cinematic .tile:hover{border-color:#e5c48b77}
+.scene.volume-ready.camera-cinematic .unit .name{top:26px;bottom:auto}
+.scene.volume-ready.camera-cinematic .unit .hpbar{top:48px;bottom:auto;width:70%}
+.scene.volume-ready.camera-cinematic .unit.selected,.scene.volume-ready.camera-cinematic .unit.legal{outline:none}
+.scene.volume-ready.camera-cinematic .unit.selected::after,.scene.volume-ready.camera-cinematic .unit.legal::after{content:'';position:absolute;top:0;left:3px;right:3px;height:65px;border:2px solid #f7d78e;background:linear-gradient(#f7d78e18,transparent);pointer-events:none}
+.scene.volume-ready.camera-cinematic .unit.legal::after{border-color:#f4cf87;background:linear-gradient(#f4cf871e,transparent)}
+@media(max-width:650px){.scene.volume-ready.camera-cinematic .unit .name{top:18px}.scene.volume-ready.camera-cinematic .unit .hpbar{top:35px}.scene.volume-ready.camera-cinematic .unit.selected::after,.scene.volume-ready.camera-cinematic .unit.legal::after{height:48px}}
