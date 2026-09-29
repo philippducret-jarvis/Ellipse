@@ -10,7 +10,7 @@ const yawArgument=process.argv.find(argument=>argument.startsWith('--yaw='));
 const yaw=yawArgument?Number(yawArgument.slice('--yaw='.length)):0;
 const arcade=process.argv.includes('--arcade');
 assert.ok(Number.isFinite(yaw)&&Math.abs(yaw)<=.25);
-assert.ok(['lookdev-v3','lookdev-v4','lookdev-v5','lookdev-v6','lookdev-v7','lookdev-v8','lookdev-v9','lookdev-v10'].includes(version));
+assert.ok(['lookdev-v3','lookdev-v4','lookdev-v5','lookdev-v6','lookdev-v7','lookdev-v8','lookdev-v9','lookdev-v10','lookdev-v12'].includes(version));
 const out='workspaces/shadow-echoes/02_production/lot-15/qa';
 await mkdir(out,{recursive:true});
 const browser=await chromium.launch({headless:true});
@@ -25,6 +25,7 @@ try{
  catch(error){console.error('Etat du rendu :',await page.locator('#arena-volume').evaluate(node=>({...node.dataset})).catch(()=>null),'Erreurs :',errors);throw error;}
  if(version==='lookdev-v7')await page.locator('#arena-volume[data-seraphine-motion="reference-hair-region-and-keyposes"]').waitFor();
  if(version==='lookdev-v8')await page.locator('#arena-volume[data-seraphine-motion="reference-hair-cloth-and-keyposes"]').waitFor();
+ if(version==='lookdev-v12')await page.locator('#arena-volume[data-seraphine-motion="reference-hair-cloth-with-base"]').waitFor();
  if(version==='lookdev-v9'){
   await page.locator('#arena-volume[data-seraphine-depth="reference-heightfield-v1"]').waitFor();
   const depthRange=Number(await page.locator('#arena-volume').getAttribute('data-seraphine-depth-range'));
@@ -50,7 +51,7 @@ try{
  await page.waitForTimeout(500);
  const cameraLabel=(camera.includes('portrait')?'-portrait':camera.includes('cinematic')?'-cinematic':camera.includes('legacy')?'-legacy':camera?'-focus':'')+(reduced?'-reduced':'')+(yawArgument?`-yaw-${String(yaw).replace('.','_')}`:'')+(arcade?'-arcade':'')+(mobile?'-mobile':'');
  await page.screenshot({path:`${out}/seraphine-${version}${cameraLabel}-battle.png`});
- if(version==='lookdev-v8'){await page.waitForTimeout(900);await page.screenshot({path:`${out}/seraphine-${version}${cameraLabel}-idle-late.png`});}
+ if(version==='lookdev-v8'||version==='lookdev-v12'){await page.waitForTimeout(900);await page.screenshot({path:`${out}/seraphine-${version}${cameraLabel}-idle-late.png`});}
  await page.locator('[data-action=basic]').click();
  await page.locator('#arena [data-unit=sentry-a]').click();
  await page.locator('#arena-volume[data-seraphine-pose="windup"]').waitFor({timeout:15000});

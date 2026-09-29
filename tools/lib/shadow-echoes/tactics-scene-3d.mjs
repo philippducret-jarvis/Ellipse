@@ -22,7 +22,8 @@ const seraphineLookdevSets={
  'lookdev-v7':{idle:'../turnaround-v1.png',windup:'../turnaround-v1.png',attack:'seraphine-reference-attack-key-v6.png',mattes:['seraphine-reference-front-matte-v4.png','seraphine-reference-quarter-matte-v5.png','seraphine-reference-attack-matte-v6.png'],idleWidth:1.02,frontCrop:422/1536,keyCrops:[{offset:1147/1536,repeat:389/1536},null],keyWidths:[1.02,1.63],hairRegion:'seraphine-reference-hair-region-v7.png'},
  'lookdev-v8':{idle:'../turnaround-v1.png',windup:'../turnaround-v1.png',attack:'seraphine-reference-attack-key-v6.png',mattes:['seraphine-reference-front-matte-v4.png','seraphine-reference-quarter-matte-v5.png','seraphine-reference-attack-matte-v6.png'],idleWidth:1.02,frontCrop:422/1536,keyCrops:[{offset:1147/1536,repeat:389/1536},null],keyWidths:[1.02,1.63],hairRegion:'seraphine-reference-hair-region-v7.png',clothRegion:'seraphine-reference-cloth-region-v8.png'},
  'lookdev-v9':{idle:'../turnaround-v1.png',windup:'../turnaround-v1.png',attack:'seraphine-reference-attack-key-v6.png',mattes:['seraphine-reference-front-matte-v4.png','seraphine-reference-quarter-matte-v5.png','seraphine-reference-attack-matte-v6.png'],idleWidth:1.02,frontCrop:422/1536,keyCrops:[{offset:1147/1536,repeat:389/1536},null],keyWidths:[1.02,1.63],depthMap:'seraphine-reference-depth-v9.png'},
- 'lookdev-v10':{idle:'../turnaround-v1.png',windup:'../turnaround-v1.png',attack:'seraphine-reference-attack-alpha-v10.png',mattes:['seraphine-reference-front-matte-v4.png','seraphine-reference-quarter-matte-v5.png',null],idleWidth:1.02,frontCrop:422/1536,keyCrops:[{offset:1147/1536,repeat:389/1536},null],keyWidths:[1.02,1.63]}
+ 'lookdev-v10':{idle:'../turnaround-v1.png',windup:'../turnaround-v1.png',attack:'seraphine-reference-attack-alpha-v10.png',mattes:['seraphine-reference-front-matte-v4.png','seraphine-reference-quarter-matte-v5.png',null],idleWidth:1.02,frontCrop:422/1536,keyCrops:[{offset:1147/1536,repeat:389/1536},null],keyWidths:[1.02,1.63]},
+ 'lookdev-v12':{idle:'../turnaround-v1.png',windup:'../turnaround-v1.png',attack:'seraphine-reference-attack-key-v6.png',mattes:['seraphine-reference-front-matte-v4.png','seraphine-reference-quarter-matte-v5.png','seraphine-reference-attack-matte-v6.png'],idleWidth:1.02,frontCrop:422/1536,keyCrops:[{offset:1147/1536,repeat:389/1536},null],keyWidths:[1.02,1.63],hairRegion:'seraphine-reference-hair-region-v7.png',clothRegion:'seraphine-reference-cloth-region-v8.png',preserveIdleBase:true}
 };
 const tilePosition=(x,lane)=>new T.Vector3(x-(WIDTH-1)/2,0,(lane-(LANES-1)/2)*.75);
 const actorPosition=(x,lane)=>tilePosition(x,lane);
@@ -30,7 +31,7 @@ const alive=unit=>unit.hp>0;
 
 /** One renderer for the entire encounter. The HTML grid remains the accessible input layer. */
 export function createTacticsScene3D(host,{reduced=false}={}){
- const params=new URLSearchParams(location.search),cameraMode=params.get('camera'),useReferenceEnemies=['lookdev-v2','lookdev-v3','lookdev-v4','lookdev-v5','lookdev-v6','lookdev-v7','lookdev-v8','lookdev-v9','lookdev-v10'].includes(params.get('seraphine')??'lookdev-v6'),portraitReview=cameraMode==='portrait',heroReview=portraitReview||cameraMode==='seraphine',cinematicReview=cameraMode==='cinematic'||(!cameraMode&&window.innerWidth>=900),yawParam=Number(params.get('reviewYaw')),reviewYaw=Number.isFinite(yawParam)?Math.max(-.25,Math.min(.25,yawParam)):0;
+ const params=new URLSearchParams(location.search),cameraMode=params.get('camera'),useReferenceEnemies=['lookdev-v2','lookdev-v3','lookdev-v4','lookdev-v5','lookdev-v6','lookdev-v7','lookdev-v8','lookdev-v9','lookdev-v10','lookdev-v12'].includes(params.get('seraphine')??'lookdev-v12'),portraitReview=cameraMode==='portrait',heroReview=portraitReview||cameraMode==='seraphine',cinematicReview=cameraMode==='cinematic'||(!cameraMode&&window.innerWidth>=900),yawParam=Number(params.get('reviewYaw')),reviewYaw=Number.isFinite(yawParam)?Math.max(-.25,Math.min(.25,yawParam)):0;
  host.closest('.scene')?.classList.toggle('camera-cinematic',cinematicReview);
  const renderer=new T.WebGLRenderer({alpha:false,antialias:true,powerPreference:'high-performance'});
  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.35));renderer.outputColorSpace=T.SRGBColorSpace;
@@ -111,15 +112,17 @@ export function createTacticsScene3D(host,{reduced=false}={}){
   material.customProgramCacheKey=()=>`seraphine-region-${overlay?'overlay':'base'}`;
   material.needsUpdate=true;
  }
- function setTwoRegionMask(material,hair,cloth,layer){
+ function setTwoRegionMask(material,hair,cloth,layer,preserveBase=false){
   material.userData.regionMap=hair;material.userData.clothMap=cloth;
   material.onBeforeCompile=shader=>{
    shader.uniforms.hairMap={value:hair};shader.uniforms.clothMap={value:cloth};
    shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nuniform sampler2D hairMap;\nuniform sampler2D clothMap;');
-   const weight=layer==='hair'?'hairCut':layer==='cloth'?'clothCut':'(1.0-hairCut)*(1.0-clothCut)';
-   shader.fragmentShader=shader.fragmentShader.replace('#include <alphamap_fragment>',`#include <alphamap_fragment>\nfloat regionX=vAlphaMapUv.x/0.2747396;\nfloat regionSide=step(0.18,abs(regionX-0.5));\nfloat regionHead=step(0.76,vAlphaMapUv.y);\nfloat hairCut=step(0.967,texture2D(hairMap,vAlphaMapUv).g)*max(regionSide,regionHead);\nfloat clothCut=step(0.967,texture2D(clothMap,vAlphaMapUv).g)*regionSide*(1.0-hairCut);\ndiffuseColor.a*=${weight};`);
+   const weight=layer==='hair'?'hairCut':layer==='cloth'?'clothCut':preserveBase?'1.0':'(1.0-hairCut)*(1.0-clothCut)';
+   const threshold=preserveBase?'smoothstep(0.82,0.985,':'step(0.967,';
+   const close=')';
+   shader.fragmentShader=shader.fragmentShader.replace('#include <alphamap_fragment>',`#include <alphamap_fragment>\nfloat regionX=vAlphaMapUv.x/0.2747396;\nfloat regionSide=step(0.18,abs(regionX-0.5));\nfloat regionHead=step(0.76,vAlphaMapUv.y);\nfloat hairCut=${threshold}texture2D(hairMap,vAlphaMapUv).g${close}*max(regionSide,regionHead);\nfloat clothCut=${threshold}texture2D(clothMap,vAlphaMapUv).g${close}*regionSide*(1.0-hairCut);\ndiffuseColor.a*=${weight};`);
   };
-  material.customProgramCacheKey=()=>`seraphine-regions-${layer}`;
+  material.customProgramCacheKey=()=>`seraphine-regions-${layer}-${preserveBase}`;
   material.needsUpdate=true;
  }
  function displaceReference(mesh,image,crop){
@@ -146,7 +149,7 @@ export function createTacticsScene3D(host,{reduced=false}={}){
   entry.pivot.remove(entry.enemy.root);geometries.forEach(geometry=>geometry.dispose());entry.enemy.materials.forEach(material=>material.dispose());entry.enemy=null;entry.enemySprite=sprite;entry.pivot.add(sprite);
   host.dataset.enemyVisuals='guardian-portraits-v1';host.dataset.enemySprites=String([...actors.values()].filter(actor=>actor.enemySprite).length);
  }catch(error){console.warn('Planche des gardiens indisponible ; sentinelles en volume conservées.',error);}}
- async function loadSeraphineSkin(entry){try{const requested=new URLSearchParams(location.search).get('seraphine')??'lookdev-v6',lookdev=seraphineLookdevSets[requested];if(lookdev){
+ async function loadSeraphineSkin(entry){try{const requested=new URLSearchParams(location.search).get('seraphine')??'lookdev-v12',lookdev=seraphineLookdevSets[requested];if(lookdev){
   const texture=await new T.TextureLoader().loadAsync(lookdevBase+lookdev.idle);
   if(disposed||actors.get(entry.id)!==entry){texture.dispose();return;}
   texture.colorSpace=T.SRGBColorSpace;texture.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());
@@ -175,7 +178,7 @@ export function createTacticsScene3D(host,{reduced=false}={}){
    const region=await new T.TextureLoader().loadAsync(lookdevBase+lookdev.hairRegion);
    if(disposed||actors.get(entry.id)!==entry){region.dispose();return;}
    region.repeat.set(lookdev.frontCrop,1);region.needsUpdate=true;
-   setRegionMask(sprite.material,region,false);
+   if(!lookdev.preserveIdleBase)setRegionMask(sprite.material,region,false);
    const hairMap=texture.clone(),hairMatte=sprite.material.alphaMap.clone();hairMap.needsUpdate=true;hairMatte.needsUpdate=true;
    const hairGeometry=new T.PlaneGeometry(lookdev.idleWidth,2.45,12,24);
    const hair=new T.Mesh(hairGeometry,new T.MeshBasicMaterial({map:hairMap,alphaMap:hairMatte,transparent:true,alphaTest:.965,side:T.DoubleSide,depthWrite:false,toneMapped:false}));
@@ -188,12 +191,13 @@ export function createTacticsScene3D(host,{reduced=false}={}){
    if(disposed||actors.get(entry.id)!==entry){clothRegion.dispose();return;}
    clothRegion.repeat.set(lookdev.frontCrop,1);clothRegion.needsUpdate=true;
    const hairRegion=entry.referenceSprite.material.userData.regionMap;
-   setTwoRegionMask(sprite.material,hairRegion,clothRegion,'base');
-   setTwoRegionMask(entry.hairSprite.material,hairRegion,clothRegion,'hair');
+   setTwoRegionMask(sprite.material,hairRegion,clothRegion,'base',lookdev.preserveIdleBase);
+   setTwoRegionMask(entry.hairSprite.material,hairRegion,clothRegion,'hair',lookdev.preserveIdleBase);
+   if(lookdev.preserveIdleBase)entry.hairSprite.material.alphaTest=.05;
    const clothMap=texture.clone(),clothMatte=sprite.material.alphaMap.clone();clothMap.needsUpdate=true;clothMatte.needsUpdate=true;
    const clothGeometry=new T.PlaneGeometry(lookdev.idleWidth,2.45,12,24);
    const cloth=new T.Mesh(clothGeometry,new T.MeshBasicMaterial({map:clothMap,alphaMap:clothMatte,transparent:true,alphaTest:.965,side:T.DoubleSide,depthWrite:false,toneMapped:false}));
-   setTwoRegionMask(cloth.material,hairRegion,clothRegion,'cloth');cloth.userData.rest=Float32Array.from(clothGeometry.attributes.position.array);
+   setTwoRegionMask(cloth.material,hairRegion,clothRegion,'cloth',lookdev.preserveIdleBase);if(lookdev.preserveIdleBase)cloth.material.alphaTest=.05;cloth.userData.rest=Float32Array.from(clothGeometry.attributes.position.array);
    cloth.position.y=1.22;cloth.renderOrder=3;cloth.name='Seraphine independently animated reference cloth';entry.clothSprite=cloth;entry.pivot.add(cloth);
    host.dataset.seraphineMotion='reference-hair-cloth-and-keyposes';
   }
@@ -209,7 +213,7 @@ export function createTacticsScene3D(host,{reduced=false}={}){
    if(i===0)entry.windupSprite=key;else entry.attackSprite=key;
    entry.pivot.add(key);
   }
-  host.dataset.seraphineKeyposes=String(1+Number(!!entry.windupSprite)+Number(!!entry.attackSprite));host.dataset.seraphineMattes=String([entry.referenceSprite,entry.windupSprite,entry.attackSprite].filter(pose=>!!pose?.material.alphaMap).length);host.dataset.seraphineAttackAlpha=lookdev.mattes?.[2]?'silhouette-matte':'intrinsic-png';host.dataset.seraphineMotion=entry.clothSprite?'reference-hair-cloth-and-keyposes':entry.hairSprite?'reference-hair-region-and-keyposes':'regional-mesh-and-clean-keyposes';
+  host.dataset.seraphineKeyposes=String(1+Number(!!entry.windupSprite)+Number(!!entry.attackSprite));host.dataset.seraphineMattes=String([entry.referenceSprite,entry.windupSprite,entry.attackSprite].filter(pose=>!!pose?.material.alphaMap).length);host.dataset.seraphineAttackAlpha=lookdev.mattes?.[2]?'silhouette-matte':'intrinsic-png';host.dataset.seraphineMotion=lookdev.preserveIdleBase?'reference-hair-cloth-with-base':entry.clothSprite?'reference-hair-cloth-and-keyposes':entry.hairSprite?'reference-hair-region-and-keyposes':'regional-mesh-and-clean-keyposes';
   return;
  }
  const groomReview=requested==='groom-v4-1',silhouetteReview=requested==='silhouette-v4',surfaceReview=requested==='surface-v3';const modelName=groomReview?'seraphine-silhouette-v4-1-runtime.glb':silhouetteReview?'seraphine-silhouette-v4-runtime.glb':surfaceReview?'seraphine-surface-v3-runtime.glb':'seraphine-atelier-v2-runtime.glb';const gltf=await new GLTFLoader().loadAsync(`../../03_assets/characters/seraphine/modeling/${modelName}`);if(disposed||actors.get(entry.id)!==entry){disposeScene(gltf.scene);return;}entry.pivot.remove(entry.model.root);entry.model.dispose();entry.model=null;gltf.scene.traverse(object=>{if(object.isMesh){object.castShadow=true;object.receiveShadow=true;}});entry.pivot.add(gltf.scene);host.dataset.seraphineMaterials=String(tuneHeroMaterials(gltf.scene,{roughness:.9,metalness:1.1}));entry.gltf={scene:gltf.scene,mixer:new T.AnimationMixer(gltf.scene),clips:new Map(gltf.animations.map(clip=>[clip.name,clip])),playing:null};host.dataset.seraphineModel=groomReview?'groom-v4-1':silhouetteReview?'silhouette-v4':surfaceReview?'surface-v3':'atelier-v2';}catch(error){host.dataset.seraphineModel='fallback';console.warn('Rig skinné de Séraphine indisponible, volume de secours conservé.',error);}}
