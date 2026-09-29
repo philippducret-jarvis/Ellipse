@@ -1,0 +1,5 @@
+# Séraphine V13 — identité de référence pendant la frappe
+
+La frappe V12 est dynamique, mais sa pose générée modifie le visage. La V13 teste l'autre compromis : l'attente utilise les calques V12, puis la préparation et la frappe montrent toutes deux la vue trois quarts de la planche originale. Le plan de la frappe avance et s'incline pendant que l'effet de lame rejoint l'ennemi. Le visage, la coiffure et le costume restent donc les pixels de la référence au cours des trois phases.
+
+La [revue portrait](../../02_production/lot-15/seraphine-v13-portrait-attack-review.png) permet de vérifier l'identité du visage. La [revue à taille de combat](../../02_production/lot-15/seraphine-v13-campaign-attack-review.png) montre la limite du mouvement. Cette variante reste accessible avec `?seraphine=lookdev-v13` et ne remplace pas la V12 : le bras, la lame et les étoffes n'ont pas encore de trajectoire articulée. Elle confirme qu'il faut découper et articuler la vue de référence ou créer un vrai modèle fidèle, plutôt que demander à une nouvelle image générée de reproduire le visage.
