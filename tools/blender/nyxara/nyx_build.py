@@ -51,10 +51,10 @@ M = {
     "gem": mk_mat("nyx_amethyst", (0.50, 0.15, 0.80), 0.0, 0.1, emit=(0.3, 0.08, 0.5)),
 }
 HAIR_COLORS = [
-    ((0.006, 0.003, 0.012), 0.40),
-    ((0.024, 0.010, 0.048), 0.34),
-    ((0.062, 0.022, 0.125), 0.20),
-    ((0.150, 0.055, 0.290), 0.06),
+    ((0.004, 0.002, 0.008), 0.46),
+    ((0.013, 0.006, 0.028), 0.34),
+    ((0.036, 0.013, 0.078), 0.17),
+    ((0.095, 0.036, 0.190), 0.03),
 ]
 HM = [mk_mat("nyx_hair_%d" % i, c, 0.0, 0.62) for i, (c, _) in enumerate(HAIR_COLORS)]
 for _m in HM:
@@ -63,7 +63,7 @@ for _m in HM:
         if _k in _b.inputs:
             _b.inputs[_k].default_value = 0.12
     if "Sheen Weight" in _b.inputs:
-        _b.inputs["Sheen Weight"].default_value = 0.35
+        _b.inputs["Sheen Weight"].default_value = 0.10
         _b.inputs["Sheen Tint"].default_value = (0.5, 0.25, 0.9, 1)
 _sb = M["skin"].node_tree.nodes["Principled BSDF"]
 _sb.inputs["Base Color"].default_value = (0.86, 0.63, 0.57, 1)
@@ -595,8 +595,8 @@ CM = dict(
     net=C.mk_mat("nyx_net_black", (0.010, 0.008, 0.016), 0.0, 0.4, alpha=0.62),
     glove=C.mk_mat("nyx_glove", (0.010, 0.008, 0.016), 0.0, 0.22),
     shoe=C.mk_mat("nyx_shoe", (0.008, 0.006, 0.012), 0.0, 0.18),
-    cloth=C.mk_mat("nyx_cloth_black", (0.014, 0.009, 0.028), 0.0, 0.55),
-    hem=C.mk_mat("nyx_cloth_violet", (0.26, 0.08, 0.46), 0.0, 0.45, emit=(0.16, 0.04, 0.30), emit_strength=0.7),
+    cloth=C.mk_mat("nyx_cloth_black", (0.007, 0.004, 0.014), 0.0, 0.62),
+    hem=C.mk_mat("nyx_cloth_violet", (0.20, 0.06, 0.38), 0.0, 0.5, emit=(0.14, 0.04, 0.26), emit_strength=0.45),
     raven=C.mk_mat("nyx_raven", (0.012, 0.008, 0.022), 0.15, 0.22),
     beak=C.mk_mat("nyx_beak", (0.07, 0.06, 0.09), 0.0, 0.25),
     orb=C.mk_mat("nyx_orb_core", (0.006, 0.002, 0.014), 0.0, 0.08),
@@ -1016,7 +1016,7 @@ if ENGINE == "CYCLES":
         lo.rotation_euler = (Vector((0, -0.02, 1.0)) - Vector(loc)).normalized().to_track_quat("-Z", "Y").to_euler()
     area("key", (-2.0, -3.2, 3.0), 420, (1.0, 0.93, 0.86), 2.0)
     area("fill", (3.0, -2.6, 1.6), 90, (0.80, 0.82, 1.0), 2.5)
-    area("rim", (1.6, 3.0, 2.6), 200, (0.62, 0.36, 0.95), 1.8)
+    area("rim", (1.6, 3.0, 2.6), 150, (0.62, 0.36, 0.95), 1.8)
     area("rim2", (-2.2, 2.6, 2.4), 110, (0.55, 0.45, 1.0), 1.8)
 cam = bpy.data.cameras.new("cam"); cam.type = "ORTHO"
 co_ = bpy.data.objects.new("cam", cam); sc.collection.objects.link(co_); sc.camera = co_
