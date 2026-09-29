@@ -49,6 +49,9 @@ JOINTS = {}
 for side in ("l", "r"):
     for j in ("shoulder", "elbow", "hand", "upper-leg", "knee", "ankle"):
         JOINTS[(side, j)] = joint_pos("joint-%s-%s" % (side, j))
+LANDMARKS = {}
+for j in ("head", "head-2", "neck", "jaw", "mouth", "l-eye", "r-eye", "l-eye-target", "r-eye-target", "l-upperlid", "l-lowerlid", "r-upperlid", "r-lowerlid", "spine-4"):
+    LANDMARKS[j] = joint_pos("joint-" + j)
 print("JOINTS", {("%s-%s" % k): tuple(round(c, 3) for c in v) for k, v in JOINTS.items()})
 keep_v = set()
 for v in me.vertices:
@@ -58,6 +61,7 @@ bm = bmesh.new(); bm.from_mesh(me); bm.verts.ensure_lookup_table()
 bmesh.ops.delete(bm, geom=[f for f in bm.faces if not all(v.index in keep_v for v in f.verts)], context="FACES")
 bmesh.ops.delete(bm, geom=[v for v in bm.verts if not v.link_faces], context="VERTS")
 
+lm_verts = {k: bm.verts.new(p) for k, p in LANDMARKS.items()}
 # --- 3. proportions par sections (hauteur z) ---------------------------------
 def interp(table, z):
     """table: [(z, value)] triés, interpolation lissée."""
@@ -152,6 +156,9 @@ H1 = max(v.co.z for v in bm.verts)
 f = H_TARGET / H1
 for v in bm.verts:
     v.co *= f
+lm_out = {k: [round(c, 5) for c in v.co] for k, v in lm_verts.items()}
+json.dump(lm_out, open(outprefix + "_landmarks.json", "w"), indent=1)
+bmesh.ops.delete(bm, geom=list(lm_verts.values()), context="VERTS")
 bm.to_mesh(me); bm.free()
 for p in me.polygons:
     p.use_smooth = True
