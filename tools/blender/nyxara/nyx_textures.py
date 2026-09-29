@@ -125,7 +125,7 @@ def paint_skin(P, M, ctx, seed=3):
     n_mid = fbm(pts, 22.0, 3, seed + 1)
     n_hi = fbm(pts, 900.0, 2, seed + 2)
     n_vhi = fbm(pts, 2400.0, 1, seed + 3)
-    base = np.array([0.905, 0.752, 0.700], dtype=np.float32)
+    base = np.array([0.880, 0.708, 0.640], dtype=np.float32)
     col = np.tile(base, (len(x), 1))
     col[:, 0] += 0.030 * (n_low - 0.5) + 0.010 * (n_mid - 0.5)
     col[:, 1] += 0.040 * (n_low - 0.5) + 0.014 * (n_mid - 0.5)
@@ -143,6 +143,8 @@ def paint_skin(P, M, ctx, seed=3):
         blend((0.88, 0.48, 0.47), 0.30 * g)
     nose = np.exp(-(((x) / 0.011) ** 2 + ((z - 1.692) / 0.012) ** 2)) * (y < -0.135)
     blend((0.90, 0.55, 0.52), 0.32 * nose)
+    hollow = np.exp(-(((ax - 0.080) / 0.020) ** 2 + ((z - 1.652) / 0.020) ** 2)) * front_face
+    blend((0.62, 0.42, 0.42), 0.30 * hollow)
     chin = np.exp(-((x / 0.02) ** 2 + ((z - 1.612) / 0.014) ** 2)) * front_face
     blend((0.88, 0.60, 0.57), 0.12 * chin)
     # articulations : coudes, genoux, mains
@@ -165,7 +167,7 @@ def paint_skin(P, M, ctx, seed=3):
     d_in = np.minimum(z - bot, top - z)
     lipmask = sstep(-0.0005, 0.0009, d_in) * sstep(W * 1.15, W * 0.95, ax) * within
     tt = np.clip((z - bot) / np.maximum(top - bot, 1e-5), 0, 1)
-    lip_col = np.stack([lerp(0.66, 0.50, sstep(0.0, 1.0, np.abs(tt - 0.45))), lerp(0.05, 0.02, sstep(0.0, 1.0, np.abs(tt - 0.45))), lerp(0.10, 0.06, sstep(0.0, 1.0, np.abs(tt - 0.45)))], -1)
+    lip_col = np.stack([lerp(0.56, 0.38, sstep(0.0, 1.0, np.abs(tt - 0.45))), lerp(0.035, 0.012, sstep(0.0, 1.0, np.abs(tt - 0.45))), lerp(0.07, 0.04, sstep(0.0, 1.0, np.abs(tt - 0.45)))], -1)
     hl = np.exp(-(((z - (bot + 0.0035)) / 0.0016) ** 2 + (x / 0.010) ** 2))
     lip_col += 0.10 * hl[:, None]
     seam = np.exp(-(((z - line) / 0.0009) ** 2))
@@ -187,11 +189,11 @@ def paint_skin(P, M, ctx, seed=3):
     dz = z - zl
     u = (ax - xin) / max(xout - xin, 1e-4)
     near = front_face & (u > -0.25) & (u < 1.55) & (dz > -0.006) & (dz < 0.030)
-    H = 0.0060 + 0.0100 * np.sin(np.pi * np.clip(u * 0.85 + 0.1, 0, 1)) ** 0.8
+    H = 0.0075 + 0.0125 * np.sin(np.pi * np.clip(u * 0.85 + 0.1, 0, 1)) ** 0.8
     H = H * (1 - 0.6 * sstep(1.0, 1.5, u))
     a_sh = sstep(-0.0002, 0.0012, dz) * (1 - sstep(0.35 * H, H, dz)) * sstep(-0.25, 0.05, u) * (1 - sstep(1.1, 1.5, u)) * near
     t = np.clip(dz / np.maximum(H, 1e-4), 0, 1)
-    sh_col = np.stack([lerp(0.10, 0.42, sstep(0.0, 0.7, t)), lerp(0.02, 0.15, sstep(0.0, 0.7, t)), lerp(0.18, 0.64, sstep(0.0, 0.7, t))], -1)
+    sh_col = np.stack([lerp(0.040, 0.34, sstep(0.0, 0.75, t)), lerp(0.010, 0.11, sstep(0.0, 0.75, t)), lerp(0.085, 0.50, sstep(0.0, 0.75, t))], -1)
     sh_col *= (1 - 0.40 * sstep(0.55, 1.15, u))[:, None]
     sh_col += 0.06 * (fbm(pts, 400.0, 1, seed + 21) - 0.5)[:, None]
     for k in range(3):
@@ -202,7 +204,7 @@ def paint_skin(P, M, ctx, seed=3):
     blend((0.012, 0.006, 0.020), 0.96 * liner)
     # ombre sous l'œil (fumée légère)
     low = front_face & (u > -0.05) & (u < 1.1) & (dz < -0.001) & (dz > -0.010)
-    a_lo = sstep(-0.010, -0.002, dz) * (1 - sstep(-0.0012, -0.0004, dz)) * low * 0.22
+    a_lo = sstep(-0.010, -0.002, dz) * (1 - sstep(-0.0012, -0.0004, dz)) * low * 0.07
     blend((0.25, 0.10, 0.36), a_lo)
 
     col = np.clip(col, 0, 1)

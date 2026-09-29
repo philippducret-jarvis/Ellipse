@@ -318,3 +318,149 @@ def merge_meshes(objs, name, scene):
     bpy.ops.object.join()
     objs[0].name = name
     return objs[0]
+
+
+
+# --------------------------------------------------------------------------- filigrane organique (cellules de Voronoï)
+def voronoi_tube(bvh, a, b, r_eff, spacing, ang0, ang1, accept, offset_fn, seed=1, jitter=0.33, subdiv=3, max_axis_dist=None):
+    """Cellules de Voronoï dans l'espace (arc, longueur) d'un tube a->b, projetées sur la surface.
+    Retourne (polylignes, noeuds) ; les noeuds sont des tuples (position, normale)."""
+    import numpy as np
+    from scipy.spatial import Voronoi
+    rng = np.random.RandomState(seed)
+    ax = (b - a)
+    L = ax.length
+    ax = ax.normalized()
+    front = Vector((0, -1, 0))
+    u0 = front - ax * front.dot(ax)
+    u0 = u0.normalized() if u0.length > 1e-4 else Vector((1, 0, 0))
+    w0 = ax.cross(u0).normalized()
+    s0, s1 = ang0 * r_eff, ang1 * r_eff
+    pts = []
+    ny = int(L / (spacing * 0.866)) + 3
+    nx = int((s1 - s0) / spacing) + 3
+    for j in range(-1, ny):
+        for i in range(-1, nx):
+            s = s0 + (i + 0.5 * (j % 2)) * spacing + rng.uniform(-jitter, jitter) * spacing
+            l = j * spacing * 0.866 + rng.uniform(-jitter, jitter) * spacing
+            pts.append((s, l))
+    vor = Voronoi(np.array(pts))
+
+    def to3d(s, l):
+        th = s / r_eff
+        cc = a + ax * l
+        d = u0 * math.cos(th) + w0 * math.sin(th)
+        h = bvh.ray_cast(cc + d * 0.6, -d, 0.8)
+        if h[0] is None:
+            return None
+        p, n = h[0], h[1]
+        if max_axis_dist is not None:
+            rel = p - a
+            radial = rel - ax * rel.dot(ax)
+            if radial.length > max_axis_dist:
+                return None
+        if not accept(p, n):
+            return None
+        return (p + n * offset_fn(p), n)
+
+    V = vor.vertices
+    lines, nodes = [], {}
+    for (i0, i1) in vor.ridge_vertices:
+        if i0 < 0 or i1 < 0:
+            continue
+        p0, p1 = V[i0], V[i1]
+        if not (s0 <= p0[0] <= s1 and s0 <= p1[0] <= s1 and 0.0 <= p0[1] <= L and 0.0 <= p1[1] <= L):
+            continue
+        seg = []
+        for k in range(subdiv + 1):
+            t = k / subdiv
+            q = to3d(p0[0] + (p1[0] - p0[0]) * t, p0[1] + (p1[1] - p0[1]) * t)
+            if q is None:
+                seg = None
+                break
+            seg.append(q)
+        if seg is None:
+            continue
+        lines.append([q[0] for q in seg])
+        nodes[i0] = seg[0]
+        nodes[i1] = seg[-1]
+    return lines, list(nodes.values())
+
+
+def add_octa(bm, loc, size, up=None, stretch=1.25):
+    """Gemme taillée basse définition (octaèdre allongé, 8 triangles)."""
+    up = (up or Vector((0, 0, 1))).normalized()
+    t = up.cross(Vector((1, 0, 0)))
+    if t.length < 1e-3:
+        t = up.cross(Vector((0, 1, 0)))
+    t = t.normalized()
+    b = up.cross(t).normalized()
+    top = bm.verts.new(loc + up * size * stretch)
+    bot = bm.verts.new(loc - up * size * stretch)
+    ring = [bm.verts.new(loc + (t * math.cos(a) + b * math.sin(a)) * size * 0.62) for a in (0.0, math.pi / 2, math.pi, 1.5 * math.pi)]
+    for i in range(4):
+        bm.faces.new((ring[i], ring[(i + 1) % 4], top))
+        bm.faces.new((ring[(i + 1) % 4], ring[i], bot))
+
+
+# --------------------------------------------------------------------------- tissu déchiqueté en lanières
+def tattered(scene, name, pos_fn, nu, nv, n_strips, v_split, seed, mat_body, mat_hem,
+             len_min=0.70, len_max=1.04, gap=0.22, hem_frac=0.30, uv_scale=(3.0, 8.0)):
+    """Haut continu (v < v_split), bas découpé en lanières de longueurs inégales à pointe effilée."""
+    rng = random.Random(seed)
+    bm = bmesh.new()
+    uvl = bm.loops.layers.uv.new("UVMap")
+
+    def grid(u0, u1, v0, v1, cols, rows, tip=None, hem_from=None, wob=None):
+        rows_v = []
+        for j in range(rows + 1):
+            v = v0 + (v1 - v0) * j / rows
+            row = []
+            for i in range(cols + 1):
+                u = u0 + (u1 - u0) * i / cols
+                if tip is not None and v1 > tip:
+                    uc = 0.5 * (u0 + u1)
+                    u = uc + (u - uc) * (1.0 - 0.88 * smooth((v - tip) / (v1 - tip)))
+                p = pos_fn(u, v, 0.0)
+                if wob is not None:
+                    p = p + wob(v)
+                row.append((bm.verts.new(p), u, v))
+            rows_v.append(row)
+        for j in range(rows):
+            for i in range(cols):
+                q = (rows_v[j][i], rows_v[j][i + 1], rows_v[j + 1][i + 1], rows_v[j + 1][i])
+                f = bm.faces.new([e[0] for e in q])
+                f.smooth = True
+                vmid = 0.5 * (q[0][2] + q[2][2])
+                f.material_index = 1 if (hem_from is not None and vmid > hem_from) else 0
+                for lp, e in zip(f.loops, q):
+                    lp[uvl].uv = (e[1] * uv_scale[0], e[2] * uv_scale[1])
+
+    grid(0.0, 1.0, 0.0, v_split, nu, max(2, int(round(nv * v_split))))
+    w = 1.0 / n_strips
+    for k in range(n_strips):
+        ua = k * w + w * gap * 0.5 * rng.uniform(0.5, 1.5)
+        ub = (k + 1) * w - w * gap * 0.5 * rng.uniform(0.5, 1.5)
+        vmax = rng.uniform(len_min, len_max)
+        cols = max(1, int(round(nu * (ub - ua))))
+        rows = max(3, int(round(nv * (vmax - v_split))))
+        amp = rng.uniform(0.004, 0.030)
+        ph = rng.uniform(0, 6.28)
+        dx = rng.uniform(-0.05, 0.05)
+        span = max(1e-3, vmax - v_split)
+
+        def wob(v, amp=amp, ph=ph, dx=dx, span=span):
+            f_in = smooth((v - v_split) / 0.10)
+            return Vector((dx * smooth((v - v_split) / span) + amp * math.sin(v * 14 + ph) * f_in,
+                           amp * 0.6 * math.cos(v * 11 + ph) * f_in, 0.0))
+        grid(ua, ub, v_split, vmax, cols, rows,
+             tip=v_split + span * rng.uniform(0.55, 0.82),
+             hem_from=v_split + span * (1.0 - hem_frac * rng.uniform(0.8, 1.3)), wob=wob)
+    me = bpy.data.meshes.new(name)
+    bm.to_mesh(me)
+    bm.free()
+    ob = bpy.data.objects.new(name, me)
+    scene.collection.objects.link(ob)
+    me.materials.append(mat_body)
+    me.materials.append(mat_hem)
+    return ob

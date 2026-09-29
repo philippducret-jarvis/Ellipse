@@ -1,8 +1,14 @@
 {
- "strands": 520,
+ "strands": 470,
  "ribbon_w": 0.017,
- "ribbon_pts": 26,
+ "ribbon_pts": 22,
  "spread": 0.28,
+ "wisps": 150,
+ "crown_off": 0.014,
+ "eye_open_x": 1.1,
+ "eye_open_z": 1.25,
+ "iris_r": 0.0066,
+ "lid_drop": 0.003,
  "engine": "CYCLES",
  "samples": 128,
  "shots": [

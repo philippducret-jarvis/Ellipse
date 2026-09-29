@@ -1,12 +1,12 @@
-# Shadow Echoes — Nyxara, modèle 3D jouable v2 (textures PBR)
+# Shadow Echoes — Nyxara, modèle 3D jouable v3
 
 ## Ce qui est livré
 
-Dossier : `03_assets/characters/nyxara/model3d-v2/`
+Dossier : `03_assets/characters/nyxara/model3d-v3/`
 
 | Élément | Détail |
 |---|---|
-| GLB | `nyxara_lod0.glb` (142 k triangles, 24 Mo), `nyxara_lod1.glb` (42 k, 12,7 Mo, textures 1024), `nyxara_lod2.glb` (12 k, 4,7 Mo, textures 512) |
+| GLB | `nyxara_lod0.glb` (148 k triangles, 31.2 Mo), `nyxara_lod1.glb` (40 k, 14.2 Mo, textures 1024), `nyxara_lod2.glb` (13 k, 5.3 Mo, textures 512) |
 | Rig | 55 os au nommage UE, poids de peau MakeHuman conservés, tissus et cheveux pondérés par proximité ou par hauteur |
 | Animations | 12 clips : `idle_neutral`, `idle_glamour`, `idle_personality`, `walk`, `run`, `hit_light`, `hit_heavy`, `skill_cast`, `ultimate_cast`, `victory`, `defeat`, `hub_greeting` |
 | Meshes | `nyx_body`, `nyx_costume`, `nyx_lattice`, `nyx_jewelry`, `nyx_face`, `nyx_hair`, `nyx_cloth`, `nyx_props` |
@@ -32,6 +32,19 @@ Le point de départ du chantier a été le constat du document 23 : un modèle p
 
 La v1 n'avait que des couleurs unies. La v2 ajoute des textures PBR générées par code et cuites depuis la géométrie : peau (teinte, rougeurs, pores fins, maquillage et lèvres peints à l'endroit exact des repères 3D), iris détaillés, cartes de cheveux à mèches fines, filet noir à mailles régulières, tissu à trame. Le rendu passe de « prototype en couleurs unies » à un personnage crédible en gros plan.
 
+## Apport de la v3
+
+Passe ciblée sur les écarts les plus visibles avec la planche (comparaison : `renders/comparaison_planche.png`) :
+
+- visage : paupières supérieures abaissées (regard mi-clos), tête légèrement renversée, peau plus chaude, éclairage latéral ;
+- cheveux : volume au sommet (la calotte n'est plus visible) et frange en travers du front ;
+- costume : filigrane d'or organique en cellules sur le torse et les bras, améthystes aux nœuds et pendeloques, gemmes aux croisements du treillis des jambes, bonnets en dentelle ;
+- cape et jupe déchiquetées en lanières de longueurs inégales à pointes violettes ;
+- orbe noire à croissant violet lumineux ;
+- présentation : rendu AgX et halo lumineux au compositing (n'affecte pas le GLB).
+
+Les trois niveaux respectent les budgets du dépôt (148 k / 40 k / 13 k triangles).
+
 ## Écarts avec la cible (fidélité non approuvée)
 
 `fidelity_approved` reste **faux**. Ce qui est reconnaissable : silhouette en sablier, couronne dorée à pointes, chevelure sombre à reflets violets, filet de chaînes d'or, gants à griffes, corbeau, orbe, longue cape à ourlet violet, escarpins. Ce qui manque encore par rapport à la planche :
@@ -39,7 +52,7 @@ La v1 n'avait que des couleurs unies. La v2 ajoute des textures PBR générées 
 - **Visage** : générique, sans sculpt d'identité ni peinture de texture.
 - **Matières** : textures procédurales crédibles, mais pas peintes à la main ; le métal et les gemmes restent des matériaux simples.
 - **Cheveux** : rubans plats ; la planche montre des mèches fines et désordonnées. Le passage à des cartes texturées est nécessaire.
-- **Costume** : le filet d'or est un treillis régulier, pas le filigrane organique de la planche ; les bords des coques restent anguleux sous les filets.
+- **Costume** : trop couvrant ; sur la planche, la peau reste visible sous le filet d'or et une dentelle florale, ici les bas et le filet du torse sont trop opaques.
 - **Tissus** : statiques, sans os secondaires ni simulation.
 - **Animation** : 12 clips sur 30, procéduraux et non nettoyés ; pas de formes faciales.
 

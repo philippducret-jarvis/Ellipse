@@ -54,7 +54,7 @@ groups = {
     "nyx_body": ["Mira_MPFB_Basemesh"],
     "nyx_costume": ["nyx_bra", "nyx_brief", "nyx_stockings", "nyx_torso_net", "nyx_gloves", "nyx_shoes", "nyx_toecaps", "nyx_collar", "nyx_heels"],
     "nyx_lattice": ["nyx_lattice_m"],
-    "nyx_jewelry": ["nyx_trim_m", "nyx_chains_m", "nyx_claws", "nyx_bgem_", "nyx_sgem_", "nyx_choker_gem", "nyx_drop_", "nyx_crown", "nyx_spike", "nyx_gem_", "nyx_ear_"],
+    "nyx_jewelry": ["nyx_trim_m", "nyx_chains_m", "nyx_collar_thorns_m", "nyx_collar_ring2_m", "nyx_belt_pendants_m", "nyx_cuffs_m", "nyx_shoulder_thorns_m", "nyx_filigree_m", "nyx_dropchains_m", "nyx_fgems", "nyx_pgem_", "nyx_claws", "nyx_bgem_", "nyx_sgem_", "nyx_choker_gem", "nyx_drop_", "nyx_crown", "nyx_spike", "nyx_gem_", "nyx_ear_"],
     "nyx_face": ["nyx_eye_", "nyx_iris_", "nyx_pupil_", "nyx_brow_", "nyx_liner_", "nyx_lash_", "nyx_shadow_", "nyx_lips", "nyx_lipline"],
     "nyx_hair": ["nyx_hair", "nyx_scalp"],
     "nyx_cloth": ["nyx_cape_", "nyx_skirt_", "nyx_sleeve_r"],
@@ -310,11 +310,11 @@ def lod_stage(tag, ratio_map, drop=()):
 t, v, m = stats(); s = export(os.path.join(OUT, "nyxara_lod0.glb"))
 report["lods"]["lod0"] = dict(triangles=t, vertices=v, materials=m, bytes=s); print("LOD0", t, v, m, s)
 retex("lod1", 1024)
-lod_stage("lod1", {"nyx_body": 0.34, "nyx_costume": 0.30, "nyx_jewelry": 0.28, "nyx_lattice": 0.22, "nyx_hair": 0.33, "nyx_cloth": 0.26, "nyx_props": 0.40, "nyx_face": 0.45})
+lod_stage("lod1", {"nyx_body": 0.32, "nyx_costume": 0.28, "nyx_jewelry": 0.22, "nyx_lattice": 0.22, "nyx_hair": 0.28, "nyx_cloth": 0.24, "nyx_props": 0.36, "nyx_face": 0.45})
 t, v, m = stats(); s = export(os.path.join(OUT, "nyxara_lod1.glb"))
 report["lods"]["lod1"] = dict(triangles=t, vertices=v, materials=m, bytes=s); print("LOD1", t, v, m, s)
 retex("lod2", 512)
-lod_stage("lod2", {"nyx_body": 0.30, "nyx_costume": 0.30, "nyx_jewelry": 0.30, "nyx_hair": 0.30, "nyx_cloth": 0.30, "nyx_props": 0.45, "nyx_face": 0.40}, drop=("nyx_lattice",))
+lod_stage("lod2", {"nyx_body": 0.30, "nyx_costume": 0.30, "nyx_jewelry": 0.20, "nyx_hair": 0.26, "nyx_cloth": 0.26, "nyx_props": 0.40, "nyx_face": 0.40}, drop=("nyx_lattice",))
 t, v, m = stats(); s = export(os.path.join(OUT, "nyxara_lod2.glb"))
 report["lods"]["lod2"] = dict(triangles=t, vertices=v, materials=m, bytes=s); print("LOD2", t, v, m, s)
 json.dump(report, open(os.path.join(OUT, "export-report.json"), "w"), indent=2)
