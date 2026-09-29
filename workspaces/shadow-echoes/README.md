@@ -12,6 +12,8 @@ Après cette revue, la méthode a changé : la [comparaison Séraphine 2,5D](htt
 
 Une [étude des calques animés](00_brief/documents/26_calques_animes_seraphine_2026_09_29.md) est disponible en [preview V8](http://localhost:4273/workspaces/shadow-echoes/07_exports/web/tactics.html?seraphine=lookdev-v8&camera=seraphine) : cheveux et pans extérieurs bougent indépendamment en attente. Le [cadrage portrait](http://localhost:4273/workspaces/shadow-echoes/07_exports/web/tactics.html?seraphine=lookdev-v8&camera=portrait) grossit les raccords pour les contrôler. La V6 reste la version par défaut jusqu'à validation des contours et des poses.
 
+La [revue de profondeur V9](00_brief/documents/27_profondeur_reference_seraphine_2026_09_29.md) projette la planche frontale sur un maillage déformé. La [vue de face](http://localhost:4273/workspaces/shadow-echoes/07_exports/web/tactics.html?seraphine=lookdev-v9&camera=portrait) et la [vue oblique de contrôle](http://localhost:4273/workspaces/shadow-echoes/07_exports/web/tactics.html?seraphine=lookdev-v9&camera=portrait&reviewYaw=0.18) montrent ce que la carte de profondeur apporte et où elle déforme le visage. Cette étude n'est pas promue : V6 reste la version par défaut.
+
 Deuxième lot jouable d’un RPG gothique : hub central, quatre Mythiques, dix activités, trois gardiens, trois rituels d’invocation, neuf équipements, six reliques, arbres de talents, XP et ascensions. Section créée le 23 septembre 2026 à partir des trois archives fournies par l’utilisateur.
 
 ## Accès dans Ellipse

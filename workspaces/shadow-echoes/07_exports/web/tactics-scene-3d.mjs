@@ -20,7 +20,8 @@ const seraphineLookdevSets={
  'lookdev-v5':{idle:'../turnaround-v1.png',windup:'../turnaround-v1.png',attack:'seraphine-basic-attack-key-v3.png',mattes:['seraphine-reference-front-matte-v4.png','seraphine-reference-quarter-matte-v5.png','seraphine-attack-matte-v3.png'],idleWidth:1.02,frontCrop:422/1536,keyCrops:[{offset:1147/1536,repeat:389/1536},null],keyWidths:[1.02,1.63]},
  'lookdev-v6':{idle:'../turnaround-v1.png',windup:'../turnaround-v1.png',attack:'seraphine-reference-attack-key-v6.png',mattes:['seraphine-reference-front-matte-v4.png','seraphine-reference-quarter-matte-v5.png','seraphine-reference-attack-matte-v6.png'],idleWidth:1.02,frontCrop:422/1536,keyCrops:[{offset:1147/1536,repeat:389/1536},null],keyWidths:[1.02,1.63]},
  'lookdev-v7':{idle:'../turnaround-v1.png',windup:'../turnaround-v1.png',attack:'seraphine-reference-attack-key-v6.png',mattes:['seraphine-reference-front-matte-v4.png','seraphine-reference-quarter-matte-v5.png','seraphine-reference-attack-matte-v6.png'],idleWidth:1.02,frontCrop:422/1536,keyCrops:[{offset:1147/1536,repeat:389/1536},null],keyWidths:[1.02,1.63],hairRegion:'seraphine-reference-hair-region-v7.png'},
- 'lookdev-v8':{idle:'../turnaround-v1.png',windup:'../turnaround-v1.png',attack:'seraphine-reference-attack-key-v6.png',mattes:['seraphine-reference-front-matte-v4.png','seraphine-reference-quarter-matte-v5.png','seraphine-reference-attack-matte-v6.png'],idleWidth:1.02,frontCrop:422/1536,keyCrops:[{offset:1147/1536,repeat:389/1536},null],keyWidths:[1.02,1.63],hairRegion:'seraphine-reference-hair-region-v7.png',clothRegion:'seraphine-reference-cloth-region-v8.png'}
+ 'lookdev-v8':{idle:'../turnaround-v1.png',windup:'../turnaround-v1.png',attack:'seraphine-reference-attack-key-v6.png',mattes:['seraphine-reference-front-matte-v4.png','seraphine-reference-quarter-matte-v5.png','seraphine-reference-attack-matte-v6.png'],idleWidth:1.02,frontCrop:422/1536,keyCrops:[{offset:1147/1536,repeat:389/1536},null],keyWidths:[1.02,1.63],hairRegion:'seraphine-reference-hair-region-v7.png',clothRegion:'seraphine-reference-cloth-region-v8.png'},
+ 'lookdev-v9':{idle:'../turnaround-v1.png',windup:'../turnaround-v1.png',attack:'seraphine-reference-attack-key-v6.png',mattes:['seraphine-reference-front-matte-v4.png','seraphine-reference-quarter-matte-v5.png','seraphine-reference-attack-matte-v6.png'],idleWidth:1.02,frontCrop:422/1536,keyCrops:[{offset:1147/1536,repeat:389/1536},null],keyWidths:[1.02,1.63],depthMap:'seraphine-reference-depth-v9.png'}
 };
 const tilePosition=(x,lane)=>new T.Vector3(x-(WIDTH-1)/2,0,(lane-(LANES-1)/2)*.75);
 const actorPosition=(x,lane)=>tilePosition(x,lane);
@@ -28,7 +29,7 @@ const alive=unit=>unit.hp>0;
 
 /** One renderer for the entire encounter. The HTML grid remains the accessible input layer. */
 export function createTacticsScene3D(host,{reduced=false}={}){
- const params=new URLSearchParams(location.search),useReferenceEnemies=['lookdev-v2','lookdev-v3','lookdev-v4','lookdev-v5','lookdev-v6','lookdev-v7','lookdev-v8'].includes(params.get('seraphine')??'lookdev-v6'),portraitReview=params.get('camera')==='portrait',heroReview=portraitReview||params.get('camera')==='seraphine';
+ const params=new URLSearchParams(location.search),useReferenceEnemies=['lookdev-v2','lookdev-v3','lookdev-v4','lookdev-v5','lookdev-v6','lookdev-v7','lookdev-v8','lookdev-v9'].includes(params.get('seraphine')??'lookdev-v6'),portraitReview=params.get('camera')==='portrait',heroReview=portraitReview||params.get('camera')==='seraphine',yawParam=Number(params.get('reviewYaw')),reviewYaw=Number.isFinite(yawParam)?Math.max(-.25,Math.min(.25,yawParam)):0;
  const renderer=new T.WebGLRenderer({alpha:false,antialias:true,powerPreference:'high-performance'});
  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.35));renderer.outputColorSpace=T.SRGBColorSpace;
  renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.28;
@@ -94,7 +95,7 @@ export function createTacticsScene3D(host,{reduced=false}={}){
    const lowerCloth=Math.max(0,Math.min(1,(-v-.1)/.9));
    const breath=Math.max(0,1-Math.abs(v-.35)*3)*Math.max(0,1-side*2);
    const hairWave=Math.sin(now*1.85+y*4.2+x*2.1),clothWave=Math.sin(now*1.28+x*4.6-y*1.7);
-   positions.setXYZ(i,x+amount*(hair*.027*hairWave+outerCloth*.038*clothWave+lowerCloth*.012*Math.sin(now*.9+x*3)),y+amount*(breath*.012*Math.sin(now*1.45)+outerCloth*.013*Math.sin(now*1.28+x*2)),amount*(hair*.038*Math.cos(now*1.2+x*2)+outerCloth*.052*Math.sin(now*.8+x*3)));
+   positions.setXYZ(i,x+amount*(hair*.027*hairWave+outerCloth*.038*clothWave+lowerCloth*.012*Math.sin(now*.9+x*3)),y+amount*(breath*.012*Math.sin(now*1.45)+outerCloth*.013*Math.sin(now*1.28+x*2)),rest[i*3+2]+amount*(hair*.038*Math.cos(now*1.2+x*2)+outerCloth*.052*Math.sin(now*.8+x*3)));
   }
   positions.needsUpdate=true;
  }
@@ -119,6 +120,19 @@ export function createTacticsScene3D(host,{reduced=false}={}){
   material.customProgramCacheKey=()=>`seraphine-regions-${layer}`;
   material.needsUpdate=true;
  }
+ function displaceReference(mesh,image,crop){
+  const canvas=document.createElement('canvas');canvas.width=image.naturalWidth||image.width;canvas.height=image.naturalHeight||image.height;
+  const context=canvas.getContext('2d',{willReadFrequently:true});context.drawImage(image,0,0);
+  const pixels=context.getImageData(0,0,canvas.width,canvas.height).data,positions=mesh.geometry.attributes.position,uv=mesh.geometry.attributes.uv;
+  let minimum=Infinity,maximum=-Infinity;
+  for(let i=0;i<positions.count;i++){
+   const px=Math.max(0,Math.min(canvas.width-1,Math.round(uv.getX(i)*crop*(canvas.width-1)))),py=Math.max(0,Math.min(canvas.height-1,Math.round((1-uv.getY(i))*(canvas.height-1))));
+   let total=0;for(const dx of [-4,0,4])for(const dy of [-4,0,4]){const x=Math.max(0,Math.min(canvas.width-1,px+dx)),y=Math.max(0,Math.min(canvas.height-1,py+dy));total+=pixels[(y*canvas.width+x)*4];}
+   const depth=(total/(9*255)-.3)*.18;positions.setZ(i,depth);minimum=Math.min(minimum,depth);maximum=Math.max(maximum,depth);
+  }
+  positions.needsUpdate=true;mesh.geometry.computeVertexNormals();mesh.userData.rest=Float32Array.from(positions.array);
+  return maximum-minimum;
+ }
  const neutralColor=new T.Color('#95939a'),reachColor=new T.Color('#cbb06e'),intentColor=new T.Color('#d75568'),selectedColor=new T.Color('#f1d68f');
  function disposeScene(root){const geometries=new Set(),materials=new Set();root.traverse(object=>{if(object.geometry)geometries.add(object.geometry);for(const material of Array.isArray(object.material)?object.material:[object.material])if(material)materials.add(material);});geometries.forEach(geometry=>geometry.dispose());materials.forEach(material=>{for(const value of Object.values(material))if(value?.isTexture)value.dispose();material.dispose();});}
  function disposeActor(entry){entry.contact.geometry.dispose();entry.contact.material.dispose();if(entry.referenceSprite){const regions=new Set();for(const sprite of [entry.referenceSprite,entry.hairSprite,entry.clothSprite,entry.windupSprite,entry.attackSprite].filter(Boolean)){sprite.geometry.dispose();sprite.material.map?.dispose();sprite.material.alphaMap?.dispose();if(sprite.material.userData.regionMap)regions.add(sprite.material.userData.regionMap);if(sprite.material.userData.clothMap)regions.add(sprite.material.userData.clothMap);sprite.material.dispose();}regions.forEach(texture=>texture.dispose());return;}if(entry.enemySprite){entry.enemySprite.geometry.dispose();entry.enemySprite.material.map?.dispose();entry.enemySprite.material.dispose();return;}if(entry.gltf){entry.gltf.mixer.stopAllAction();disposeScene(entry.gltf.scene);return;}if(entry.model){entry.model.dispose();return;}disposeScene(entry.pivot);}
@@ -135,7 +149,7 @@ export function createTacticsScene3D(host,{reduced=false}={}){
   if(disposed||actors.get(entry.id)!==entry){texture.dispose();return;}
   texture.colorSpace=T.SRGBColorSpace;texture.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());
   if(lookdev.frontCrop){texture.repeat.set(lookdev.frontCrop,1);texture.needsUpdate=true;}
-  const geometry=new T.PlaneGeometry(lookdev.idleWidth??1.63,2.45,12,24);
+  const geometry=new T.PlaneGeometry(lookdev.idleWidth??1.63,2.45,lookdev.depthMap?64:12,lookdev.depthMap?128:24);
   const sprite=new T.Mesh(geometry,new T.MeshBasicMaterial({map:texture,transparent:true,alphaTest:.045,side:T.DoubleSide,depthWrite:false,toneMapped:false}));
   sprite.userData.rest=Float32Array.from(geometry.attributes.position.array);
   sprite.position.y=1.22;sprite.renderOrder=2;sprite.name='Seraphine reference-derived 2.5D lookdev';
@@ -147,6 +161,13 @@ export function createTacticsScene3D(host,{reduced=false}={}){
    if(lookdev.frontCrop){matte.repeat.set(lookdev.frontCrop,1);matte.needsUpdate=true;}
    sprite.material.alphaMap=matte;sprite.material.alphaTest=.965;sprite.material.needsUpdate=true;
    host.dataset.seraphineMaterials='reference-with-silhouette-matte';
+  }
+  if(lookdev.depthMap){
+   const depthTexture=await new T.TextureLoader().loadAsync(lookdevBase+lookdev.depthMap);
+   if(disposed||actors.get(entry.id)!==entry){depthTexture.dispose();return;}
+   const depthRange=displaceReference(sprite,depthTexture.image,lookdev.frontCrop);depthTexture.dispose();entry.referenceDepth=true;
+   host.dataset.seraphineDepth='reference-heightfield-v1';
+   host.dataset.seraphineDepthRange=depthRange.toFixed(3);
   }
   if(lookdev.hairRegion){
    const region=await new T.TextureLoader().loadAsync(lookdevBase+lookdev.hairRegion);
@@ -221,7 +242,7 @@ export function createTacticsScene3D(host,{reduced=false}={}){
    if(clip==='idle'&&entry.clip!=='idle'){entry.clip='idle';entry.started=now;}
    if(entry.referenceSprite){const sprite=entry.referenceSprite,active=entry.clip!=='idle',basic=entry.clip==='attack1'&&!!entry.attackSprite,phase=Math.max(0,Math.min(1,t/1.25));
     const stage=basic?(phase<.16?'idle':phase<.52?(entry.windupSprite?'windup':'idle'):phase<.84?'attack':'idle'):'idle';
-    sprite.visible=stage==='idle';sprite.position.y=1.22+(reduced?0:Math.sin(now*1.45)*.012);sprite.position.x=active?-.035*Math.sin(Math.min(1,t/.56)*Math.PI):0;sprite.rotation.z=active?-.012*Math.sin(Math.min(1,t/.58)*Math.PI):Math.sin(now*.85)*.004;p.rotation.y=0;
+    sprite.visible=stage==='idle';sprite.position.y=1.22+(reduced?0:Math.sin(now*1.45)*.012);sprite.position.x=active?-.035*Math.sin(Math.min(1,t/.56)*Math.PI):0;sprite.rotation.z=active?-.012*Math.sin(Math.min(1,t/.58)*Math.PI):Math.sin(now*.85)*.004;p.rotation.y=entry.referenceDepth && stage==='idle' ? reviewYaw+(reduced?0:.025*Math.sin(now*.48)) : 0;
     if(entry.hairSprite){const hair=entry.hairSprite;hair.visible=stage==='idle';hair.position.y=sprite.position.y;hair.position.x=sprite.position.x;hair.rotation.z=sprite.rotation.z;if(!reduced&&hair.visible)deformReference(hair,now,1.35);}
     if(entry.clothSprite){const cloth=entry.clothSprite;cloth.visible=stage==='idle';cloth.position.y=sprite.position.y;cloth.position.x=sprite.position.x;cloth.rotation.z=sprite.rotation.z;if(!reduced&&cloth.visible)deformReference(cloth,now,1.25);}
     if(entry.windupSprite){entry.windupSprite.visible=stage==='windup';entry.windupSprite.position.x=-.055;entry.windupSprite.rotation.z=-.023;if(stage==='windup')host.dataset.seraphineWindupSeen='true';}
