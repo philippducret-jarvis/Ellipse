@@ -189,7 +189,7 @@ def paint_skin(P, M, ctx, seed=3):
     dz = z - zl
     u = (ax - xin) / max(xout - xin, 1e-4)
     near = front_face & (u > -0.25) & (u < 1.55) & (dz > -0.006) & (dz < 0.030)
-    H = 0.0075 + 0.0125 * np.sin(np.pi * np.clip(u * 0.85 + 0.1, 0, 1)) ** 0.8
+    H = 0.0075 + 0.0125 * np.maximum(np.sin(np.pi * np.clip(u * 0.85 + 0.1, 0, 1)), 0.0) ** 0.8
     H = H * (1 - 0.6 * sstep(1.0, 1.5, u))
     a_sh = sstep(-0.0002, 0.0012, dz) * (1 - sstep(0.35 * H, H, dz)) * sstep(-0.25, 0.05, u) * (1 - sstep(1.1, 1.5, u)) * near
     t = np.clip(dz / np.maximum(H, 1e-4), 0, 1)
@@ -207,7 +207,7 @@ def paint_skin(P, M, ctx, seed=3):
     a_lo = sstep(-0.010, -0.002, dz) * (1 - sstep(-0.0012, -0.0004, dz)) * low * 0.07
     blend((0.25, 0.10, 0.36), a_lo)
 
-    col = np.clip(col, 0, 1)
+    col = np.clip(np.nan_to_num(col, nan=0.8), 0, 1)
     img = np.zeros((res, res, 3), dtype=np.float32)
     img[idx] = col
 
@@ -269,10 +269,10 @@ def hair_texture(size=(512, 1024), seed=1, tone=0, ss=2):
     img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
     tones = {
-        0: ((0.004, 0.002, 0.009), (0.010, 0.005, 0.022), 0.03),
-        1: ((0.008, 0.004, 0.019), (0.022, 0.010, 0.050), 0.07),
-        2: ((0.014, 0.007, 0.034), (0.045, 0.019, 0.105), 0.11),
-        3: ((0.006, 0.003, 0.014), (0.060, 0.026, 0.150), 0.16),
+        0: ((0.006, 0.003, 0.014), (0.030, 0.012, 0.070), 0.12),
+        1: ((0.012, 0.005, 0.030), (0.070, 0.026, 0.160), 0.22),
+        2: ((0.020, 0.008, 0.050), (0.120, 0.045, 0.260), 0.30),
+        3: ((0.010, 0.004, 0.024), (0.160, 0.060, 0.340), 0.40),
     }
     dark, light, hi_p = tones[tone]
     n_strands = 300
@@ -294,7 +294,7 @@ def hair_texture(size=(512, 1024), seed=1, tone=0, ss=2):
         t = rng.rand()
         c = [lerp(dark[i], light[i], t) for i in range(3)]
         if rng.rand() < hi_p:
-            c = [lerp(light[i], (0.22, 0.09, 0.42)[i], rng.uniform(0.2, 0.7)) for i in range(3)]
+            c = [lerp(light[i], (0.40, 0.16, 0.70)[i], rng.uniform(0.2, 0.7)) for i in range(3)]
         col = tuple(int(255 * v ** (1 / 2.2)) for v in c)  # sRGB
         pts = []
         steps = 40
@@ -329,14 +329,19 @@ def lace_alpha(P, M, res, J):
     r_eff = np.where(torso, 0.125, 0.065)
     s = th * r_eff
     tt = z
-    p = np.where(torso, 0.0105, 0.0125)
+    p = np.where(torso, 0.018, 0.022)
     u1 = (s + tt) / p; u2 = (s - tt) / p
     f1 = np.abs(u1 - np.round(u1)); f2 = np.abs(u2 - np.round(u2))
-    w = 0.13
+    w = 0.085
     a1 = 1 - sstep(w * 0.7, w * 1.1, f1)
     a2 = 1 - sstep(w * 0.7, w * 1.1, f2)
     knot = 1 - sstep(0.10, 0.20, np.sqrt(f1 ** 2 + f2 ** 2))
     a = np.maximum(np.maximum(a1, a2), knot * 0.9)
+    # dentelle florale par zones (jambes) : taches denses à motif pétale
+    patch = sstep(0.63, 0.69, fbm(pts, 7.0, 3, 21)) * (z < 0.98)
+    pet = np.abs(np.sin(u1 * np.pi * 0.5) * np.sin(u2 * np.pi * 0.5))
+    lace = 0.35 + 0.6 * sstep(0.25, 0.55, pet * fbm(pts, 180.0, 2, 22) * 1.8)
+    a = np.maximum(a, patch * lace)
     a = np.clip(a * 1.05, 0, 1)
     img = np.zeros((res, res, 4), dtype=np.float32)
     col = np.tile(np.array([0.012, 0.010, 0.018], dtype=np.float32), (len(x), 1))

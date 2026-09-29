@@ -9,6 +9,7 @@
  "eye_open_z": 1.25,
  "iris_r": 0.0066,
  "lid_drop": 0.003,
+ "leg_steps": 36,
  "engine": "CYCLES",
  "samples": 128,
  "shots": [

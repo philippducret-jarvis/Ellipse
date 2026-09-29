@@ -57,10 +57,10 @@ M = {
     "gem": mk_mat("nyx_amethyst", (0.50, 0.15, 0.80), 0.0, 0.1, emit=(0.3, 0.08, 0.5)),
 }
 HAIR_COLORS = [
-    ((0.004, 0.002, 0.008), 0.46),
-    ((0.013, 0.006, 0.028), 0.34),
-    ((0.036, 0.013, 0.078), 0.17),
-    ((0.095, 0.036, 0.190), 0.03),
+    ((0.010, 0.004, 0.022), 0.34),
+    ((0.030, 0.011, 0.068), 0.34),
+    ((0.070, 0.025, 0.150), 0.22),
+    ((0.160, 0.058, 0.320), 0.10),
 ]
 HM = [mk_mat("nyx_hair_%d" % i, c, 0.0, 0.5) for i, (c, _) in enumerate(HAIR_COLORS)]
 for _i, _m in enumerate(HM):
@@ -868,12 +868,11 @@ parts = {}
 parts["bra"] = C.shell(body, "nyx_bra", pred_bra, 0.0065, CM["cup"], sc)
 parts["brief"] = C.shell(body, "nyx_brief", pred_brief, 0.0045, CM["cup"], sc)
 parts["stock"] = C.shell(body, "nyx_stockings", pred_stock, 0.0028, CM["net"], sc)
-parts["torso"] = C.shell(body, "nyx_torso_net", pred_torso, 0.0024, CM["net"], sc)
 parts["glove"] = C.shell(body, "nyx_gloves", pred_glove, 0.0034, CM["glove"], sc)
 parts["shoe"] = C.shell(body, "nyx_shoes", pred_shoe, 0.0090, CM["shoe"], sc)
 parts["collar"] = C.shell(body, "nyx_collar", pred_collar, 0.0042, CM["lace"], sc)
 parts["scalp"] = C.shell(body, "nyx_scalp", lambda f, dl: wsum(f, dl, G_SCALP) > 0.4 and (cen(f).z > 1.795 or (cen(f).z > 1.72 and cen(f).y > -0.02)), 0.0060, CM["scalp"], sc)
-for k in ("bra", "brief", "stock", "torso", "collar"):
+for k in ("bra", "brief", "stock", "collar"):
     C.relax_boundary(parts[k], 10, 0.5)
 
 # bouts de chaussure : enveloppe convexe lisse de la zone des orteils
@@ -1384,15 +1383,16 @@ sc.display.shading.show_cavity = True
 sc.world = bpy.data.worlds.new("w"); sc.world.color = (0.16, 0.16, 0.17)
 if ENGINE == "CYCLES":
     sc.world.use_nodes = True
-    bg = sc.world.node_tree.nodes["Background"]; bg.inputs["Color"].default_value = (0.035, 0.026, 0.05, 1); bg.inputs["Strength"].default_value = 1.0
+    bg = sc.world.node_tree.nodes["Background"]; bg.inputs["Color"].default_value = (0.11, 0.05, 0.17, 1); bg.inputs["Strength"].default_value = 1.0
     def area(name, loc, energy, color, size):
         ld = bpy.data.lights.new(name, "AREA"); ld.energy = energy; ld.color = color; ld.size = size
         lo = bpy.data.objects.new(name, ld); sc.collection.objects.link(lo); lo.location = loc
         lo.rotation_euler = (Vector((0, -0.02, 1.0)) - Vector(loc)).normalized().to_track_quat("-Z", "Y").to_euler()
     area("key", (-2.8, -2.0, 3.2), 470, (1.0, 0.90, 0.80), 1.8)
     area("fill", (3.0, -2.6, 1.6), 45, (0.78, 0.74, 1.0), 2.5)
-    area("rim", (1.8, 2.8, 2.6), 170, (0.70, 0.45, 1.0), 1.6)
-    area("rim2", (-2.2, 2.6, 2.4), 110, (0.62, 0.42, 1.0), 1.6)
+    area("rim", (1.8, 2.8, 2.6), 380, (0.70, 0.42, 1.0), 1.8)
+    area("rim2", (-2.2, 2.6, 2.4), 260, (0.62, 0.40, 1.0), 1.8)
+    area("glowfloor", (0.0, 0.8, -0.4), 160, (0.65, 0.30, 1.0), 2.4)
     if prm("glare", True):
         sc.use_nodes = True
         _ct = sc.node_tree

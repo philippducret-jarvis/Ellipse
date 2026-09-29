@@ -9,7 +9,9 @@
  "eye_open_z": 1.25,
  "iris_r": 0.0066,
  "lid_drop": 0.003,
+ "leg_steps": 36,
  "engine": "BLENDER_WORKBENCH",
+ "samples": 128,
  "shots": [
   "full_front",
   "full_34",

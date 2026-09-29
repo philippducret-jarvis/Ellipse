@@ -1,5 +1,5 @@
 {
-  "id": "nyxara-model3d-v3",
+  "id": "nyxara-model3d-v4",
   "hero_id": "nyxara",
   "updated_at": "2026-09-29",
   "status": "integration_candidate_review",
@@ -46,22 +46,22 @@
   ],
   "lods": {
     "lod0": {
-      "triangles": 148340,
-      "vertices": 97699,
+      "triangles": 146082,
+      "vertices": 96503,
       "materials": 25,
-      "bytes": 31241392
+      "bytes": 30000760
     },
     "lod1": {
-      "triangles": 40355,
-      "vertices": 32346,
+      "triangles": 39722,
+      "vertices": 31989,
       "materials": 25,
-      "bytes": 14235348
+      "bytes": 14379460
     },
     "lod2": {
-      "triangles": 13393,
-      "vertices": 15188,
+      "triangles": 13203,
+      "vertices": 15072,
       "materials": 25,
-      "bytes": 5300720
+      "bytes": 5478120
     }
   },
   "budgets_reference": {
@@ -84,8 +84,7 @@
     "fidelity_to_reference": false
   },
   "known_gaps": [
-    "Peau trop couverte : sur la planche, la peau reste visible sous le filet d'or et la dentelle florale ; ici les bas et le filet du torse sont trop opaques.",
-    "Éclairage de présentation plus sombre que la planche (contre-jour violet vif absent).",
+    "Planche plus lumineuse et plus dense en chaînes pendantes ; le personnage 3D reste un peu plus sombre et plus sobre.",
     "Visage : forme MakeHuman retouchée, sans sculpt d'identité ; regard et maquillage générés par texture.",
     "Cheveux en cartes de rubans : volume et frange corrects, mais aspect en lanières de près et teinte plus sombre que la planche.",
     "Corbeau simplifié (volumes et plumes stylisées), sans plumage détaillé.",
@@ -117,5 +116,10 @@
     "orbe noire à croissant violet lumineux et éclats",
     "rendu AgX et halo lumineux au compositing (présentation uniquement, pas dans le GLB)"
   ],
-  "renders_note": "Rendus produits avec un treillis des jambes et un filigrane légèrement plus tessellés (52 pas, 3 subdivisions) que les GLB (36 pas, 2 subdivisions) : différence invisible à cette échelle."
+  "v4_changes": [
+    "correction d'un bug de texture de peau (valeur invalide qui noircissait jambes, ventre et bras depuis la v2)",
+    "filet des bas ajouré (mailles 22 mm) avec dentelle florale par zones ; filet opaque du ventre retiré",
+    "cheveux éclaircis vers le violet",
+    "éclairage de présentation : fond violet, contre-jours violets renforcés, lumières d'appoint de face (n'affecte pas le GLB)"
+  ]
 }
