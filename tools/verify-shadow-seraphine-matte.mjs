@@ -8,8 +8,11 @@ const reduced=process.argv.includes('--reduced');
 const mobile=process.argv.includes('--mobile');
 const yawArgument=process.argv.find(argument=>argument.startsWith('--yaw='));
 const yaw=yawArgument?Number(yawArgument.slice('--yaw='.length)):0;
+const freezeArgument=process.argv.find(argument=>argument.startsWith('--freeze='));
+const freeze=freezeArgument?Number(freezeArgument.slice('--freeze='.length)):null;
 const arcade=process.argv.includes('--arcade');
 assert.ok(Number.isFinite(yaw)&&Math.abs(yaw)<=.25);
+assert.ok(freeze===null||Number.isFinite(freeze)&&freeze>.57&&freeze<.84);
 assert.ok(['lookdev-v3','lookdev-v4','lookdev-v5','lookdev-v6','lookdev-v7','lookdev-v8','lookdev-v9','lookdev-v10','lookdev-v12','lookdev-v13'].includes(version));
 const out='workspaces/shadow-echoes/02_production/lot-15/qa';
 await mkdir(out,{recursive:true});
@@ -18,7 +21,7 @@ try{
  const page=await browser.newPage({viewport:mobile?{width:390,height:844}:{width:1440,height:960},reducedMotion:reduced?'reduce':'no-preference'}),errors=[];
  page.on('pageerror',error=>errors.push(error.message));
  page.on('response',response=>{if(response.status()>=400)errors.push(`${response.status()} ${response.url()}`);});
- await page.goto(`http://localhost:4273/workspaces/shadow-echoes/07_exports/web/tactics.html?seraphine=${version}${camera}${yawArgument?`&reviewYaw=${yaw}`:''}${arcade?'&environment=arcade-v3':''}`,{waitUntil:'domcontentloaded'});
+ await page.goto(`http://localhost:4273/workspaces/shadow-echoes/07_exports/web/tactics.html?seraphine=${version}${camera}${yawArgument?`&reviewYaw=${yaw}`:''}${freezeArgument?`&reviewFreeze=${freeze}`:''}${arcade?'&environment=arcade-v3':''}`,{waitUntil:'domcontentloaded'});
  await page.locator('[data-node=entry]').click();
  await page.locator('#toggle-render').click();
  try{await page.locator(`#arena-volume[data-seraphine-model="${version}"][data-seraphine-materials="reference-with-silhouette-matte"][data-seraphine-keyposes="3"][data-seraphine-mattes="${version==='lookdev-v10'?2:3}"][data-enemy-sprites="3"]`).waitFor({timeout:60000});}
@@ -49,13 +52,14 @@ try{
  if(camera.includes('legacy'))await page.locator('#arena-volume[data-camera="formation"][data-environment="modeled-v2"]').waitFor();
  if(mobile&&!camera&&!arcade)await page.locator('#arena-volume[data-camera="formation"][data-environment="modeled-v2"]').waitFor();
  await page.waitForTimeout(500);
- const cameraLabel=(camera.includes('portrait')?'-portrait':camera.includes('cinematic')?'-cinematic':camera.includes('legacy')?'-legacy':camera?'-focus':'')+(reduced?'-reduced':'')+(yawArgument?`-yaw-${String(yaw).replace('.','_')}`:'')+(arcade?'-arcade':'')+(mobile?'-mobile':'');
+ const cameraLabel=(camera.includes('portrait')?'-portrait':camera.includes('cinematic')?'-cinematic':camera.includes('legacy')?'-legacy':camera?'-focus':'')+(reduced?'-reduced':'')+(yawArgument?`-yaw-${String(yaw).replace('.','_')}`:'')+(freezeArgument?`-freeze-${String(freeze).replace('.','_')}`:'')+(arcade?'-arcade':'')+(mobile?'-mobile':'');
  await page.screenshot({path:`${out}/seraphine-${version}${cameraLabel}-battle.png`});
  if(version==='lookdev-v8'||version==='lookdev-v12'){await page.waitForTimeout(900);await page.screenshot({path:`${out}/seraphine-${version}${cameraLabel}-idle-late.png`});}
  await page.locator('[data-action=basic]').click();
  await page.locator('#arena [data-unit=sentry-a]').click();
  await page.locator('#arena-volume[data-seraphine-pose="windup"]').waitFor({timeout:15000});
  await page.locator('#arena-volume[data-seraphine-pose="attack"]').waitFor({timeout:15000});
+ if(freezeArgument)await page.locator('#arena-volume[data-seraphine-impact-seen="true"]').waitFor({timeout:15000});
  await page.locator('#arena-volume[data-seraphine-slash-seen="true"]').waitFor({timeout:15000});
  await page.screenshot({path:`${out}/seraphine-${version}${cameraLabel}-attack.png`});
  assert.deepEqual(errors,[]);

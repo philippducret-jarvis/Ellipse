@@ -2,6 +2,8 @@
 
 ## Avancement du 29 septembre 2026
 
+La [revue de l'impact](00_brief/documents/32_impact_combat_seraphine_2026_09_29.md) ajoute une réaction visuelle des sentinelles à la frappe de Séraphine, avec éclat rouge et recul. Un arrêt sur image de revue permet de contrôler le contact à taille de combat. L'essai d'avant-bras séparé a été écarté après inspection : sa rotation exige un vrai montage articulé du personnage.
+
 La [vue tactique](http://localhost:4273/workspaces/shadow-echoes/07_exports/web/tactics.html) charge désormais Séraphine V12 : le visage et le costume de la planche originale restent intacts sous des calques de cheveux et de pans extérieurs animés en attente. L'essai V8 retirait les mêmes régions de la pose fixe et ouvrait des trous sombres pendant le mouvement ; la V12 conserve la pose sous les calques. Les [vues portrait](http://localhost:4273/workspaces/shadow-echoes/07_exports/web/tactics.html?seraphine=lookdev-v12&camera=portrait) et [campagne](http://localhost:4273/workspaces/shadow-echoes/07_exports/web/tactics.html?seraphine=lookdev-v12&camera=cinematic&environment=arcade-v3) servent à la revue. L'ancienne V6 reste accessible avec `?seraphine=lookdev-v6`. La [V13](00_brief/documents/31_seraphine_frappe_identite_reference_v13_2026_09_29.md) compare une frappe dont le visage reste directement celui de la planche ; elle n'est pas chargée par défaut, car son bras et sa lame ne sont pas encore articulés. Les corps en volume des autres héros, la frappe de Séraphine et le décor restent loin du rendu cible ; cette promotion concerne le raccord des calques d'attente, pas une approbation artistique du personnage.
 
 ## Direction active au 28 septembre 2026

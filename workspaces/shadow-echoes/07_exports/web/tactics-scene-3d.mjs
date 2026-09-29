@@ -32,7 +32,7 @@ const alive=unit=>unit.hp>0;
 
 /** One renderer for the entire encounter. The HTML grid remains the accessible input layer. */
 export function createTacticsScene3D(host,{reduced=false}={}){
- const params=new URLSearchParams(location.search),cameraMode=params.get('camera'),useReferenceEnemies=['lookdev-v2','lookdev-v3','lookdev-v4','lookdev-v5','lookdev-v6','lookdev-v7','lookdev-v8','lookdev-v9','lookdev-v10','lookdev-v12','lookdev-v13'].includes(params.get('seraphine')??'lookdev-v12'),portraitReview=cameraMode==='portrait',heroReview=portraitReview||cameraMode==='seraphine',cinematicReview=cameraMode==='cinematic'||(!cameraMode&&window.innerWidth>=900),yawParam=Number(params.get('reviewYaw')),reviewYaw=Number.isFinite(yawParam)?Math.max(-.25,Math.min(.25,yawParam)):0;
+ const params=new URLSearchParams(location.search),cameraMode=params.get('camera'),useReferenceEnemies=['lookdev-v2','lookdev-v3','lookdev-v4','lookdev-v5','lookdev-v6','lookdev-v7','lookdev-v8','lookdev-v9','lookdev-v10','lookdev-v12','lookdev-v13'].includes(params.get('seraphine')??'lookdev-v12'),portraitReview=cameraMode==='portrait',heroReview=portraitReview||cameraMode==='seraphine',cinematicReview=cameraMode==='cinematic'||(!cameraMode&&window.innerWidth>=900),yawParam=Number(params.get('reviewYaw')),reviewYaw=Number.isFinite(yawParam)?Math.max(-.25,Math.min(.25,yawParam)):0,freezeParam=Number(params.get('reviewFreeze')),reviewFreeze=Number.isFinite(freezeParam)&&freezeParam>.52&&freezeParam<.84?freezeParam:null;
  host.closest('.scene')?.classList.toggle('camera-cinematic',cinematicReview);
  const renderer=new T.WebGLRenderer({alpha:false,antialias:true,powerPreference:'high-performance'});
  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.35));renderer.outputColorSpace=T.SRGBColorSpace;
@@ -85,13 +85,16 @@ export function createTacticsScene3D(host,{reduced=false}={}){
   for(let i=0;i<segments;i++)for(const k of [i/segments,(i+1)/segments]){const angle=start+sweep*k,taper=Math.pow(Math.sin(Math.PI*k),1.35)*width,cs=Math.cos(angle),sn=Math.sin(angle);vertices.push((radius-taper)*cs,(radius-taper)*sn,0,(radius+taper)*cs,(radius+taper)*sn,0);}
   const geometry=new T.BufferGeometry(),indices=[];for(let i=0;i<segments;i++){const a=i*4;indices.push(a,a+1,a+2,a+1,a+3,a+2);}geometry.setAttribute('position',new T.Float32BufferAttribute(vertices,3));geometry.setIndex(indices);return new T.Mesh(geometry,material);
  }
+ function impactRays(material){const vertices=[];for(let i=0;i<7;i++){const angle=i*Math.PI*2/7,cs=Math.cos(angle),sn=Math.sin(angle),edge=.009,reach=i%2?.28:.37;vertices.push(cs*.13-sn*edge,sn*.13+cs*edge,0,cs*reach,sn*reach,0,cs*.13+sn*edge,sn*.13-cs*edge,0);}const geometry=new T.BufferGeometry();geometry.setAttribute('position',new T.Float32BufferAttribute(vertices,3));geometry.computeVertexNormals();return new T.Mesh(geometry,material);}
  function makeSlash(entry,targetId){const target=actors.get(targetId),group=new T.Group(),at=target?.goal??entry.goal.clone().add(new T.Vector3(.9,0,0));group.position.set(at.x,1.17,at.z+.32);
   const edgeMaterial=new T.MeshBasicMaterial({color:'#ffe7d8',transparent:true,opacity:0,side:T.DoubleSide,depthWrite:false,depthTest:false,toneMapped:false,blending:T.AdditiveBlending});
   const glowMaterial=new T.MeshBasicMaterial({color:'#e42453',transparent:true,opacity:0,side:T.DoubleSide,depthWrite:false,depthTest:false,toneMapped:false,blending:T.AdditiveBlending});
-  const arc=slashRibbon(.4,.019,-1.75,Math.PI*1.05,edgeMaterial),halo=slashRibbon(.4,.075,-1.75,Math.PI*1.05,glowMaterial);
-  arc.renderOrder=9;halo.renderOrder=8;group.add(halo,arc);scene.add(group);
-  const effect={group,arc,halo,entry};slashEffects.push(effect);return effect;
+  const rayMaterial=new T.MeshBasicMaterial({color:'#f02f4f',transparent:true,opacity:0,side:T.DoubleSide,depthWrite:false,depthTest:false,toneMapped:false,blending:T.AdditiveBlending});
+  const arc=slashRibbon(.4,.019,-1.75,Math.PI*1.05,edgeMaterial),halo=slashRibbon(.4,.075,-1.75,Math.PI*1.05,glowMaterial),rays=impactRays(rayMaterial);
+  arc.renderOrder=9;halo.renderOrder=8;rays.renderOrder=10;group.add(halo,arc,rays);scene.add(group);
+  const effect={group,arc,halo,rays,entry,targetId};slashEffects.push(effect);return effect;
  }
+ function impactPulse(entry){let pulse=0;for(const effect of slashEffects)if(effect.targetId===entry.id){const phase=(effect.entry.referenceAttackElapsed??0)/1.25;const rise=Math.max(0,Math.min(1,(phase-.57)/.07)),fall=Math.max(0,Math.min(1,(.86-phase)/.16));pulse=Math.max(pulse,rise*fall);}return pulse;}
  function deformReference(mesh,now,amount){const positions=mesh.geometry.attributes.position,rest=mesh.userData.rest;if(!rest)return;
   for(let i=0;i<positions.count;i++){const x=rest[i*3],y=rest[i*3+1],u=x/.815,v=y/1.225,side=Math.abs(u);
    const hair=Math.max(0,Math.min(1,(v-.04)/.76))*Math.max(0,Math.min(1,(side-.2)/.65));
@@ -241,7 +244,7 @@ export function createTacticsScene3D(host,{reduced=false}={}){
  const observer=new ResizeObserver(resize);observer.observe(host);resize();
  function frame(ms){if(disposed)return;raf=requestAnimationFrame(frame);if(!visible||document.hidden)return;const now=ms/1000,dt=Math.min(.05,Math.max(0,now-last));last=now;
   for(const entry of actors.values()){
-   const p=entry.pivot;let t=now-entry.started;if(entry.referenceSprite&&entry.clip==='attack1'){entry.referenceAttackElapsed=(entry.referenceAttackElapsed??0)+dt;t=entry.referenceAttackElapsed;}p.position.lerp(entry.goal,reduced?1:Math.min(1,dt*7));
+   const p=entry.pivot;let t=now-entry.started;if(entry.referenceSprite&&entry.clip==='attack1'){entry.referenceAttackElapsed=(entry.referenceAttackElapsed??0)+dt;if(reviewFreeze!==null)entry.referenceAttackElapsed=Math.min(entry.referenceAttackElapsed,1.25*reviewFreeze);t=entry.referenceAttackElapsed;}p.position.lerp(entry.goal,reduced?1:Math.min(1,dt*7));
    if(Math.abs(p.position.x-entry.goal.x)>.02||Math.abs(p.position.z-entry.goal.z)>.02)entry.clip='run';
    else if(entry.clip==='run'&&t>.3){entry.clip='idle';entry.started=now;}
    const duration=entry.referenceSprite&&entry.clip==='attack1'?1.25:MOTIONS[entry.clip]?.duration??.8;
@@ -261,11 +264,11 @@ export function createTacticsScene3D(host,{reduced=false}={}){
    }
    else if(entry.gltf){const rig=entry.gltf;if(rig.playing!==entry.clip){rig.mixer.stopAllAction();const motion=rig.clips.get(entry.clip)??rig.clips.get('idle');if(motion){const action=rig.mixer.clipAction(motion);action.reset();action.setLoop(MOTIONS[entry.clip]?.loop?T.LoopRepeat:T.LoopOnce);action.clampWhenFinished=true;action.play();}rig.playing=entry.clip;}rig.mixer.update(dt);p.rotation.y=.14;}
    else if(entry.model){entry.model.apply(sampleHeroPose(entry.id,entry.clip,entry.clip==='idle'?now:now-entry.started),reduced?0:now);p.rotation.y=entry.id==='nyxara'?-.16:.14;}
-   else if(entry.enemySprite){const sprite=entry.enemySprite,attack=entry.clip==='attack1'?Math.sin(Math.min(1,t/.7)*Math.PI):0;const bob=reduced?0:Math.sin(now*1.65+entry.x)*.017;sprite.position.y=sprite.userData.baseY+bob;sprite.position.x=-attack*.12;sprite.rotation.z=-attack*.035+(reduced?0:Math.sin(now*1.1+entry.x)*.008);p.rotation.y=0;}
+   else if(entry.enemySprite){const sprite=entry.enemySprite,attack=entry.clip==='attack1'?Math.sin(Math.min(1,t/.7)*Math.PI):0,hit=impactPulse(entry);const bob=reduced?0:Math.sin(now*1.65+entry.x)*.017;sprite.position.y=sprite.userData.baseY+bob;sprite.position.x=-attack*.12+hit*.12;sprite.rotation.z=-attack*.035+hit*.07+(reduced?0:Math.sin(now*1.1+entry.x)*.008);sprite.material.color.setRGB(1,1-hit*.28,1-hit*.27);if(hit>.4)host.dataset.seraphineImpactSeen='true';p.rotation.y=0;}
    else{const enemy=entry.enemy,bob=reduced?0:Math.sin(now*2+entry.x)*.025;enemy.body.position.y=bob;enemy.arms[0].rotation.x=entry.clip==='attack1'?-.9*Math.sin(Math.min(1,t/.7)*Math.PI):Math.sin(now*1.6)*.06;enemy.arms[1].rotation.x=Math.sin(now*1.6+1)*.06;enemy.legs[0].rotation.x=Math.sin(now*3)*.025;enemy.legs[1].rotation.x=-enemy.legs[0].rotation.x;p.rotation.y=-.25;}
    p.position.y=.08;
   }
-  for(let i=slashEffects.length-1;i>=0;i--){const effect=slashEffects[i],phase=(effect.entry.referenceAttackElapsed??0)/1.25,progress=Math.max(0,Math.min(1,(phase-.49)/.36));effect.group.visible=phase>=.49&&phase<.86;effect.group.scale.setScalar(.78+progress*.64);effect.group.rotation.z=-.16+progress*.53;effect.arc.material.opacity=(1-progress)*.98;effect.halo.material.opacity=(1-progress)*.58;if(phase>.54&&phase<.8)host.dataset.seraphineSlashSeen='true';if(phase>.93||!actors.has(effect.entry.id)){discardSlash(effect);slashEffects.splice(i,1);}}
+  for(let i=slashEffects.length-1;i>=0;i--){const effect=slashEffects[i],phase=(effect.entry.referenceAttackElapsed??0)/1.25,progress=Math.max(0,Math.min(1,(phase-.49)/.36)),impact=Math.max(0,Math.min(1,(phase-.57)/.07))*Math.max(0,Math.min(1,(.86-phase)/.16));effect.group.visible=phase>=.49&&phase<.86;effect.group.scale.setScalar(.78+progress*.64);effect.group.rotation.z=-.16+progress*.53;effect.arc.material.opacity=(1-progress)*.98;effect.halo.material.opacity=(1-progress)*.58;effect.rays.material.opacity=impact*.65;if(phase>.54&&phase<.8)host.dataset.seraphineSlashSeen='true';if(phase>.93||!actors.has(effect.entry.id)){discardSlash(effect);slashEffects.splice(i,1);}}
   environment.update(now);
   renderer.render(scene,camera);
  }
