@@ -90,16 +90,5 @@
     "Corbeau et orbe sont simplifiés ; l'orbe suit la main droite dans toutes les animations, y compris au repos.",
     "12 animations sur les 30 du contrat ; procédurales, sans nettoyage manuel ; LOD1/LOD2 par décimation automatique.",
     "Non importé dans Godot ni dans le moteur web du jeu (outils absents de l'environnement de production)."
-  ],
-  "binaries_pending_upload": {
-    "reason": "envoi Git LFS refusé par la politique réseau de l'environnement de production (hôte lfs.github.com) ; fichiers remis séparément",
-    "files": [
-      "nyxara_lod0.glb",
-      "nyxara_lod1.glb",
-      "nyxara_lod2.glb",
-      "nyxara_source.blend",
-      "renders/*.png"
-    ],
-    "destination": "03_assets/characters/nyxara/model3d-v1/"
-  }
+  ]
 }

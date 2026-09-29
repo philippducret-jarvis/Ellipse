@@ -4,8 +4,6 @@
 
 Dossier : `03_assets/characters/nyxara/model3d-v1/`
 
-> Les fichiers binaires (trois GLB, `nyxara_source.blend`, rendus) n'ont pas pu être envoyés par Git LFS depuis l'environnement de production (hôte `lfs.github.com` refusé par la politique réseau). Ils ont été remis séparément et doivent être ajoutés à ce dossier ; le manifeste les liste sous `binaries_pending_upload`.
-
 | Élément | Détail |
 |---|---|
 | GLB | `nyxara_lod0.glb` (145 k triangles, 6,3 Mo), `nyxara_lod1.glb` (43 k, 2,6 Mo), `nyxara_lod2.glb` (12 k, 1,4 Mo) |
