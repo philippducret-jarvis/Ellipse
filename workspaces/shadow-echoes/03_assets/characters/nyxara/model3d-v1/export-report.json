@@ -1,0 +1,38 @@
+{
+  "character": "nyxara",
+  "clips": [
+    "idle_neutral",
+    "idle_glamour",
+    "idle_personality",
+    "walk",
+    "run",
+    "hit_light",
+    "hit_heavy",
+    "skill_cast",
+    "ultimate_cast",
+    "victory",
+    "defeat",
+    "hub_greeting"
+  ],
+  "bones": 55,
+  "lods": {
+    "lod0": {
+      "triangles": 145216,
+      "vertices": 90114,
+      "materials": 24,
+      "bytes": 6307360
+    },
+    "lod1": {
+      "triangles": 43487,
+      "vertices": 30448,
+      "materials": 24,
+      "bytes": 2628432
+    },
+    "lod2": {
+      "triangles": 12087,
+      "vertices": 12359,
+      "materials": 24,
+      "bytes": 1422124
+    }
+  }
+}
