@@ -2,6 +2,8 @@
 
 ## Avancement du 30 septembre 2026
 
+La [formation des quatre Mythiques avec illustrations originales](00_brief/documents/34_formation_quatre_mythiques_reference_2026_09_30.md) remplace les trois volumes simplifiés de Lysael, Nyxara et Voren dans la vue 2,5D. Leurs portraits en pied transparents bougent légèrement en attente et en action ; les effets de contact reprennent leur couleur propre. [Voir la formation](http://localhost:4273/workspaces/shadow-echoes/07_exports/web/tactics.html?seraphine=lookdev-v15&camera=cinematic&environment=arcade-v3) ou l'[ancienne étude de volumes](http://localhost:4273/workspaces/shadow-echoes/07_exports/web/tactics.html?seraphine=lookdev-v15&camera=cinematic&environment=arcade-v3&party=volume). Les personnages restent des plans 2,5D et le jalon de sculpture/rig demeure ouvert.
+
 La [revue Séraphine V15 et le jalon artistique final](00_brief/documents/33_seraphine_v15_revue_et_jalon_final_2026_09_30.md) ajoutent un léger mouvement des cheveux et des étoffes pendant la frappe de trois quarts en préservant les pixels originaux du visage. Comparer [le portrait](http://localhost:4273/workspaces/shadow-echoes/07_exports/web/tactics.html?seraphine=lookdev-v15&camera=portrait) et [la taille de combat](http://localhost:4273/workspaces/shadow-echoes/07_exports/web/tactics.html?seraphine=lookdev-v15&camera=cinematic&environment=arcade-v3). La V15 reste une étude non approuvée : une sculpture, une retopologie, des UV/textures PBR et un rig complet sont encore nécessaires pour atteindre la planche cible. La V12 reste chargée par défaut.
 
 ## Avancement du 29 septembre 2026
