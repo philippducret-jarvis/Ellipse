@@ -1,5 +1,9 @@
 # Shadow Echoes — projet Ellipse
 
+## Avancement du 30 septembre 2026
+
+La [revue Séraphine V15 et le jalon artistique final](00_brief/documents/33_seraphine_v15_revue_et_jalon_final_2026_09_30.md) ajoutent un léger mouvement des cheveux et des étoffes pendant la frappe de trois quarts en préservant les pixels originaux du visage. Comparer [le portrait](http://localhost:4273/workspaces/shadow-echoes/07_exports/web/tactics.html?seraphine=lookdev-v15&camera=portrait) et [la taille de combat](http://localhost:4273/workspaces/shadow-echoes/07_exports/web/tactics.html?seraphine=lookdev-v15&camera=cinematic&environment=arcade-v3). La V15 reste une étude non approuvée : une sculpture, une retopologie, des UV/textures PBR et un rig complet sont encore nécessaires pour atteindre la planche cible. La V12 reste chargée par défaut.
+
 ## Avancement du 29 septembre 2026
 
 La [revue de l'impact](00_brief/documents/32_impact_combat_seraphine_2026_09_29.md) ajoute une réaction visuelle des sentinelles à la frappe de Séraphine, avec éclat rouge et recul. Un arrêt sur image de revue permet de contrôler le contact à taille de combat. L'essai d'avant-bras séparé a été écarté après inspection : sa rotation exige un vrai montage articulé du personnage.
