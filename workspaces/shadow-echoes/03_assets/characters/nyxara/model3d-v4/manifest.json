@@ -1,0 +1,125 @@
+{
+  "id": "nyxara-model3d-v4",
+  "hero_id": "nyxara",
+  "updated_at": "2026-09-29",
+  "status": "integration_candidate_review",
+  "fidelity_approved": false,
+  "source_reference": "01_inputs/references/partie-2/fiche_héros_de_nyxara_souveraine_du_néant.png",
+  "body_source": "MPFB 2.0.17 / MakeHuman CC0 (maillage de base complet, cibles macro féminines, proportions par sections)",
+  "tools": "Blender 4.0.2 en arrière-plan, scripts dans tools/blender/nyxara/",
+  "files": {
+    "lod0": "nyxara_lod0.glb",
+    "lod1": "nyxara_lod1.glb",
+    "lod2": "nyxara_lod2.glb",
+    "source": "nyxara_source.blend",
+    "renders": "renders/",
+    "comparison": "renders/comparaison_planche.png"
+  },
+  "rig": {
+    "bones": 55,
+    "naming": "UE (pelvis, spine_01..03, clavicle_*, upperarm_*, lowerarm_*, hand_*, doigts, thigh_*, calf_*, foot_*, ball_*, neck_01, head, breast_*)",
+    "skin": "poids MakeHuman conservés ; tissus, cheveux et accessoires pondérés par proximité ou par hauteur"
+  },
+  "animations": [
+    "idle_neutral",
+    "idle_glamour",
+    "idle_personality",
+    "walk",
+    "run",
+    "hit_light",
+    "hit_heavy",
+    "skill_cast",
+    "ultimate_cast",
+    "victory",
+    "defeat",
+    "hub_greeting"
+  ],
+  "meshes": [
+    "nyx_body",
+    "nyx_costume",
+    "nyx_lattice",
+    "nyx_jewelry",
+    "nyx_face",
+    "nyx_hair",
+    "nyx_cloth",
+    "nyx_props"
+  ],
+  "lods": {
+    "lod0": {
+      "triangles": 146082,
+      "vertices": 96503,
+      "materials": 25,
+      "bytes": 30000760
+    },
+    "lod1": {
+      "triangles": 39722,
+      "vertices": 31989,
+      "materials": 25,
+      "bytes": 14379460
+    },
+    "lod2": {
+      "triangles": 13203,
+      "vertices": 15072,
+      "materials": 25,
+      "bytes": 5478120
+    }
+  },
+  "budgets_reference": {
+    "pc_lod0_characters_tris": 120000,
+    "pc_lod0_hair_tris": 28000,
+    "lod1_tris": 35000,
+    "lod2_tris": 12000
+  },
+  "gates": {
+    "topology_humanoid_rig": true,
+    "gltf_export_and_reimport_checked": true,
+    "three_lods": true,
+    "animation_clips_12_of_30": true,
+    "pbr_textures": true,
+    "face_expressions_blendshapes": false,
+    "hair_cards_textured": true,
+    "cloth_physics_bones": false,
+    "final_sculpt_identity": false,
+    "engine_import_test_godot": false,
+    "fidelity_to_reference": false
+  },
+  "known_gaps": [
+    "Planche plus lumineuse et plus dense en chaînes pendantes ; le personnage 3D reste un peu plus sombre et plus sobre.",
+    "Visage : forme MakeHuman retouchée, sans sculpt d'identité ; regard et maquillage générés par texture.",
+    "Cheveux en cartes de rubans : volume et frange corrects, mais aspect en lanières de près et teinte plus sombre que la planche.",
+    "Corbeau simplifié (volumes et plumes stylisées), sans plumage détaillé.",
+    "Tissus et cheveux statiques (pas d'os secondaires ni de simulation).",
+    "12 animations sur les 30 du contrat, procédurales, sans nettoyage manuel ; pas de formes faciales.",
+    "Non importé dans Godot ni dans le moteur web du jeu (outils absents de l'environnement de production).",
+    "GLB LOD0 de 31 Mo, surtout à cause des textures (peau, dentelle 4096)."
+  ],
+  "textures": {
+    "skin": "base + métal/rugosité + normale 2048 (teinte, rougeurs, pores, maquillage et lèvres peints)",
+    "eyes": "iris 512 (fibres, limbe, reflets) sur disque posé sur le globe",
+    "hair": "4 cartes de mèches 512x1024 à découpe alpha (mode MASK)",
+    "lace": "filet 4096 à alpha, motif calculé en 3D puis cuit en UV",
+    "cloth": "tissu et ourlet 1024 (base, métal/rugosité, normale)",
+    "orb": "tourbillon émissif 1024x512",
+    "lod_sizes": {
+      "lod0": "toutes tailles d'origine",
+      "lod1": "côté max 1024",
+      "lod2": "côté max 512"
+    },
+    "lace_cups": "bonnets et culotte : dentelle noire cuite à partir du motif du filet"
+  },
+  "v3_changes": [
+    "paupières supérieures abaissées, tête légèrement renversée, peau plus chaude, éclairage latéral",
+    "volume des cheveux au sommet et frange en travers du front (106 mèches)",
+    "filigrane d'or organique (cellules de Voronoï) sur le torse et les bras, 290 améthystes aux noeuds, pendeloques",
+    "gemmes aux croisements du treillis des jambes",
+    "cape et jupe déchiquetées en lanières à pointes violettes",
+    "orbe noire à croissant violet lumineux et éclats",
+    "rendu AgX et halo lumineux au compositing (présentation uniquement, pas dans le GLB)"
+  ],
+  "v4_changes": [
+    "correction d'un bug de texture de peau (valeur invalide qui noircissait jambes, ventre et bras depuis la v2)",
+    "filet des bas ajouré (mailles 22 mm) avec dentelle florale par zones ; filet opaque du ventre retiré",
+    "cheveux éclaircis vers le violet",
+    "éclairage de présentation : fond violet, contre-jours violets renforcés, lumières d'appoint de face (n'affecte pas le GLB)"
+  ]
+}

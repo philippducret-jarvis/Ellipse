@@ -94,7 +94,7 @@ def hero_pose(rig, J, mesh_objs=None, keep_root=True):
     for i, d in ((1, 10), (2, 14), (3, 12)):
         rot_local(P["thumb_%02d_r" % i], "X", d)
     # tête et buste
-    aim_bone(rig, P["head"], (0.05, -0.10, 0.99))
+    aim_bone(rig, P["head"], (-0.05, 0.13, 0.99))
     rot_local(P["spine_02"], "Z", -4)
     rot_local(P["pelvis"], "Z", 5)
     # jambes : appui sur la jambe gauche, jambe droite croisée devant

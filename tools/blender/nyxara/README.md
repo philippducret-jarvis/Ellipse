@@ -1,7 +1,7 @@
 # Nyxara — pipeline Blender du modèle 3D
 
 Modèle 3D jouable de Nyxara (Shadow Echoes), construit par script à partir du maillage
-MakeHuman/MPFB (CC0) déjà présent dans le dépôt. Blender 4.0.2+ en arrière-plan, numpy, Mesa/EGL
+MakeHuman/MPFB (CC0) déjà présent dans le dépôt. Blender 4.0.2+ en arrière-plan, numpy, Pillow et SciPy (`apt install python3-pil python3-scipy`), Mesa/EGL
 pour le rendu Workbench. Aucun outil externe n'est nécessaire.
 
 ## Chaîne complète
@@ -34,6 +34,7 @@ blender -b -P $T/glb_check.py -- $O/export/nyxara_lod0.glb $O/export/nyxara_lod1
 |---|---|
 | `body_lab.py` | macros MakeHuman féminines, proportions par sections, membres lissés, export des 125 articulations |
 | `nyx_build.py` | tête (yeux, maquillage, couronne, cheveux en rubans) + costume + tissus + rig + pose + rendus |
+| `nyx_textures.py` | textures PBR procédurales (peau et maquillage, iris, cartes de cheveux, dentelle, tissu, orbe) cuites depuis la géométrie ; nécessite numpy, Pillow et SciPy |
 | `nyx_costume.py` | coques issues du corps, treillis d'or, tissus paramétriques, transfert de poids |
 | `nyx_rig.py` | armature 55 os (nommage UE) rattachée aux articulations, poses par visée, talons cuits |
 | `nyx_export.py` | purge, fusion en 8 meshes, 12 animations procédurales, LOD0/1/2, rapport |
