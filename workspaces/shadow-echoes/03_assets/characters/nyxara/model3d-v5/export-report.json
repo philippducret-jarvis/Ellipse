@@ -17,22 +17,22 @@
   "bones": 55,
   "lods": {
     "lod0": {
-      "triangles": 146082,
-      "vertices": 96503,
+      "triangles": 145944,
+      "vertices": 93440,
       "materials": 25,
-      "bytes": 30000760
+      "bytes": 29880408
     },
     "lod1": {
-      "triangles": 39722,
-      "vertices": 31989,
+      "triangles": 39154,
+      "vertices": 31196,
       "materials": 25,
-      "bytes": 14379460
+      "bytes": 14316800
     },
     "lod2": {
-      "triangles": 13203,
-      "vertices": 15072,
+      "triangles": 13474,
+      "vertices": 15429,
       "materials": 25,
-      "bytes": 5478120
+      "bytes": 5476788
     }
   }
 }

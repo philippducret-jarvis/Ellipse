@@ -20,7 +20,7 @@ bone_names = {b.name for b in rig.data.bones}
 
 # ------------------------------------------------------------------ nettoyage de la scène
 for ob in list(sc.objects):
-    if ob.type in ("CAMERA", "LIGHT"):
+    if ob.type in ("CAMERA", "LIGHT", "CURVES"):
         bpy.data.objects.remove(ob, do_unlink=True)
 meshes = [o for o in sc.objects if o.type == "MESH"]
 for o in meshes:
@@ -54,7 +54,7 @@ groups = {
     "nyx_body": ["Mira_MPFB_Basemesh"],
     "nyx_costume": ["nyx_bra", "nyx_brief", "nyx_stockings", "nyx_torso_net", "nyx_gloves", "nyx_shoes", "nyx_toecaps", "nyx_collar", "nyx_heels"],
     "nyx_lattice": ["nyx_lattice_m"],
-    "nyx_jewelry": ["nyx_trim_m", "nyx_chains_m", "nyx_collar_thorns_m", "nyx_collar_ring2_m", "nyx_belt_pendants_m", "nyx_cuffs_m", "nyx_shoulder_thorns_m", "nyx_filigree_m", "nyx_dropchains_m", "nyx_fgems", "nyx_pgem_", "nyx_claws", "nyx_bgem_", "nyx_sgem_", "nyx_choker_gem", "nyx_drop_", "nyx_crown", "nyx_spike", "nyx_gem_", "nyx_ear_"],
+    "nyx_jewelry": ["nyx_trim_m", "nyx_chains_m", "nyx_collar_thorns_m", "nyx_collar_ring2_m", "nyx_belt_pendants_m", "nyx_cuffs_m", "nyx_shoulder_thorns_m", "nyx_filigree_m", "nyx_dropchains_m", "nyx_hangchains_m", "nyx_fgems", "nyx_pgem_", "nyx_claws", "nyx_bgem_", "nyx_sgem_", "nyx_choker_gem", "nyx_drop_", "nyx_crown", "nyx_spike", "nyx_gem_", "nyx_ear_"],
     "nyx_face": ["nyx_eye_", "nyx_iris_", "nyx_pupil_", "nyx_brow_", "nyx_liner_", "nyx_lash_", "nyx_shadow_", "nyx_lips", "nyx_lipline"],
     "nyx_hair": ["nyx_hair", "nyx_scalp"],
     "nyx_cloth": ["nyx_cape_", "nyx_skirt_", "nyx_sleeve_r"],
@@ -307,6 +307,7 @@ def lod_stage(tag, ratio_map, drop=()):
         bpy.ops.object.modifier_apply(modifier="dec")
         o.data.validate(clean_customdata=True)
 
+lod_stage("lod0", {"nyx_hair": 0.75})
 t, v, m = stats(); s = export(os.path.join(OUT, "nyxara_lod0.glb"))
 report["lods"]["lod0"] = dict(triangles=t, vertices=v, materials=m, bytes=s); print("LOD0", t, v, m, s)
 retex("lod1", 1024)

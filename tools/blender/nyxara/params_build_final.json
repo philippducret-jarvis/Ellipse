@@ -19,5 +19,12 @@
   "head_front",
   "head_34",
   "full_side"
+ ],
+ "strand_hair": true,
+ "hair_rgb": [
+  0.022,
+  0.007,
+  0.048,
+  1.0
  ]
 }

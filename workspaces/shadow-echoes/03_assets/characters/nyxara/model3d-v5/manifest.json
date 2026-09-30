@@ -1,5 +1,5 @@
 {
-  "id": "nyxara-model3d-v4",
+  "id": "nyxara-model3d-v5",
   "hero_id": "nyxara",
   "updated_at": "2026-09-29",
   "status": "integration_candidate_review",
@@ -46,22 +46,22 @@
   ],
   "lods": {
     "lod0": {
-      "triangles": 146082,
-      "vertices": 96503,
+      "triangles": 145944,
+      "vertices": 93440,
       "materials": 25,
-      "bytes": 30000760
+      "bytes": 29880408
     },
     "lod1": {
-      "triangles": 39722,
-      "vertices": 31989,
+      "triangles": 39154,
+      "vertices": 31196,
       "materials": 25,
-      "bytes": 14379460
+      "bytes": 14316800
     },
     "lod2": {
-      "triangles": 13203,
-      "vertices": 15072,
+      "triangles": 13474,
+      "vertices": 15429,
       "materials": 25,
-      "bytes": 5478120
+      "bytes": 5476788
     }
   },
   "budgets_reference": {
@@ -85,8 +85,8 @@
   },
   "known_gaps": [
     "Planche plus lumineuse et plus dense en chaînes pendantes ; le personnage 3D reste un peu plus sombre et plus sobre.",
+    "Cheveux du GLB en cartes de rubans : la finesse des rendus (mèches) n'est pas disponible en jeu sans système de cheveux du moteur.",
     "Visage : forme MakeHuman retouchée, sans sculpt d'identité ; regard et maquillage générés par texture.",
-    "Cheveux en cartes de rubans : volume et frange corrects, mais aspect en lanières de près et teinte plus sombre que la planche.",
     "Corbeau simplifié (volumes et plumes stylisées), sans plumage détaillé.",
     "Tissus et cheveux statiques (pas d'os secondaires ni de simulation).",
     "12 animations sur les 30 du contrat, procédurales, sans nettoyage manuel ; pas de formes faciales.",
@@ -121,5 +121,12 @@
     "filet des bas ajouré (mailles 22 mm) avec dentelle florale par zones ; filet opaque du ventre retiré",
     "cheveux éclaircis vers le violet",
     "éclairage de présentation : fond violet, contre-jours violets renforcés, lumières d'appoint de face (n'affecte pas le GLB)"
-  ]
+  ],
+  "v5_changes": [
+    "rendus : cheveux en mèches fines (17 280 brins, matériau de cheveux) générés depuis les cartes posées",
+    "visage raccourci (menton remonté), pommettes et lèvres",
+    "60 chaînes pendantes en caténaire sur les hanches, le buste et les cuisses, avec gemmes",
+    "LOD0 : cartes de cheveux allégées de 25 % pour tenir le budget"
+  ],
+  "renders_note": "Les rendus utilisent des mèches fines (objet Curves, rendu Cycles uniquement). Le GLB, destiné au jeu, garde les cartes de cheveux texturées : en jeu, la chevelure est moins fine que sur les rendus."
 }

@@ -1,12 +1,12 @@
-# Shadow Echoes — Nyxara, modèle 3D jouable v4
+# Shadow Echoes — Nyxara, modèle 3D jouable v5
 
 ## Ce qui est livré
 
-Dossier : `03_assets/characters/nyxara/model3d-v4/`
+Dossier : `03_assets/characters/nyxara/model3d-v5/`
 
 | Élément | Détail |
 |---|---|
-| GLB | `nyxara_lod0.glb` (146 k triangles, 30.0 Mo), `nyxara_lod1.glb` (39 k, 14.4 Mo, textures 1024), `nyxara_lod2.glb` (13 k, 5.5 Mo, textures 512) |
+| GLB | `nyxara_lod0.glb` (145 k triangles, 29.9 Mo), `nyxara_lod1.glb` (39 k, 14.3 Mo, textures 1024), `nyxara_lod2.glb` (13 k, 5.5 Mo, textures 512) |
 | Rig | 55 os au nommage UE, poids de peau MakeHuman conservés, tissus et cheveux pondérés par proximité ou par hauteur |
 | Animations | 12 clips : `idle_neutral`, `idle_glamour`, `idle_personality`, `walk`, `run`, `hit_light`, `hit_heavy`, `skill_cast`, `ultimate_cast`, `victory`, `defeat`, `hub_greeting` |
 | Meshes | `nyx_body`, `nyx_costume`, `nyx_lattice`, `nyx_jewelry`, `nyx_face`, `nyx_hair`, `nyx_cloth`, `nyx_props` |
@@ -50,6 +50,12 @@ Les trois niveaux respectent les budgets du dépôt (148 k / 40 k / 13 k triangl
 - Correction d'un bug de la texture de peau : une valeur invalide dans le calcul du maquillage des yeux noircissait la peau des jambes, du ventre et des bras depuis la v2.
 - Bas en filet ajouré avec dentelle florale par zones ; filet opaque du ventre retiré : la peau est visible sous le filigrane d'or, comme sur la planche.
 - Cheveux éclaircis vers le violet ; éclairage de présentation violet plus lumineux.
+
+## Apport de la v5
+
+- Rendus avec cheveux en mèches fines (17 280 brins générés à partir des cartes posées) : le plus gros gain de réalisme. **Rendu uniquement** : le GLB garde les cartes de cheveux.
+- Visage raccourci (menton remonté), pommettes et lèvres plus marquées.
+- 60 chaînes pendantes en caténaire (hanches, buste, cuisses) avec gemmes, comme sur la planche.
 
 ## Écarts avec la cible (fidélité non approuvée)
 

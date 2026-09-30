@@ -92,6 +92,15 @@ for v in me.vertices:
         c.x *= 1 - prm("jaw_slim", 0.13) * jaw
         if abs(c.x) < 0.024 and 1.665 < c.z < 1.765 and c.y < -0.125:
             c.x *= 1 - prm("nose_slim", 0.14) * smooth((0.024 - abs(c.x)) / 0.024)
+def face_shift(z):
+    """Remontée verticale du bas du visage (0 au-dessus de 1.70, max au menton, nulle au cou)."""
+    k = prm("face_short", 0.075)
+    return k * max(0.0, 1.70 - z) * smooth((z - 1.53) / 0.06)
+for v in me.vertices:
+    c = v.co
+    if c.y < 0.03 and 1.50 < c.z < 1.70:
+        wy_ = smooth((0.03 - c.y) / 0.07)
+        c.z += face_shift(c.z) * wy_
 for v in me.vertices:
     c = v.co
     if c.y < -0.10 and 1.58 < c.z < 1.78:
@@ -157,7 +166,7 @@ def surface_y(x, z):
     h = mesh_bvh.ray_cast(Vector((x, -1.0, z)), Vector((0, 1, 0)))
     return h[0].y if h[0] else None
 
-MOUTH_Z, MOUTH_HALF_W = prm("mouth_z", 1.648), 0.026
+MOUTH_Z, MOUTH_HALF_W = prm("mouth_z", 1.648) + face_shift(prm("mouth_z", 1.648)), 0.026
 for p in me.polygons:
     c = p.center
     m = 0
@@ -988,6 +997,75 @@ fgem_me = bpy.data.meshes.new("nyx_fgems"); gbm.to_mesh(fgem_me); gbm.free()
 fgem_obj = bpy.data.objects.new("nyx_fgems", fgem_me); sc.collection.objects.link(fgem_obj); fgem_me.materials.append(GEM)
 if drop_chains:
     C.add_curve_obj(sc, "nyx_dropchains", drop_chains, GOLD, 0.0010)
+crng2 = random.Random(57)
+hang = []
+cand = [q for q in fil_nodes if q[0].y < -0.02 and 0.96 < q[0].z < 1.30]
+cand.sort(key=lambda q: q[0].z)
+used_ = set()
+def catenary(a, b, sag, n=14):
+    pts = []
+    for i in range(n + 1):
+        t = i / n
+        p = a.lerp(b, t) + Vector((0, 0, -sag * 4 * t * (1 - t)))
+        for _ in range(2):
+            loc_, nor_, idx_, dist_ = bvh.find_nearest(p)
+            if loc_ is not None and (p - loc_).dot(nor_) < 0.007:
+                p = loc_ + nor_ * 0.007
+        pts.append(p)
+    return pts
+for i, (pa, na) in enumerate(cand):
+    if len(hang) >= prm("hang_chains", 46) or i in used_:
+        continue
+    best = None
+    for j, (pb, nb) in enumerate(cand):
+        if j == i or j in used_:
+            continue
+        d = (pb - pa)
+        if 0.045 < d.length < 0.11 and abs(d.z) < 0.03:
+            best = j
+            break
+    if best is None:
+        continue
+    used_.add(i); used_.add(best)
+    pb = cand[best][0]
+    sag = crng2.uniform(0.018, 0.050)
+    pts = catenary(pa, pb, sag)
+    hang.append(pts)
+    low = min(pts, key=lambda q: q.z)
+    gb2 = bmesh.new()
+    C.add_octa(gb2, low + Vector((0, 0, -0.009)), 0.0050, up=Vector((0, 0, 1)), stretch=2.0)
+    for extra in range(crng2.randint(0, 2)):
+        q = pts[crng2.randint(3, len(pts) - 4)]
+        C.add_octa(gb2, q + Vector((0, 0, -0.007)), 0.0036, up=Vector((0, 0, 1)), stretch=1.8)
+    gb2.to_mesh(fgem_me) if False else None
+    tmp_me = bpy.data.meshes.new("tmp_hg"); gb2.to_mesh(tmp_me); gb2.free()
+    bm_all = bmesh.new(); bm_all.from_mesh(fgem_me); bm_all.from_mesh(tmp_me); bm_all.to_mesh(fgem_me); bm_all.free()
+    bpy.data.meshes.remove(tmp_me)
+# chaînes verticales tombant des hanches sur les cuisses
+for k in range(prm("thigh_chains", 14)):
+    side = 1 if k % 2 == 0 else -1
+    a_ = math.radians(crng2.uniform(-40, 40))
+    d_ = Vector((math.sin(a_) * side, -math.cos(a_), 0))
+    h_ = bvh.ray_cast(Vector((side * 0.13, -0.02, 0.97)) + d_ * 0.5, -d_, 0.8)
+    if h_[0] is None:
+        continue
+    top = h_[0] + h_[1] * 0.009
+    L_ = crng2.uniform(0.06, 0.16)
+    pts = [top + Vector((0, 0, -L_ * t / 10)) for t in range(11)]
+    pts2 = []
+    for p in pts:
+        loc_, nor_, idx_, dist_ = bvh.find_nearest(p)
+        if loc_ is not None and (p - loc_).dot(nor_) < 0.007:
+            p = loc_ + nor_ * 0.007
+        pts2.append(p)
+    hang.append(pts2)
+    gb3 = bmesh.new(); C.add_octa(gb3, pts2[-1] + Vector((0, 0, -0.010)), 0.0055, up=Vector((0, 0, 1)), stretch=2.2)
+    tmp_me = bpy.data.meshes.new("tmp_hg"); gb3.to_mesh(tmp_me); gb3.free()
+    bm_all = bmesh.new(); bm_all.from_mesh(fgem_me); bm_all.from_mesh(tmp_me); bm_all.to_mesh(fgem_me); bm_all.free()
+    bpy.data.meshes.remove(tmp_me)
+if hang:
+    C.add_curve_obj(sc, "nyx_hangchains", hang, GOLD, 0.0012)
+print("HANGING chains", len(hang))
 print("GEMS", len(fgem_me.polygons) // 8, "drops", len(drop_chains))
 
 # griffes dorées
@@ -1217,7 +1295,7 @@ rig = nyx_rig.build_armature(outprefix + "_joints.json", os.path.join(LIB, "rig_
 rig.location.z = -ZMIN
 
 skinned_by_transfer = list(parts.values()) + [claw, heel, toecap]
-skinned_by_transfer += [o for o in sc.objects if o.type == "MESH" and o.name in ("nyx_trim_m", "nyx_lattice_m", "nyx_chains_m", "nyx_collar_thorns_m", "nyx_collar_ring2_m", "nyx_belt_pendants_m", "nyx_cuffs_m", "nyx_shoulder_thorns_m", "nyx_filigree_m", "nyx_dropchains_m")]
+skinned_by_transfer += [o for o in sc.objects if o.type == "MESH" and o.name in ("nyx_trim_m", "nyx_lattice_m", "nyx_chains_m", "nyx_collar_thorns_m", "nyx_collar_ring2_m", "nyx_belt_pendants_m", "nyx_cuffs_m", "nyx_shoulder_thorns_m", "nyx_filigree_m", "nyx_dropchains_m", "nyx_hangchains_m")]
 skinned_by_transfer += gems + pend_gems + [fgem_obj]
 for o in skinned_by_transfer:
     C.transfer_weights(body, o)
@@ -1364,6 +1442,109 @@ def sleeve_build(bm):
     bpy.data.objects.remove(cl, do_unlink=True)
 sleeve = build_posed("nyx_sleeve_r", sleeve_build, "lowerarm_r", [CM["cloth"], CM["hem"]])
 bpy.context.view_layer.update()
+
+# ---------------------------------------------------------------- cheveux en mèches fines (rendu uniquement)
+if prm("strand_hair", False):
+    import numpy as np
+    dg_ = bpy.context.evaluated_depsgraph_get()
+    hmat = bpy.data.materials.new("nyx_hair_strands")
+    hmat.use_nodes = True
+    hnt = hmat.node_tree
+    for n_ in list(hnt.nodes):
+        hnt.nodes.remove(n_)
+    hb_ = hnt.nodes.new("ShaderNodeBsdfHairPrincipled")
+    try:
+        hb_.parametrization = "COLOR"
+    except Exception:
+        pass
+    hb_.inputs["Color"].default_value = prm("hair_rgb", (0.060, 0.022, 0.120, 1.0))
+    hb_.inputs["Roughness"].default_value = 0.32
+    hb_.inputs["Radial Roughness"].default_value = 0.35
+    if "Coat" in hb_.inputs:
+        hb_.inputs["Coat"].default_value = 0.08
+    if "Random Color" in hb_.inputs:
+        hb_.inputs["Random Color"].default_value = 0.25
+    if "Random Roughness" in hb_.inputs:
+        hb_.inputs["Random Roughness"].default_value = 0.2
+    ho_ = hnt.nodes.new("ShaderNodeOutputMaterial")
+    hnt.links.new(hb_.outputs[0], ho_.inputs["Surface"])
+    srng = random.Random(5)
+
+    def ribbons_from(ob, npts):
+        eo = ob.evaluated_get(dg_)
+        m_ = eo.to_mesh()
+        co_ = np.zeros(len(m_.vertices) * 3, dtype=np.float32)
+        m_.vertices.foreach_get("co", co_)
+        eo.to_mesh_clear()
+        co_ = co_.reshape(-1, 3)
+        mw = np.array(ob.matrix_world)
+        co_ = co_ @ mw[:3, :3].T + mw[:3, 3]
+        per = 2 * npts
+        out = []
+        for b in range(len(co_) // per):
+            blk = co_[b * per:(b + 1) * per]
+            Lp, Rp = blk[0::2], blk[1::2]
+            out.append((0.5 * (Lp + Rp), Rp - Lp))
+        return out
+
+    def add_strands(ribbons, children, radius_root, spread, depth_ratio):
+        allp, sizes, rads = [], [], []
+        NPS = 20
+        for mid, side in ribbons:
+            n = len(mid)
+            t_ = np.linspace(0, 1, n)
+            tang = np.gradient(mid, axis=0)
+            tang /= np.maximum(np.linalg.norm(tang, axis=1, keepdims=True), 1e-6)
+            sdir = side / np.maximum(np.linalg.norm(side, axis=1, keepdims=True), 1e-6)
+            ndir = np.cross(tang, sdir)
+            ndir /= np.maximum(np.linalg.norm(ndir, axis=1, keepdims=True), 1e-6)
+            width = np.linalg.norm(side, axis=1) * 0.5
+            for c in range(children):
+                a_ = srng.uniform(-1, 1)
+                b_ = srng.uniform(-1, 1) * depth_ratio
+                cut = srng.uniform(0.72, 1.0)
+                ph = srng.uniform(0, 6.28); fq = srng.uniform(6, 16); fz = srng.uniform(0.0006, 0.0022)
+                ts = np.linspace(0, cut, NPS)
+                idx = np.clip(ts * (n - 1), 0, n - 1)
+                i0 = np.floor(idx).astype(int); i1 = np.minimum(i0 + 1, n - 1); f = (idx - i0)[:, None]
+                lerp_ = lambda arr: arr[i0] * (1 - f) + arr[i1] * f
+                M_, S_, N_ = lerp_(mid), lerp_(sdir), lerp_(ndir)
+                Wd = lerp_(width[:, None])
+                clump = (0.35 + 0.65 * np.sin(np.pi * np.clip(ts / 0.85, 0, 1)) ** 0.6)[:, None]
+                off = (S_ * a_ + N_ * b_) * Wd * spread * clump
+                frizz = (S_ * np.sin(ts * fq + ph)[:, None] + N_ * np.cos(ts * fq * 0.7 + ph)[:, None]) * fz * ts[:, None]
+                P_ = M_ + off + frizz
+                allp.append(P_)
+                sizes.append(NPS)
+                rads.append(np.linspace(radius_root, radius_root * 0.25, NPS))
+        if not allp:
+            return None
+        P_all = np.concatenate(allp).astype(np.float32)
+        R_all = np.concatenate(rads).astype(np.float32)
+        cu = bpy.data.hair_curves.new("nyx_hair_strands")
+        cu.add_curves(sizes)
+        cu.attributes["position"].data.foreach_set("vector", P_all.ravel())
+        ra = cu.attributes.get("radius") or cu.attributes.new("radius", "FLOAT", "POINT")
+        ra.data.foreach_set("value", R_all)
+        cu.materials.append(hmat)
+        ob = bpy.data.objects.new("nyx_hair_strands", cu)
+        sc.collection.objects.link(ob)
+        return ob, len(sizes)
+
+    rb_main = ribbons_from(hair, NS)
+    rb_wisp = ribbons_from(wisps_ob, 16)
+    r1 = add_strands(rb_main, prm("hair_children", 30), 0.00030, 1.15, 0.45)
+    r2 = add_strands(rb_wisp, 4, 0.00022, 1.0, 0.3)
+    print("STRANDS", r1[1] if r1 else 0, r2[1] if r2 else 0)
+    hair.hide_render = True
+    wisps_ob.hide_render = True
+    if "Hair" in [n for n in dir(sc.render)]:
+        pass
+    try:
+        sc.cycles_curves.shape = "THICK"
+        sc.cycles_curves.subdivisions = 2
+    except Exception as e_:
+        print("CURVES", e_)
 
 # ---------------------------------------------------------------- rendu
 ENGINE = prm("engine", "BLENDER_WORKBENCH")

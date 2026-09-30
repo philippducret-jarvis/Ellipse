@@ -16,5 +16,12 @@
   "full_front",
   "full_34",
   "full_back"
+ ],
+ "strand_hair": false,
+ "hair_rgb": [
+  0.022,
+  0.007,
+  0.048,
+  1.0
  ]
 }
